@@ -6,13 +6,17 @@ import { StyleSheet } from "react-native";
 export default class Login extends Component{
     constructor(props:any){
         super(props);
+        this.state={
+            account:'',
+            password:''
+        }
     }
     render():JSX.Element{
         return(
             <View style={styles.wrapper}>
                 <View style={styles.inputWrapper}>
-                    <ComponentInput styles={styleLogin.Input} placeholder={'請輸入帳號'}/>
-                    <ComponentInput styles={styleLogin.Input} placeholder={'請輸入密碼'}/>
+                    <ComponentInput setState={this.setState} styles={styleLogin.Input} placeholder={'請輸入帳號'}/>
+                    <ComponentInput setState={this.setState} styles={styleLogin.Input} placeholder={'請輸入密碼'}/>
                 </View>
             </View>
         )

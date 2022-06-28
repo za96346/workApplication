@@ -1,6 +1,9 @@
+import React from "react";
+
 export interface interfaceComponentInput {
     placeholder:string,
-    styles:any,
+    styles:object,
+    setState:React.Dispatch<React.SetStateAction<object>>,
     
 };
 

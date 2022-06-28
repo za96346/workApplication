@@ -6,7 +6,8 @@ export const styleLogin={
         backgroundColor:'#rgb(35,230,55)',
         height:60,
         borderRadius:10,
-        paddingLeft:50
+        paddingLeft:50,
+        
     },
 
 
