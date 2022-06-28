@@ -1,35 +1,58 @@
 import React,{ Component, ReactNode } from "react";
-import { Image, ProgressViewIOSBase, TextInput } from "react-native";
+import { Animated, Easing, Image, ProgressViewIOSBase, TextInput } from "react-native";
+import { shadowWrapper } from "../style/styles";
 import {  interfaceComponentInput } from "../type/type";
 export class ComponentInput extends Component <interfaceComponentInput,any>{
     placeholder: string;
     styles: any;
-    propSetState:React.Dispatch<React.SetStateAction<object>>
+    change:Function;
+    img:NodeRequire
 
 
-    constructor(private prop:interfaceComponentInput){
+    constructor(public prop:interfaceComponentInput){
         super(prop);
-        this.placeholder=prop.placeholder
-        this.styles=prop.styles
-        this.propSetState=this.setState
-        this.state={
-            focusEvent:false
+        this.placeholder = prop.placeholder
+        this.styles = { ...prop.styles,position:'relative' }
+        this.img = prop.require
+        this.change=prop.change
+        this.state = {
+            focusEvent:false,
+            focusStyle:{
+                backgroundColor:'#f8f',
+                ...shadowWrapper('#fff',{width:5,height:5},0.5,5)
+            },
+            blurStyle:{
+                ...shadowWrapper('#000',{width:5,height:5},0.5,5)
+            }
         }
+
     }
+
+
     render():JSX.Element {
-        console.log()
         return(
             <>
                 <TextInput
-                    onChange={(e)=>{
-                        this.propSetState((prev)=>({...prev,account:e.currentTarget.valueOf}))
+                    onChangeText={(value)=>{
+                        this.change(value)  
                     }}
-                    
-                    onFocus={()=>this.setState({focusEvent:true})}
-                    onBlur={()=>this.setState({focusEvent:false})}
-                    style={{...this.styles,backgroundColor:this.state.focusEvent?'#fff':this.styles.backgroundColor}}
+                    onFocus={() => this.setState({focusEvent:true})}
+                    onBlur={() => this.setState({focusEvent:false})}
+                    style={{
+                    ...this.styles,
+                    ...this.state.focusEvent
+                        ?this.state.focusStyle
+                        :this.state.blurStyle
+                    }}
                     placeholder={this.placeholder}/>
-                <Image source={require('')}></Image>
+                <Image
+                    style={{width:40,
+                        height: '90%',
+                        position: 'absolute',
+                        top: (this.styles.height-(this.styles.height*0.9))/2,
+                        left: 10
+                    }} 
+                    source={this.img}></Image>
             </>
         
         )
