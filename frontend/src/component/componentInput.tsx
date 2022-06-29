@@ -1,8 +1,8 @@
 import React,{ Component, ReactNode } from "react";
 import { Animated, Easing, Image, ProgressViewIOSBase, TextInput } from "react-native";
 import { shadowWrapper } from "../style/styles";
-import {  interfaceComponentInput } from "../type/type";
-export class ComponentInput extends Component <interfaceComponentInput,any>{
+import {  interfaceComponentInput, interfaceComponentInputState } from "../type/type";
+export class ComponentInput extends Component <interfaceComponentInput,interfaceComponentInputState>{
     placeholder: string;
     styles: any;
     change:Function;

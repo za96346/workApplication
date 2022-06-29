@@ -1,4 +1,4 @@
-import { shadowProps } from "../type/type"
+
 
 export const styleLogin={
     

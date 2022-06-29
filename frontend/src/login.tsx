@@ -1,32 +1,52 @@
 import React,{Component} from "react";
-import { ActivityIndicator, Animated, Button, Text, TextInput, Touchable, TouchableHighlight, View } from "react-native";
+import { ActivityIndicator, Animated, Button, Modal, ProgressViewIOSBase, Text, TextInput, Touchable, TouchableHighlight, View } from "react-native";
 import { ComponentInput } from "./component/componentInput";
 import { styleLogin,shadowWrapper } from "./style/styles";
 import { StyleSheet } from "react-native";
-export default class Login extends Component{
+import { interfaceLoginState } from "./type/type";
+import ComponentModal from "./component/componentModal";
+
+
+export default class Login extends Component< any, interfaceLoginState >{
     constructor(props:any){
         super(props);
-        this.state={
-            account: '',
-            password: ''
-        }
+
         this.changeAccount=this.changeAccount.bind(this)
         this.changePassword=this.changePassword.bind(this)
+        this.changeModalVisible=this.changeModalVisible.bind(this)
+        this.state={
+            account: '',
+            password: '',
+            modalVisible:false,
+        }
     }
+
     changeAccount( value:string ) {
         this.setState( (prev) => ({...prev, account:value}) )
     }
     changePassword( value:string ) {
         this.setState( (prev) => ({...prev, password:value}) )
     }
+    changeModalVisible( value:boolean ) {
+        this.setState( (prev) => ({...prev,modalVisible:value}) )
+    }
     componentDidUpdate() {
         console.log('sideEffect',this.state)
     }
+    
 
     render():JSX.Element{
         console.log(this.state)
         return(
             <>  
+            <ComponentModal 
+                visible={this.state.modalVisible}
+                titleText={'警告'}
+                bodyText={'是否登入'}
+                btnText={'確定'}
+                change={this.changeModalVisible}
+
+                />
             <View style={styles.wrapper}>
                 <ActivityIndicator size="small" color="#0000ff"/>
                 <View>
@@ -44,11 +64,18 @@ export default class Login extends Component{
                 <TouchableHighlight
                     activeOpacity={0.6}
                     underlayColor="#DDDDDD"
+                    
                     style={{
                     ...styles.buttonWrapper,
                     ...shadowWrapper('#000',{width:10,height:10},0.5,10)
                     }}>
-                    <Button title='登入' onPress={()=>console.log('on press')}/>
+                    <Button 
+                        title='登入' 
+                        onPress={()=>{
+                            //api to fetching data
+                            
+                            this.changeModalVisible(true)
+                        }}/>
                 </TouchableHighlight>
                 
             </View>

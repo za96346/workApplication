@@ -6,13 +6,21 @@ export interface interfaceComponentInput {
     change: Function,
     require: NodeRequire;
 };
-export type shadowProps={
-    shadowColor:string,
-    shadowOffset:{
-        width:number|string,
-        height:number|string
-    },
-    shadowOpacity:number,
-    shadowRadius:number,
-}
 
+export interface interfaceLoginState {
+    account:string,
+    password:string,
+    modalVisible:boolean,
+}
+export interface interfaceComponentModal {
+    visible: boolean,
+    titleText:string,
+    bodyText:string,
+    btnText:string,
+    change:Function
+}
+export interface interfaceComponentInputState{
+    focusEvent:boolean,
+    focusStyle:object
+    blurStyle:object
+}
