@@ -22,21 +22,21 @@ export default class Login extends Component< any, interfaceLoginState >{
     }
 
     changeAccount( value:string ) {
-        this.setState( (prev) => ({...prev, account:value}) )
+        this.setState( {account:value} )
     }
     changePassword( value:string ) {
-        this.setState( (prev) => ({...prev, password:value}) )
+        this.setState( { password:value} )
     }
-    changeModalVisible( value:boolean ) {
-        this.setState( (prev) => ({...prev,modalVisible:value}) )
+    changeModalVisible() {
+        this.setState( {modalVisible: this.state.modalVisible?false:true} )
     }
     componentDidUpdate() {
-        console.log('sideEffect',this.state)
+        console.log('Login state => ',this.state)
     }
     
 
     render():JSX.Element{
-        console.log(this.state)
+        
         return(
             <>  
             <ComponentModal 
@@ -45,11 +45,10 @@ export default class Login extends Component< any, interfaceLoginState >{
                 bodyText={'是否登入'}
                 btnText={'確定'}
                 change={this.changeModalVisible}
-
                 />
             <View style={styles.wrapper}>
                 <ActivityIndicator size="small" color="#0000ff"/>
-                <View>
+                <View> 
                     <Text>here is the login logo</Text>
                 </View>
                 <View style={styles.allInputWrapper}>
@@ -74,7 +73,7 @@ export default class Login extends Component< any, interfaceLoginState >{
                         onPress={()=>{
                             //api to fetching data
                             
-                            this.changeModalVisible(true)
+                            this.changeModalVisible()
                         }}/>
                 </TouchableHighlight>
                 

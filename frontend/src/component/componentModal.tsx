@@ -1,52 +1,50 @@
 import React from "react";
-import { Modal, View, Text, Button } from "react-native";
-import { interfaceComponentModal } from "../type/type";
+import { Modal, View, Text, Button, Touchable, TouchableOpacity } from "react-native";
+import { interfaceComponentModalProps } from "../type/type";
+import ComponentButton from "./componentButton";
 
-export default class ComponentModal extends React.Component <interfaceComponentModal,any>{
+export default class ComponentModal extends React.Component <interfaceComponentModalProps, any>{
     visible:boolean
     titleText:string
     bodyText:string
     btnText:string
     change:Function
 
-    constructor(public prop: interfaceComponentModal) {
-        super(prop)
-        this.visible=prop.visible
-        this.titleText=prop.titleText
-        this.bodyText=prop.bodyText
-        this.btnText=prop.btnText
-        this.change=prop.change
-        this.state={
-            visible:false,
-        }
-        this.changeVisible=this.changeVisible.bind(this)
+    constructor(public props: interfaceComponentModalProps) {
+        super(props)
+        this.visible=props.visible
+        this.titleText=props.titleText
+        this.bodyText=props.bodyText
+        this.btnText=props.btnText
+        this.change=props.change
     }
-    changeVisible(prevProp:boolean) {
-        if(prevProp!==this.state.visible){
-            console.log('to setState =====> ')
-            this.setState({visible:prevProp})
-        }
-    }
-    componentDidUpdate(prevProp:any,prevState:any){
-        //prevProp當前傳入的prop(新的)
-        //this.prop.visible 原本的prop(舊的)
-        if(prevProp.visible!==this.visible){
-            console.log('\n')
-            console.log('\nprevProp.visible => ',prevProp.visible,'\n','this.state.visible => ',this.prop.visible)
-            this.changeVisible(prevProp)
-        }
-    }
+
     
     render(): JSX.Element {
         return(
             <Modal 
-                visible={this.state.visible}
+                visible={this.props.visible}
                 transparent={true}
                 >
-                <View style={{width:'100%',height:'100%',alignItems:'center',justifyContent:'center'}}>
-                    <Text>{this.titleText}</Text>
-                    <Text>{this.bodyText}</Text>
-                    <Button title={this.btnText} onPress={()=>this.change(false)}/>
+                <View style={{width: '100%', height: '100%', alignItems: "center", justifyContent: 'center', flexDirection: 'column'}}>
+                    <View 
+                        style={{
+                            borderRadius: 20,
+                            alignItems: 'center',
+                            width: '70%', 
+                            height: '40%',
+                            backgroundColor: 'white'
+                        }}>
+                        <View style={{width: '100%', height: '20%', justifyContent: 'center', backgroundColor: 'blue', borderTopLeftRadius: 20, borderTopRightRadius :20}}>
+                            <Text style={{color: 'white', textAlign: 'center'}}>{this.props.titleText}</Text>
+                        </View>
+                        <View style={{width: '100%', height: '60%', justifyContent: 'center', backgroundColor: 'white'}}>
+                            <Text style={{textAlign: 'center'}}>{this.props.bodyText}</Text>
+                        </View>
+                        
+                        <ComponentButton change={this.props.change} btnText={this.props.btnText}/>
+
+                    </View>
                 </View>
             </Modal>
         )

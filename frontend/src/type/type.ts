@@ -1,6 +1,6 @@
 import React from "react";
 
-export interface interfaceComponentInput {
+export interface interfaceComponentInputProps {
     placeholder: string,
     styles: object,
     change: Function,
@@ -12,15 +12,19 @@ export interface interfaceLoginState {
     password:string,
     modalVisible:boolean,
 }
-export interface interfaceComponentModal {
+export interface interfaceComponentModalProps extends typeComponentButtonProps {
+    //擴展
     visible: boolean,
     titleText:string,
     bodyText:string,
-    btnText:string,
-    change:Function
 }
 export interface interfaceComponentInputState{
     focusEvent:boolean,
     focusStyle:object
     blurStyle:object
+}
+export type typeComponentButtonProps={
+    //元件按鈕的type
+    btnText: string, 
+    change: Function
 }

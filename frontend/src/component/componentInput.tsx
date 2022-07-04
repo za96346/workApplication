@@ -1,15 +1,16 @@
 import React,{ Component, ReactNode } from "react";
 import { Animated, Easing, Image, ProgressViewIOSBase, TextInput } from "react-native";
 import { shadowWrapper } from "../style/styles";
-import {  interfaceComponentInput, interfaceComponentInputState } from "../type/type";
-export class ComponentInput extends Component <interfaceComponentInput,interfaceComponentInputState>{
+import {  interfaceComponentInputProps, interfaceComponentInputState } from "../type/type";
+
+export class ComponentInput extends Component <interfaceComponentInputProps, interfaceComponentInputState>{
     placeholder: string;
     styles: any;
     change:Function;
     img:NodeRequire
 
 
-    constructor(public prop:interfaceComponentInput){
+    constructor(public prop: interfaceComponentInputProps){
         super(prop);
         this.placeholder = prop.placeholder
         this.styles = { ...prop.styles,position:'relative' }
@@ -32,9 +33,10 @@ export class ComponentInput extends Component <interfaceComponentInput,interface
     render():JSX.Element {
         return(
             <>
+                
                 <TextInput
                     onChangeText={(value)=>{
-                        this.change(value)  
+                        this.change(value)
                     }}
                     onFocus={() => this.setState({focusEvent:true})}
                     onBlur={() => this.setState({focusEvent:false})}
