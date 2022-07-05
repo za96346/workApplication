@@ -1,14 +1,19 @@
 import React from "react";
-import { Text } from "react-native"; 
+import { Text, Touchable } from "react-native"; 
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default class Main extends React.Component{
+    navigation: any
     constructor(props:any) {
         super(props)
+        this.navigation = props.navigation
     }
     render(): JSX.Element {
         return (
             <>
-                <Text>Main page</Text>
+                <TouchableOpacity onPress={()=>this.navigation.goBack()}>
+                    <Text >Main page</Text>
+                </TouchableOpacity>
             </>
         );
     }

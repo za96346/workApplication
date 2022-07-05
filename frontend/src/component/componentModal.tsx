@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, View, Text, Button, Touchable, TouchableOpacity } from "react-native";
-import { interfaceComponentModalProps } from "../type/type";
+import { interfaceComponentModalProps, typeNavigation } from "../type/type";
 import ComponentButton from "./componentButton";
 
 export default class ComponentModal extends React.Component <interfaceComponentModalProps, any>{
@@ -9,9 +9,11 @@ export default class ComponentModal extends React.Component <interfaceComponentM
     bodyText:string
     btnText:string
     change:Function
+    navigation: typeNavigation
 
     constructor(public props: interfaceComponentModalProps) {
         super(props)
+        this.navigation = props.navigation
         this.visible=props.visible
         this.titleText=props.titleText
         this.bodyText=props.bodyText

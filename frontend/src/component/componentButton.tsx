@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button, TouchableOpacity } from "react-native";
 import { typeComponentButtonProps } from "../type/type";
+
 export default class ComponentButton extends Component<typeComponentButtonProps, any>{
     btnText: string;
     change: Function
@@ -19,6 +20,7 @@ export default class ComponentButton extends Component<typeComponentButtonProps,
                     title={this.props.btnText}
                     onPress={() => {
                         this.change(false)
+                        
                     }}
                 />
             </TouchableOpacity>
