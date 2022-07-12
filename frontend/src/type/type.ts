@@ -1,5 +1,3 @@
-import React from "react";
-
 export interface interfaceComponentInputProps {
     placeholder: string,
     styles: object,
@@ -34,4 +32,8 @@ export type typeNavigation = {
     navigate: (pageName:string, params: object) => {},
     popToTop: ()=>{},
     goBack: ()=>{}
+}
+export type typeReduxAction = {
+    type: string;
+    payLoad: Object | [] | string | number
 }

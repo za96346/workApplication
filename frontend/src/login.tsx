@@ -76,6 +76,7 @@ export default class Login extends Component< typeNavigation, interfaceLoginStat
                             title='登入' 
                             onPress={()=>{
                                 //api to fetching data
+                                
                                 this.navigation.navigate('Main',{params:'',navigation:this.navigation})
                                 this.changeModalVisible()
                             }}/>
