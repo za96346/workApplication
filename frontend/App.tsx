@@ -16,7 +16,8 @@ import * as actionCreators from './src/action/action'
 
 // 持久化存储 state
 import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+//import storage from 'redux-persist/lib/storage';
+import AsyncStorage from "@react-native-community/async-storage";
 
 //開發工具
 import { composeWithDevTools } from 'redux-devtools-extension';
@@ -57,7 +58,7 @@ const reducer = combineReducers({
 
 const persistConfig = {
 	key: 'root',
-	storage: storage,
+	storage: AsyncStorage,
 	whitelist: ['loginData'], // only member will be persisted
 };
 
@@ -67,17 +68,17 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 
 const middleware = [thunk];
   
-export const store = createStore(
+const store = createStore(
   persistedReducer,
   composeWithDevTools(applyMiddleware(...middleware)),
 );
-export const persisStore = persistStore(store);
+const persisStore = persistStore(store);
 
 // if you are not using the middleWare , you can choosing option below.
 //export const store = createStore(reducer,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 
-export class App extends Component{
+export default class App extends Component{
     render(): JSX.Element {
         return(
 			<Provider store={store}>
@@ -96,11 +97,11 @@ export class App extends Component{
 
 
 // 將store中的items值傳綁到props上
-const mapStateToProps = (store: any):object => (
-	{ items: store.items }
-  )
+//const mapStateToProps = (store: any):object => (
+	//{ items: store.items }
+ // )
   
   // 連接Redux store
   // 並把store.items綁到props.items，
   // actionCreators裡面的方法也綁到props上
-export default connect(mapStateToProps, actionCreators)(App)
+//export default connect(mapStateToProps, actionCreators)(App)
