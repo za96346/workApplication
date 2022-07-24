@@ -5,6 +5,7 @@ import { styleLogin,shadowWrapper } from "./style/styles";
 import { StyleSheet } from "react-native";
 import { interfaceLoginState, typeNavigation } from "./type/type";
 import ComponentModal from "./component/componentModal";
+import { login } from "./config/api";
 
 
 
@@ -76,7 +77,7 @@ export default class Login extends Component< typeNavigation, interfaceLoginStat
                             title='登入' 
                             onPress={()=>{
                                 //api to fetching data
-                                
+                                login(this.state)
                                 this.navigation.navigate('Main',{params:'',navigation:this.navigation})
                                 this.changeModalVisible()
                             }}/>
