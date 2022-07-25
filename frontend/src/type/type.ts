@@ -33,7 +33,3 @@ export type typeNavigation = {
     popToTop: ()=>{},
     goBack: ()=>{}
 }
-export type typeReduxAction = {
-    type: string;
-    payLoad: Object | [] | string | number
-}

@@ -6,6 +6,8 @@ import { StyleSheet } from "react-native";
 import { interfaceLoginState, typeNavigation } from "./type/type";
 import ComponentModal from "./component/componentModal";
 import { login } from "./config/api";
+import { store } from "../App";
+import { getLoginData } from "./action/action";
 
 
 
@@ -35,6 +37,7 @@ export default class Login extends Component< typeNavigation, interfaceLoginStat
     }
     componentDidUpdate() {
         console.log('Login state => ',this.state)
+        console.log('store loginData => ', store.getState().loginData)
     }
     
 
@@ -78,6 +81,7 @@ export default class Login extends Component< typeNavigation, interfaceLoginStat
                             onPress={()=>{
                                 //api to fetching data
                                 login(this.state)
+                                store.dispatch(getLoginData())
                                 this.navigation.navigate('Main',{params:'',navigation:this.navigation})
                                 this.changeModalVisible()
                             }}/>

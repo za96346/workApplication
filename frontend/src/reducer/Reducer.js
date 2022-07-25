@@ -1,12 +1,12 @@
 import { actionType } from "../type/actionType";
-import { typeReduxAction } from "../type/type";
+
 
 const getDataState = {
     state: null,
     data: null
 }
 
-export const loginData = (state = getDataState, action:typeReduxAction):object => {
+export const loginData = (state = getDataState, action) => {
     switch(action.type) {
         case actionType.PERSON_DATA_SUCCESS:
             return {

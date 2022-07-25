@@ -53,7 +53,7 @@ const headerOptions = ({route,navigation}:{route: RouteProp<ParamListBase, strin
 });
 
 const reducer = combineReducers({
-    loginData
+    loginData: loginData
 })
 
 const persistConfig = {
@@ -68,7 +68,7 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 
 const middleware = [thunk];
   
-const store = createStore(
+export const store = createStore(
   persistedReducer,
   composeWithDevTools(applyMiddleware(...middleware)),
 );

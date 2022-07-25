@@ -1,7 +1,8 @@
 import { Dispatch } from "react"
 import { actionType } from "../type/actionType"
 
-export const getLoginData = () => async (dispatch: Dispatch<object>) => {
+export const getLoginData = () => async (dispatch) => {
+    console.log('it do')
     try {
         dispatch({
             type: actionType.PERSON_DATA_SUCCESS,
