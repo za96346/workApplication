@@ -23,10 +23,11 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { PersistGate } from "redux-persist/integration/react";
 import thunk from "redux-thunk";
+import { extendTheme, NativeBaseProvider } from "native-base";
 
 
 const Stack = createStackNavigator();
-const headerOptions = ({route,navigation}:{route: RouteProp<ParamListBase, string>,navigation:typeNavigation}) => ({
+const headerOptions = ({route, navigation} : {route: RouteProp <ParamListBase, string> ,navigation: typeNavigation}) => ({
 	title: 'hihi',
 	headerTintColor: 'black', // 字體顏色
 	headerTitleStyle: {alignSelf: 'center', fontSize: 16}, // header 樣式
@@ -77,18 +78,27 @@ const persisStore = persistStore(store);
 // if you are not using the middleWare , you can choosing option below.
 //export const store = createStore(reducer,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
+const newColorTheme = {
+	brand: {
+	  900: '#8287af',
+	  800: '#7c83db',
+	  700: '#b3bef6',
+	},
+  };
 
 export default class App extends Component{
     render(): JSX.Element {
         return(
 			<Provider store={store}>
 				<PersistGate loading={null} persistor={persisStore}>
-					<NavigationContainer >
-						<Stack.Navigator screenOptions={headerOptions} initialRouteName="Login">
-							<Stack.Screen name="Login" component={Login} />
-							<Stack.Screen name="Main" component={Main} />
-						</Stack.Navigator>
-					</NavigationContainer>
+					<NativeBaseProvider theme={extendTheme({ colors: newColorTheme })}>
+						<NavigationContainer >
+							<Stack.Navigator screenOptions={headerOptions} initialRouteName="Login">
+								<Stack.Screen name="Login" component={Login} />
+								<Stack.Screen name="Main" component={Main} />
+							</Stack.Navigator>
+						</NavigationContainer>
+					</NativeBaseProvider>
 				</PersistGate>
 			</Provider>
 		)

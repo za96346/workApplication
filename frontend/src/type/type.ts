@@ -1,8 +1,11 @@
+import React from "react"
+import { Icon } from "native-base"
+
+
 export interface interfaceComponentInputProps {
     placeholder: string,
-    styles: object,
+    icons: JSX.Element,
     change: Function,
-    require: NodeRequire;
 };
 
 export interface interfaceLoginState {
@@ -30,6 +33,6 @@ export type typeComponentButtonProps = {
 }
 export type typeNavigation = {
     navigate: (pageName:string, params: object) => {},
-    popToTop: ()=>{},
-    goBack: ()=>{}
+    popToTop: () => {},
+    goBack: () => {}
 }

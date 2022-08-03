@@ -8,7 +8,10 @@ import ComponentModal from "./component/componentModal";
 import { login } from "./config/api";
 import { store } from "../App";
 import { getLoginData } from "./action/action";
-
+import { language } from "./language";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome5';
+import { Icon } from "native-base";
 
 
 export default class Login extends Component< typeNavigation, interfaceLoginState >{
@@ -16,26 +19,26 @@ export default class Login extends Component< typeNavigation, interfaceLoginStat
     constructor(props:any){
         super(props);
         this.navigation = props.navigation
-        this.changeAccount=this.changeAccount.bind(this)
-        this.changePassword=this.changePassword.bind(this)
-        this.changeModalVisible=this.changeModalVisible.bind(this)
+        this.changeAccount = this.changeAccount.bind(this)
+        this.changePassword = this.changePassword.bind(this)
+        this.changeModalVisible = this.changeModalVisible.bind(this)
         this.state={
             account: '',
             password: '',
-            modalVisible:false,
+            modalVisible: false,
         }
     }
 
-    changeAccount( value:string ) {
+    public changeAccount( value:string ) {
         this.setState( {account:value} )
     }
-    changePassword( value:string ) {
+    public changePassword( value:string ) {
         this.setState( { password:value} )
     }
-    changeModalVisible() {
+    public changeModalVisible() {
         this.setState( {modalVisible: this.state.modalVisible?false:true} )
     }
-    componentDidUpdate() {
+    public componentDidUpdate() {
         console.log('Login state => ',this.state)
         console.log('store loginData => ', store.getState().loginData)
     }
@@ -49,9 +52,9 @@ export default class Login extends Component< typeNavigation, interfaceLoginStat
                 <ComponentModal 
                     navigation={this.navigation}
                     visible={this.state.modalVisible}
-                    titleText={'警告'}
-                    bodyText={'是否登入'}
-                    btnText={'確定'}
+                    titleText={language.warning}
+                    bodyText={language.loginOrNot}
+                    btnText={language.confirm}
                     change={this.changeModalVisible}
                     />
                 <View style={styles.wrapper}>
@@ -62,10 +65,30 @@ export default class Login extends Component< typeNavigation, interfaceLoginStat
                     <View style={styles.allInputWrapper}>
                         
                         <View style={styles.inputWrapper}>
-                            <ComponentInput require={require('./static/account.png')} change={this.changeAccount} styles={styleLogin.Input} placeholder={'請輸入帳號'}/>
+                            <ComponentInput 
+                                icons={
+                                    <Icon
+                                        style={{color: '#C7C7E2'}}
+                                        size={10}
+                                        name="user-alt"
+                                        as={FontAwesome}
+                                    />
+                                }
+                                change={this.changeAccount}  
+                                placeholder={language.pleaseInputAccount}/>
                         </View>
                         <View style={styles.inputWrapper}>
-                            <ComponentInput require={require('./static/password.png')} change={this.changePassword} styles={styleLogin.Input} placeholder={'請輸入密碼'}/>
+                            <ComponentInput
+                                icons={
+                                    <Icon
+                                        style={{color: '#C7C7E2'}}
+                                        size={10}
+                                        name="lock"
+                                        as={FontAwesome}
+                                    />
+                                }
+                                change={this.changePassword}  
+                                placeholder={language.pleaseInputPassword}/>
                         </View>
                     </View>
                     <TouchableHighlight
@@ -73,16 +96,16 @@ export default class Login extends Component< typeNavigation, interfaceLoginStat
                         underlayColor="#DDDDDD"
                         
                         style={{
-                        ...styles.buttonWrapper,
-                        ...shadowWrapper('#000',{width:10,height:10},0.5,10)
+                            ...styles.buttonWrapper,
+                            ...shadowWrapper('#000', { width: 10, height: 10 }, 0.5, 10)
                         }}>
-                        <Button 
-                            title='登入' 
-                            onPress={()=>{
+                        <Button
+                            title={language.login} 
+                            onPress={() => {
                                 //api to fetching data
                                 login(this.state)
                                 store.dispatch(getLoginData())
-                                this.navigation.navigate('Main',{params:'',navigation:this.navigation})
+                                this.navigation.navigate('Main', {params:'',navigation:this.navigation})
                                 this.changeModalVisible()
                             }}/>
                     </TouchableHighlight>
