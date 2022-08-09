@@ -1,6 +1,6 @@
 
-import Login from './login';
-import Main from './main';
+import Login from './Login';
+import Main from './Main';
 
 const RootNavigator = ({
     login: {

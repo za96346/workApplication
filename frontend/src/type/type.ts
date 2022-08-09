@@ -2,37 +2,56 @@ import React from "react"
 import { Icon } from "native-base"
 
 
-export interface interfaceComponentInputProps {
+export interface interfaceCO_InputProps {
     placeholder: string,
     icons: JSX.Element,
     change: Function,
+    styIdx: string,
 };
-
-export interface interfaceLoginState {
-    account:string,
-    password:string,
-    modalVisible:boolean,
+export interface interfaceCO_InputState{
+    focusEvent: boolean,
+    focusStyle: object
+    blurStyle: object,
+    isPress: boolean,
 }
-export interface interfaceComponentModalProps extends 
-    typeComponentButtonProps {
+export interface interfaceLoginState {
+    account: string,
+    password: string,
+    modalVisible: boolean,
+    isLoading: boolean,
+}
+export type navigation = {
+    navigation: any,
+    route: any,
+}
+
+export interface interfaceCO_WarningWindowProps extends 
+    typeCO_ButtonProps {
     //擴展
     visible: boolean,
     titleText:string,
     bodyText:string,
-    navigation: typeNavigation,
+    navigation: Function,
 }
-export interface interfaceComponentInputState{
-    focusEvent:boolean,
-    focusStyle:object
-    blurStyle:object
-}
-export type typeComponentButtonProps = {
+export type typeCO_ButtonProps = {
     //元件按鈕的type
+    styIdx: string,
     btnText: string, 
-    change: Function
+    btnAction: Function
 }
-export type typeNavigation = {
-    navigate: (pageName:string, params: object) => {},
-    popToTop: () => {},
-    goBack: () => {}
+export interface interfaceCO_LoadingProps {
+    isVisible: boolean,
+    styIdx: string
+}
+export interface interfaceCO_LoadingState {
+    dot: string,
+}
+export interface interfaceCO_WorkListProps {
+    styIdx: string,
+    data: Array <{
+        imgUrl: string,
+        userName: string,
+        todayWorkType: string,
+        todayWorkTime: string
+    }>,
 }

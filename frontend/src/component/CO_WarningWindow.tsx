@@ -1,30 +1,18 @@
 import React from "react";
-import { Modal, View, Text, Button, Touchable, TouchableOpacity } from "react-native";
-import { interfaceComponentModalProps, typeNavigation } from "../type/type";
-import ComponentButton from "./componentButton";
+import { Modal, View, Text, Touchable, TouchableOpacity } from "react-native";
+import { interfaceCO_WarningWindowProps } from "../type/type";
+import CO_Button from "./CO_Button";
 
-export default class ComponentModal extends React.Component <interfaceComponentModalProps, any>{
-    visible:boolean
-    titleText:string
-    bodyText:string
-    btnText:string
-    change:Function
-    navigation: typeNavigation
+export default class CO_WarningWindow extends React.Component <interfaceCO_WarningWindowProps, any>{
 
-    constructor(public props: interfaceComponentModalProps) {
+    constructor(public props: interfaceCO_WarningWindowProps) {
         super(props)
-        this.navigation = props.navigation
-        this.visible=props.visible
-        this.titleText=props.titleText
-        this.bodyText=props.bodyText
-        this.btnText=props.btnText
-        this.change=props.change
     }
 
     
     render(): JSX.Element {
         return(
-            <Modal 
+            <Modal
                 visible={this.props.visible}
                 transparent={true}
                 >
@@ -44,7 +32,7 @@ export default class ComponentModal extends React.Component <interfaceComponentM
                             <Text style={{textAlign: 'center'}}>{this.props.bodyText}</Text>
                         </View>
                         
-                        <ComponentButton change={this.props.change} btnText={this.props.btnText}/>
+                        <CO_Button btnText={this.props.bodyText} btnAction={this.props.navigation} styIdx="one"/>
 
                     </View>
                 </View>

@@ -1,10 +1,9 @@
 import React,{ Component } from "react";
 import { NavigationContainer, ParamListBase, RouteProp } from "@react-navigation/native";
-import {createStackNavigator} from '@react-navigation/stack';
-import Login from "./src/login";
-import Main from "./src/main";
+import {createStackNavigator, Header} from '@react-navigation/stack';
+import Login from "./src/Login";
+import Main from "./src/Main";
 import { Image, Platform, Text, TouchableOpacity } from "react-native";
-import { typeNavigation } from "./src/type/type";
 import { connect, Provider } from "react-redux";
 import {
     legacy_createStore as createStore,
@@ -23,31 +22,49 @@ import AsyncStorage from "@react-native-community/async-storage";
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { PersistGate } from "redux-persist/integration/react";
 import thunk from "redux-thunk";
-import { extendTheme, NativeBaseProvider } from "native-base";
+import { extendTheme, Icon, NativeBaseProvider } from "native-base";
+import FontAwesome from 'react-native-vector-icons/FontAwesome5';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 
 const Stack = createStackNavigator();
-const headerOptions = ({route, navigation} : {route: RouteProp <ParamListBase, string> ,navigation: typeNavigation}) => ({
-	title: 'hihi',
-	headerTintColor: 'black', // 字體顏色
-	headerTitleStyle: {alignSelf: 'center', fontSize: 16}, // header 樣式
+const headerOptions = ({ route, navigation } : { route: any , navigation: any }) => ({
+	title: route?.params?.title || '',
+	headerTintColor: route?.params?.headerTintColor || 'black', // 字體顏色
+	headerTitleStyle: route?.params?.headerTitleStyle || {alignSelf: 'center', fontSize: 16}, // header 樣式
 	headerStyle: {
 	  height: Platform.OS === 'ios' ? 88 : 44,
 	}, // 使用裝置來判斷 header 的高度
 	headerRight: () => (
 		<TouchableOpacity
-		onPress={() => {
-		  navigation.popToTop();
-		}}>
-			<Text>home</Text>
+			onPress={() => {
+			navigation.popToTop();
+			}}>
+			<Icon
+				style={{marginRight: 10}}
+				color={'#C7C7E2'}
+				size={10}
+				name="home"
+				as={FontAwesome}
+			/>
 	  </TouchableOpacity>
 	), // 右邊放入 icon
 	headerLeft: () => (
 	  <TouchableOpacity
 		onPress={() => {
-		  navigation.goBack();
+			try {
+				navigation.goBack();	
+			} catch {
+				//pass
+			}
 		}}>
-			<Text>返回</Text>
+			<Icon
+				style={{marginLeft: 10}}
+				color={'#C7C7E2'}
+				size={10}
+				name="back"
+				as={AntDesign}
+			/>
 	  </TouchableOpacity>
 	  // 左邊放入icon 並使用 navigation.goBack() 及 backToHome() 回上一頁
 	),
@@ -93,9 +110,19 @@ export default class App extends Component{
 				<PersistGate loading={null} persistor={persisStore}>
 					<NativeBaseProvider theme={extendTheme({ colors: newColorTheme })}>
 						<NavigationContainer >
-							<Stack.Navigator screenOptions={headerOptions} initialRouteName="Login">
-								<Stack.Screen name="Login" component={Login} />
-								<Stack.Screen name="Main" component={Main} />
+							<Stack.Navigator
+								screenOptions={headerOptions}
+								initialRouteName="Login">
+								<Stack.Screen 
+									name="Login"
+									component={Login}
+									options={{headerShown: false}}//隱藏頭
+								/>
+								<Stack.Screen
+									options={{headerShown: false}}
+									name="Main" 
+									component={Main} 
+								/>
 							</Stack.Navigator>
 						</NavigationContainer>
 					</NativeBaseProvider>

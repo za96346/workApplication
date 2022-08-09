@@ -1,10 +1,8 @@
 import React,{Component} from "react";
-import { ActivityIndicator, Animated, Button, Modal, ProgressViewIOSBase, Text, TextInput, Touchable, TouchableHighlight, View } from "react-native";
-import { ComponentInput } from "./component/componentInput";
+import { ActivityIndicator, Animated, Button, ProgressViewIOSBase, Text, TextInput, Touchable, TouchableHighlight, View } from "react-native";
 import { styleLogin,shadowWrapper } from "./style/styles";
 import { StyleSheet } from "react-native";
-import { interfaceLoginState, typeNavigation } from "./type/type";
-import ComponentModal from "./component/componentModal";
+import { interfaceLoginState, navigation } from "./type/type";
 import { login } from "./config/api";
 import { store } from "../App";
 import { getLoginData } from "./action/action";
@@ -12,33 +10,46 @@ import { language } from "./language";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome5';
 import { Icon } from "native-base";
+import CO_WarningWindow from "./component/CO_WarningWindow";
+import { CO_Input } from "./component/CO_Input";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import CO_Button from "./component/CO_Button";
+import Modal from 'react-native-modal';
+import CO_Loading from "./component/CO_Loading";
 
-
-export default class Login extends Component< typeNavigation, interfaceLoginState >{
-    navigation: typeNavigation;
-    constructor(props:any){
+export default class Login extends Component<navigation, interfaceLoginState >{
+    constructor(props: any){
+        console.log('login props => ', props)
         super(props);
-        this.navigation = props.navigation
         this.changeAccount = this.changeAccount.bind(this)
         this.changePassword = this.changePassword.bind(this)
         this.changeModalVisible = this.changeModalVisible.bind(this)
+        this.loginbtnAction = this.loginbtnAction.bind(this)
         this.state={
             account: '',
             password: '',
             modalVisible: false,
+            isLoading: false,
         }
     }
 
-    public changeAccount( value:string ) {
+    private changeAccount( value:string ) {
         this.setState( {account:value} )
     }
-    public changePassword( value:string ) {
+    private changePassword( value:string ) {
         this.setState( { password:value} )
     }
-    public changeModalVisible() {
-        this.setState( {modalVisible: this.state.modalVisible?false:true} )
+    private changeModalVisible() {
+        this.setState( {modalVisible: this.state.modalVisible ? false : true} )
     }
-    public componentDidUpdate() {
+    public loginbtnAction() {
+        //api to fetching data
+        login(this.state)
+        store.dispatch(getLoginData())
+        this.props.navigation.navigate('Main', {title: 'Main'})
+        this.changeModalVisible()
+    }
+    componentDidUpdate() {
         console.log('Login state => ',this.state)
         console.log('store loginData => ', store.getState().loginData)
     }
@@ -48,70 +59,59 @@ export default class Login extends Component< typeNavigation, interfaceLoginStat
         
         return(
             <>
-            
-                <ComponentModal 
-                    navigation={this.navigation}
+                {/* <CO_WarningWindow
+                    styIdx="one"
+                    navigation={this.props.navigation}
                     visible={this.state.modalVisible}
                     titleText={language.warning}
                     bodyText={language.loginOrNot}
                     btnText={language.confirm}
-                    change={this.changeModalVisible}
-                    />
-                <View style={styles.wrapper}>
-                    <ActivityIndicator size="small" color="#0000ff"/>
+                    btnAction={this.changeModalVisible}
+                /> */}
+                <CO_Loading isVisible={this.state.isLoading} styIdx='one'/>
+                <KeyboardAwareScrollView
+                        resetScrollToCoords={{ x: 0, y: 0 }}
+                        contentContainerStyle={styles.wrapper}
+                        scrollEnabled={false}
+                    >
                     <View> 
                         <Text>here is the login logo</Text>
                     </View>
                     <View style={styles.allInputWrapper}>
                         
                         <View style={styles.inputWrapper}>
-                            <ComponentInput 
+                            <CO_Input
                                 icons={
                                     <Icon
-                                        style={{color: '#C7C7E2'}}
+                                        color={'#C7C7E2'}
                                         size={10}
                                         name="user-alt"
                                         as={FontAwesome}
                                     />
                                 }
+                                styIdx='two'
                                 change={this.changeAccount}  
                                 placeholder={language.pleaseInputAccount}/>
                         </View>
                         <View style={styles.inputWrapper}>
-                            <ComponentInput
+                            <CO_Input
                                 icons={
                                     <Icon
-                                        style={{color: '#C7C7E2'}}
+                                        color={'#C7C7E2'}
                                         size={10}
                                         name="lock"
                                         as={FontAwesome}
                                     />
                                 }
+                                styIdx='two'
                                 change={this.changePassword}  
                                 placeholder={language.pleaseInputPassword}/>
                         </View>
                     </View>
-                    <TouchableHighlight
-                        activeOpacity={0.6}
-                        underlayColor="#DDDDDD"
-                        
-                        style={{
-                            ...styles.buttonWrapper,
-                            ...shadowWrapper('#000', { width: 10, height: 10 }, 0.5, 10)
-                        }}>
-                        <Button
-                            title={language.login} 
-                            onPress={() => {
-                                //api to fetching data
-                                login(this.state)
-                                store.dispatch(getLoginData())
-                                this.navigation.navigate('Main', {params:'',navigation:this.navigation})
-                                this.changeModalVisible()
-                            }}/>
-                    </TouchableHighlight>
+
+                    <CO_Button styIdx="one" btnText={language.login} btnAction={this.loginbtnAction}/>
                     
-                </View>
-            
+                </KeyboardAwareScrollView>
             </>
         )
     }
@@ -138,11 +138,5 @@ const styles=StyleSheet.create({
     inputWrapper:{
         width:'100%',
     },
-    buttonWrapper:{
-        width:'90%',
-        backgroundColor:'#ccc',
-        borderRadius:10,
-
-    }
     
 })
