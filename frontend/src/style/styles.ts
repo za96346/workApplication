@@ -19,3 +19,13 @@ export const shadowWrapper = (
         elevation: 2,
     }
 }
+
+export const circle = (
+        radius: number,
+    ):object => {
+    return {
+        width: radius,
+        height: radius,
+        borderRadius: radius / 2
+    }
+}

@@ -10,5 +10,16 @@ export const language = {
     workList: '班表',
     checkIn: '打卡',
     staffChange: '班表異動',
-    setting: '設定'
+    setting: '設定',
+    personalDataSetting: '個人資料設定',
+    basicSetting: '基本設定',
+    logOut: '登出',
+    aboutUs: '關於我們',
+    contactUs: '聯絡我們',
+    applyChangeWork: '調班申請',
+    applyUpWork: '加班申請',
+    forgetCheckIn: '忘記打卡',
+    late: '遲到',
+    elseOnWork: '其他異議',
+    applyRequestLeave: '請假申請'
 }

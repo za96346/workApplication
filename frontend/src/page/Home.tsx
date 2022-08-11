@@ -3,11 +3,11 @@ import React from "react";
 import { SafeAreaView } from "react-native";
 import CO_WorkList from "../component/CO_WorkList";
 const data = new Array(100).fill({
-        imgUrl: '',
-        userName: 'jack',
-        todayWorkType: '早班',
-        todayWorkTime: '9 : 00 ~ 17 : 30'
-    })
+    imgUrl: '',
+    userName: 'jack',
+    todayWorkType: '早班',
+    todayWorkTime: '9 : 00 ~ 17 : 30'
+})
 
 export default class Home extends React.Component <any, any>{
     constructor(props: any) {

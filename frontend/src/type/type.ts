@@ -55,3 +55,19 @@ export interface interfaceCO_WorkListProps {
         todayWorkTime: string
     }>,
 }
+
+
+
+
+export interface interfaceCO_NavigateListProps {
+    icons: JSX.Element,
+    name: string,
+    style?: object,
+    btnAction: Function,
+}
+
+export interface interfaceCO_FormUIProps {
+    // btnAction: Function,
+    Label: string,
+    imgUrl: any
+}
