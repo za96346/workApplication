@@ -64,10 +64,13 @@ export interface interfaceCO_NavigateListProps {
     name: string,
     style?: object,
     btnAction: Function,
+    styIdex: string,
 }
 
 export interface interfaceCO_FormUIProps {
     // btnAction: Function,
     Label: string,
-    imgUrl: any
+    imgUrl: any,
+    btnAction: Function,
+    styIdex: string,
 }

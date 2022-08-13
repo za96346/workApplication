@@ -6,7 +6,46 @@ import lonicon from 'react-native-vector-icons/Ionicons'
 import { language } from "../language";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { circle } from "../style/styles";
-import AntDesign from "react-native-vector-icons/AntDesign"
+import AntDesign from "react-native-vector-icons/AntDesign";
+
+const container = [
+    {
+        styIdx: 'one',
+        btnAction: () => {},
+        style: { marginTop: 10 },
+        icons: <Icon name="ios-person-circle-outline" as={lonicon} color={'#444'} size={10}/>,
+        name: language.personalDataSetting,
+    },
+    {
+        styIdx: 'one',
+        btnAction: () => {},
+        style: { marginTop: 10 },
+        icons: <Icon name="ios-settings-sharp" as={lonicon} color={'#444'} size={10}/>,
+        name: language.basicSetting,
+    },
+    {
+        styIdx: 'one',
+        btnAction: () => {},
+        style: { marginTop: 10 },
+        icons: <Icon name="phone" as={FontAwesome} color={'#444'} size={10}/>,
+        name: language.contactUs,
+    },
+    {
+        styIdx: 'one',
+        btnAction: () => {},
+        style: { marginTop: 10 },
+        icons: <Icon name="commenting" as={FontAwesome} color={'#444'} size={10}/>,
+        name: language.aboutUs,
+    },
+    {
+        styIdx: 'one',
+        btnAction: () => {},
+        style: { marginTop: 10 },
+        icons: <Icon name="ios-log-in-outline" as={lonicon} color={'#444'} size={10}/>,
+        name: language.logOut,
+    }
+]
+
 class Setting extends React.Component <any, any>{
     constructor(props: any) {
         super(props)
@@ -66,31 +105,18 @@ class Setting extends React.Component <any, any>{
                         flexDirection: 'column',
                         alignItems: 'center',
                     }}>
-                    <CO_NavigateList
-                        btnAction={() => this.btnAction(language.personalDataSetting)}
-                        style={{ marginTop: 10 }}
-                        icons={<Icon name="ios-person-circle-outline" as={lonicon} color={'#444'} size={10}/>}
-                        name={language.personalDataSetting}/>
-                    <CO_NavigateList
-                        btnAction={() => this.btnAction(language.basicSetting)}
-                        style={{ marginTop: 10 }}
-                        icons={<Icon name="ios-settings-sharp" as={lonicon} color={'#444'} size={10}/>}
-                        name={language.basicSetting}/>
-                    <CO_NavigateList
-                        btnAction={() => this.btnAction(language.personalDataSetting)}
-                        style={{ marginTop: 10 }}
-                        icons={<Icon name="phone" as={FontAwesome} color={'#444'} size={10}/>}
-                        name={language.contactUs}/>
-                    <CO_NavigateList
-                        btnAction={() => this.btnAction(language.personalDataSetting)}
-                        style={{ marginTop: 10 }}
-                        icons={<Icon name="commenting" as={FontAwesome} color={'#444'} size={10}/>}
-                        name={language.aboutUs}/>
-                    <CO_NavigateList
-                        btnAction={() => this.btnAction(language.logOut)}
-                        style={{ marginTop: 10 }}
-                        icons={<Icon name="ios-log-in-outline" as={lonicon} color={'#444'} size={10}/>}
-                        name={language.logOut}/>
+                    {
+                        container.map((item, index) => {
+                            return (
+                                <CO_NavigateList
+                                    styIdex={item.styIdx}
+                                    btnAction={item.btnAction}
+                                    style={item.style}
+                                    icons={item.icons}
+                                    name={item.name}/>
+                            )
+                        })
+                    }
                 </View>
             </View>
         )
