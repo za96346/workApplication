@@ -48,6 +48,7 @@ export default class Login extends Component<navigation, interfaceLoginState >{
         store.dispatch(getLoginData())
         this.props.navigation.navigate('Main', {title: 'Main'})
         this.changeModalVisible()
+        console.log('=>>>>>>>>>>>>>>>>>', this.props.navigation.canGoBack(false))
     }
     componentDidUpdate() {
         console.log('Login state => ',this.state)
