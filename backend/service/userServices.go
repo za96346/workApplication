@@ -43,5 +43,5 @@ func UpdateUser(props *gin.Context) {
 }
 
 func DeleteUser(props *gin.Context) {
-	deleteUser := []pojo.User{}
+	// deleteUser := []pojo.User{}
 }
