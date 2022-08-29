@@ -3,11 +3,13 @@ import { Outlet } from "react-router-dom";
 import Footer from "../component/Footer";
 import Header from "../component/Header";
 
-const Layout = () => {
+const Layout = ():JSX.Element => {
     return (
         <>
         <Header />
-        <Outlet />
+            <div className={styles.article}>
+                <Outlet />
+            </div>
         <Footer />
         </>
     )

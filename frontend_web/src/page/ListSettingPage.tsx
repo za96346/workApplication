@@ -1,10 +1,10 @@
 import React from "react";
 
-const TimeSettingPage = () => {
+const ListSettingPage = ():JSX.Element => {
     return (
         <>
         TimeSetting
         </>
     )
 }
-export default TimeSettingPage;
+export default ListSettingPage;

@@ -4,7 +4,7 @@
 	justify-content: center;
 }
 %shadowNormal {
-  	box-shadow: 0px 0px 10px black;
+  	box-shadow:0px 0px 10px rgb(78, 78, 78),;
 }
 %verticleBlock {
 	display: flex;
@@ -16,6 +16,18 @@ body{
 	width: 100vw;
 	padding: 0;
 	margin: 0;
+}
+.article {
+	height: 80vh;
+	min-height: 80vh;
+	max-height: 80vh;
+	overflow-y: scroll;
+	background-color: blanchedalmond;
+}
+div::-webkit-scrollbar {
+	display: none;
+	scroll-behavior: smooth;
+	scroll-snap-type: mandatory;
 }
 .headerBlock{
 	width: 100vw;
@@ -34,41 +46,115 @@ body{
 	font-size: 1rem;
 	>div {
 		flex: 1;
-		background-color: blueviolet;
 		height: 100%;
 		@extend %center;
 		transition: 0.4s;
 		&:hover {
 		cursor: pointer;
-		@extend %shadowNormal;
+			@extend %shadowNormal;
+			border-radius: 10px;
+		}
+	}
+	.navBlur {
+	}
+	.navFocus {
+		background-color: rgb(42, 164, 130);
+	}
+}
+
+.editBlock {
+	@extend %verticleBlock;
+	width: 100%;
+	.editHeader {
+		width: 90%;
+		height: 30px;
+		border-radius: 20px 20px 0px 0px;
+		background-color: rgb(189, 143, 143);
+		color: #fff;
+		padding-left: 20px;
+		@extend %center;
+		margin-top: 20px;
+	}
+	.editBody{
+		background:linear-gradient(rgba(75, 141, 163, 0.4), rgba(79, 90, 255, 0.4), rgba(0, 214, 211, 0.4));
+		overflow-x: scroll;
+		border-radius: 0px 0px 20px 20px;
+		width: 90%;
+		.editPerson {
+			width: fit-content;
+			min-width: 100%;
+			height: 50px;
+			border-top: 1px gray solid;
+			display: flex;
+			align-items: center;
+			>div:first-child {
+				position: sticky;
+				left: 0;
+				background-color: rgb(38, 172, 169);
+				
+			}
+			>div:last-child {
+				border-bottom: 1px solid #fff;
+			}
+			.editDay {
+				@extend %center;
+				min-width: 40px;
+				height: 100%;
+				flex: 1;
+				border-left: 1px solid #fff;
+				transition: 0.4s;
+				&:hover {
+					background-color: black;
+					color: #fff;
+					@extend %shadowNormal;
+					cursor: pointer;
+				}
+			}
 		}
 	}
 }
-.editBlock {
-	height: 80vh;
-	background-color: blanchedalmond;
-	.editGroup {
-		@extend %verticleBlock;
-		width: 100%;
-		
-		.editHeader {
-			width: 100%;
-			height: 30px;
-			background-color: brown;
 
+.selfSettingBlock {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	.selfSettingHead {
+		margin-top: 20px;
+		width: 150px;
+		height: 150px;
+		background-color: #fff;
+		border-radius: 50%;
+		@extend %shadowNormal;
+		position: relative;
+		>div {
+			font-size: 2rem;
+			position: absolute;
+			bottom: -50px;
+			left: 50%;
+			transform: translateX(-50%);
 		}
-		.editBody{
-			width: 100%;
-			.editPerson {
-				width: inherit;
-				height: 50px;
-				border: 1px gray solid;
-				.editDay {
-					width: 10px;
-					height: 10px;
-					background-color: chartreuse;
-				}
+	}
+	.selfSettingBody {
+		margin-top: 50px;
+		max-width: 300px;
+		width: 100%;
+		height: 70%;
+		padding: 0px 20px;
+		>div {
+			font-size: 1rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			height: 10%;
+			&:hover {
+				cursor: pointer;
+				
 			}
+		}
+		>div:last-child {
+			justify-content: center;
 
 		}
 	}

@@ -1,24 +1,112 @@
 import React from "react";
-import styles from '../index.module.scss';
-const EditPage = () => {
+const data = [
+    {
+        groupName: '保育組',
+        groupMember: [
+            {
+                name: 'json',
+                id: 9230994802,
+            },
+            {
+                name: 'json',
+                id: 9230994802,
+            },
+            {
+                name: 'json',
+                id: 9230994802,
+            },
+            {
+                name: 'json',
+                id: 9230994802,
+            },
+            {
+                name: 'json',
+                id: 9230994802,
+            }
+        ]
+    },
+    {
+        groupName: '公關組',
+        groupMember: [
+            {
+                name: 'json',
+                id: 9230994802,
+            },
+            {
+                name: 'json',
+                id: 9230994802,
+            },
+            {
+                name: 'json',
+                id: 9230994802,
+            },
+            {
+                name: 'json',
+                id: 9230994802,
+            },
+            {
+                name: 'json',
+                id: 9230994802,
+            }
+        ]
+    },
+    {
+        groupName: '行政組',
+        groupMember: [
+            {
+                name: 'json',
+                id: 9230994802,
+            },
+            {
+                name: 'json',
+                id: 9230994802,
+            },
+            {
+                name: 'json',
+                id: 9230994802,
+            },
+            {
+                name: 'json',
+                id: 9230994802,
+            },
+            {
+                name: 'json',
+                id: 9230994802,
+            }
+        ]
+    }
+]
+const EditPage = ():JSX.Element => {
     return (
-        <div className={styles.editBlock}>
-            <div className={styles.editGroup}>
-                <div className={styles.editHeader}>xx 組</div>
+        <>  
+            {data.map((dataItem) => (
+                
+                <div className={styles.editBlock}>
+                    <div className={styles.editHeader}>{dataItem.groupName}</div>
 
-                <div className={styles.editBody}>
-                    {
-                        new Array(5).fill('').map(() => (
-                            <div className={styles.editPerson}>
-                                <div className={styles.editDay}>
-                                    
+                    <div className={styles.editBody}>
+                        {
+                            dataItem.groupMember.map((pItem, pIndex) => (
+                                <div className={styles.editPerson}>
+                                    {
+                                        new Array(32).fill('').map((item, dIndex) => (
+                                            <div className={styles.editDay}>
+                                                {
+                                                dIndex === 0
+                                                    ? pItem.name
+                                                    :pIndex + '-' + dIndex
+                                                }
+                                            </div>
+                                        ))
+                                    }
                                 </div>
-                            </div>
-                        ))
-                    }
+                            ))
+                        }
+                    </div>
                 </div>
-            </div>
-        </div>
+            ))
+            }
+        </>
     )
 }
 export default EditPage;
