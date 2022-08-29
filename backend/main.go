@@ -1,8 +1,7 @@
 //go get github.com/gin-gonic/gin
 //go get github.com/joho/godotenv
 
-
-//http status code reference => https://go.dev/src/net/http/status.go
+// http status code reference => https://go.dev/src/net/http/status.go
 package main
 
 import (
@@ -13,12 +12,17 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+
 	// . "./middleWare/permessionMiddleWare"
+	"backend/database"
 	. "backend/route"
 )
 
 
 func main() {
+	go func() {
+		database.DBInit();
+	}()
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("error loading .env file")
@@ -29,6 +33,6 @@ func main() {
 	userApi := apiServer.Group("/workApp/user")
 	UserRouter(userApi)
 	// apiServer.Use(permessionMiddleWare("a1234"))
-	apiServer.Run(port)
+	apiServer.Run(":" + port)
 }
 

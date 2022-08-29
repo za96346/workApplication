@@ -7,9 +7,8 @@ import (
 	"net/http"
 
 	// "strconv"
-
 	"backend/pojo"
-
+	// "backend/database"
 	"github.com/gin-gonic/gin"
 )
 var userList = []pojo.User{}
