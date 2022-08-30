@@ -21,7 +21,7 @@ import (
 
 func main() {
 	go func() {
-		database.DBInit();
+		database.DBconnect();
 	}()
 	err := godotenv.Load()
 	if err != nil {

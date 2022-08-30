@@ -13,20 +13,10 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var (
-	account string
-	password string
-	name string
-	banch string
-	emp_id string
-	on_work_day string
-	position string
-	work_state string
-)
 var DB *sql.DB
 var err error
 
-func DBInit() {
+func DBconnect() {
 	err = godotenv.Load()
 	if err != nil {
 		log.Fatal("error loading .env file")
@@ -47,7 +37,7 @@ func DBInit() {
 		DB.SetMaxIdleConns(100000)
 		DB.SetMaxOpenConns(100000)
 	}
-	SelectSingleUser();
+	DataBaseInit(DB);
 }
 
 func SelectSingleUser() {
@@ -58,11 +48,20 @@ func SelectSingleUser() {
 	}
 	defer rows.Close()
 	defer DB.Close()
+
 	for rows.Next() {
-		err := rows.Scan(&account, &name, &password, &banch, &emp_id, &on_work_day, &position, &work_state)
+		// err := rows.Scan(
+		// 	&userTableInstance.Account,
+		// 	&userTableInstance.Banch,
+		// 	&userTableInstance.Emp_id,
+		// 	&userTableInstance.Name,
+		// 	&userTableInstance.On_work_day,
+		// 	&userTableInstance.Password,
+		// 	&userTableInstance.Position,
+		// 	&userTableInstance.Work_state)
 		if err != nil {
 			log.Fatal(err)
 		}
-		log.Println(account, name, password, banch, emp_id, on_work_day, position, work_state)
+		log.Println()
 	}
 }
