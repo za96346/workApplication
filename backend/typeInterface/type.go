@@ -8,7 +8,7 @@ var userTableInstance *UserTable
 
 type UserTable struct {
 	UserId string
-	companyCode string
+	CompanyCode string
 	Account string
 	Password string
 	OnWorkDay string

@@ -15,13 +15,16 @@ import (
 
 	// . "./middleWare/permessionMiddleWare"
 	"backend/database"
+	"backend/redis"
 	. "backend/route"
 )
 
 
 func main() {
 	go func() {
-		database.DBconnect();
+		database.MysqlDBConn();
+		redis.RedisDBConn()
+
 	}()
 	err := godotenv.Load()
 	if err != nil {

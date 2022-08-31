@@ -1,27 +1,30 @@
 package database
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
+	"time"
+	. "backend/typeinterface"
 )
-
-func DataBaseInit(DB *sql.DB) {
+func DataBaseInit() {
 	// DB.Query(`drop database workApplication;`)
 	// DB.Query(`create database workApplication;`)
 	// DB.Query(`use workApplication;`)
-	DB.Exec(`drop table user;`)
-	DB.Exec(`drop table userPreference;`)
-	DB.Exec(`drop table shift;`)
-	DB.Exec(`drop table shiftChange;`)
-	DB.Exec(`drop table shiftOverTime;`)
-	DB.Exec(`drop table forgetPunch;`)
-	DB.Exec(`drop table dayOff;`)
-	DB.Exec(`drop table lateExcused;`)
-	DB.Exec(`drop table company;`)
-	DB.Exec(`drop table companyBanch;`)
+	defer simulateData();
+	// defer MysqlDB.Close();
+	MysqlDB.Exec(`drop table user;`)
+	MysqlDB.Exec(`drop table userPreference;`)
+	MysqlDB.Exec(`drop table shift;`)
+	MysqlDB.Exec(`drop table shiftChange;`)
+	MysqlDB.Exec(`drop table shiftOverTime;`)
+	MysqlDB.Exec(`drop table forgetPunch;`)
+	MysqlDB.Exec(`drop table dayOff;`)
+	MysqlDB.Exec(`drop table lateExcused;`)
+	MysqlDB.Exec(`drop table company;`)
+	MysqlDB.Exec(`drop table companyBanch;`)
 /// user table
-	_, err = DB.Exec(`
+	_, err = MysqlDB.Exec(`
 		create table user(
 			userId int not null AUTO_INCREMENT unique,
 			companyCode varchar(50),
@@ -30,11 +33,11 @@ func DataBaseInit(DB *sql.DB) {
 			onWorkDay varchar(50),
 			banch varchar(50),
 			permession varchar(50),
-			wrokState varchar(50),
+			workState varchar(50),
 			createTime varchar(50),
 			lastModify varchar(50),
-			monthSalary varchar(50),
-			ParTimeSalary varchar(50)
+			monthSalary int,
+			partTimeSalary int
 		);
 	`)
 	if err == nil {
@@ -44,7 +47,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 /// userPreference table
-	_, err = DB.Exec(`
+	_, err = MysqlDB.Exec(`
 		create table userPreference(
 			userId int primary key,
 			style varchar(50),
@@ -61,7 +64,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 ///shift table
-	_, err = DB.Exec(`
+	_, err = MysqlDB.Exec(`
 		create table shift(
 			shiftId int unique,
 			userId int,
@@ -81,7 +84,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 ///shiftChange table
-	_, err = DB.Exec(`
+	_, err = MysqlDB.Exec(`
 	create table shiftChange(
 		initiatorShiftId int,
 		requestedShiftId int,
@@ -100,7 +103,7 @@ func DataBaseInit(DB *sql.DB) {
 	}
 
 ///shiftOverTime table
-	_, err = DB.Exec(`
+	_, err = MysqlDB.Exec(`
 	create table shiftOverTime(
 		shiftId int,
 		initiatorOnOverTime varchar(50),
@@ -119,7 +122,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 ///forgetPunch table
-	_, err = DB.Exec(`
+	_, err = MysqlDB.Exec(`
 		create table forgetPunch(
 			shiftId int,
 			targetPunch varchar(3),
@@ -137,7 +140,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 /// dayOff table
-	_, err = DB.Exec(`
+	_, err = MysqlDB.Exec(`
 		create table dayOff(
 			shiftId int,
 			dayOffType varchar(10),
@@ -156,7 +159,7 @@ func DataBaseInit(DB *sql.DB) {
 	}
 
 /// lateExcused table
-	_, err = DB.Exec(`
+	_, err = MysqlDB.Exec(`
 		create table lateExcused(
 			shiftId int,
 			lateExcusedType varchar(10),
@@ -175,9 +178,9 @@ func DataBaseInit(DB *sql.DB) {
 	}
 
 /// company table
-	_, err = DB.Exec(`
+	_, err = MysqlDB.Exec(`
 		create table company(
-			companyId int unique,
+			companyId int unique auto_increment,
 			companyCode varchar(50) unique,
 			companyName varchar(200),
 			companyLocation varchar(200),
@@ -196,7 +199,7 @@ func DataBaseInit(DB *sql.DB) {
 	}
 
 /// companyBanch table
-	_, err = DB.Exec(`
+	_, err = MysqlDB.Exec(`
 		create table companyBanch(
 			companyId int,
 			banchName varchar(50),
@@ -214,7 +217,7 @@ func DataBaseInit(DB *sql.DB) {
 
 
 /// userPreference alter
-	_, err = DB.Exec("alter table userPreference add foreign key(userId) references user(userId) on update cascade;")
+	_, err = MysqlDB.Exec("alter table userPreference add foreign key(userId) references user(userId) on update cascade;")
 
 	if err == nil {
 		fmt.Println("userPreference alter foreign key success")
@@ -223,7 +226,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 /// shift alter
-	_, err = DB.Exec(`
+	_, err = MysqlDB.Exec(`
 		alter table shift add primary key (onShiftTime, offShiftTime, shiftId, userId);`)
 
 	if err == nil {
@@ -233,7 +236,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 	
-	_, err = DB.Exec("alter table shift add foreign key(userId) references user(userId) on update cascade;")
+	_, err = MysqlDB.Exec("alter table shift add foreign key(userId) references user(userId) on update cascade;")
 
 	if err == nil {
 		fmt.Println("shift alter foreign key success")
@@ -242,7 +245,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 
-	_, err = DB.Exec("alter table shift auto_increment=734028;")
+	_, err = MysqlDB.Exec("alter table shift auto_increment=734028;")
 
 	if err == nil {
 		fmt.Println("shift alter set auto increment success")
@@ -252,7 +255,7 @@ func DataBaseInit(DB *sql.DB) {
 	}
 
 /// shiftChange alter
-	_, err = DB.Exec(`
+	_, err = MysqlDB.Exec(`
 	alter table shiftChange add primary key (initiatorShiftId, requestedShiftId);`)
 
 	if err == nil {
@@ -262,7 +265,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 
-	_, err = DB.Exec("alter table shiftChange add foreign key(initiatorShiftId) references shift(shiftId) on update cascade;")
+	_, err = MysqlDB.Exec("alter table shiftChange add foreign key(initiatorShiftId) references shift(shiftId) on update cascade;")
 
 	if err == nil {
 		fmt.Println("shiftChange alter foreign key success")
@@ -271,7 +274,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 
-	_, err = DB.Exec("alter table shiftChange add foreign key (requestedShiftId) references shift(shiftId) on update cascade;")
+	_, err = MysqlDB.Exec("alter table shiftChange add foreign key (requestedShiftId) references shift(shiftId) on update cascade;")
 
 	if err == nil {
 		fmt.Println("shiftChange alter foreign key success")
@@ -279,9 +282,8 @@ func DataBaseInit(DB *sql.DB) {
 		fmt.Println("shiftChange alter foreign key failed")
 		log.Fatal(err)
 	}
-	defer DB.Close()
 /// shiftOverTime alter
-	_, err = DB.Exec(`
+	_, err = MysqlDB.Exec(`
 	alter table shiftOverTime add primary key (shiftId, initiatorOnOverTime, initiatorOffOverTime);`)
 
 	if err == nil {
@@ -291,7 +293,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 
-	_, err = DB.Exec("alter table shiftOverTime add foreign key (shiftId) references shift(shiftId) on update cascade;")
+	_, err = MysqlDB.Exec("alter table shiftOverTime add foreign key (shiftId) references shift(shiftId) on update cascade;")
 
 	if err == nil {
 		fmt.Println("shiftOverTime alter foreign key success")
@@ -300,7 +302,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 /// forgetPunch alter
-	_, err = DB.Exec(`
+	_, err = MysqlDB.Exec(`
 	alter table forgetPunch add primary key (shiftId, targetPunch);`)
 
 	if err == nil {
@@ -310,7 +312,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 
-	_, err = DB.Exec(`alter table forgetPunch add foreign key (shiftId) references shift(shiftId) on update cascade;`)
+	_, err = MysqlDB.Exec(`alter table forgetPunch add foreign key (shiftId) references shift(shiftId) on update cascade;`)
 
 	if err == nil {
 		fmt.Println("forgetPunch alter foreign key success")
@@ -319,7 +321,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 /// dayOff alter
-	_, err = DB.Exec(`alter table dayOff add primary key (shiftId, dayOffType);`)
+	_, err = MysqlDB.Exec(`alter table dayOff add primary key (shiftId, dayOffType);`)
 
 	if err == nil {
 		fmt.Println("dayOff alter primary key success")
@@ -328,7 +330,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 
-	_, err = DB.Exec(`alter table dayOff add foreign key (shiftId) references shift(shiftId) on update cascade;`)
+	_, err = MysqlDB.Exec(`alter table dayOff add foreign key (shiftId) references shift(shiftId) on update cascade;`)
 
 	if err == nil {
 		fmt.Println("dayOff alter foreign key success")
@@ -337,7 +339,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 /// lateExecused alter
-	_, err = DB.Exec(`alter table lateExcused add primary key (shiftId, lateExcusedType);`)
+	_, err = MysqlDB.Exec(`alter table lateExcused add primary key (shiftId, lateExcusedType);`)
 
 	if err == nil {
 		fmt.Println("lateExcused alter primary key success")
@@ -346,7 +348,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 
-	_, err = DB.Exec(`alter table lateExcused add foreign key (shiftId) references shift(shiftId) on update cascade;`)
+	_, err = MysqlDB.Exec(`alter table lateExcused add foreign key (shiftId) references shift(shiftId) on update cascade;`)
 
 	if err == nil {
 		fmt.Println("lateExcused alter foreign key success")
@@ -355,7 +357,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 /// company alter
-	_, err = DB.Exec(`alter table company add primary key (companyId, companyCode);`)
+	_, err = MysqlDB.Exec(`alter table company add primary key (companyId, companyCode);`)
 
 	if err == nil {
 		fmt.Println("company alter primary key success")
@@ -364,8 +366,17 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 
+	_, err = MysqlDB.Exec("alter table company auto_increment=3034;")
+
+	if err == nil {
+		fmt.Println("company alter set auto increment success")
+	} else {
+		fmt.Println("company alter set auto increment failed")
+		log.Fatal(err)
+	}
+
 /// companyBanch alter
-	_, err = DB.Exec(`alter table companyBanch add primary key (companyId, banchName);`)
+	_, err = MysqlDB.Exec(`alter table companyBanch add primary key (companyId, banchName);`)
 
 	if err == nil {
 		fmt.Println("companyBanch alter primary key success")
@@ -374,7 +385,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 
-	_, err = DB.Exec(`alter table companyBanch add foreign key (companyId) references company(companyId) on update cascade;`)
+	_, err = MysqlDB.Exec(`alter table companyBanch add foreign key (companyId) references company(companyId) on update cascade;`)
 
 	if err == nil {
 		fmt.Println("companyBanch alter foreign key success")
@@ -383,7 +394,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 // user alter
-	_, err = DB.Exec("alter table user auto_increment=9000034;")
+	_, err = MysqlDB.Exec("alter table user auto_increment=34;")
 
 	if err == nil {
 		fmt.Println("user alter set auto increment success")
@@ -392,7 +403,7 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 
-	_, err = DB.Exec(`alter table user add foreign key (companyCode) references company(companyCode) on update cascade;`)
+	_, err = MysqlDB.Exec(`alter table user add foreign key (companyCode) references company(companyCode) on update cascade;`)
 
 	if err == nil {
 		fmt.Println("user alter foreign key success")
@@ -401,4 +412,110 @@ func DataBaseInit(DB *sql.DB) {
 		log.Fatal(err)
 	}
 
+}
+func simulateData() {
+	tx, err := MysqlDB.Begin()
+	defer tx.Commit()
+	if err != nil {
+		fmt.Println(err)
+		tx.Rollback()
+	}
+	_,err = tx.Exec(`insert into company(
+			companyCode,
+			companyName,
+			companyLocation,
+			companyPhoneNumber,
+			termStart,
+			termEnd,
+			createTime,
+			lastModify
+		) values(
+			?, ?, ?, ?, ?, ?, ?, ?
+	)`,
+		"fei32fej",
+		"xx股份有限公司",
+		"台中市大甲區ｘｘｘ",
+		"0906930873",
+		time.Now(),
+		time.Now(),
+		time.Now(),
+		time.Now(),
+	)
+	if err != nil {
+		fmt.Println(err)
+		tx.Rollback()
+	}
+	for i := 0; i <=120; i++ {
+		_, err = tx.Exec(`insert into user(
+				companyCode,
+				account,
+				password,
+				onWorkDay,
+				banch,
+				permession,
+				workState,
+				createTime,
+				lastModify,
+				monthSalary,
+				partTimeSalary
+			) values(
+				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+		)`,
+			"fei32fej",
+			"account" + strconv.Itoa(i),
+			"1234",
+			"2022-02-11 10;10:00",
+			"公關組",
+			"admin",
+			"on",
+			time.Now(),
+			time.Now(),
+			30000 + i,
+			130 + i,
+		)
+		if err != nil {
+			tx.Rollback()
+			fmt.Println(err)
+		}
+	// 	_, err = tx.Exec(`insert into userPreference(
+
+	// 	) values(
+	// 		?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+	// 	)`,
+		
+	// )
+	// if err != nil {
+	// 	tx.Rollback()
+	// 	fmt.Println(err)
+	// 	break;
+	// }
+	}
+	tx.Commit()
+	users := new(UserTable)
+	res, err := MysqlDB.Query(`select * from user;`)
+	
+	if err != nil {
+		fmt.Println(err)
+	}
+	for res.Next() {
+		err = res.Scan(
+			&users.UserId,
+			&users.CompanyCode,
+			&users.Account,
+			&users.Password,
+			&users.OnWorkDay,
+			&users.Banch,
+			&users.Permession,
+			&users.Work_state,
+			&users.CreateTime,
+			&users.LastModify,
+			&users.MonthSalary,
+			&users.PartTimeSalary,
+		)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println(users)
+	}
+	defer res.Close()
 }
