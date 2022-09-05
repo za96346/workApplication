@@ -5,14 +5,10 @@ import (
 	"log"
 	"strconv"
 	"time"
-	. "backend/typeinterface"
+	"sync"
 )
 func DataBaseInit() {
-	// DB.Query(`drop database workApplication;`)
-	// DB.Query(`create database workApplication;`)
-	// DB.Query(`use workApplication;`)
 	defer simulateData();
-	// defer MysqlDB.Close();
 	MysqlDB.Exec(`drop table user;`)
 	MysqlDB.Exec(`drop table userPreference;`)
 	MysqlDB.Exec(`drop table shift;`)
@@ -414,108 +410,78 @@ func DataBaseInit() {
 
 }
 func simulateData() {
-	tx, err := MysqlDB.Begin()
-	defer tx.Commit()
-	if err != nil {
-		fmt.Println(err)
-		tx.Rollback()
-	}
-	_,err = tx.Exec(`insert into company(
-			companyCode,
-			companyName,
-			companyLocation,
-			companyPhoneNumber,
-			termStart,
-			termEnd,
-			createTime,
-			lastModify
-		) values(
-			?, ?, ?, ?, ?, ?, ?, ?
-	)`,
-		"fei32fej",
-		"xx股份有限公司",
-		"台中市大甲區ｘｘｘ",
-		"0906930873",
-		time.Now(),
-		time.Now(),
-		time.Now(),
-		time.Now(),
-	)
-	if err != nil {
-		fmt.Println(err)
-		tx.Rollback()
-	}
-	for i := 0; i <=120; i++ {
-		_, err = tx.Exec(`insert into user(
-				companyCode,
-				account,
-				password,
-				onWorkDay,
-				banch,
-				permession,
-				workState,
-				createTime,
-				lastModify,
-				monthSalary,
-				partTimeSalary
-			) values(
-				?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-		)`,
+	wg := new(sync.WaitGroup)
+    wg.Add(1)
+	go func ()  {
+		resStatus = DBSingleton().InsertCompanyAll(
 			"fei32fej",
-			"account" + strconv.Itoa(i),
-			"1234",
-			"2022-02-11 10;10:00",
+			"xx股份有限公司",
+			"台中市大甲區ｘｘｘ",
+			"0906930873",
+			time.Now(),
+			time.Now(),
+			time.Now(),
+			time.Now(),
+		)
+		if resStatus {
+			// do success handle
+		} else {
+			//do fail handle
+		}
+		resData := DBSingleton().SelectCompanySingle("fei32fej")
+		fmt.Println("接收SelectCompanySingle 記憶體位置 => ", resData, "\n")
+		resStatus = DBSingleton().InsertCompanyBanchAll(
+			(*resData).CompanyId,
 			"公關組",
-			"admin",
-			"on",
+			"{}",
 			time.Now(),
 			time.Now(),
-			30000 + i,
-			130 + i,
 		)
-		if err != nil {
-			tx.Rollback()
-			fmt.Println(err)
+		if resStatus {
+			// do success handle
+		} else {
+			//do fail handle
 		}
-	// 	_, err = tx.Exec(`insert into userPreference(
-
-	// 	) values(
-	// 		?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-	// 	)`,
-		
-	// )
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	fmt.Println(err)
-	// 	break;
-	// }
+		wg.Done()
+	}()
+	wg.Wait()
+	wg.Add(2)
+	for i := 0; i <=1; i++ {
+		i := i
+		go func (i int)  {
+			resStatus = DBSingleton().InsertUserAll(
+				"fei32fej",
+				"account" + strconv.Itoa(i),
+				"1234",
+				"2022-02-11 10;10:00",
+				"公關組",
+				"admin",
+				"on",
+				time.Now(),
+				time.Now(),
+				30000 + i,
+				130 + i,
+			)
+			resData := DBSingleton().SelectUserSingle("account" + strconv.Itoa(i))
+			fmt.Println("接收SelectUserSingle 記憶體位置 => ", resData, "\n")
+			resStatus = DBSingleton().InsertUserPreferenceAll(
+				(*resData).UserId,
+				"{style}",
+				"12",
+				"pic",
+				time.Now(),
+				time.Now(),
+			)
+			if resStatus {
+				// do success handle
+			} else {
+				//do fail handle
+			}
+			wg.Done()
+		}(i)
 	}
-	tx.Commit()
-	users := new(UserTable)
-	res, err := MysqlDB.Query(`select * from user;`)
-	
-	if err != nil {
-		fmt.Println(err)
-	}
-	for res.Next() {
-		err = res.Scan(
-			&users.UserId,
-			&users.CompanyCode,
-			&users.Account,
-			&users.Password,
-			&users.OnWorkDay,
-			&users.Banch,
-			&users.Permession,
-			&users.Work_state,
-			&users.CreateTime,
-			&users.LastModify,
-			&users.MonthSalary,
-			&users.PartTimeSalary,
-		)
-		if err != nil {
-			log.Fatal(err)
-		}
-		log.Println(users)
-	}
-	defer res.Close()
+	wg.Wait()
+	resData := DBSingleton().SelectUserAll()
+	fmt.Println("接收SelectUserAll 記憶體位置 => ", resData, "\n")
+	fmt.Println(" => ", (*resData)[0], (*resData)[1])
 }

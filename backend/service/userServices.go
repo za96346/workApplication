@@ -27,7 +27,9 @@ func CreateUser(props *gin.Context) {
 func UpdateUser(props *gin.Context) {
 	//put
 	// update
-
+	go func ()  {
+		
+	}()
 	user := []pojo.User{}
 	err := props.ShouldBindJSON(&user)
 	if err != nil {
