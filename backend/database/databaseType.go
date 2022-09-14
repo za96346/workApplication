@@ -6,6 +6,8 @@ import (
 )
 var userTableMux sync.RWMutex
 var UserTableInstance *UserTable
+var queryMux *sync.Mutex
+var SqlQuery *sqlQuery
 
 type UserTable struct {
 	UserId float64
@@ -44,8 +46,6 @@ func UserTableSingleton() *UserTable {
 	}
 	return UserTableInstance
 }
-var queryMux *sync.Mutex
-var SqlQuery *sqlQuery
 type sqlQuery struct {
 	User userQuery
 	UserPreference userPerferenceQuery
@@ -76,13 +76,13 @@ func SqlQuerySingleton() *sqlQuery {
 	queryMux = new(sync.Mutex)
 	if SqlQuery == nil {
 		queryMux.Lock()
-		defer queryMux.Unlock()
 		if SqlQuery == nil {
 			SqlQuery = &sqlQuery{}
 			addUserQuery()
 			addCompanyQuery()
 			addUserPreferenceQuery()
 			addCompanyBanchQuery()
+			defer queryMux.Unlock()
 			return SqlQuery
 		}
 	}

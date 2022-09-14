@@ -1,13 +1,14 @@
 package route
 
 import (
-	. "backend/service"
-	// "fmt"
+	// "strconv"
 
 	"github.com/gin-gonic/gin"
+	"backend/worker"
 )
 func UserRouter(props *gin.RouterGroup) {
-	props.GET("/fetch/single/:userId", FindSingleUser)
-	props.POST("/create", CreateUser)
-	props.PUT("/update", UpdateUser)
+
+	props.GET("/fetch/single/:userId", worker.AssignWorker(0))
+	props.POST("/create", worker.AssignWorker(1))
+	props.PUT("/update", worker.AssignWorker(2))
 }

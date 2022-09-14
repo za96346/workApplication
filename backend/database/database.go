@@ -23,7 +23,6 @@ var InsertUserPreferenceAllMux = new(sync.RWMutex)
 var InsertUserMux = new(sync.RWMutex)
 var InsertCompanyBanchMux = new(sync.RWMutex)
 
-var query = SqlQuerySingleton()
 var DBSingletonMux = new(sync.Mutex)
 var resStatus bool
 
@@ -48,7 +47,7 @@ func DBSingleton() *db {
 		DBSingletonMux.Lock()
 		if DBInstance == nil {
 			DBInstance = &db{}
-			DBSingletonMux.Unlock()
+			defer DBSingletonMux.Unlock()
 		}
 	}
 	return DBInstance
@@ -83,7 +82,7 @@ func(db *db)Conn() {
 func(db *db) SelectUserSingle(accountOrUserId interface{}) **UserTable {
 	user := new(UserTable)
 	// defer runtime.GC()
-	err := MysqlDB.QueryRow(query.User.selectSingle, accountOrUserId, accountOrUserId).Scan(
+	err := MysqlDB.QueryRow((*SqlQuerySingleton()).User.selectSingle, accountOrUserId, accountOrUserId).Scan(
 		&user.UserId,
 		&user.CompanyCode,
 		&user.Account,
@@ -107,7 +106,7 @@ func(db *db) SelectUserSingle(accountOrUserId interface{}) **UserTable {
 func(db *db) SelectUserAll() *[]UserTable {
 	user := new(UserTable)
 	carry := []UserTable{}
-	res, err := MysqlDB.Query(query.User.selectAll)
+	res, err := MysqlDB.Query((*SqlQuerySingleton()).User.selectAll)
 	defer res.Close()
 	// defer runtime.GC()
 	if err != nil {
@@ -142,7 +141,7 @@ func(db *db) SelectUserAll() *[]UserTable {
 }
 func(db *db) SelectCompanySingle(companyIdOrCompanyCode interface{}) **CompanyTable {
 	company := new(CompanyTable)
-	err = MysqlDB.QueryRow(query.Company.SelectSingle, companyIdOrCompanyCode, companyIdOrCompanyCode).Scan(
+	err = MysqlDB.QueryRow((*SqlQuerySingleton()).Company.SelectSingle, companyIdOrCompanyCode, companyIdOrCompanyCode).Scan(
 		&company.CompanyId,
 		&company.CompanyCode,
 		&company.CompanyName,
@@ -176,7 +175,7 @@ func(db *db) InsertUserAll(
 	///
 		InsertUserMux.Lock()
 		defer InsertUserMux.Unlock()
-		stmt, err := MysqlDB.Prepare(query.User.InsertAll)
+		stmt, err := MysqlDB.Prepare((*SqlQuerySingleton()).User.InsertAll)
 		defer stmt.Close()
 		if err != nil {
 			fmt.Println(err)
@@ -214,7 +213,7 @@ func(db *db) InsertUserPreferenceAll(
 		///
 		InsertUserPreferenceAllMux.Lock()
 		defer  InsertUserPreferenceAllMux.Unlock()
-		stmt, err := MysqlDB.Prepare(query.UserPreference.InsertAll)
+		stmt, err := MysqlDB.Prepare((*SqlQuerySingleton()).UserPreference.InsertAll)
 		defer stmt.Close()
 		if err != nil {
 			fmt.Println(err)
@@ -246,7 +245,7 @@ func(db *db) InsertCompanyAll(
 	lastModify time.Time) bool {
 		InsertCompanyMux.Lock()
 		defer InsertCompanyMux.Unlock()
-		stmt, err := MysqlDB.Prepare(query.Company.InsertAll)
+		stmt, err := MysqlDB.Prepare((*SqlQuerySingleton()).Company.InsertAll)
 		defer stmt.Close()
 		if err != nil {
 			fmt.Println(err)
@@ -279,7 +278,7 @@ func(db *db) InsertCompanyBanchAll(
 	) bool {
 		InsertCompanyBanchMux.Lock()
 		defer InsertCompanyBanchMux.Unlock()
-		stmt, err := MysqlDB.Prepare(query.CompanyBanch.InsertAll)
+		stmt, err := MysqlDB.Prepare((*SqlQuerySingleton()).CompanyBanch.InsertAll)
 		defer stmt.Close()
 		if err != nil {
 			fmt.Println(err)
