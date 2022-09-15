@@ -413,7 +413,7 @@ func simulateData() {
 	wg := new(sync.WaitGroup)
     (*wg).Add(1)
 	go func ()  {
-		resStatus = (*DBSingleton()).InsertCompanyAll(
+		resStatus = (*MysqlSingleton()).InsertCompanyAll(
 			"fei32fej",
 			"xx股份有限公司",
 			"台中市大甲區ｘｘｘ",
@@ -428,9 +428,9 @@ func simulateData() {
 		} else {
 			//do fail handle
 		}
-		resData := (*DBSingleton()).SelectCompanySingle("fei32fej")
+		resData := (*MysqlSingleton()).SelectCompanySingle("fei32fej")
 		fmt.Println("接收SelectCompanySingle 記憶體位置 => ", resData, "\n")
-		resStatus = (*DBSingleton()).InsertCompanyBanchAll(
+		resStatus = (*MysqlSingleton()).InsertCompanyBanchAll(
 			(*resData).CompanyId,
 			"公關組",
 			"{}",
@@ -449,7 +449,7 @@ func simulateData() {
 	for i := 0; i <=1; i++ {
 		i := i
 		go func (i int)  {
-			resStatus = (*DBSingleton()).InsertUserAll(
+			resStatus = (*MysqlSingleton()).InsertUserAll(
 				"fei32fej",
 				"account" + strconv.Itoa(i),
 				"1234",
@@ -462,9 +462,9 @@ func simulateData() {
 				30000 + i,
 				130 + i,
 			)
-			resData := (*DBSingleton()).SelectUserSingle("account" + strconv.Itoa(i))
+			resData := (*MysqlSingleton()).SelectUserSingle("account" + strconv.Itoa(i))
 			fmt.Println("接收SelectUserSingle 記憶體位置 => ", resData, "\n")
-			resStatus = (*DBSingleton()).InsertUserPreferenceAll(
+			resStatus = (*MysqlSingleton()).InsertUserPreferenceAll(
 				(*resData).UserId,
 				"{style}",
 				"12",
@@ -481,7 +481,7 @@ func simulateData() {
 		}(i)
 	}
 	(*wg).Wait()
-	resData := (*DBSingleton()).SelectUserAll()
+	resData := (*MysqlSingleton()).SelectUserAll()
 	fmt.Println("接收SelectUserAll 記憶體位置 => ", resData, "\n")
 	fmt.Println(" => ", (*resData)[0], (*resData)[1])
 }

@@ -5,11 +5,13 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
 	"runtime"
+	"time"
 
 	// "time"
 
@@ -18,22 +20,23 @@ import (
 
 	// . "./middleWare/permessionMiddleWare"
 	"backend/database"
+	"backend/middleWare"
 	"backend/redis"
 	. "backend/route"
 	"backend/worker"
 )
-var mysqlDB = database.DBSingleton()
 func main() {
 	runtime.SetMutexProfileFraction(-1)
-	worker.WorkerSingleton().CreateWorker(200)
+	worker.WorkerSingleton().CreateWorker(runtime.NumCPU() * 2)
+	fmt.Println("開啟的worker數量", runtime.NumCPU() * 2)
 
 	go func ()  {
-		Gorace()		
+		http.ListenAndServe("0.0.0.0:6060", nil)
 	}()
 
 	go func() {
-		redis.RedisDBConn()
-		(*mysqlDB).Conn()
+		redis.RedisSingleton().Conn()
+		(*database.MysqlSingleton()).Conn()
 		
 	}()
 
@@ -45,13 +48,10 @@ func main() {
 	}
 	port := os.Getenv("PORT")
 	apiServer := gin.Default()
+	apiServer.Use(middleWare.RateLimit(time.Second, 100, 100))
 
 	userApi := apiServer.Group("/workApp/user")
 	UserRouter(userApi)
 	// apiServer.Use(permessionMiddleWare("a1234"))
 	apiServer.Run(":" + port)
-}
-func Gorace() {
-
-	http.ListenAndServe("0.0.0.0:6060", nil)
 }

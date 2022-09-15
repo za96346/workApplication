@@ -42,7 +42,7 @@ type dbInterface interface {
 	InsertCompanyBanchAll() bool
 }
 
-func DBSingleton() *db {
+func MysqlSingleton() *db {
 	if DBInstance == nil {
 		DBSingletonMux.Lock()
 		if DBInstance == nil {
@@ -53,7 +53,7 @@ func DBSingleton() *db {
 	return DBInstance
 }
 
-func(db *db)Conn() {
+func(dbObj *db)Conn() {
 	err = godotenv.Load()
 	if err != nil {
 		log.Fatal("error loading .env file")
@@ -79,7 +79,7 @@ func(db *db)Conn() {
 	// SelectUserAll();
 }
 
-func(db *db) SelectUserSingle(accountOrUserId interface{}) **UserTable {
+func(dbObj *db) SelectUserSingle(accountOrUserId interface{}) **UserTable {
 	user := new(UserTable)
 	// defer runtime.GC()
 	err := MysqlDB.QueryRow((*SqlQuerySingleton()).User.selectSingle, accountOrUserId, accountOrUserId).Scan(
@@ -103,7 +103,7 @@ func(db *db) SelectUserSingle(accountOrUserId interface{}) **UserTable {
 	return &user
 }
 
-func(db *db) SelectUserAll() *[]UserTable {
+func(dbObj *db) SelectUserAll() *[]UserTable {
 	user := new(UserTable)
 	carry := []UserTable{}
 	res, err := MysqlDB.Query((*SqlQuerySingleton()).User.selectAll)
@@ -139,7 +139,7 @@ func(db *db) SelectUserAll() *[]UserTable {
 	fmt.Println("回傳SelectUseAll 記憶體位置 => ", &carry)
 	return &carry
 }
-func(db *db) SelectCompanySingle(companyIdOrCompanyCode interface{}) **CompanyTable {
+func(dbObj *db) SelectCompanySingle(companyIdOrCompanyCode interface{}) **CompanyTable {
 	company := new(CompanyTable)
 	err = MysqlDB.QueryRow((*SqlQuerySingleton()).Company.SelectSingle, companyIdOrCompanyCode, companyIdOrCompanyCode).Scan(
 		&company.CompanyId,
@@ -160,7 +160,7 @@ func(db *db) SelectCompanySingle(companyIdOrCompanyCode interface{}) **CompanyTa
 	fmt.Println("回傳SelectCompanySingle 記憶體位置 => ", &company)
 	return &company
 }
-func(db *db) InsertUserAll(
+func(dbObj *db) InsertUserAll(
 	companyCode string,
 	account string,
 	password string,
@@ -202,7 +202,7 @@ func(db *db) InsertUserAll(
 		return true
 
 }
-func(db *db) InsertUserPreferenceAll(
+func(dbObj *db) InsertUserPreferenceAll(
 	userId float64,
 	style string,
 	fontSize string,
@@ -234,7 +234,7 @@ func(db *db) InsertUserPreferenceAll(
 		}
 		return true;
 }
-func(db *db) InsertCompanyAll(
+func(dbObj *db) InsertCompanyAll(
 	companyCode string,
 	companyName string,
 	companyLocation string,
@@ -269,7 +269,7 @@ func(db *db) InsertCompanyAll(
 		}
 		return true
 }
-func(db *db) InsertCompanyBanchAll(
+func(dbObj *db) InsertCompanyBanchAll(
 	companyId float64,
 	banchName string,
 	banchShiftStyle string,

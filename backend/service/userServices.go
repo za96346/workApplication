@@ -31,9 +31,6 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer (*waitJob).Done()
 	//put
 	// update
-	go func ()  {
-		
-	}()
 	user := []pojo.User{}
 	err := (*props).ShouldBindJSON(&user)
 	if err != nil {

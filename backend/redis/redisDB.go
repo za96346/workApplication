@@ -3,15 +3,36 @@ import (
 	"fmt"
 	"os"
 	"log"
+	"sync"
 	// "strconv"
 	"github.com/go-redis/redis"
 	"github.com/joho/godotenv"
 )
+type db struct {
+}
+type dbInterface interface{
+
+}
+
 
 var err error
 var RedisDB *redis.Client
+var redisInstance *db
 
-func RedisDBConn() { // 實體化redis.Client 並返回實體的位址
+var DBSingletonMux = new(sync.Mutex)
+
+func RedisSingleton() *db {
+	if redisInstance == nil {
+		DBSingletonMux.Lock()
+		if redisInstance == nil {
+			redisInstance = &db{}
+			defer DBSingletonMux.Unlock()
+		}
+	}
+	return redisInstance
+}
+
+func(dbObj *db) Conn() { // 實體化redis.Client 並返回實體的位址
 	err = godotenv.Load()
 	if err != nil {
 		log.Fatal("error loading .env file")
