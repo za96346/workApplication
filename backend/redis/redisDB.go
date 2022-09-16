@@ -11,7 +11,8 @@ import (
 type db struct {
 }
 type dbInterface interface{
-
+	Conn()
+	
 }
 
 

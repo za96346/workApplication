@@ -35,7 +35,6 @@ func WorkerSingleton() *WorkerPool {
 }
 
 func(t *WorkerPool) worker(id int) {
-    fmt.Println("compare", *t, &t)
 			
     for job := range (*t).JobChan {
         
