@@ -19,7 +19,7 @@ import (
 	"github.com/joho/godotenv"
 
 	// . "./middleWare/permessionMiddleWare"
-	// "backend/database"
+	"backend/database"
 	"backend/middleWare"
 	"backend/redis"
 	. "backend/route"
@@ -36,7 +36,7 @@ func main() {
 
 	go func() {
 		(*redis.RedisSingleton()).Conn()
-		// (*database.MysqlSingleton()).Conn()
+		(*database.MysqlSingleton()).Conn()
 		
 	}()
 
