@@ -20,6 +20,7 @@ import (
 
 	// . "./middleWare/permessionMiddleWare"
 	"backend/database"
+	"backend/handler"
 	"backend/middleWare"
 	"backend/redis"
 	. "backend/route"
@@ -33,15 +34,10 @@ func main() {
 	go func ()  {
 		http.ListenAndServe("0.0.0.0:6060", nil)
 	}()
+	(*database.MysqlSingleton()).Conn()
+	(*redis.RedisSingleton()).Conn()
 
-	go func() {
-		(*redis.RedisSingleton()).Conn()
-		(*database.MysqlSingleton()).Conn()
-		
-	}()
-
-
-
+	handler.TakeAllFromMysql()
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("error loading .env file")

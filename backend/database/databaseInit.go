@@ -424,11 +424,7 @@ func simulateData() {
 			time.Now(),
 			time.Now(),
 		)
-		if resStatus {
-			// do success handle
-		} else {
-			//do fail handle
-		}
+		handleError(resStatus)
 		// 公司部門
 		resData := (*MysqlSingleton()).SelectCompanySingle("fei32fej")
 		fmt.Println("接收SelectCompanySingle 記憶體位置 => ", resData, "\n")
@@ -439,11 +435,7 @@ func simulateData() {
 			time.Now(),
 			time.Now(),
 		)
-		if resStatus {
-			// do success handle
-		} else {
-			//do fail handle
-		}
+		handleError(resStatus)
 		(*wg).Done()
 	}()
 	(*wg).Wait()
@@ -473,11 +465,7 @@ func simulateData() {
 				time.Now(),
 				time.Now(),
 			)
-			if resStatus {
-				// do success handle
-			} else {
-				//do fail handle
-			}
+			handleError(resStatus)
 			for shiftStep := 0; shiftStep <= 30; shiftStep++ {
 				hours, _ :=  time.ParseDuration("1h")
 				oneDay, _ := time.ParseDuration(fmt.Sprint(strconv.Itoa(shiftStep * 24), "h"))
@@ -507,10 +495,10 @@ func simulateData() {
 	(*MysqlSingleton()).SelectDayOffAll()
 	(*MysqlSingleton()).SelectLateExcusedAll()
 }
-// func handleError(resStatus *MysqlSingleton()) {
-// 	if resStatus {
-// 		// do success handle
-// 	} else {
-// 		//do fail handle
-// 	}
-// }
+func handleError(resStatus bool) {
+	if resStatus {
+		// do success handle
+	} else {
+		//do fail handle
+	}
+}

@@ -14,7 +14,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var DBSingletonMux = new(sync.Mutex)
+var dbSingletonMux = new(sync.Mutex)
 var DBInstance *db
 
 type db struct {
@@ -42,7 +42,7 @@ type dbInterface interface {
 
 func MysqlSingleton() *db {
 	if DBInstance == nil {
-		DBSingletonMux.Lock()
+		dbSingletonMux.Lock()
 		if DBInstance == nil {
 			DBInstance = &db{
 				InsertCompanyMux: new(sync.Mutex),
@@ -52,7 +52,7 @@ func MysqlSingleton() *db {
 				InsertShiftMux: new(sync.RWMutex),
 				InsertShiftChangeMux: new(sync.RWMutex),
 			}
-			defer DBSingletonMux.Unlock()
+			defer dbSingletonMux.Unlock()
 		}
 	}
 	return DBInstance
@@ -76,8 +76,8 @@ func(dbObj *db) Conn() {
 	if err != nil {
 		log.Fatal(err)
 	} else {
-		// MysqlDB.SetMaxIdleConns(100000)
-		// MysqlDB.SetMaxOpenConns(100000)
+		(*dbObj).MysqlDB.SetMaxIdleConns(100000)
+		(*dbObj).MysqlDB.SetMaxOpenConns(100000)
 		(*dbObj).MysqlDB.SetConnMaxLifetime(time.Second * 100)
 	}
 	DataBaseInit();
