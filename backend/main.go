@@ -19,13 +19,15 @@ import (
 	"github.com/joho/godotenv"
 
 	// . "./middleWare/permessionMiddleWare"
-	"backend/database"
 	"backend/handler"
+	_ "backend/handler"
 	"backend/middleWare"
-	"backend/redis"
 	. "backend/route"
 	"backend/worker"
 )
+func init() {
+	handler.Init()
+}
 func main() {
 	runtime.SetMutexProfileFraction(-1)
 	worker.WorkerSingleton().CreateWorker(runtime.NumCPU() * 2)
@@ -34,10 +36,7 @@ func main() {
 	go func ()  {
 		http.ListenAndServe("0.0.0.0:6060", nil)
 	}()
-	(*database.MysqlSingleton()).Conn()
-	(*redis.RedisSingleton()).Conn()
 
-	handler.TakeAllFromMysql()
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("error loading .env file")
