@@ -8,6 +8,7 @@ import (
 
 	// "fmt"
 	"sync"
+	"backend/panicHandler"
 )
 
 func Init() {
@@ -15,6 +16,7 @@ func Init() {
 	(*redis.Singleton()).Conn() // redis 連接
 	// (*redis.Singleton()).RedisDb.FlushAll() // redis清空
 	(*Singleton()).TakeAllFromMysql() // 從mysql 抓到 redis
+	(*Singleton()).DeleteCompany(0, 1)
 }
 
 var dbHandlerInstance *DB
@@ -23,18 +25,24 @@ var dbHandlerInstanceMux = new(sync.Mutex)
 type DB struct {
 	Redis *redis.DB
 	Mysql *mysql.DB
-	userLock bool
-	userPreferenceLock bool
-	compnayLock bool
-	compnayBanchLock bool
-	shiftLock bool
-	shiftChangeLock bool
-	shiftOverTimeLock bool
-	dayOffLock bool
-	forgetPunchLock bool
-	lateExcusedLock bool
+	userLock *bool
+	userPreferenceLock *bool
+	compnayLock *bool
+	compnayBanchLock *bool
+	shiftLock *bool
+	shiftChangeLock *bool
+	shiftOverTimeLock *bool
+	dayOffLock *bool
+	forgetPunchLock *bool
+	lateExcusedLock *bool
 }
+
+func newBool(b bool) *bool {
+    return &b
+}
+
 func Singleton() *DB {
+	defer panichandler.Recover()
 	if dbHandlerInstance == nil {
 		dbHandlerInstanceMux.Lock()
 		if dbHandlerInstance == nil {
@@ -42,16 +50,16 @@ func Singleton() *DB {
 			dbHandlerInstance = &DB{
 				Redis: redis.Singleton(),
 				Mysql: mysql.Singleton(),
-				userLock: false,
-				userPreferenceLock: false,
-				compnayLock: false,
-				compnayBanchLock: false,
-				shiftLock: false,
-				shiftChangeLock: false,
-				shiftOverTimeLock: false,
-				dayOffLock: false,
-				forgetPunchLock: false,
-				lateExcusedLock: false,
+				userLock: newBool(false),
+				userPreferenceLock: newBool(false),
+				compnayLock: newBool(false),
+				compnayBanchLock: newBool(false),
+				shiftLock: newBool(false),
+				shiftChangeLock: newBool(false),
+				shiftOverTimeLock: newBool(false),
+				dayOffLock: newBool(false),
+				forgetPunchLock: newBool(false),
+				lateExcusedLock: newBool(false),
 			}
 		}
 	}
@@ -59,6 +67,7 @@ func Singleton() *DB {
 }
 
 func(dbObj *DB) TakeAllFromMysql() {
+	defer panichandler.Recover()
 	(*dbObj).restoreUserAll()
 	(*dbObj).restoreUserPreferenceAll()
 	(*dbObj).restoreCompanyAll()
@@ -70,7 +79,8 @@ func(dbObj *DB) TakeAllFromMysql() {
 	(*dbObj).restoreForgetPunchAll()
 	(*dbObj).restoreLateExcusedAll()
 
-	(*dbObj).SelectUser(0)
+	res := (*dbObj).SelectUser(1, 2)
+	fmt.Println("res =>", (*res)[0].Account)
 	(*dbObj).SelectCompany(0)
 	(*dbObj).SelectUserPreference(0)
 	(*dbObj).SelectCompanyBanch(0)
@@ -81,12 +91,11 @@ func(dbObj *DB) TakeAllFromMysql() {
 	(*dbObj).SelectForgetPunch(0)
 	(*dbObj).SelectLateExcused(0)
 
-	res := (*dbObj).Mysql.SelectUserSingle(1, 0)
-	fmt.Println("選擇單個user", res)
 }
 
 
 func forEach[T any, callbackT any](data *[]T, callback func(*T) callbackT) {
+	defer panichandler.Recover()
 	for _, value := range *data {
 		_ = callback(&value)
 	}
@@ -97,10 +106,11 @@ func selectAllHandler[
 	](
 		redisCallback func() *[]callbackT,
 		mysqlCallback func() *[]callbackT,
-		isLocked bool,
+		isLocked *bool,
 	) *[]callbackT {
 
-	if (*redis.Singleton()).IsAlive() && !isLocked {
+	defer panichandler.Recover()
+	if (*redis.Singleton()).IsAlive() && !(*isLocked) {
 		// redis
 		res := redisCallback()
 		return res
@@ -126,74 +136,84 @@ func selectAllHandler[
 //  ------------------------------clear and reStore to redis------------------------------
 
 func(dbObj *DB) restoreUserAll() {
-	(*dbObj).userLock = true
+	defer panichandler.Recover()
+	(*(*dbObj).userLock) = true
 	(*dbObj).Redis.DeleteKeyUser()
-	arr := (*dbObj.Mysql).SelectUserAll(0)
+	arr := (*dbObj.Mysql).SelectUser(0)
 	forEach(arr, (*dbObj.Redis).InsertUser)
-	(*dbObj).userLock = false
+	(*(*dbObj).userLock) = false
 }
 func(dbObj *DB) restoreUserPreferenceAll() {
-	(*dbObj).userPreferenceLock = true
+	defer panichandler.Recover()
+	(*(*dbObj).userPreferenceLock) = true
 	(*dbObj).Redis.DeleteKeyUserPreference()
-	arr := (*dbObj.Mysql).SelectUserPreferenceAll(0)
+	arr := (*dbObj.Mysql).SelectUserPreference(0)
 	forEach(arr, (*dbObj.Redis).InsertUserPreference)
-	(*dbObj).userPreferenceLock = false
+	(*(*dbObj).userPreferenceLock) = false
 }
 func(dbObj *DB) restoreCompanyAll() {
-	(*dbObj).compnayLock= true
+	defer panichandler.Recover()
+	(*(*dbObj).compnayLock)= true
 	(*dbObj).Redis.DeleteKeyCompany()
-	arr := (*dbObj.Mysql).SelectCompanyAll(0)
+	arr := (*dbObj.Mysql).SelectCompany(0)
 	forEach(arr, (*dbObj.Redis).InsertCompany)
-	(*dbObj).compnayLock= false
+	(*(*dbObj).compnayLock) = false
 }
 func(dbObj *DB) restoreCompanyBanchAll() {
-	(*dbObj).compnayBanchLock= true
+	defer panichandler.Recover()
+	(*(*dbObj).compnayBanchLock)= true
 	(*dbObj).Redis.DeleteKeyCompanyBanch()
-	arr := (*dbObj.Mysql).SelectCompanyBanchAll(0)
+	arr := (*dbObj.Mysql).SelectCompanyBanch(0)
 	forEach(arr, (*dbObj.Redis).InsertCompanyBanch)
-	(*dbObj).compnayBanchLock= false
+	(*(*dbObj).compnayBanchLock) = false
 }
 func(dbObj *DB) restoreShiftAll() {
-	(*dbObj).shiftLock= true
+	defer panichandler.Recover()
+	(*(*dbObj).shiftLock) = true
 	(*dbObj).Redis.DeleteKeyShift()
-	arr := (*dbObj.Mysql).SelectShiftAll(0)
+	arr := (*dbObj.Mysql).SelectShift(0)
 	forEach(arr, (*dbObj.Redis).InsertShift)
-	(*dbObj).shiftLock= false
+	(*(*dbObj).shiftLock) = false
 }
 func(dbObj *DB) restoreShiftChangeAll() {
-	(*dbObj).shiftChangeLock= true
+	defer panichandler.Recover()
+	(*(*dbObj).shiftChangeLock) = true
 	(*dbObj).Redis.DeleteKeyShiftChange()
-	arr := (*dbObj.Mysql).SelectShiftChangeAll(0)
+	arr := (*dbObj.Mysql).SelectShiftChange(0)
 	forEach(arr, (*dbObj.Redis).InsertShiftChange)
-	(*dbObj).shiftChangeLock= false
+	(*(*dbObj).shiftChangeLock) = false
 }
 func(dbObj *DB) restoreShiftOverTimeAll() {
-	(*dbObj).shiftOverTimeLock= true
+	defer panichandler.Recover()
+	(*(*dbObj).shiftOverTimeLock) = true
 	(*dbObj).Redis.DeleteKeyShiftOverTime()
-	arr := (*dbObj.Mysql).SelectShiftOverTimeAll(0)
+	arr := (*dbObj.Mysql).SelectShiftOverTime(0)
 	forEach(arr, (*dbObj.Redis).InsertShiftOverTime)
-	(*dbObj).shiftOverTimeLock= false
+	(*(*dbObj).shiftOverTimeLock) = false
 }
 func(dbObj *DB) restoreDayOffAll() {
-	(*dbObj).dayOffLock= true
+	defer panichandler.Recover()
+	(*(*dbObj).dayOffLock) = true
 	(*dbObj).Redis.DeleteKeyDayOff()
-	arr := (*dbObj.Mysql).SelectDayOffAll(0)
+	arr := (*dbObj.Mysql).SelectDayOff(0)
 	forEach(arr, (*dbObj.Redis).InsertDayOff)
-	(*dbObj).dayOffLock= false
+	(*(*dbObj).dayOffLock) = false
 }
 func(dbObj *DB) restoreForgetPunchAll() {
-	(*dbObj).forgetPunchLock= true
+	defer panichandler.Recover()
+	(*(*dbObj).forgetPunchLock) = true
 	(*dbObj).Redis.DeleteKeyForgetPunch()
-	arr := (*dbObj.Mysql).SelectForgetPunchAll(0)
+	arr := (*dbObj.Mysql).SelectForgetPunch(0)
 	forEach(arr, (*dbObj.Redis).InsertForgetPunch)
-	(*dbObj).forgetPunchLock= false
+	(*(*dbObj).forgetPunchLock)= false
 }
 func(dbObj *DB) restoreLateExcusedAll() {
-	(*dbObj).lateExcusedLock= true
+	defer panichandler.Recover()
+	(*(*dbObj).lateExcusedLock) = true
 	(*dbObj).Redis.DeleteKeyLateExcused()
-	arr := (*dbObj.Mysql).SelectLateExcusedAll(0)
+	arr := (*dbObj.Mysql).SelectLateExcused(0)
 	forEach(arr, (*dbObj.Redis).InsertLateExcused)
-	(*dbObj).lateExcusedLock= false
+	(*(*dbObj).lateExcusedLock) = false
 }
 
 
@@ -205,6 +225,7 @@ func(dbObj *DB) restoreLateExcusedAll() {
 
 
 func(dbObj *DB) InsertUser(data *table.UserTable) (bool, int64) {
+	defer panichandler.Recover()
 	isOk, id := (*dbObj).Mysql.InsertUser(
 		(*data).CompanyCode,
 		(*data).Account,
@@ -220,14 +241,17 @@ func(dbObj *DB) InsertUser(data *table.UserTable) (bool, int64) {
 	)
 	if isOk {
 		go func ()  {
-			res := (*dbObj).Mysql.SelectUserSingle(0, id)
-			(*dbObj).Redis.InsertUser(res)
+			res := (*dbObj).Mysql.SelectUser(1, id)
+			for _, value := range *res {
+				(*dbObj).Redis.InsertUser(&value)
+			}
 		}()
 		return true, id
 	}
 	return false, id
 }
 func(dbObj *DB) InsertUserPreference(data *table.UserPreferenceTable) (bool, int64) {
+	defer panichandler.Recover()
 	isOk, _ := (*dbObj).Mysql.InsertUserPreference(
 		(*data).UserId,
 		(*data).Style,
@@ -238,14 +262,17 @@ func(dbObj *DB) InsertUserPreference(data *table.UserPreferenceTable) (bool, int
 	)
 	if isOk {
 		go func ()  {
-			res := (*dbObj).Mysql.SelectUserPreferenceSingle(0, (*data).UserId)
-			(*dbObj).Redis.InsertUserPreference(res)
+			res := (*dbObj).Mysql.SelectUserPreference(1, (*data).UserId)
+			for _, value := range *res {
+				(*dbObj).Redis.InsertUserPreference(&value)
+			}
 		}()
 		return true, (*data).UserId
 	}
 	return false, (*data).UserId
 }
 func(dbObj *DB) InsertCompany(data *table.CompanyTable) (bool, int64) {
+	defer panichandler.Recover()
 	isOk, id := (*dbObj).Mysql.InsertCompany(
 		(*data).CompanyCode,
 		(*data).CompanyName,
@@ -258,14 +285,17 @@ func(dbObj *DB) InsertCompany(data *table.CompanyTable) (bool, int64) {
 	)
 	if isOk {
 		go func ()  {
-			res := (*dbObj).Mysql.SelectCompanySingle(0, id)
-			(*dbObj).Redis.InsertCompany(res)	
+			res := (*dbObj).Mysql.SelectCompany(1, id)
+			for _, value := range *res {
+				(*dbObj).Redis.InsertCompany(&value)	
+			}
 		}()
 		return true, id
 	}
 	return false, id
 }
 func(dbObj *DB) InsertCompanyBanch(data *table.CompanyBanchTable) (bool, int64) {
+	defer panichandler.Recover()
 	isOk, id := (*dbObj).Mysql.InsertCompanyBanch(
 		(*data).CompanyId,
 		(*data).BanchName,
@@ -275,14 +305,17 @@ func(dbObj *DB) InsertCompanyBanch(data *table.CompanyBanchTable) (bool, int64) 
 	)
 	if isOk {
 		go func ()  {
-			res := (*dbObj).Mysql.SelectCompanyBanchSingle(1, id)
-			(*dbObj).Redis.InsertCompanyBanch(res)
+			res := (*dbObj).Mysql.SelectCompanyBanch(2, id)
+			for _, value := range *res {
+				(*dbObj).Redis.InsertCompanyBanch(&value)
+			}
 		}()
 		return true, id
 	}
 	return false, id
 }
 func(dbObj *DB) InsertShift(data *table.ShiftTable) (bool, int64) {
+	defer panichandler.Recover()
 	isOk, id := (*dbObj).Mysql.InsertShift(
 		(*data).UserId,
 		(*data).OnShiftTime,
@@ -295,14 +328,18 @@ func(dbObj *DB) InsertShift(data *table.ShiftTable) (bool, int64) {
 	)
 	if isOk {
 		go func ()  {
-			res := (*dbObj).Mysql.SelectShiftSingle(0, id)
-			(*dbObj).Redis.InsertShift(res)
+			res := (*dbObj).Mysql.SelectShift(1, id)
+			for _, value := range *res {
+				(*dbObj).Redis.InsertShift(&value)
+			}
+			
 		}()
 		return true, id
 	}
 	return false, id
 }
 func(dbObj *DB) InsertShiftChange(data *table.ShiftChangeTable) (bool, int64) {
+	defer panichandler.Recover()
 	isOk, id := (*dbObj).Mysql.InsertShiftChange(
 		(*data).InitiatorShiftId,
 		(*data).RequestedShiftId,
@@ -314,14 +351,17 @@ func(dbObj *DB) InsertShiftChange(data *table.ShiftChangeTable) (bool, int64) {
 	)
 	if isOk {
 		go func ()  {
-			res := (*dbObj).Mysql.SelectShiftChangeSingle(0, id)
-			(*dbObj).Redis.InsertShiftChange(res)
+			res := (*dbObj).Mysql.SelectShiftChange(1, id)
+			for _, value := range *res {
+				(*dbObj).Redis.InsertShiftChange(&value)
+			}
 		}()
 		return true, id
 	}
 	return false, id
 }
 func(dbObj *DB) InsertShiftOverTime(data *table.ShiftOverTimeTable) (bool, int64) {
+	defer panichandler.Recover()
 	isOk, id := (dbObj).Mysql.InsertShiftOverTime(
 		(*data).ShiftId,
 		(*data).InitiatorOnOverTime,
@@ -334,14 +374,18 @@ func(dbObj *DB) InsertShiftOverTime(data *table.ShiftOverTimeTable) (bool, int64
 	)
 	if isOk {
 		go func ()  {
-			res := (*dbObj).Mysql.SelectShiftOverTimeSingle(0, id)
-			(*dbObj).Redis.InsertShiftOverTime(res)
+			res := (*dbObj).Mysql.SelectShiftOverTime(1, id)
+			for _, value := range *res {
+				(*dbObj).Redis.InsertShiftOverTime(&value)
+			}
+			
 		}()
 		return true, id
 	}
 	return false, id
 }
 func(dbObj *DB) InsertDayOff(data *table.DayOffTable) (bool, int64) {
+	defer panichandler.Recover()
 	isOk, id := (*dbObj).Mysql.InsertDayOff(
 		(*data).ShiftId,
 		(*data).DayOffType,
@@ -353,14 +397,17 @@ func(dbObj *DB) InsertDayOff(data *table.DayOffTable) (bool, int64) {
 	)
 	if isOk {
 		go func ()  {
-			res := (*dbObj).Mysql.SelectDayOffSingle(0, id)
-			(*dbObj).Redis.InsertDayOff(res)
+			res := (*dbObj).Mysql.SelectDayOff(1, id)
+			for _, value := range *res {
+				(*dbObj).Redis.InsertDayOff(&value)
+			}
 		}()
 		return true, id
 	}
 	return false, id
 }
 func(dbObj *DB) InsertForgetPunch(data *table.ForgetPunchTable) (bool, int64) {
+	defer panichandler.Recover()
 	isOk, id := (*dbObj).Mysql.InsertForgetPunch(
 		(*data).ShiftId,
 		(*data).TargetPunch,
@@ -372,14 +419,18 @@ func(dbObj *DB) InsertForgetPunch(data *table.ForgetPunchTable) (bool, int64) {
 	)
 	if isOk {
 		go func ()  {
-			res := (*dbObj).Mysql.SelectForgetPunchSingle(0, id)
-			(*dbObj).Redis.InsertForgetPunch(res)
+			res := (*dbObj).Mysql.SelectForgetPunch(1, id)
+			for _, value := range *res {
+				(*dbObj).Redis.InsertForgetPunch(&value)
+			}
+			
 		}()
 		return true, id
 	}
 	return false, id
 }
 func(dbObj *DB) InsertLateExcusedAll(data *table.LateExcusedTable) (bool, int64) {
+	defer panichandler.Recover()
 	isOk, id := (*dbObj).Mysql.InsertLateExcused(
 		(*data).ShiftId,
 		(*data).LateExcusedType,
@@ -391,8 +442,10 @@ func(dbObj *DB) InsertLateExcusedAll(data *table.LateExcusedTable) (bool, int64)
 	)
 	if isOk {
 		go func ()  {
-			res := (*dbObj).Mysql.SelectLateExcusedSingle(0, id)
-			(*dbObj).Redis.InsertLateExcused(res)
+			res := (*dbObj).Mysql.SelectLateExcused(1, id)
+			for _, value := range *res {
+				(*dbObj).Redis.InsertLateExcused(&value)
+			}
 		}()
 		return true, id
 	}
@@ -404,77 +457,101 @@ func(dbObj *DB) InsertLateExcusedAll(data *table.LateExcusedTable) (bool, int64)
 
 
 func(dbObj *DB) UpdateUser(){
+	defer panichandler.Recover()
 	
 }
 func(dbObj *DB) UpdateUserPreference(){
+	defer panichandler.Recover()
 	
 }
 func(dbObj *DB) UpdateCompany(){
+	defer panichandler.Recover()
 	
 }
 func(dbObj *DB) UpdateCompanyBanch(){
+	defer panichandler.Recover()
 	
 }
 func(dbObj *DB) UpdateShift(){
+	defer panichandler.Recover()
 	
 }
 func(dbObj *DB) UpdateShiftChange(){
+	defer panichandler.Recover()
 	
 }
 func(dbObj *DB) UpdateShiftOverTime(){
+	defer panichandler.Recover()
 	
 }
 func(dbObj *DB) UpdateDayOff(){
+	defer panichandler.Recover()
 	
 }
 func(dbObj *DB) UpdateForgetPunch(){
+	defer panichandler.Recover()
 	
 }
 func(dbObj *DB) UpdateLateExcused(){
-	
+	defer panichandler.Recover()
 }
 
 //  ------------------------------delete------------------------------
 
 
 func(dbObj *DB) DeleteUser(deleteKey int, userId int64){
+	defer panichandler.Recover()
 	(*dbObj).Mysql.DeleteUser(deleteKey, userId)
-	(*dbObj).Redis.DeleteUser(deleteKey, userId)
-
+	go func ()  {
+		(*dbObj).TakeAllFromMysql()
+	}()
 }
 func(dbObj *DB) DeleteUserPreference(deleteKey int, userId int64) {
+	defer panichandler.Recover()
 	(*dbObj).Mysql.DeleteUserPreference(deleteKey, userId)
 	(*dbObj).Redis.DeleteUserPreference(deleteKey, userId)
 }
 func(dbObj *DB) DeleteCompany(deleteKey int, companyId int64){
+	defer panichandler.Recover()
 	(*dbObj).Mysql.DeleteCompany(deleteKey, companyId)
-	(*dbObj).Redis.DeleteCompany(deleteKey, companyId)
+	go func ()  {
+		(*dbObj).TakeAllFromMysql()
+	}()
 }
 func(dbObj *DB) DeleteCompanyBanch(deleteKey int, id int64){
+	defer panichandler.Recover()
 	(*dbObj).Mysql.DeleteCompanyBanch(deleteKey, id)
 	(*dbObj).Redis.DeleteCompanyBanch(deleteKey, id)
 }
 func(dbObj *DB) DeleteShift(deleteKey int, shiftId int64){
+	defer panichandler.Recover()
 	(*dbObj).Mysql.DeleteShift(deleteKey, shiftId)
-	(*dbObj).Redis.DeleteShift(deleteKey, shiftId)
+	go func ()  {
+		(*dbObj).TakeAllFromMysql()
+	}()
 }
 func(dbObj *DB) DeleteShiftChange(deleteKey int, caseId int64){
+	defer panichandler.Recover()
 	(*dbObj).Mysql.DeleteShiftChange(deleteKey, caseId)
 	(*dbObj).Redis.DeleteShiftChange(deleteKey, caseId)
 }
 func(dbObj *DB) DeleteShiftOverTime(deleteKey int, caseId int64){
+	defer panichandler.Recover()
 	(*dbObj).Mysql.DeleteShiftOverTime(deleteKey, caseId)
 	(*dbObj).Redis.DeleteShiftOverTime(deleteKey, caseId)
 }
 func(dbObj *DB) DeleteDayOff(deleteKey int, caseId int64){
+	defer panichandler.Recover()
 	(*dbObj).Mysql.DeleteDayOff(deleteKey, caseId)
 	(*dbObj).Redis.DeleteDayOff(deleteKey, caseId)
 }
 func(dbObj *DB) DeleteForgetPunch(deleteKey int, caseId int64){
+	defer panichandler.Recover()
 	(*dbObj).Mysql.DeleteForgetPunch(deleteKey, caseId)
 	(*dbObj).Redis.DeleteForgetPunch(deleteKey, caseId)
 }
 func(dbObj *DB) DeleteLateExcused(deleteKey int, caseId int64){
+	defer panichandler.Recover()
 	(*dbObj).Mysql.DeleteLateExcused(deleteKey, caseId)
 	(*dbObj).Redis.DeleteLateExcused(deleteKey, caseId)	
 }
@@ -484,182 +561,155 @@ func(dbObj *DB) DeleteLateExcused(deleteKey int, caseId int64){
 
 //  ------------------------------select------------------------------
 
-//0 => all
+// 0 => 全部, value => nil
+//  1 =>  userId, value => int64
+//  2 => account, value => string
 func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTable {
-	switch selectKey {
-	case 0:
-		return selectAllHandler(
-			func() *[]table.UserTable {
-				return (*dbObj.Redis).SelectUser(selectKey)
-			},
-			func() *[]table.UserTable {
-				return (*dbObj.Mysql).SelectUserAll(selectKey)
-			},
-			(*dbObj).userLock,
-		)
-	default:
-		return &[]table.UserTable{}
-	}
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.UserTable {
+			return (*dbObj.Redis).SelectUser(selectKey, value...)
+		},
+		func() *[]table.UserTable {
+			return (*dbObj.Mysql).SelectUser(selectKey, value...)
+		},
+		(*dbObj).userLock,
+	)
 }
 
-//0 => all
+// 0 => 全部, value => nil
+//  1 => 使用者id, value => int64
 func(dbObj *DB) SelectUserPreference(selectKey int, value... interface{}) *[]table.UserPreferenceTable {
-	switch selectKey {
-	case 0:
-		return selectAllHandler(
-			func() *[]table.UserPreferenceTable {
-				return (*dbObj.Redis).SelectUserPreference(selectKey)
-			},
-			func() *[]table.UserPreferenceTable {
-				return (*dbObj.Mysql).SelectUserPreferenceAll(selectKey)
-			},
-			(*dbObj).userPreferenceLock,
-		)
-	default:
-		return &[]table.UserPreferenceTable{}
-	}
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.UserPreferenceTable {
+			return (*dbObj.Redis).SelectUserPreference(selectKey, value...)
+		},
+		func() *[]table.UserPreferenceTable {
+			return (*dbObj.Mysql).SelectUserPreference(selectKey, value...)
+		},
+		(*dbObj).userPreferenceLock,
+	)
 }
 
-//0 => all
+// 0 => 全部, value => nil
+//  1 => 公司id, value => int64
+//  2 => 公司碼, value => string
 func(dbObj *DB) SelectCompany(selectKey int, value... interface{}) *[]table.CompanyTable {
-	switch selectKey {
-	case 0:
-		return selectAllHandler(
-			func() *[]table.CompanyTable {
-				return (*dbObj.Redis).SelectCompany(selectKey)
-			},
-			func() *[]table.CompanyTable {
-				return (*dbObj.Mysql).SelectCompanyAll(selectKey)
-			},
-			(*dbObj).compnayLock,
-		)
-	default:
-		return &[]table.CompanyTable{}
-	}
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.CompanyTable {
+			return (*dbObj.Redis).SelectCompany(selectKey, value...)
+		},
+		func() *[]table.CompanyTable {
+			return (*dbObj.Mysql).SelectCompany(selectKey, value...)
+		},
+		(*dbObj).compnayLock,
+	)
 }
 
-//0 => all
+// 0 => 全部, value => nil
+//	1 => 公司Id, value => int64
+// 	2 => id (banchId), value => int64
 func(dbObj *DB) SelectCompanyBanch(selectKey int, value... interface{}) *[]table.CompanyBanchTable {
-	switch selectKey {
-	case 0:
-		return selectAllHandler(
-			func() *[]table.CompanyBanchTable {
-				return (*dbObj.Redis).SelectCompanyBanch(selectKey)
-			},
-			func() *[]table.CompanyBanchTable {
-				return (*dbObj.Mysql).SelectCompanyBanchAll(selectKey)
-			},
-			(*dbObj).compnayBanchLock,
-		)
-	default:
-		return &[]table.CompanyBanchTable{}
-	}
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.CompanyBanchTable {
+			return (*dbObj.Redis).SelectCompanyBanch(selectKey, value...)
+		},
+		func() *[]table.CompanyBanchTable {
+			return (*dbObj.Mysql).SelectCompanyBanch(selectKey, value...)
+		},
+		(*dbObj).compnayBanchLock,
+	)
 }
 
-//0 => all
+// 0 => all, value => nil
+//  1 => 班表id, value => int64
 func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftTable {
-	switch selectKey {
-	case 0:
-		return selectAllHandler(
-			func() *[]table.ShiftTable {
-				return (*dbObj.Redis).SelectShift(selectKey)
-			},
-			func() *[]table.ShiftTable {
-				return (*dbObj.Mysql).SelectShiftAll(selectKey)
-			},
-			(*dbObj).shiftLock,
-		)
-	default:
-		return &[]table.ShiftTable{}
-	}
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.ShiftTable {
+			return (*dbObj.Redis).SelectShift(selectKey, value...)
+		},
+		func() *[]table.ShiftTable {
+			return (*dbObj.Mysql).SelectShift(selectKey, value...)
+		},
+		(*dbObj).shiftLock,
+	)
 }
 
-//0 => all
+// 0 => all, value => nil
+//  1 => caseId, value => int64
 func(dbObj *DB) SelectShiftChange(selectKey int, value... interface{}) *[]table.ShiftChangeTable {
-	switch selectKey {
-	case 0:
-		return selectAllHandler(
-			func() *[]table.ShiftChangeTable {
-				return (*dbObj.Redis).SelectShiftChange(selectKey)
-			},
-			func() *[]table.ShiftChangeTable {
-				return (*dbObj.Mysql).SelectShiftChangeAll(selectKey)
-			},
-			(*dbObj).shiftChangeLock,
-		)
-	default:
-		return &[]table.ShiftChangeTable{}
-	}
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.ShiftChangeTable {
+			return (*dbObj.Redis).SelectShiftChange(selectKey, value...)
+		},
+		func() *[]table.ShiftChangeTable {
+			return (*dbObj.Mysql).SelectShiftChange(selectKey, value...)
+		},
+		(*dbObj).shiftChangeLock,
+	)
 }
 
-//0 => all
+// 0 => all, value => nil
+//  1 => caseId, value => int64
 func(dbObj *DB) SelectShiftOverTime(selectKey int, value... interface{}) *[]table.ShiftOverTimeTable {
-	switch selectKey {
-	case 0:
-		return selectAllHandler(
-			func() *[]table.ShiftOverTimeTable {
-				return (*dbObj.Redis).SelectShiftOverTime(selectKey)
-			},
-			func() *[]table.ShiftOverTimeTable {
-				return (*dbObj.Mysql).SelectShiftOverTimeAll(selectKey)
-			},
-			(*dbObj).shiftOverTimeLock,
-		)
-	default:
-		return &[]table.ShiftOverTimeTable{}
-	}
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.ShiftOverTimeTable {
+			return (*dbObj.Redis).SelectShiftOverTime(selectKey, value...)
+		},
+		func() *[]table.ShiftOverTimeTable {
+			return (*dbObj.Mysql).SelectShiftOverTime(selectKey, value...)
+		},
+		(*dbObj).shiftOverTimeLock,
+	)
 }
 
-//0 => all
+// 0 => all, value => nil
+//  1 => caseId, value => int64
 func(dbObj *DB) SelectDayOff(selectKey int, value... interface{}) *[]table.DayOffTable {
-	switch selectKey {
-	case 0:
-		return selectAllHandler(
-			func() *[]table.DayOffTable {
-				return (*dbObj.Redis).SelectDayOff(selectKey)
-			},
-			func() *[]table.DayOffTable {
-				return (*dbObj.Mysql).SelectDayOffAll(selectKey)
-			},
-			(*dbObj).dayOffLock,
-		)
-	default:
-		return &[]table.DayOffTable{}
-	}
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.DayOffTable {
+			return (*dbObj.Redis).SelectDayOff(selectKey, value...)
+		},
+		func() *[]table.DayOffTable {
+			return (*dbObj.Mysql).SelectDayOff(selectKey, value...)
+		},
+		(*dbObj).dayOffLock,
+	)
 }
 
-//0 => all
+// 0 => all, value => nil
+//  1 => caseId, value => int64
 func(dbObj *DB) SelectForgetPunch(selectKey int, value... interface{}) *[]table.ForgetPunchTable {
-	switch selectKey {
-	case 0:
-		return selectAllHandler(
-			func() *[]table.ForgetPunchTable {
-				return (*dbObj.Redis).SelectForgetPunch(selectKey)
-			},
-			func() *[]table.ForgetPunchTable {
-				return (*dbObj.Mysql).SelectForgetPunchAll(selectKey)
-			},
-			(*dbObj).forgetPunchLock,
-		)
-	default:
-		return &[]table.ForgetPunchTable{}
-	}
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.ForgetPunchTable {
+			return (*dbObj.Redis).SelectForgetPunch(selectKey, value...)
+		},
+		func() *[]table.ForgetPunchTable {
+			return (*dbObj.Mysql).SelectForgetPunch(selectKey, value...)
+		},
+		(*dbObj).forgetPunchLock,
+	)
 }
 
-//0 => all
+// 0 => all, value => nil
+//  1 => caseId, value => int64
 func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.LateExcusedTable {
-	switch selectKey {
-	case 0:
-		return selectAllHandler(
-			func() *[]table.LateExcusedTable {
-				return (*dbObj.Redis).SelectLateExcused(selectKey)
-			},
-			func() *[]table.LateExcusedTable {
-				return (*dbObj.Mysql).SelectLateExcusedAll(selectKey)
-			},
-			(*dbObj).lateExcusedLock,
-		)
-	default:
-		return &[]table.LateExcusedTable{}
-	}
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.LateExcusedTable {
+			return (*dbObj.Redis).SelectLateExcused(selectKey, value...)
+		},
+		func() *[]table.LateExcusedTable {
+			return (*dbObj.Mysql).SelectLateExcused(selectKey, value...)
+		},
+		(*dbObj).lateExcusedLock,
+	)
 }

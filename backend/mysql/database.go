@@ -7,13 +7,16 @@ import (
 	"fmt"
 	"log"
 	"os"
+
 	// "runtime"
+	"backend/query"
+	"backend/table"
 	"sync"
 	"time"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
-	"backend/table"
-	"backend/query"
+	"backend/panicHandler"
 )
 
 var dbSingletonMux = new(sync.Mutex)
@@ -47,6 +50,7 @@ type dbInterface interface {
 }
 
 func Singleton() *DB {
+	defer panichandler.Recover()
 	if dbInstance == nil {
 		dbSingletonMux.Lock()
 		if dbInstance == nil {
@@ -69,6 +73,7 @@ func Singleton() *DB {
 }
 
 func(dbObj *DB) Conn() {
+	defer panichandler.Recover()
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("error loading .env file")
@@ -95,13 +100,23 @@ func(dbObj *DB) Conn() {
 
 //---------------------------select---------------------------------
 
-// 0 => all
-func(dbObj *DB) SelectUserAll(selectKey int, value... interface{}) *[]table.UserTable {
+// 0 => 全部, value => nil
+//  1 =>  userId, value => int64
+//  2 => account, value => string
+func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTable {
+	defer panichandler.Recover()
 	querys := ""
 	switch selectKey {
 	case 0:
-		// value need int
 		querys = (*query.MysqlSingleton()).User.SelectAll
+		break
+	case 1:
+		// value need int
+		querys = (*query.MysqlSingleton()).User.SelectSingleByUserId
+		break
+	case 2:
+		// value need string
+		querys = (*query.MysqlSingleton()).User.SelectSingleByAccount
 		break
 	default:
 		querys = (*query.MysqlSingleton()).User.SelectAll
@@ -112,10 +127,11 @@ func(dbObj *DB) SelectUserAll(selectKey int, value... interface{}) *[]table.User
 	res, err := (*dbObj).MysqlDB.Query(querys, value...)
 	defer res.Close()
 	(*dbObj).checkErr(err)
+	companyCode := new(sql.NullString)
 	for res.Next() {
 		err = res.Scan(
 			&user.UserId,
-			&user.CompanyCode,
+			companyCode,
 			&user.Account,
 			&user.Password,
 			&user.OnWorkDay,
@@ -128,6 +144,12 @@ func(dbObj *DB) SelectUserAll(selectKey int, value... interface{}) *[]table.User
 			&user.PartTimeSalary,
 		)
 		(*dbObj).checkErr(err)
+		if companyCode.String == "" {
+			user.CompanyCode = ""
+		} else {
+			user.CompanyCode = companyCode.String
+		}
+		
 		if err == nil {
 			carry = append(carry, *user)
 		}
@@ -135,49 +157,18 @@ func(dbObj *DB) SelectUserAll(selectKey int, value... interface{}) *[]table.User
 	return &carry
 }
 
-// 0 => 使用者id int (default)
-//  1 => 帳號 string
-func(dbObj *DB) SelectUserSingle(selectKey int, value... interface{}) *table.UserTable {
-	user := new(table.UserTable)
+// 0 => 全部, value => nil
+//  1 => 使用者id, value => int64
+func(dbObj *DB) SelectUserPreference(selectKey int, value... interface{}) *[]table.UserPreferenceTable {
+	defer panichandler.Recover()
 	querys := ""
 	switch selectKey {
 	case 0:
-		// value need int
-		querys = (*query.MysqlSingleton()).User.SelectSingleByUserId
+		querys = (*query.MysqlSingleton()).UserPreference.SelectAll
 		break
 	case 1:
-		// value need string
-		querys = (*query.MysqlSingleton()).User.SelectSingleByAccount
-		break
-	default:
-		querys = (*query.MysqlSingleton()).User.SelectSingleByUserId
-		break;
-	}
-	err := (*dbObj).MysqlDB.QueryRow(querys, value...).Scan(
-		&user.UserId,
-		&user.CompanyCode,
-		&user.Account,
-		&user.Password,
-		&user.OnWorkDay,
-		&user.Banch,
-		&user.Permession,
-		&user.WorkState,
-		&user.CreateTime,
-		&user.LastModify,
-		&user.MonthSalary,
-		&user.PartTimeSalary,
-	)
-	(*dbObj).checkErr(err)
-	return user
-}
-
-// 0 => all
-func(dbObj *DB) SelectUserPreferenceAll(selectKey int, value... interface{}) *[]table.UserPreferenceTable {
-	querys := ""
-	switch selectKey {
-	case 0:
 		// value need int
-		querys = (*query.MysqlSingleton()).UserPreference.SelectAll
+		querys = (*query.MysqlSingleton()).UserPreference.SelectSingleByUserId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).UserPreference.SelectAll
@@ -207,39 +198,23 @@ func(dbObj *DB) SelectUserPreferenceAll(selectKey int, value... interface{}) *[]
 	return &carry
 }
 
-// 0 => 使用者id (default)
-func(dbObj *DB) SelectUserPreferenceSingle(selectKey int, value... interface{}) *table.UserPreferenceTable {
-	userPreference := new(table.UserPreferenceTable)
-	// defer runtime.GC()
+// 0 => 全部, value => nil
+//  1 => 公司id, value => int64
+//  2 => 公司碼, value => string
+func(dbObj *DB) SelectCompany(selectKey int, value... interface{}) *[]table.CompanyTable {
+	defer panichandler.Recover()
 	querys := ""
 	switch selectKey {
 	case 0:
-		// value need int
-		querys = (*query.MysqlSingleton()).UserPreference.SelectSingleByUserId
-		break
-	default:
-		querys = (*query.MysqlSingleton()).UserPreference.SelectSingleByUserId
-		break
-	}
-	err := (*dbObj).MysqlDB.QueryRow(querys, value...).Scan(
-		&userPreference.UserId,
-		&userPreference.Style,
-		&userPreference.FontSize,
-		&userPreference.SelfPhoto,
-		&userPreference.CreateTime,
-		&userPreference.LastModify,
-	)
-	(*dbObj).checkErr(err)
-	return userPreference
-}
-
-// 0 => all
-func(dbObj *DB) SelectCompanyAll(selectKey int, value... interface{}) *[]table.CompanyTable {
-	querys := ""
-	switch selectKey {
-	case 0:
-		// value need int
 		querys = (*query.MysqlSingleton()).Company.SelectAll
+		break
+	case 1:
+		// value need int
+		querys = (*query.MysqlSingleton()).Company.SelectSingleByCompanyId
+		break
+	case 2:
+		// value need string
+		querys = (*query.MysqlSingleton()).Company.SelectSingleByCompanyCode
 		break
 	default:
 		querys = (*query.MysqlSingleton()).Company.SelectAll
@@ -271,47 +246,24 @@ func(dbObj *DB) SelectCompanyAll(selectKey int, value... interface{}) *[]table.C
 	return &carry
 }
 
-//0 => 公司id (default)
-// 1 => 公司碼
-func(dbObj *DB) SelectCompanySingle(selectKey int, value... interface{}) *table.CompanyTable {
-		company := new(table.CompanyTable)
-		querys := ""
-		switch selectKey {
-		case 0:
-			// value need int
-			querys = (*query.MysqlSingleton()).Company.SelectSingleByCompanyId
-			break
-		case 1:
-			// value need string
-			querys = (*query.MysqlSingleton()).Company.SelectSingleByCompanyCode
-			break
-		default:
-			querys = (*query.MysqlSingleton()).Company.SelectSingleByCompanyId
-			break
-		}
-		err := (*dbObj).MysqlDB.QueryRow(querys, value...).Scan(
-			&company.CompanyId,
-			&company.CompanyCode,
-			&company.CompanyName,
-			&company.CompanyLocation,
-			&company.CompanyPhoneNumber,
-			&company.TermStart,
-			&company.TermEnd,
-			&company.CreateTime,
-			&company.LastModify,
-		)
-		(*dbObj).checkErr(err)
-		return company
-}
-
-// 0 => all
-func(dbObj *DB) SelectCompanyBanchAll(selectKey int, value... interface{}) *[]table.CompanyBanchTable {
+// 0 => 全部, value => nil
+//	1 => 公司Id, value => int64
+// 	2 => id (banchId), value => int64
+func(dbObj *DB) SelectCompanyBanch(selectKey int, value... interface{}) *[]table.CompanyBanchTable {
+	defer panichandler.Recover()
 	querys := ""
 	switch selectKey {
 	case 0:
-		// value need int
 		querys = (*query.MysqlSingleton()).CompanyBanch.SelectAll
 		break
+	case 1:
+		// value need int
+		querys = (*query.MysqlSingleton()).CompanyBanch.SelectSingleByCompanyId
+		break
+	case 2:
+		// value need int
+		querys = (*query.MysqlSingleton()).CompanyBanch.SelectSingleById
+		break;
 	default:
 		querys = (*query.MysqlSingleton()).CompanyBanch.SelectAll
 		break
@@ -339,43 +291,18 @@ func(dbObj *DB) SelectCompanyBanchAll(selectKey int, value... interface{}) *[]ta
 	return &carry 
 }
 
-//0 => companyId (default)
-// 1 => id (banchId)
-func(dbObj *DB) SelectCompanyBanchSingle(selectKey int, value... interface{}) *table.CompanyBanchTable {
-
-		companyBanch := new(table.CompanyBanchTable)
-		querys := ""
-		switch selectKey {
-		case 0:
-			// value need int
-			querys = (*query.MysqlSingleton()).CompanyBanch.SelectSingleByCompanyId
-			break
-		case 1:
-			querys = (*query.MysqlSingleton()).CompanyBanch.SelectSingleById
-			break;
-		default:
-			querys = (*query.MysqlSingleton()).CompanyBanch.SelectSingleByCompanyId
-			break
-		}
-		err := (*dbObj).MysqlDB.QueryRow(querys, value...).Scan(
-			&companyBanch.Id,
-			&companyBanch.CompanyId,
-			&companyBanch.BanchName,
-			&companyBanch.BanchShiftStyle,
-			&companyBanch.CreateTime,
-			&companyBanch.LastModify,
-		)
-		(*dbObj).checkErr(err)
-		return companyBanch
-}
-
-// 0 => all
-func(dbObj *DB) SelectShiftAll(selectKey int, value... interface{}) *[]table.ShiftTable {
+// 0 => all, value => nil
+//  1 => 班表id, value => int64
+func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftTable {
+	defer panichandler.Recover()
 	querys := ""
 	switch selectKey {
 	case 0:
-		// value need int
 		querys = (*query.MysqlSingleton()).Shift.SelectAll
+		break
+	case 1:
+		// value need int
+		querys = (*query.MysqlSingleton()).Shift.SelectSingleByShiftId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).Shift.SelectAll
@@ -406,41 +333,18 @@ func(dbObj *DB) SelectShiftAll(selectKey int, value... interface{}) *[]table.Shi
 	return &carry
 }
 
-// 0 => 班表id
-func(dbObj *DB) SelectShiftSingle(selectKey int, value... interface{}) *table.ShiftTable {
-	shift := new(table.ShiftTable)
+// 0 => all, value => nil
+//  1 => caseId, value => int64
+func(dbObj *DB) SelectShiftChange(selectKey int, value... interface{}) *[]table.ShiftChangeTable {
+	defer panichandler.Recover()
 	querys := ""
 	switch selectKey {
 	case 0:
-		// value need int
-		querys = (*query.MysqlSingleton()).Shift.SelectSingleByShiftId
-		break
-	default:
-		querys = (*query.MysqlSingleton()).Shift.SelectSingleByShiftId
-		break
-	}
-	err := (*dbObj).MysqlDB.QueryRow(querys, value...).Scan(
-		&shift.ShiftId,
-		&shift.UserId,
-		&shift.OnShiftTime,
-		&shift.OffShiftTime,
-		&shift.PunchIn,
-		&shift.PunchOut,
-		&shift.SpecifyTag,
-		&shift.CreateTime,
-		&shift.LastModify,
-	)
-	(*dbObj).checkErr(err)
-	return shift
-}
-
-// 0 => all
-func(dbObj *DB) SelectShiftChangeAll(selectKey int, value... interface{}) *[]table.ShiftChangeTable {
-	querys := ""
-	switch selectKey {
-	case 0:
-		// value need int
 		querys = (*query.MysqlSingleton()).ShiftChange.SelectAll
+		break
+	case 1:
+		// value need int
+		querys = (*query.MysqlSingleton()).ShiftChange.SelectSingleByCaseId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).ShiftChange.SelectAll
@@ -470,40 +374,18 @@ func(dbObj *DB) SelectShiftChangeAll(selectKey int, value... interface{}) *[]tab
 	return &carry
 }
 
-// 0 => caseId (default)
-func(dbObj *DB) SelectShiftChangeSingle(selectKey int, value... interface{}) *table.ShiftChangeTable {
-	shiftChange := new(table.ShiftChangeTable)
+// 0 => all, value => nil
+//  1 => caseId, value => int64
+func(dbObj *DB) SelectShiftOverTime(selectKey int, value... interface{}) *[]table.ShiftOverTimeTable {
+	defer panichandler.Recover()
 	querys := ""
 	switch selectKey {
 	case 0:
-		// value need int
-		querys = (*query.MysqlSingleton()).ShiftChange.SelectSingleByCaseId
-		break
-	default:
-		querys = (*query.MysqlSingleton()).ShiftChange.SelectSingleByCaseId
-		break
-	}
-	err := (*dbObj).MysqlDB.QueryRow(querys, value...).Scan(
-		&shiftChange.CaseId,
-		&shiftChange.InitiatorShiftId,
-		&shiftChange.RequestedShiftId,
-		&shiftChange.Reason,
-		&shiftChange.CaseProcess,
-		&shiftChange.SpecifyTag,
-		&shiftChange.CreateTime,
-		&shiftChange.LastModify,
-	)
-	(*dbObj).checkErr(err)
-	return shiftChange
-}
-
-// 0 => all
-func(dbObj *DB) SelectShiftOverTimeAll(selectKey int, value... interface{}) *[]table.ShiftOverTimeTable {
-	querys := ""
-	switch selectKey {
-	case 0:
-		// value need int
 		querys = (*query.MysqlSingleton()).ShiftOverTime.SelectAll
+		break
+	case 1:
+		// value need int
+		querys = (*query.MysqlSingleton()).ShiftOverTime.SelectSingleByCaseId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).ShiftOverTime.SelectAll
@@ -534,41 +416,18 @@ func(dbObj *DB) SelectShiftOverTimeAll(selectKey int, value... interface{}) *[]t
 	return &carry
 }
 
-// 0 => caseId (default)
-func(dbObj *DB) SelectShiftOverTimeSingle(selectKey int, value... interface{}) *table.ShiftOverTimeTable {
-	shiftOverTime:= new(table.ShiftOverTimeTable)
+// 0 => all, value => nil
+//  1 => caseId, value => int64
+func(dbObj *DB) SelectForgetPunch(selectKey int, value... interface{}) *[]table.ForgetPunchTable {
+	defer panichandler.Recover()
 	querys := ""
 	switch selectKey {
 	case 0:
-		// value need int
-		querys = (*query.MysqlSingleton()).ShiftOverTime.SelectSingleByCaseId
-		break
-	default:
-		querys = (*query.MysqlSingleton()).ShiftOverTime.SelectSingleByCaseId
-		break
-	}
-	err := (*dbObj).MysqlDB.QueryRow(querys, value...).Scan(
-		&shiftOverTime.CaseId,
-		&shiftOverTime.ShiftId,
-		&shiftOverTime.InitiatorOnOverTime,
-		&shiftOverTime.InitiatorOffOverTime,
-		&shiftOverTime.Reason,
-		&shiftOverTime.CaseProcess,
-		&shiftOverTime.SpecifyTag,
-		&shiftOverTime.CreateTime,
-		&shiftOverTime.LastModify,
-	)
-	(*dbObj).checkErr(err)
-	return shiftOverTime
-}
-
-// 0 => all
-func(dbObj *DB) SelectForgetPunchAll(selectKey int, value... interface{}) *[]table.ForgetPunchTable {
-	querys := ""
-	switch selectKey {
-	case 0:
-		// value need int
 		querys = (*query.MysqlSingleton()).ForgetPunch.SelectAll
+		break
+	case 1:
+		// value need int
+		querys = (*query.MysqlSingleton()).ForgetPunch.SelectSingleByCaseId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).ForgetPunch.SelectAll
@@ -598,40 +457,18 @@ func(dbObj *DB) SelectForgetPunchAll(selectKey int, value... interface{}) *[]tab
 	return &carry
 }
 
-// 0 => caseId (default)
-func(dbObj *DB) SelectForgetPunchSingle(selectKey int, value... interface{}) *table.ForgetPunchTable {
-	forgetPunch := new(table.ForgetPunchTable)
+// 0 => all, value => nil
+//  1 => caseId, value => int64
+func(dbObj *DB) SelectDayOff(selectKey int, value... interface{}) *[]table.DayOffTable {
+	defer panichandler.Recover()
 	querys := ""
 	switch selectKey {
 	case 0:
-		// value need int
-		querys = (*query.MysqlSingleton()).ForgetPunch.SelectSingleByCaseId
-		break
-	default:
-		querys = (*query.MysqlSingleton()).ForgetPunch.SelectSingleByCaseId
-		break
-	}
-	err := (*dbObj).MysqlDB.QueryRow(querys, value...).Scan(
-		&forgetPunch.CaseId,
-		&forgetPunch.ShiftId,
-		&forgetPunch.TargetPunch,
-		&forgetPunch.Reason,
-		&forgetPunch.CaseProcess,
-		&forgetPunch.SpecifyTag,
-		&forgetPunch.CreateTime,
-		&forgetPunch.LastModify,
-	)
-	(*dbObj).checkErr(err)
-	return forgetPunch
-}
-
-// 0 => all
-func(dbObj *DB) SelectDayOffAll(selectKey int, value... interface{}) *[]table.DayOffTable {
-	querys := ""
-	switch selectKey {
-	case 0:
-		// value need int
 		querys = (*query.MysqlSingleton()).DayOff.SelectAll
+		break
+	case 1:
+		// value need int
+		querys = (*query.MysqlSingleton()).DayOff.SelectSingleByCaseId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).DayOff.SelectAll
@@ -661,40 +498,18 @@ func(dbObj *DB) SelectDayOffAll(selectKey int, value... interface{}) *[]table.Da
 	return &carry
 }
 
-// 0 => caseId (default)
-func(dbObj *DB) SelectDayOffSingle(selectKey int, value... interface{}) *table.DayOffTable {
-	dayOff := new(table.DayOffTable)
+// 0 => all, value => nil
+//  1 => caseId, value => int64
+func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.LateExcusedTable {
+	defer panichandler.Recover()
 	querys := ""
 	switch selectKey {
 	case 0:
-		// value need int
-		querys = (*query.MysqlSingleton()).DayOff.SelectSingleByCaseId
-		break
-	default:
-		querys = (*query.MysqlSingleton()).DayOff.SelectSingleByCaseId
-		break
-	}
-	err := (*dbObj).MysqlDB.QueryRow(querys, value...).Scan(
-		&dayOff.CaseId,
-		&dayOff.ShiftId,
-		&dayOff.DayOffType,
-		&dayOff.Reason,
-		&dayOff.CaseProcess,
-		&dayOff.SpecifyTag,
-		&dayOff.CreateTime,
-		&dayOff.LastModify,
-	)
-	(*dbObj).checkErr(err)
-	return dayOff
-}
-
-// 0 => all
-func(dbObj *DB) SelectLateExcusedAll(selectKey int, value... interface{}) *[]table.LateExcusedTable {
-	querys := ""
-	switch selectKey {
-	case 0:
-		// value need int
 		querys = (*query.MysqlSingleton()).LateExcused.SelectAll
+		break
+	case 1:
+		// value need int
+		querys = (*query.MysqlSingleton()).LateExcused.SelectSingleByCaseId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).LateExcused.SelectAll
@@ -724,38 +539,12 @@ func(dbObj *DB) SelectLateExcusedAll(selectKey int, value... interface{}) *[]tab
 	return &carry
 }
 
-// 0 => caseId (default)
-func(dbObj *DB) SelectLateExcusedSingle(selectKey int, value... interface{}) *table.LateExcusedTable {
-	lateExcused := new(table.LateExcusedTable)
-	querys := ""
-	switch selectKey {
-	case 0:
-		// value need int
-		querys = (*query.MysqlSingleton()).LateExcused.SelectSingleByCaseId
-		break
-	default:
-		querys = (*query.MysqlSingleton()).LateExcused.SelectSingleByCaseId
-		break
-	}
-	err := (*dbObj).MysqlDB.QueryRow(querys, value...).Scan(
-		&lateExcused.CaseId,
-		&lateExcused.ShiftId,
-		&lateExcused.LateExcusedType,
-		&lateExcused.Reason,
-		&lateExcused.CaseProcess,
-		&lateExcused.SpecifyTag,
-		&lateExcused.CreateTime,
-		&lateExcused.LastModify,
-	)
-	(*dbObj).checkErr(err)
-	return lateExcused
-}
-
 
 // ---------------------------------delete------------------------------------
 
 //使用者的唯一id
 func(dbObj *DB) DeleteUser(deleteKey int, userId interface{}) bool {
+	defer panichandler.Recover()
 	(*dbObj).userMux.Lock()
 	defer (*dbObj).userMux.Unlock()
 	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).User.Delete)
@@ -763,6 +552,7 @@ func(dbObj *DB) DeleteUser(deleteKey int, userId interface{}) bool {
 	(*dbObj).checkErr(err)
 	_, err = stmt.Exec(userId)
 	if err != nil {
+		(*dbObj).checkErr(err)
 		return false
 	}
 	return true
@@ -770,6 +560,7 @@ func(dbObj *DB) DeleteUser(deleteKey int, userId interface{}) bool {
 
 //使用者的唯一id
 func(dbObj *DB) DeleteUserPreference(deleteKey int, userId interface{}) bool {
+	defer panichandler.Recover()
 	(*dbObj).userPreferenceMux.Lock()
 	defer (*dbObj).userPreferenceMux.Unlock()
 	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).UserPreference.Delete)
@@ -777,6 +568,7 @@ func(dbObj *DB) DeleteUserPreference(deleteKey int, userId interface{}) bool {
 	(*dbObj).checkErr(err)
 	_, err = stmt.Exec(userId)
 	if err != nil {
+		(*dbObj).checkErr(err)
 		return false
 	}
 	return true
@@ -784,6 +576,7 @@ func(dbObj *DB) DeleteUserPreference(deleteKey int, userId interface{}) bool {
 
 //公司的唯一id
 func(dbObj *DB) DeleteCompany(deleteKey int, companyId interface{}) bool {
+	defer panichandler.Recover()
 	(*dbObj).companyMux.Lock()
 	defer (*dbObj).companyMux.Unlock()
 	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).Company.Delete)
@@ -791,6 +584,7 @@ func(dbObj *DB) DeleteCompany(deleteKey int, companyId interface{}) bool {
 	(*dbObj).checkErr(err)
 	_, err = stmt.Exec(companyId)
 	if err != nil {
+		(*dbObj).checkErr(err)
 		return false
 	}
 	return true
@@ -798,6 +592,7 @@ func(dbObj *DB) DeleteCompany(deleteKey int, companyId interface{}) bool {
 
 // 公司部門的id
 func(dbObj *DB) DeleteCompanyBanch(deleteKey int, id interface{}) bool {
+	defer panichandler.Recover()
 	(*dbObj).companyBanchMux.Lock()
 	defer (*dbObj).companyBanchMux.Unlock()
 	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).CompanyBanch.Delete)
@@ -805,6 +600,7 @@ func(dbObj *DB) DeleteCompanyBanch(deleteKey int, id interface{}) bool {
 	(*dbObj).checkErr(err)
 	_, err = stmt.Exec(id)
 	if err != nil {
+		(*dbObj).checkErr(err)
 		return false
 	}
 	return true
@@ -812,6 +608,7 @@ func(dbObj *DB) DeleteCompanyBanch(deleteKey int, id interface{}) bool {
 
 // 班表的唯一id
 func(dbObj *DB) DeleteShift(deleteKey int, shiftId interface{}) bool {
+	defer panichandler.Recover()
 	(*dbObj).shiftMux.Lock()
 	defer (*dbObj).shiftMux.Unlock()
 	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).Shift.Delete)
@@ -819,6 +616,7 @@ func(dbObj *DB) DeleteShift(deleteKey int, shiftId interface{}) bool {
 	(*dbObj).checkErr(err)
 	_, err = stmt.Exec(shiftId)
 	if err != nil {
+		(*dbObj).checkErr(err)
 		return false
 	}
 	return true
@@ -826,6 +624,7 @@ func(dbObj *DB) DeleteShift(deleteKey int, shiftId interface{}) bool {
 
 // 案件的唯一id
 func(dbObj *DB) DeleteShiftChange(deleteKey int, caseId interface{}) bool {
+	defer panichandler.Recover()
 	(*dbObj).shiftChangeMux.Lock()
 	defer (*dbObj).shiftChangeMux.Unlock()
 	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).ShiftChange.Delete)
@@ -833,6 +632,7 @@ func(dbObj *DB) DeleteShiftChange(deleteKey int, caseId interface{}) bool {
 	(*dbObj).checkErr(err)
 	_, err = stmt.Exec(caseId)
 	if err != nil {
+		(*dbObj).checkErr(err)
 		return false
 	}
 	return true
@@ -840,6 +640,7 @@ func(dbObj *DB) DeleteShiftChange(deleteKey int, caseId interface{}) bool {
 
 // 案件的唯一id
 func(dbObj *DB) DeleteShiftOverTime(deleteKey int, caseId interface{}) bool {
+	defer panichandler.Recover()
 	(*dbObj).shiftOverTimeMux.Lock()
 	defer (*dbObj).shiftOverTimeMux.Unlock()
 	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).ShiftOverTime.Delete)
@@ -847,6 +648,7 @@ func(dbObj *DB) DeleteShiftOverTime(deleteKey int, caseId interface{}) bool {
 	(*dbObj).checkErr(err)
 	_, err = stmt.Exec(caseId)
 	if err != nil {
+		(*dbObj).checkErr(err)
 		return false
 	}
 	return true
@@ -854,6 +656,7 @@ func(dbObj *DB) DeleteShiftOverTime(deleteKey int, caseId interface{}) bool {
 
 // 案件的唯一id
 func(dbObj *DB) DeleteForgetPunch(deleteKey int, caseId interface{}) bool {
+	defer panichandler.Recover()
 	(*dbObj).forgetPunchMux.Lock()
 	defer (*dbObj).forgetPunchMux.Unlock()
 	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).ForgetPunch.Delete)
@@ -861,6 +664,7 @@ func(dbObj *DB) DeleteForgetPunch(deleteKey int, caseId interface{}) bool {
 	(*dbObj).checkErr(err)
 	_, err = stmt.Exec(caseId)
 	if err != nil {
+		(*dbObj).checkErr(err)
 		return false
 	}
 	return true
@@ -868,6 +672,7 @@ func(dbObj *DB) DeleteForgetPunch(deleteKey int, caseId interface{}) bool {
 
 // 案件的唯一id
 func(dbObj *DB) DeleteLateExcused(deleteKey int, caseId interface{}) bool {
+	defer panichandler.Recover()
 	(*dbObj).lateExcusedMux.Lock()
 	defer (*dbObj).lateExcusedMux.Unlock()
 	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).LateExcused.Delete)
@@ -875,6 +680,7 @@ func(dbObj *DB) DeleteLateExcused(deleteKey int, caseId interface{}) bool {
 	(*dbObj).checkErr(err)
 	_, err = stmt.Exec(caseId)
 	if err != nil {
+		(*dbObj).checkErr(err)
 		return false
 	}
 	return true
@@ -882,6 +688,7 @@ func(dbObj *DB) DeleteLateExcused(deleteKey int, caseId interface{}) bool {
 
 // 案件的唯一id
 func(dbObj *DB) DeleteDayOff(deleteKey int, caseId interface{}) bool {
+	defer panichandler.Recover()
 	(*dbObj).dayOffMux.Lock()
 	defer (*dbObj).dayOffMux.Unlock()
 	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).DayOff.Delete)
@@ -889,6 +696,7 @@ func(dbObj *DB) DeleteDayOff(deleteKey int, caseId interface{}) bool {
 	(*dbObj).checkErr(err)
 	_, err = stmt.Exec(caseId)
 	if err != nil {
+		(*dbObj).checkErr(err)
 		return false
 	}
 	return true
@@ -909,6 +717,7 @@ func(dbObj *DB) InsertUser(
 	monthSalary int,
 	partTimeSalary int) (bool, int64) {
 	///
+		defer panichandler.Recover()
 		(*dbObj).userMux.Lock()
 		defer (*dbObj).userMux.Unlock()
 		stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).User.InsertAll)
@@ -943,6 +752,7 @@ func(dbObj *DB) InsertUserPreference(
 	lastModify time.Time,
 	) (bool, int64) {
 		///
+		defer panichandler.Recover()
 		(*dbObj).userPreferenceMux.Lock()
 		defer  (*dbObj).userPreferenceMux.Unlock()
 		stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).UserPreference.InsertAll)
@@ -972,6 +782,7 @@ func(dbObj *DB) InsertCompany(
 	createTime time.Time,
 	lastModify time.Time) (bool, int64) {
 
+		defer panichandler.Recover()
 		(*dbObj).companyMux.Lock()
 		defer (*dbObj).companyMux.Unlock()
 		stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).Company.InsertAll)
@@ -1002,6 +813,7 @@ func(dbObj *DB) InsertCompanyBanch(
 	lastModify time.Time,
 	) (bool, int64) {
 
+		defer panichandler.Recover()
 		(*dbObj).companyBanchMux.Lock()
 		defer (*dbObj).companyBanchMux.Unlock()
 		stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).CompanyBanch.InsertAll)
@@ -1031,6 +843,7 @@ func(dbObj *DB) InsertShift(
 	specifyTag string,
 	) (bool, int64) {
 
+		defer panichandler.Recover()
 		(*dbObj).shiftMux.Lock()
 		defer (*dbObj).shiftMux.Unlock()
 		stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).Shift.InsertAll)
@@ -1063,6 +876,7 @@ func(dbObj *DB) InsertShiftChange(
 	lastModify time.Time,
 	) (bool, int64) {
 
+		defer panichandler.Recover()
 		(*dbObj).shiftChangeMux.Lock()
 		defer (*dbObj).shiftChangeMux.Unlock()
 		stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).ShiftChange.InsertAll)
@@ -1094,6 +908,8 @@ func(dbObj *DB) InsertShiftOverTime(
 	createTime time.Time,
 	lastModify time.Time,
 	) (bool, int64) {
+
+		defer panichandler.Recover()
 		(*dbObj).shiftOverTimeMux.Lock()
 		defer (*dbObj).shiftOverTimeMux.Unlock()
 		stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).ShiftOverTime.InsertAll)
@@ -1125,6 +941,8 @@ func(dbObj *DB) InsertForgetPunch(
 	createTime time.Time,
 	lastModify time.Time,
 	) (bool, int64) {
+
+		defer panichandler.Recover()
 		(*dbObj).forgetPunchMux.Lock()
 		defer (*dbObj).forgetPunchMux.Unlock()
 		stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).ForgetPunch.InsertAll)
@@ -1154,6 +972,8 @@ func(dbObj *DB) InsertDayOff(
 	createTime time.Time,
 	lastModify time.Time,
 	) (bool, int64) {
+
+		defer panichandler.Recover()
 		(*dbObj).dayOffMux.Lock()
 		defer (*dbObj).dayOffMux.Unlock()
 		stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).DayOff.InsertAll)
@@ -1183,6 +1003,8 @@ func(dbObj *DB) InsertLateExcused(
 	createTime time.Time,
 	lastModify time.Time,
 	) (bool, int64) {
+
+		defer panichandler.Recover()
 		(*dbObj).lateExcusedMux.Lock()
 		defer (*dbObj).lateExcusedMux.Unlock()
 		stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).LateExcused.InsertAll)

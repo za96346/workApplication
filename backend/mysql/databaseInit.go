@@ -219,7 +219,7 @@ func DataBaseInit() {
 
 
 /// userPreference alter
-	_, err = (*Singleton()).MysqlDB.Exec("alter table userPreference add foreign key(userId) references user(userId) on update cascade;")
+	_, err = (*Singleton()).MysqlDB.Exec("alter table userPreference add foreign key(userId) references user(userId) on update cascade on delete cascade;")
 
 	if err == nil {
 		fmt.Println("userPreference alter foreign key success")
@@ -238,7 +238,7 @@ func DataBaseInit() {
 		log.Fatal(err)
 	}
 	
-	_, err = (*Singleton()).MysqlDB.Exec("alter table shift add foreign key(userId) references user(userId) on update cascade;")
+	_, err = (*Singleton()).MysqlDB.Exec("alter table shift add foreign key(userId) references user(userId) on update cascade on delete cascade;")
 
 	if err == nil {
 		fmt.Println("shift alter foreign key success")
@@ -267,7 +267,7 @@ func DataBaseInit() {
 		log.Fatal(err)
 	}
 
-	_, err = (*Singleton()).MysqlDB.Exec("alter table shiftChange add foreign key(initiatorShiftId) references shift(shiftId) on update cascade;")
+	_, err = (*Singleton()).MysqlDB.Exec("alter table shiftChange add foreign key(initiatorShiftId) references shift(shiftId) on update cascade on delete cascade;")
 
 	if err == nil {
 		fmt.Println("shiftChange alter foreign key success")
@@ -276,7 +276,7 @@ func DataBaseInit() {
 		log.Fatal(err)
 	}
 
-	_, err = (*Singleton()).MysqlDB.Exec("alter table shiftChange add foreign key (requestedShiftId) references shift(shiftId) on update cascade;")
+	_, err = (*Singleton()).MysqlDB.Exec("alter table shiftChange add foreign key (requestedShiftId) references shift(shiftId) on update cascade on delete cascade;")
 
 	if err == nil {
 		fmt.Println("shiftChange alter foreign key success")
@@ -295,7 +295,7 @@ func DataBaseInit() {
 		log.Fatal(err)
 	}
 
-	_, err = (*Singleton()).MysqlDB.Exec("alter table shiftOverTime add foreign key (shiftId) references shift(shiftId) on update cascade;")
+	_, err = (*Singleton()).MysqlDB.Exec("alter table shiftOverTime add foreign key (shiftId) references shift(shiftId) on update cascade on delete cascade;")
 
 	if err == nil {
 		fmt.Println("shiftOverTime alter foreign key success")
@@ -314,7 +314,7 @@ func DataBaseInit() {
 		log.Fatal(err)
 	}
 
-	_, err = (*Singleton()).MysqlDB.Exec(`alter table forgetPunch add foreign key (shiftId) references shift(shiftId) on update cascade;`)
+	_, err = (*Singleton()).MysqlDB.Exec(`alter table forgetPunch add foreign key (shiftId) references shift(shiftId) on update cascade on delete cascade;`)
 
 	if err == nil {
 		fmt.Println("forgetPunch alter foreign key success")
@@ -332,7 +332,7 @@ func DataBaseInit() {
 		log.Fatal(err)
 	}
 
-	_, err = (*Singleton()).MysqlDB.Exec(`alter table dayOff add foreign key (shiftId) references shift(shiftId) on update cascade;`)
+	_, err = (*Singleton()).MysqlDB.Exec(`alter table dayOff add foreign key (shiftId) references shift(shiftId) on update cascade on delete cascade;`)
 
 	if err == nil {
 		fmt.Println("dayOff alter foreign key success")
@@ -350,7 +350,7 @@ func DataBaseInit() {
 		log.Fatal(err)
 	}
 
-	_, err = (*Singleton()).MysqlDB.Exec(`alter table lateExcused add foreign key (shiftId) references shift(shiftId) on update cascade;`)
+	_, err = (*Singleton()).MysqlDB.Exec(`alter table lateExcused add foreign key (shiftId) references shift(shiftId) on update cascade on delete cascade;`)
 
 	if err == nil {
 		fmt.Println("lateExcused alter foreign key success")
@@ -387,7 +387,7 @@ func DataBaseInit() {
 		log.Fatal(err)
 	}
 
-	_, err = (*Singleton()).MysqlDB.Exec(`alter table companyBanch add foreign key (companyId) references company(companyId) on update cascade;`)
+	_, err = (*Singleton()).MysqlDB.Exec(`alter table companyBanch add foreign key (companyId) references company(companyId) on update cascade on delete cascade;`)
 
 	if err == nil {
 		fmt.Println("companyBanch alter foreign key success")
@@ -396,6 +396,7 @@ func DataBaseInit() {
 		log.Fatal(err)
 	}
 // user alter
+// companyCode 被刪除後 set null
 	_, err = (*Singleton()).MysqlDB.Exec("alter table user auto_increment=1;")
 
 	if err == nil {
@@ -405,7 +406,7 @@ func DataBaseInit() {
 		log.Fatal(err)
 	}
 
-	_, err = (*Singleton()).MysqlDB.Exec(`alter table user add foreign key (companyCode) references company(companyCode) on update cascade;`)
+	_, err = (*Singleton()).MysqlDB.Exec(`alter table user add foreign key (companyCode) references company(companyCode) on update cascade on delete set null;`)
 
 	if err == nil {
 		fmt.Println("user alter foreign key success")
@@ -432,10 +433,10 @@ func simulateData() {
 		)
 		handleError(resStatus)
 		// company banch
-		resData := (*Singleton()).SelectCompanySingle(1, "fei32fej")
+		resData := (*Singleton()).SelectCompany(2, "fei32fej")
 		fmt.Println("接收SelectCompanySingle 記憶體位置 => ", resData, "\n")
 		resStatus, _ = (*Singleton()).InsertCompanyBanch(
-			(*resData).CompanyId,
+			(*resData)[0].CompanyId,
 			"公關組",
 			"{}",
 			time.Now(),
@@ -464,9 +465,9 @@ func simulateData() {
 				130 + i,
 			)
 			// userPreference
-			resData := (*Singleton()).SelectUserSingle(1, "account" + strconv.Itoa(i)) //拿使用者資料
+			resData := (*Singleton()).SelectUser(2, "account" + strconv.Itoa(i)) //拿使用者資料
 			resStatus, _ = (*Singleton()).InsertUserPreference(
-				(*resData).UserId,
+				(*resData)[0].UserId,
 				"{style}",
 				"12",
 				"pic",
@@ -479,7 +480,7 @@ func simulateData() {
 				hours, _ :=  time.ParseDuration("1h")
 				oneDay, _ := time.ParseDuration(fmt.Sprint(strconv.Itoa(shiftStep * 24), "h"))
 				_, _ = (*Singleton()).InsertShift(
-					(*resData).UserId,
+					(*resData)[0].UserId,
 					time.Now().Add(-8 * hours).Add(oneDay),
 					time.Now().Add(oneDay),
 					time.Now(),

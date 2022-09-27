@@ -12,6 +12,7 @@ import (
 	"context"
 	"time"
 
+	panichandler "backend/panicHandler"
 	"backend/table"
 
 	"github.com/go-redis/redis"
@@ -38,6 +39,7 @@ var redisInstance *DB
 var dbSingletonMux = new(sync.Mutex)
 
 func Singleton() *DB {
+	defer panichandler.Recover()
 	if redisInstance == nil {
 		dbSingletonMux.Lock()
 		if redisInstance == nil {
@@ -71,6 +73,7 @@ func Singleton() *DB {
 }
 
 func(dbObj *DB) Conn() { // 實體化redis.Client 並返回實體的位址
+	defer panichandler.Recover()
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("error loading .env file")
@@ -103,101 +106,248 @@ func(dbObj *DB) IsAlive() bool {
 //  ------------------------------select------------------------------
 		//  select all  //
 
-//0 => all
+// 0 => 全部, value =>  nil
+//  1 =>  userId, value => int64
+//  2 => account, value => string
 func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTable {
+	defer panichandler.Recover()
+	tableKey := (*dbObj).table[0]
 	switch selectKey {
 	case 0:
-		return forEach[table.UserTable]((*dbObj).fake, (*dbObj).table[0], 2)
+		return forEach[table.UserTable](
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+		)
+	case 1:
+		return forEach[table.UserTable](
+			func() ([]string, error) {
+				return (*dbObj).hmGet(tableKey, value...)
+			},
+		)
+	// case 2:
+	// 	return forEach[table.UserTable](
+	// 		func() ([]string, error) {
+				
+	// 		},
+	// 	)
 	default:
 		return &[]table.UserTable{}
 	}
 }
 
-//0 => all
+// 0 => 全部, value => nil
+//  1 => 使用者id, value => int64
 func(dbObj *DB) SelectUserPreference(selectKey int, value... interface{}) *[]table.UserPreferenceTable {
+	defer panichandler.Recover()
+	tableKey := (*dbObj).table[1]
 	switch selectKey {
 	case 0:
-		return forEach[table.UserPreferenceTable]((*dbObj).fake, (*dbObj).table[1], 2)
+		return forEach[table.UserPreferenceTable](
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+		)
+	case 1:
+		return forEach[table.UserPreferenceTable](
+			func() ([]string, error) {
+				return (*dbObj).hmGet(tableKey, value...)
+			},
+		)
 	default:
 		return &[]table.UserPreferenceTable{}
 	}
 }
 
-//0 => all
+// 0 => 全部, value => nil
+//  1 => 公司id, value => int64
+//  2 => 公司碼, value => string
 func(dbObj *DB) SelectCompany(selectKey int, value... interface{}) *[]table.CompanyTable {
+	defer panichandler.Recover()
+	tableKey := (*dbObj).table[2]
 	switch selectKey {
 	case 0:
-		return forEach[table.CompanyTable]((*dbObj).fake, (*dbObj).table[2], 2)
+		return forEach[table.CompanyTable](
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+		)
+	case 1:
+		return forEach[table.CompanyTable](
+			func() ([]string, error) {
+				return (*dbObj).hmGet(tableKey, value...)
+			},
+		)
+	// case 2:
+	// 	return forEach[table.CompanyTable](
+	// 		func() ([]string, error) {
+	// 			return (*dbObj).hmGet(tableKey, value...)
+	// 		},
+	// 	)
 	default:
 		return &[]table.CompanyTable{}
 	}
 }
 
-//0 => all
+// 0 => 全部, value => nil
+//	1 => 公司Id, value => int64
+// 	2 => id (banchId), value => int64
 func(dbObj *DB) SelectCompanyBanch(selectKey int, value... interface{}) *[]table.CompanyBanchTable {
+	defer panichandler.Recover()
+	tableKey := (*dbObj).table[3]
 	switch selectKey {
 	case 0:
-		return forEach[table.CompanyBanchTable]((*dbObj).fake, (*dbObj).table[3], 2)
+		return forEach[table.CompanyBanchTable](
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+		)
+	// case 1:
+	// 	return
+	case 2:
+		return forEach[table.CompanyBanchTable](
+			func() ([]string, error) {
+				return (*dbObj).hmGet(tableKey, value...)
+			},
+		)
 	default:
 		return &[]table.CompanyBanchTable{}
 	}
 }
 
-//0 => all
+// 0 => all, value => nil
+//  1 => 班表id, value => int64
 func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftTable {
+	defer panichandler.Recover()
+	tableKey := (*dbObj).table[4]
 	switch selectKey {
 	case 0:
-		return forEach[table.ShiftTable]((*dbObj).fake, (*dbObj).table[4], 2)
+		return forEach[table.ShiftTable](
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+		)
+	case 1:
+		return forEach[table.ShiftTable](
+			func() ([]string, error) {
+				return (*dbObj).hmGet(tableKey, value...)
+			},
+		)
 	default:
 		return &[]table.ShiftTable{}
 	}
 }
 
-//0 => all
+// 0 => all, value => nil
+//  1 => caseId, value => int64
 func(dbObj *DB) SelectShiftChange(selectKey int, value... interface{}) *[]table.ShiftChangeTable {
+	defer panichandler.Recover()
+	tableKey := (*dbObj).table[5]
 	switch selectKey {
 	case 0:
-		return forEach[table.ShiftChangeTable]((*dbObj).fake, (*dbObj).table[5], 2)
+		return forEach[table.ShiftChangeTable](
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+		)
+	case 1:
+		return forEach[table.ShiftChangeTable](
+			func() ([]string, error) {
+				return (*dbObj).hmGet(tableKey, value...)
+			},
+		)
 	default:
 		return &[]table.ShiftChangeTable{}
 	}
 }
 
-//0 => all
+// 0 => all, value => nil
+//  1 => caseId, value => int64
 func(dbObj *DB) SelectShiftOverTime(selectKey int, value... interface{}) *[]table.ShiftOverTimeTable {
+	defer panichandler.Recover()
+	tableKey := (*dbObj).table[6]
 	switch selectKey {
 	case 0:
-		return forEach[table.ShiftOverTimeTable]((*dbObj).fake, (*dbObj).table[6], 2)
+		return forEach[table.ShiftOverTimeTable](
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+		)
+	case 1:
+		return forEach[table.ShiftOverTimeTable](
+			func() ([]string, error) {
+				return (*dbObj).hmGet(tableKey, value...)
+			},
+		)
 	default:
 		return &[]table.ShiftOverTimeTable{}
 	}
 }
 
-//0 => all
+// 0 => all, value => nil
+//  1 => caseId, value => int64
 func(dbObj *DB) SelectDayOff(selectKey int, value... interface{}) *[]table.DayOffTable {
+	defer panichandler.Recover()
+	tableKey := (*dbObj).table[7]
 	switch selectKey {
 	case 0:
-		return forEach[table.DayOffTable]((*dbObj).fake, (*dbObj).table[7], 2)
+		return forEach[table.DayOffTable](
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+		)
+	case 1:
+		return forEach[table.DayOffTable](
+			func() ([]string, error) {
+				return (*dbObj).hmGet(tableKey, value...)
+			},
+		)
 	default:
 		return &[]table.DayOffTable{}
 	}
 }
 
-//0 => all
+// 0 => all, value => nil
+//  1 => caseId, value => int64
 func(dbObj *DB) SelectForgetPunch(selectKey int, value... interface{}) *[]table.ForgetPunchTable {
+	defer panichandler.Recover()
+	tableKey := (*dbObj).table[8]
 	switch selectKey {
 	case 0:
-		return forEach[table.ForgetPunchTable]((*dbObj).fake, (*dbObj).table[8], 2)
+		return forEach[table.ForgetPunchTable](
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+		)
+	case 1:
+		return forEach[table.ForgetPunchTable](
+			func() ([]string, error) {
+				return (*dbObj).hmGet(tableKey, value...)
+			},
+		)
 	default:
 		return &[]table.ForgetPunchTable{}
 	}
 }
 
-//0 => all
+// 0 => all, value => nil
+//  1 => caseId, value => int64
 func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.LateExcusedTable {
+	defer panichandler.Recover()
+	tableKey := (*dbObj).table[9]
 	switch selectKey {
 	case 0:
-		return forEach[table.LateExcusedTable]((*dbObj).fake, (*dbObj).table[9], 2)
+		return forEach[table.LateExcusedTable](
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+		)
+	case 1:
+		return forEach[table.LateExcusedTable](
+			func() ([]string, error) {
+				return (*dbObj).hmGet(tableKey, value...)
+			},
+		)
 	default:
 		return &[]table.LateExcusedTable{}
 	}
@@ -207,6 +357,7 @@ func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.
 
 //使用者的唯一id
 func(dbObj *DB) DeleteUser(deleteKey int, userId int64) bool {
+	defer panichandler.Recover()
 	(*dbObj).userMux.Lock()
 	defer (*dbObj).userMux.Unlock()
 	(*dbObj).RedisDb.HDel((*dbObj).table[0], strconv.FormatInt(userId, 10))
@@ -215,6 +366,7 @@ func(dbObj *DB) DeleteUser(deleteKey int, userId int64) bool {
 
 //使用者的唯一id
 func(dbObj *DB) DeleteUserPreference(deleteKey int, userId int64) bool {
+	defer panichandler.Recover()
 	(*dbObj).userPreferenceMux.Lock()
 	defer (*dbObj).userPreferenceMux.Unlock()
 	(*dbObj).RedisDb.HDel((*dbObj).table[1], strconv.FormatInt(userId, 10))
@@ -223,6 +375,7 @@ func(dbObj *DB) DeleteUserPreference(deleteKey int, userId int64) bool {
 
 //公司的唯一id
 func(dbObj *DB) DeleteCompany(deleteKey int, companyId int64) bool {
+	defer panichandler.Recover()
 	(*dbObj).companyMux.Lock()
 	defer (*dbObj).companyMux.Unlock()
 	(*dbObj).RedisDb.HDel((*dbObj).table[2], strconv.FormatInt(companyId, 10))
@@ -231,6 +384,7 @@ func(dbObj *DB) DeleteCompany(deleteKey int, companyId int64) bool {
 
 // 公司部門的id
 func(dbObj *DB) DeleteCompanyBanch(deleteKey int, id int64) bool {
+	defer panichandler.Recover()
 	(*dbObj).companyBanchMux.Lock()
 	defer (*dbObj).companyBanchMux.Unlock()
 	(*dbObj).RedisDb.HDel((*dbObj).table[3], strconv.FormatInt(id, 10))
@@ -239,6 +393,7 @@ func(dbObj *DB) DeleteCompanyBanch(deleteKey int, id int64) bool {
 
 // 班表的唯一id
 func(dbObj *DB) DeleteShift(deleteKey int, shiftId int64) bool {
+	defer panichandler.Recover()
 	(*dbObj).shiftMux.Lock()
 	defer (*dbObj).shiftMux.Unlock()
 	(*dbObj).RedisDb.HDel((*dbObj).table[4], strconv.FormatInt(shiftId, 10))
@@ -247,6 +402,7 @@ func(dbObj *DB) DeleteShift(deleteKey int, shiftId int64) bool {
 
 // 案件的唯一id
 func(dbObj *DB) DeleteShiftChange(deleteKey int, caseId int64) bool {
+	defer panichandler.Recover()
 	(*dbObj).shiftChangeMux.Lock()
 	defer (*dbObj).shiftChangeMux.Unlock()
 	(*dbObj).RedisDb.HDel((*dbObj).table[5], strconv.FormatInt(caseId, 10))
@@ -255,6 +411,7 @@ func(dbObj *DB) DeleteShiftChange(deleteKey int, caseId int64) bool {
 
 // 案件的唯一id
 func(dbObj *DB) DeleteShiftOverTime(deleteKey int, caseId int64) bool {
+	defer panichandler.Recover()
 	(*dbObj).shiftOverTimeMux.Lock()
 	defer (*dbObj).shiftOverTimeMux.Unlock()
 	(*dbObj).RedisDb.HDel((*dbObj).table[6], strconv.FormatInt(caseId, 10))
@@ -263,6 +420,7 @@ func(dbObj *DB) DeleteShiftOverTime(deleteKey int, caseId int64) bool {
 
 // 案件的唯一id
 func(dbObj *DB) DeleteDayOff(deleteKey int, caseId int64) bool {
+	defer panichandler.Recover()
 	(*dbObj).dayOffMux.Lock()
 	defer (*dbObj).dayOffMux.Unlock()
 	(*dbObj).RedisDb.HDel((*dbObj).table[7], strconv.FormatInt(caseId, 10))
@@ -271,6 +429,7 @@ func(dbObj *DB) DeleteDayOff(deleteKey int, caseId int64) bool {
 
 // 案件的唯一id
 func(dbObj *DB) DeleteForgetPunch(deleteKey int, caseId int64) bool {
+	defer panichandler.Recover()
 	(*dbObj).forgetPunchMux.Lock()
 	defer (*dbObj).forgetPunchMux.Unlock()
 	(*dbObj).RedisDb.HDel((*dbObj).table[8], strconv.FormatInt(caseId, 10))
@@ -279,6 +438,7 @@ func(dbObj *DB) DeleteForgetPunch(deleteKey int, caseId int64) bool {
 
 // 案件的唯一id
 func(dbObj *DB) DeleteLateExcused(deleteKey int, caseId int64) bool {
+	defer panichandler.Recover()
 	(*dbObj).lateExcusedMux.Lock()
 	defer (*dbObj).lateExcusedMux.Unlock()
 	(*dbObj).RedisDb.HDel((*dbObj).table[9], strconv.FormatInt(caseId, 10))
@@ -289,6 +449,7 @@ func(dbObj *DB) DeleteLateExcused(deleteKey int, caseId int64) bool {
 
 //  ------------------------------insert------------------------------
 func(dbObj *DB) InsertUser(data *table.UserTable) bool {
+	defer panichandler.Recover()
 	(*dbObj).userMux.Lock()
 	defer (*dbObj).userMux.Unlock()
 	key := strconv.FormatInt((*data).UserId, 10)
@@ -300,6 +461,7 @@ func(dbObj *DB) InsertUser(data *table.UserTable) bool {
 }
 
 func(dbObj *DB) InsertUserPreference(data *table.UserPreferenceTable) bool {
+	defer panichandler.Recover()
 	(*dbObj).userPreferenceMux.Lock()
 	defer (*dbObj).userPreferenceMux.Unlock()
 	key := strconv.FormatInt((*data).UserId, 10)
@@ -311,6 +473,7 @@ func(dbObj *DB) InsertUserPreference(data *table.UserPreferenceTable) bool {
 }
 
 func(dbObj *DB) InsertCompany(data *table.CompanyTable) bool {
+	defer panichandler.Recover()
 	(*dbObj).companyMux.Lock()
 	defer (*dbObj).companyMux.Unlock()
 	key := strconv.FormatInt((*data).CompanyId, 10)
@@ -322,6 +485,7 @@ func(dbObj *DB) InsertCompany(data *table.CompanyTable) bool {
 }
 
 func(dbObj *DB) InsertCompanyBanch(data *table.CompanyBanchTable) bool {
+	defer panichandler.Recover()
 	(*dbObj).companyBanchMux.Lock()
 	defer (*dbObj).companyBanchMux.Unlock()
 	key := strconv.FormatInt((*data).Id, 10)
@@ -333,6 +497,7 @@ func(dbObj *DB) InsertCompanyBanch(data *table.CompanyBanchTable) bool {
 }
 
 func(dbObj *DB) InsertShift(data *table.ShiftTable) bool {
+	defer panichandler.Recover()
 	(*dbObj).shiftMux.Lock()
 	defer (*dbObj).shiftMux.Unlock()
 	key := strconv.FormatInt((*data).ShiftId, 10)
@@ -344,6 +509,7 @@ func(dbObj *DB) InsertShift(data *table.ShiftTable) bool {
 }
 
 func(dbObj *DB) InsertShiftChange(data *table.ShiftChangeTable) bool {
+	defer panichandler.Recover()
 	(*dbObj).shiftChangeMux.Lock()
 	defer (*dbObj).shiftChangeMux.Unlock()
 	key := strconv.FormatInt((*data).CaseId, 10)
@@ -355,6 +521,7 @@ func(dbObj *DB) InsertShiftChange(data *table.ShiftChangeTable) bool {
 }
 
 func(dbObj *DB) InsertShiftOverTime(data *table.ShiftOverTimeTable) bool {
+	defer panichandler.Recover()
 	(*dbObj).shiftOverTimeMux.Lock()
 	defer (*dbObj).shiftOverTimeMux.Unlock()
 	key := strconv.FormatInt((*data).CaseId, 10)
@@ -366,6 +533,7 @@ func(dbObj *DB) InsertShiftOverTime(data *table.ShiftOverTimeTable) bool {
 }
 
 func(dbObj *DB) InsertDayOff(data *table.DayOffTable) bool {
+	defer panichandler.Recover()
 	(*dbObj).dayOffMux.Lock()
 	defer (*dbObj).dayOffMux.Unlock()
 	key := strconv.FormatInt((*data).CaseId, 10)
@@ -377,6 +545,7 @@ func(dbObj *DB) InsertDayOff(data *table.DayOffTable) bool {
 }
 
 func(dbObj *DB) InsertForgetPunch(data *table.ForgetPunchTable) bool {
+	defer panichandler.Recover()
 	(*dbObj).forgetPunchMux.Lock()
 	defer (*dbObj).forgetPunchMux.Unlock()
 	key := strconv.FormatInt((*data).CaseId, 10)
@@ -388,6 +557,7 @@ func(dbObj *DB) InsertForgetPunch(data *table.ForgetPunchTable) bool {
 }
 
 func(dbObj *DB) InsertLateExcused(data *table.LateExcusedTable) bool {
+	defer panichandler.Recover()
 	(*dbObj).lateExcusedMux.Lock()
 	defer (*dbObj).lateExcusedMux.Unlock()
 	key := strconv.FormatInt((*data).CaseId, 10)
@@ -402,58 +572,79 @@ func(dbObj *DB) InsertLateExcused(data *table.LateExcusedTable) bool {
 
 //  ------------------------------delete key------------------------------
 func(dbObj *DB) DeleteKeyUser(){
+	defer panichandler.Recover()
 	(*dbObj).RedisDb.Del((*dbObj).table[0])
 }
 func(dbObj *DB) DeleteKeyUserPreference(){
+	defer panichandler.Recover()
 	(*dbObj).RedisDb.Del((*dbObj).table[1])
 }
 func(dbObj *DB) DeleteKeyCompany(){
+	defer panichandler.Recover()
 	(*dbObj).RedisDb.Del((*dbObj).table[2])
 }
 func(dbObj *DB) DeleteKeyCompanyBanch(){
+	defer panichandler.Recover()
 	(*dbObj).RedisDb.Del((*dbObj).table[3])
 }
 func(dbObj *DB) DeleteKeyShift(){
+	defer panichandler.Recover()
 	(*dbObj).RedisDb.Del((*dbObj).table[4])
 }
 func(dbObj *DB) DeleteKeyShiftChange(){
+	defer panichandler.Recover()
 	(*dbObj).RedisDb.Del((*dbObj).table[5])
 }
 func(dbObj *DB) DeleteKeyShiftOverTime(){
+	defer panichandler.Recover()
 	(*dbObj).RedisDb.Del((*dbObj).table[6])
 }
 func(dbObj *DB) DeleteKeyDayOff(){
+	defer panichandler.Recover()
 	(*dbObj).RedisDb.Del((*dbObj).table[7])
 }
 func(dbObj *DB) DeleteKeyForgetPunch(){
+	defer panichandler.Recover()
 	(*dbObj).RedisDb.Del((*dbObj).table[8])
 }
 func(dbObj *DB) DeleteKeyLateExcused(){
+	defer panichandler.Recover()
 	(*dbObj).RedisDb.Del((*dbObj).table[9])
 }
 
 
 //  ------------------------------method------------------------------
 func(dbObj *DB) checkErr(err error) {
+	defer panichandler.Recover()
 	if err != nil {
 		fmt.Println(err)
 	}
 }
 
-func forEach[T any](data *[]any, key string, types int) *[]T {
+func forEach[T any](callback func() ([]string, error)) *[]T {
+	defer panichandler.Recover()
 	var container []T
 	list := new(T)
-	switch types {
-	case 2:
-		jsonData, _ := (*Singleton()).RedisDb.HGetAll(key).Result()
-
-		for _, v := range jsonData {
-			json.Unmarshal([]byte(v), list)
-			// mapstructure.Decode(res, list)
-			container = append(container, *list)
-		}
-		return &container
-	default:
-		return &container
+	jsonData, _ := callback()
+	for _, v := range jsonData {
+	json.Unmarshal([]byte(v), list)
+		// mapstructure.Decode(res, list)
+		container = append(container, *list)
 	}
+	return &container
+
+}
+
+// redis hmget tableKey => string, field..多選
+func(dbObj *DB) hmGet(tableKey string, field... interface{}) ([]string, error) {
+	transArr := []string{}
+	for _, v := range field {
+		transArr = append(transArr, fmt.Sprintf("%v", v))// format to string
+	}
+	returnValue := []string{}
+	res, err := (*dbObj).RedisDb.HMGet(tableKey, transArr...).Result()
+	for _, v:= range res {
+		returnValue = append(returnValue, v.(string))
+	}
+	return returnValue, err
 }
