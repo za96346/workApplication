@@ -4,37 +4,20 @@ import (
 	"time"
 )
 
-
-//共同的欄位
-type commonColumn struct {
-	CaseId int64
-	Reason string // 申請理由
-	CaseProcess string // 此案件的進度狀態到哪
-	timeColumn
-	specifyTagColumn
-}
-
-type timeColumn struct {
-	CreateTime time.Time `json:"CreateTime"`//創建的時間
-	LastModify time.Time `json:"LastModify"`// 上次修改的時間
-}
-type specifyTagColumn struct {
-	SpecifyTag string `json:"SpecifyTag"` // 特別的備註
-}
-
 //使用者
 type UserTable struct {
-	UserId int64 // 使用者的編號
-	CompanyCode string //公司碼
-	Account string // 帳號
-	Password string // 密碼
-	OnWorkDay time.Time // 到職日
-	Banch string // 部門
-	Permession string // 權限
-	WorkState string // 工作狀態 (到職on or 離職off)
-	MonthSalary int64 // 月薪
-	PartTimeSalary int64 // 時薪
-	timeColumn
+	UserId int64 `json:"UserId"`// 使用者的編號
+	CompanyCode string `json:"CompanyCode"` //公司碼
+	Account string `json:"Account"`// 帳號
+	Password string `json:"Password"`// 密碼
+	OnWorkDay time.Time `json:"OnWorkDay"` // 到職日
+	Banch string `json:"Banch"` // 部門
+	Permession string `json:"Permession"` // 權限
+	WorkState string `json:"WorkState"` // 工作狀態 (到職on or 離職off)
+	MonthSalary int `json:"MonthSalary"` // 月薪
+	PartTimeSalary int `json:"PartTimeSalary"` // 時薪
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
 }
 
 //使用者偏好
@@ -43,7 +26,8 @@ type UserPreferenceTable struct {
 	Style string
 	FontSize string
 	SelfPhoto string
-	timeColumn
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
 }
 
 //班表
@@ -54,15 +38,21 @@ type ShiftTable struct {
 	OffShiftTime time.Time `json:"OffShiftTime"` //結束上班的時間
 	PunchIn time.Time `json:"PunchIn"` // 上班卡
 	PunchOut time.Time `json:"PunchOut"`// 下班卡
-	timeColumn
-	specifyTagColumn
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
+	SpecifyTag string `json:"SpecifyTag"` // 特別的備註
 }
 
 //遲到早退
 type LateExcusedTable struct {
 	ShiftId int64 // 班表的編號
 	LateExcusedType  string // 遲到 或是 早退
-	commonColumn
+	CaseId int64
+	Reason string // 申請理由
+	CaseProcess string // 此案件的進度狀態到哪
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
+	SpecifyTag string `json:"SpecifyTag"` // 特別的備註
 }
 
 //加班
@@ -70,28 +60,48 @@ type ShiftOverTimeTable struct {
 	ShiftId int64 // 班表的編號
 	InitiatorOnOverTime time.Time // 申請人 開始加班時間
 	InitiatorOffOverTime time.Time // 申請人 結束加班時間
-	commonColumn
+	CaseId int64
+	Reason string // 申請理由
+	CaseProcess string // 此案件的進度狀態到哪
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
+	SpecifyTag string `json:"SpecifyTag"` // 特別的備註
 }
 
 //換班
 type ShiftChangeTable struct {
 	InitiatorShiftId int64 // 發起人班表的編號
 	RequestedShiftId int64 // 被請求人的班表編號
-	commonColumn
+	CaseId int64
+	Reason string // 申請理由
+	CaseProcess string // 此案件的進度狀態到哪
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
+	SpecifyTag string `json:"SpecifyTag"` // 特別的備註
 }
 
 //請假
 type DayOffTable struct {
 	ShiftId int64 // 班表的編號
 	DayOffType string // 請假類型
-	commonColumn
+	CaseId int64
+	Reason string // 申請理由
+	CaseProcess string // 此案件的進度狀態到哪
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
+	SpecifyTag string `json:"SpecifyTag"` // 特別的備註
 }
 
 //忘記打卡
 type ForgetPunchTable struct {
 	ShiftId int64 // 班表的編號
 	TargetPunch string // 上班卡 或是 下班卡
-	commonColumn
+	CaseId int64
+	Reason string // 申請理由
+	CaseProcess string // 此案件的進度狀態到哪
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
+	SpecifyTag string `json:"SpecifyTag"` // 特別的備註
 }
 
 //公司
@@ -103,7 +113,8 @@ type CompanyTable struct {
 	CompanyPhoneNumber string // 公司電話
 	TermStart time.Time // 開始期間
 	TermEnd time.Time // 結束期間
-	timeColumn
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
 }
 
 //公司部們
@@ -112,7 +123,8 @@ type CompanyBanchTable struct {
 	CompanyId int64 // 公司編號
 	BanchName string // 公司部們名稱
 	BanchShiftStyle string // 部門班表樣式
-	timeColumn
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
 }
 
 

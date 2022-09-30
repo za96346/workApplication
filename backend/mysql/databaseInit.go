@@ -1,11 +1,12 @@
 package mysql
 
 import (
+	"backend/table"
 	"fmt"
 	"log"
 	"strconv"
-	"time"
 	"sync"
+	"time"
 )
 func DataBaseInit() {
 	defer simulateData();
@@ -85,7 +86,7 @@ func DataBaseInit() {
 		caseId bigint not null unique auto_increment,
 		initiatorShiftId bigint,
 		requestedShiftId bigint,
-		reson varchar(200),
+		reason varchar(200),
 		caseProcess varchar(10),
 		specifyTag varchar(50),
 		createTime timestamp,
@@ -106,7 +107,7 @@ func DataBaseInit() {
 		shiftId bigint,
 		initiatorOnOverTime timestamp,
 		initiatorOffOverTime timestamp,
-		reson varchar(200),
+		reason varchar(200),
 		caseProcess varchar(10),
 		specifyTag varchar(50),
 		createTime timestamp,
@@ -125,7 +126,7 @@ func DataBaseInit() {
 			caseId bigint not null unique auto_increment,
 			shiftId bigint,
 			targetPunch varchar(3),
-			reson varchar(200),
+			reason varchar(200),
 			caseProcess varchar(10),
 			specifyTag varchar(50),
 			createTime timestamp,
@@ -144,7 +145,7 @@ func DataBaseInit() {
 			caseId bigint not null unique auto_increment,
 			shiftId bigint,
 			dayOffType varchar(10),
-			reson varchar(200),
+			reason varchar(200),
 			caseProcess varchar(10),
 			specifyTag varchar(50),
 			createTime timestamp,
@@ -164,7 +165,7 @@ func DataBaseInit() {
 			caseId bigint not null unique auto_increment,
 			shiftId bigint,
 			lateExcusedType varchar(10),
-			reson varchar(200),
+			reason varchar(200),
 			caseProcess varchar(10),
 			specifyTag varchar(50),
 			createTime timestamp,
@@ -421,27 +422,40 @@ func simulateData() {
     (*wg).Add(1)
 	go func ()  {
 		//company
-		resStatus, _ := (*Singleton()).InsertCompany(
-			"fei32fej",
-			"xx股份有限公司",
-			"台中市大甲區ｘｘｘ",
-			"0906930873",
-			time.Now(),
-			time.Now(),
-			time.Now(),
-			time.Now(),
-		)
+		company := table.CompanyTable{
+			CompanyCode: "",
+			CompanyName: "",
+			CompanyLocation: "",
+			CompanyPhoneNumber: "",
+			TermStart: time.Now(),
+			TermEnd: time.Now(),
+			CreateTime: time.Now(),
+			LastModify: time.Now(),
+		}
+		(*Singleton()).InsertCompany(&company)
+		company = table.CompanyTable{
+			CompanyCode: "fei32fej",
+			CompanyName: "xx股份有限公司",
+			CompanyLocation: "台中市大甲區ｘｘｘ",
+			CompanyPhoneNumber: "0906930873",
+			TermStart: time.Now(),
+			TermEnd: time.Now(),
+			CreateTime: time.Now(),
+			LastModify: time.Now(),
+		}
+		resStatus, _ := (*Singleton()).InsertCompany(&company)
 		handleError(resStatus)
 		// company banch
 		resData := (*Singleton()).SelectCompany(2, "fei32fej")
 		fmt.Println("接收SelectCompanySingle 記憶體位置 => ", resData, "\n")
-		resStatus, _ = (*Singleton()).InsertCompanyBanch(
-			(*resData)[0].CompanyId,
-			"公關組",
-			"{}",
-			time.Now(),
-			time.Now(),
-		)
+		companyBanch := table.CompanyBanchTable{
+			CompanyId :(*resData)[0].CompanyId,
+			BanchName: "公關組",
+			BanchShiftStyle: "{}",
+			CreateTime: time.Now(),
+			LastModify: time.Now(),
+		}
+		resStatus, _ = (*Singleton()).InsertCompanyBanch(&companyBanch)
 		handleError(resStatus)
 		(*wg).Done()
 	}()
@@ -451,96 +465,105 @@ func simulateData() {
 		i := i
 		go func (i int)  {
 			// user
-			resStatus, _ := (*Singleton()).InsertUser(
-				"fei32fej",
-				"account" + strconv.Itoa(i),
-				"1234",
-				time.Now(),
-				"公關組",
-				"admin",
-				"on",
-				time.Now(),
-				time.Now(),
-				30000 + i,
-				130 + i,
-			)
+			user := table.UserTable{
+				UserId : int64(0),
+				CompanyCode: "fei32fej",
+				Account: "account" + strconv.Itoa(i),
+				Password: "1234",
+				OnWorkDay: time.Now(),
+				Banch: "公關組",
+				Permession: "admin",
+				WorkState: "on",
+				MonthSalary: 30000 + i,
+				PartTimeSalary: 130 + i,
+				CreateTime: time.Now(),
+				LastModify: time.Now(),
+			}
+			resStatus, _ := (*Singleton()).InsertUser(&user)
 			// userPreference
 			resData := (*Singleton()).SelectUser(2, "account" + strconv.Itoa(i)) //拿使用者資料
-			resStatus, _ = (*Singleton()).InsertUserPreference(
-				(*resData)[0].UserId,
-				"{style}",
-				"12",
-				"pic",
-				time.Now(),
-				time.Now(),
-			)
+			userPreference := table.UserPreferenceTable{
+				UserId: (*resData)[0].UserId,
+				Style: "{style}",
+				FontSize: "12",
+				SelfPhoto: "pic",
+				CreateTime: time.Now(),
+				LastModify: time.Now(),
+			}
+			resStatus, _ = (*Singleton()).InsertUserPreference(&userPreference)
 			handleError(resStatus)
 			// shift
 			for shiftStep := 0; shiftStep <= 30; shiftStep++ {
 				hours, _ :=  time.ParseDuration("1h")
 				oneDay, _ := time.ParseDuration(fmt.Sprint(strconv.Itoa(shiftStep * 24), "h"))
-				_, _ = (*Singleton()).InsertShift(
-					(*resData)[0].UserId,
-					time.Now().Add(-8 * hours).Add(oneDay),
-					time.Now().Add(oneDay),
-					time.Now(),
-					time.Now(),
-					time.Now(),
-					time.Now(),
-					"nothing",
-				)
+				shift := table.ShiftTable{
+					UserId: (*resData)[0].UserId,
+					OnShiftTime: time.Now().Add(-8 * hours).Add(oneDay),
+					OffShiftTime: time.Now().Add(oneDay),
+					SpecifyTag: "nothing",
+					PunchIn: time.Now(),
+					PunchOut: time.Now(),
+					CreateTime: time.Now(),
+					LastModify: time.Now(),
+				}
+				_, _ = (*Singleton()).InsertShift(&shift)
 			}
 			wg.Done()
 		}(i)
 	}
 	// shift change
+	shiftChange := table.ShiftChangeTable{
+		InitiatorShiftId: int64(1),
+		RequestedShiftId: int64(2),
+		Reason: "我那天有事",
+		CaseProcess: "manager",
+		SpecifyTag: "hi",
+		CreateTime: time.Now(),
+		LastModify: time.Now(),
+	}
+	shiftOverTime := table.ShiftOverTimeTable{
+		ShiftId: int64(1),
+		InitiatorOnOverTime: time.Now(),
+		InitiatorOffOverTime: time.Now(),
+		Reason: "妹有原因",
+		CaseProcess: "manager",
+		SpecifyTag: "hi",
+		CreateTime: time.Now(),
+		LastModify: time.Now(),
+	}
+	forgetPunch := table.ForgetPunchTable{
+		ShiftId: int64(1),
+		TargetPunch: "上班",
+		Reason: "妹有原因",
+		CaseProcess: "manager",
+		SpecifyTag: "hi",
+		CreateTime: time.Now(),
+		LastModify: time.Now(),
+	}
+	dayOff := table.DayOffTable{
+		ShiftId: int64(1),
+		DayOffType: "事假",
+		Reason: "妹有原因",
+		CaseProcess: "manager",
+		SpecifyTag: "hi",
+		CreateTime: time.Now(),
+		LastModify: time.Now(),
+	}
+	lateExcused := table.LateExcusedTable{
+		ShiftId: int64(1),
+		LateExcusedType: "遲到",
+		Reason: "妹有原因",
+		CaseProcess: "manager",
+		SpecifyTag: "hi",
+		CreateTime: time.Now(),
+		LastModify: time.Now(),
+	}
 	(*wg).Wait()
-	(*Singleton()).InsertShiftChange(
-		int64(1),
-		int64(2),
-		"我那天有事",
-		"manager",
-		"hi",
-		time.Now(),
-		time.Now(),
-	)
-	(*Singleton()).InsertShiftOverTime(
-		int64(1),
-		time.Now(),
-		time.Now(),
-		"妹有原因",
-		"manager",
-		"hi",
-		time.Now(),
-		time.Now(),
-	)
-	(*Singleton()).InsertForgetPunch(
-		int64(1),
-		"上班",
-		"妹有原因",
-		"manager",
-		"hi",
-		time.Now(),
-		time.Now(),
-	)
-	(*Singleton()).InsertDayOff(
-		int64(1),
-		"事假",
-		"妹有原因",
-		"manager",
-		"hi",
-		time.Now(),
-		time.Now(),
-	)
-	(*Singleton()).InsertLateExcused(
-		int64(1),
-		"遲到",
-		"妹有原因",
-		"manager",
-		"hi",
-		time.Now(),
-		time.Now(),
-	)
+	(*Singleton()).InsertShiftChange(&shiftChange)
+	(*Singleton()).InsertShiftOverTime(&shiftOverTime)
+	(*Singleton()).InsertForgetPunch(&forgetPunch)
+	(*Singleton()).InsertDayOff(&dayOff)
+	(*Singleton()).InsertLateExcused(&lateExcused)
 }
 func handleError(resStatus bool) {
 	if resStatus {

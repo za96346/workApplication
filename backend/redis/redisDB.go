@@ -114,23 +114,33 @@ func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTab
 	tableKey := (*dbObj).table[0]
 	switch selectKey {
 	case 0:
-		return forEach[table.UserTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).RedisDb.HVals(tableKey).Result()
 			},
+			func(v table.UserTable) bool {return true},
 		)
 	case 1:
-		return forEach[table.UserTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).hmGet(tableKey, value...)
 			},
+			func(v table.UserTable) bool {return true},
 		)
-	// case 2:
-	// 	return forEach[table.UserTable](
-	// 		func() ([]string, error) {
-				
-	// 		},
-	// 	)
+	case 2:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.UserTable) bool {
+				for _, filterItem := range value {
+					if filterItem == v.Account {
+						return true
+					}
+				}
+				return false
+			},
+		)
 	default:
 		return &[]table.UserTable{}
 	}
@@ -143,16 +153,18 @@ func(dbObj *DB) SelectUserPreference(selectKey int, value... interface{}) *[]tab
 	tableKey := (*dbObj).table[1]
 	switch selectKey {
 	case 0:
-		return forEach[table.UserPreferenceTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).RedisDb.HVals(tableKey).Result()
 			},
+			func(V table.UserPreferenceTable) bool {return true},
 		)
 	case 1:
-		return forEach[table.UserPreferenceTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).hmGet(tableKey, value...)
 			},
+			func(V table.UserPreferenceTable) bool {return true},
 		)
 	default:
 		return &[]table.UserPreferenceTable{}
@@ -167,23 +179,33 @@ func(dbObj *DB) SelectCompany(selectKey int, value... interface{}) *[]table.Comp
 	tableKey := (*dbObj).table[2]
 	switch selectKey {
 	case 0:
-		return forEach[table.CompanyTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).RedisDb.HVals(tableKey).Result()
 			},
+			func(v table.CompanyTable) bool {return true},
 		)
 	case 1:
-		return forEach[table.CompanyTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).hmGet(tableKey, value...)
 			},
+			func(v table.CompanyTable) bool {return true},
 		)
-	// case 2:
-	// 	return forEach[table.CompanyTable](
-	// 		func() ([]string, error) {
-	// 			return (*dbObj).hmGet(tableKey, value...)
-	// 		},
-	// 	)
+	case 2:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.CompanyTable) bool {
+				for _, filterItem := range value {
+					if filterItem == v.CompanyCode {
+						return true
+					}
+				}
+				return false
+			},
+		)
 	default:
 		return &[]table.CompanyTable{}
 	}
@@ -197,18 +219,32 @@ func(dbObj *DB) SelectCompanyBanch(selectKey int, value... interface{}) *[]table
 	tableKey := (*dbObj).table[3]
 	switch selectKey {
 	case 0:
-		return forEach[table.CompanyBanchTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).RedisDb.HVals(tableKey).Result()
 			},
+			func(v table.CompanyBanchTable) bool {return true},
 		)
-	// case 1:
-	// 	return
+	case 1:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.CompanyBanchTable) bool {
+				for _, filterItem := range value {
+					if int64(filterItem.(int)) == v.CompanyId {
+						return true
+					}
+				}
+				return false
+			},
+		)
 	case 2:
-		return forEach[table.CompanyBanchTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).hmGet(tableKey, value...)
 			},
+			func(v table.CompanyBanchTable) bool {return true},
 		)
 	default:
 		return &[]table.CompanyBanchTable{}
@@ -222,16 +258,18 @@ func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftT
 	tableKey := (*dbObj).table[4]
 	switch selectKey {
 	case 0:
-		return forEach[table.ShiftTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).RedisDb.HVals(tableKey).Result()
 			},
+			func(v table.ShiftTable) bool {return true},
 		)
 	case 1:
-		return forEach[table.ShiftTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).hmGet(tableKey, value...)
 			},
+			func(v table.ShiftTable) bool {return true},
 		)
 	default:
 		return &[]table.ShiftTable{}
@@ -245,16 +283,18 @@ func(dbObj *DB) SelectShiftChange(selectKey int, value... interface{}) *[]table.
 	tableKey := (*dbObj).table[5]
 	switch selectKey {
 	case 0:
-		return forEach[table.ShiftChangeTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).RedisDb.HVals(tableKey).Result()
 			},
+			func(v table.ShiftChangeTable) bool {return true},
 		)
 	case 1:
-		return forEach[table.ShiftChangeTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).hmGet(tableKey, value...)
 			},
+			func(v table.ShiftChangeTable) bool {return true},
 		)
 	default:
 		return &[]table.ShiftChangeTable{}
@@ -268,16 +308,18 @@ func(dbObj *DB) SelectShiftOverTime(selectKey int, value... interface{}) *[]tabl
 	tableKey := (*dbObj).table[6]
 	switch selectKey {
 	case 0:
-		return forEach[table.ShiftOverTimeTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).RedisDb.HVals(tableKey).Result()
 			},
+			func(v table.ShiftOverTimeTable) bool {return true},
 		)
 	case 1:
-		return forEach[table.ShiftOverTimeTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).hmGet(tableKey, value...)
 			},
+			func(v table.ShiftOverTimeTable) bool {return true},
 		)
 	default:
 		return &[]table.ShiftOverTimeTable{}
@@ -291,16 +333,18 @@ func(dbObj *DB) SelectDayOff(selectKey int, value... interface{}) *[]table.DayOf
 	tableKey := (*dbObj).table[7]
 	switch selectKey {
 	case 0:
-		return forEach[table.DayOffTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).RedisDb.HVals(tableKey).Result()
 			},
+			func(v table.DayOffTable) bool {return true},
 		)
 	case 1:
-		return forEach[table.DayOffTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).hmGet(tableKey, value...)
 			},
+			func(v table.DayOffTable) bool {return true},
 		)
 	default:
 		return &[]table.DayOffTable{}
@@ -314,16 +358,18 @@ func(dbObj *DB) SelectForgetPunch(selectKey int, value... interface{}) *[]table.
 	tableKey := (*dbObj).table[8]
 	switch selectKey {
 	case 0:
-		return forEach[table.ForgetPunchTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).RedisDb.HVals(tableKey).Result()
 			},
+			func(v table.ForgetPunchTable) bool {return true},
 		)
 	case 1:
-		return forEach[table.ForgetPunchTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).hmGet(tableKey, value...)
 			},
+			func(v table.ForgetPunchTable) bool {return true},
 		)
 	default:
 		return &[]table.ForgetPunchTable{}
@@ -337,16 +383,18 @@ func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.
 	tableKey := (*dbObj).table[9]
 	switch selectKey {
 	case 0:
-		return forEach[table.LateExcusedTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).RedisDb.HVals(tableKey).Result()
 			},
+			func(v table.LateExcusedTable) bool {return true},
 		)
 	case 1:
-		return forEach[table.LateExcusedTable](
+		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).hmGet(tableKey, value...)
 			},
+			func(v table.LateExcusedTable) bool {return true},
 		)
 	default:
 		return &[]table.LateExcusedTable{}
@@ -621,15 +669,16 @@ func(dbObj *DB) checkErr(err error) {
 	}
 }
 
-func forEach[T any](callback func() ([]string, error)) *[]T {
+func forEach[T any](callback func() ([]string, error), filterCallBack func(T) bool) *[]T {
 	defer panichandler.Recover()
 	var container []T
 	list := new(T)
 	jsonData, _ := callback()
 	for _, v := range jsonData {
-	json.Unmarshal([]byte(v), list)
-		// mapstructure.Decode(res, list)
-		container = append(container, *list)
+		json.Unmarshal([]byte(v), list)
+		if filterCallBack(*list) {
+			container = append(container, *list)
+		}
 	}
 	return &container
 

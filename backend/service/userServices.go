@@ -3,14 +3,15 @@ package service
 import (
 	// "encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"sync"
 
 	// "strconv"
 	"backend/pojo"
+	"backend/table"
 	// "backend/database"
 	"github.com/gin-gonic/gin"
+	"backend/handler"
 )
 var userList = []pojo.User{}
 func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
@@ -21,26 +22,26 @@ func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
 }
 
 func CreateUser(props *gin.Context, waitJob *sync.WaitGroup) {
+	// post
 	defer (*waitJob).Done()
-	//post
-	fmt.Println("do create user")
-	(*props).JSON(http.StatusOK, "l")
+	user := table.UserTable{}
+	(*props).ShouldBindJSON(&user)
+
+	fmt.Println("do create user", &user)
+	(*handler.Singleton()).InsertUser(&user)
+	(*props).JSON(http.StatusOK, user)
 }
 
 func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer (*waitJob).Done()
-	//put
-	// update
-	user := []pojo.User{}
-	err := (*props).ShouldBindJSON(&user)
-	if err != nil {
-		(*props).JSON(http.StatusUnprocessableEntity, "資料格式錯誤")
+	user := table.UserTable{}
+	(*props).ShouldBindJSON(&user)
+	res := (*handler.Singleton()).UpdateUser(0, &user)
+	if res {
+		(*props).JSON(http.StatusOK, "it ok")
+	} else {
+		(*props).JSON(http.StatusNotFound, "新增失敗")
 	}
-	for amount := 0; amount < len(user); amount++ {
-		userList = append(userList, user[amount])
-	}
-	log.Println("update user receive => ", userList, userList[len(userList) - 1])
-	(*props).JSON(http.StatusOK, "資料修改成功")
 }
 
 func DeleteUser(props *gin.Context, waitJob *sync.WaitGroup) {

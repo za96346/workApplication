@@ -14,9 +14,10 @@ import (
 	"sync"
 	"time"
 
+	"backend/panicHandler"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
-	"backend/panicHandler"
 )
 
 var dbSingletonMux = new(sync.Mutex)
@@ -542,11 +543,16 @@ func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.
 
 // ---------------------------------delete------------------------------------
 
-//使用者的唯一id
+//使用者的唯一id (關聯資料表userpreference 也上鎖)
 func(dbObj *DB) DeleteUser(deleteKey int, userId interface{}) bool {
 	defer panichandler.Recover()
+
 	(*dbObj).userMux.Lock()
 	defer (*dbObj).userMux.Unlock()
+
+	(*dbObj).userPreferenceMux.Lock()
+	defer (*dbObj).userPreferenceMux.Unlock()
+
 	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).User.Delete)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
@@ -574,11 +580,16 @@ func(dbObj *DB) DeleteUserPreference(deleteKey int, userId interface{}) bool {
 	return true
 }
 
-//公司的唯一id
+//公司的唯一id (關聯資料表 companyBanch 也上鎖)
 func(dbObj *DB) DeleteCompany(deleteKey int, companyId interface{}) bool {
 	defer panichandler.Recover()
+
 	(*dbObj).companyMux.Lock()
 	defer (*dbObj).companyMux.Unlock()
+
+	(*dbObj).companyBanchMux.Lock()
+	defer (*dbObj).companyBanchMux.Unlock()
+
 	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).Company.Delete)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
@@ -606,11 +617,28 @@ func(dbObj *DB) DeleteCompanyBanch(deleteKey int, id interface{}) bool {
 	return true
 }
 
-// 班表的唯一id
+// 班表的唯一id (關聯資料表	shiftovertime shiftchange forgetpunch lateexcused dayoff 都上鎖)
 func(dbObj *DB) DeleteShift(deleteKey int, shiftId interface{}) bool {
 	defer panichandler.Recover()
+
 	(*dbObj).shiftMux.Lock()
 	defer (*dbObj).shiftMux.Unlock()
+
+	(*dbObj).shiftChangeMux.Lock()
+	defer (*dbObj).shiftChangeMux.Unlock()
+
+	(*dbObj).shiftOverTimeMux.Lock()
+	defer (*dbObj).shiftOverTimeMux.Unlock()
+
+	(*dbObj).forgetPunchMux.Lock()
+	defer (*dbObj).forgetPunchMux.Unlock()
+
+	(*dbObj).lateExcusedMux.Lock()
+	defer (*dbObj).lateExcusedMux.Unlock()
+
+	(*dbObj).dayOffMux.Lock()
+	defer (*dbObj).dayOffMux.Unlock()
+
 	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).Shift.Delete)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
@@ -702,20 +730,350 @@ func(dbObj *DB) DeleteDayOff(deleteKey int, caseId interface{}) bool {
 	return true
 }
 
+//  ---------------------------------update------------------------------------
+
+
+// 0 => all
+func(dbObj *DB) UpdateUser(updateKey int, data *table.UserTable) bool {
+		defer panichandler.Recover()
+		(*dbObj).userMux.Lock()
+		defer (*dbObj).userMux.Unlock()
+		querys := ""
+		switch updateKey {
+		case 0:
+			querys = (*query.MysqlSingleton()).User.UpdateSingle
+		default:
+			querys = (*query.MysqlSingleton()).User.UpdateSingle
+		}
+		
+		stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+		defer stmt.Close()
+		(*dbObj).checkErr(err)
+		_, err = stmt.Exec(
+			(*data).CompanyCode,
+			(*data).Account,
+			(*data).Password,
+			(*data).OnWorkDay,
+			(*data).Banch,
+			(*data).Permession,
+			(*data).WorkState,
+			(*data).CreateTime,
+			(*data).LastModify,
+			(*data).MonthSalary,
+			(*data).PartTimeSalary,
+			(*data).UserId,
+		)
+		if err != nil {
+			(*dbObj).checkErr(err)
+			return false
+		}
+		return true
+}
+
+// 0 => all
+func(dbObj *DB) UpdateUserPreference(updateKey int, data *table.UserPreferenceTable) bool {
+	defer panichandler.Recover()
+	(*dbObj).userPreferenceMux.Lock()
+	defer (*dbObj).userPreferenceMux.Unlock()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).UserPreference.UpdateSingle
+		break;
+	default:
+		querys = (*query.MysqlSingleton()).UserPreference.UpdateSingle
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(
+		(*data).Style,
+		(*data).FontSize,
+		(*data).SelfPhoto,
+		(*data).CreateTime,
+		(*data).LastModify,
+		(*data).UserId,
+	)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// 0 => all
+func(dbObj *DB) UpdateCompany(updateKey int, data *table.CompanyTable) bool {
+	defer panichandler.Recover()
+	(*dbObj).companyMux.Lock()
+	defer (*dbObj).companyMux.Unlock()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).Company.UpdateSingle
+		break;
+	default:
+		querys = (*query.MysqlSingleton()).Company.UpdateSingle
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(
+		(*data).CompanyCode,
+		(*data).CompanyName,
+		(*data).CompanyLocation,
+		(*data).CompanyPhoneNumber,
+		(*data).TermStart,
+		(*data).TermEnd,
+		(*data).CreateTime,
+		(*data).LastModify,
+		(*data).CompanyId,
+	)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// 0 => all
+func(dbObj *DB) UpdateCompanyBanch(updateKey int, data *table.CompanyBanchTable) bool {
+	defer panichandler.Recover()
+	(*dbObj).companyBanchMux.Lock()
+	defer (*dbObj).companyBanchMux.Unlock()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).CompanyBanch.UpdateSingle
+		break;
+	default:
+		querys = (*query.MysqlSingleton()).CompanyBanch.UpdateSingle
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(
+		(*data).BanchName,
+		(*data).BanchShiftStyle,
+		(*data).CreateTime,
+		(*data).LastModify,
+		(*data).Id,
+	)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// 0 => all
+func(dbObj *DB) UpdateShift(updateKey int, data *table.ShiftTable) bool {
+	defer panichandler.Recover()
+	(*dbObj).shiftMux.Lock()
+	defer (*dbObj).shiftMux.Unlock()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).Shift.UpdateSingle
+		break;
+	default:
+		querys = (*query.MysqlSingleton()).Shift.UpdateSingle
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(
+		(*data).OnShiftTime,
+		(*data).OffShiftTime,
+		(*data).PunchIn,
+		(*data).PunchOut,
+		(*data).SpecifyTag,
+		(*data).CreateTime,
+		(*data).LastModify,
+		(*data).ShiftId,
+	)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// 0 => all
+func(dbObj *DB) UpdateShiftChange(updateKey int, data *table.ShiftChangeTable) bool {
+	defer panichandler.Recover()
+	(*dbObj).shiftChangeMux.Lock()
+	defer (*dbObj).shiftChangeMux.Unlock()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).ShiftChange.UpdateSingle
+		break;
+	default:
+		querys = (*query.MysqlSingleton()).ShiftChange.UpdateSingle
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(
+		(*data).InitiatorShiftId,
+		(*data).RequestedShiftId,
+		(*data).Reason,
+		(*data).CaseProcess,
+		(*data).SpecifyTag,
+		(*data).CreateTime,
+		(*data).LastModify,
+		(*data).CaseId,
+	)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// 0 => all
+func(dbObj *DB) UpdateShiftOverTime(updateKey int, data *table.ShiftOverTimeTable) bool {
+	defer panichandler.Recover()
+	(*dbObj).shiftOverTimeMux.Lock()
+	defer (*dbObj).shiftOverTimeMux.Unlock()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).ShiftOverTime.UpdateSingle
+		break;
+	default:
+		querys = (*query.MysqlSingleton()).ShiftOverTime.UpdateSingle
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(
+		(*data).InitiatorOnOverTime,
+		(*data).InitiatorOffOverTime,
+		(*data).Reason,
+		(*data).CaseProcess,
+		(*data).SpecifyTag,
+		(*data).CreateTime,
+		(*data).LastModify,
+		(*data).CaseId,
+	)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// 0 => all
+func(dbObj *DB) UpdateForgetPunch(updateKey int, data *table.ForgetPunchTable) bool {
+	defer panichandler.Recover()
+	(*dbObj).forgetPunchMux.Lock()
+	defer (*dbObj).forgetPunchMux.Unlock()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).ForgetPunch.UpdateSingle
+		break;
+	default:
+		querys = (*query.MysqlSingleton()).ForgetPunch.UpdateSingle
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(
+		(*data).TargetPunch,
+		(*data).Reason,
+		(*data).CaseProcess,
+		(*data).SpecifyTag,
+		(*data).CreateTime,
+		(*data).LastModify,
+		(*data).CaseId,
+	)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// 0 => all
+func(dbObj *DB) UpdateDayOff(updateKey int, data *table.DayOffTable) bool {
+	defer panichandler.Recover()
+	(*dbObj).dayOffMux.Lock()
+	defer (*dbObj).dayOffMux.Unlock()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).DayOff.UpdateSingle
+		break;
+	default:
+		querys = (*query.MysqlSingleton()).DayOff.UpdateSingle
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(
+		(*data).DayOffType,
+		(*data).Reason,
+		(*data).CaseProcess,
+		(*data).SpecifyTag,
+		(*data).CreateTime,
+		(*data).LastModify,
+		(*data).CaseId,
+	)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// 0 => all
+func(dbObj *DB) UpdateLateExcused(updateKey int, data *table.LateExcusedTable) bool {
+	defer panichandler.Recover()
+	(*dbObj).lateExcusedMux.Lock()
+	defer (*dbObj).lateExcusedMux.Unlock()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).LateExcused.UpdateSingle
+		break;
+	default:
+		querys = (*query.MysqlSingleton()).LateExcused.UpdateSingle
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(
+		(*data).LateExcusedType,
+		(*data).Reason,
+		(*data).CaseProcess,
+		(*data).SpecifyTag,
+		(*data).CreateTime,
+		(*data).LastModify,
+		(*data).CaseId,
+	)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+
+
 
 //  ---------------------------------insert------------------------------------
-func(dbObj *DB) InsertUser(
-	companyCode string,
-	account string,
-	password string,
-	onWorkDay time.Time,
-	banch string,
-	permession string,
-	workState string,
-	createTime time.Time,
-	lastModify time.Time,
-	monthSalary int,
-	partTimeSalary int) (bool, int64) {
+func(dbObj *DB) InsertUser(data *table.UserTable) (bool, int64) {
 	///
 		defer panichandler.Recover()
 		(*dbObj).userMux.Lock()
@@ -724,18 +1082,19 @@ func(dbObj *DB) InsertUser(
 		defer stmt.Close()
 		(*dbObj).checkErr(err)
 		res, err := stmt.Exec(
-			companyCode,
-			account,
-			password,
-			onWorkDay,
-			banch,
-			permession,
-			workState,
-			createTime,
-			lastModify,
-			monthSalary,
-			partTimeSalary,
+			(*data).CompanyCode,
+			(*data).Account,
+			(*data).Password,
+			(*data).OnWorkDay,
+			(*data).Banch,
+			(*data).Permession,
+			(*data).WorkState,
+			(*data).CreateTime,
+			(*data).LastModify,
+			(*data).MonthSalary,
+			(*data).PartTimeSalary,
 		)
+		(*dbObj).checkErr(err)
 		id, _:= res.LastInsertId()
 		if err != nil {
 			return false, id
@@ -743,14 +1102,7 @@ func(dbObj *DB) InsertUser(
 		return true, id
 
 }
-func(dbObj *DB) InsertUserPreference(
-	userId int64,
-	style string,
-	fontSize string,
-	selfPhoto string,
-	createTime time.Time,
-	lastModify time.Time,
-	) (bool, int64) {
+func(dbObj *DB) InsertUserPreference(data *table.UserPreferenceTable) (bool, int64) {
 		///
 		defer panichandler.Recover()
 		(*dbObj).userPreferenceMux.Lock()
@@ -759,28 +1111,21 @@ func(dbObj *DB) InsertUserPreference(
 		defer stmt.Close()
 		(*dbObj).checkErr(err)
 		res, err := stmt.Exec(
-			userId,
-			style,
-			fontSize,
-			selfPhoto,
-			createTime,
-			lastModify,
+			(*data).UserId,
+			(*data).Style,
+			(*data).FontSize,
+			(*data).SelfPhoto,
+			(*data).CreateTime,
+			(*data).LastModify,
 		)
+		(*dbObj).checkErr(err)
 		id, _:= res.LastInsertId()
 		if err != nil {
 			return false, id
 		}
 		return true, id
 }
-func(dbObj *DB) InsertCompany(
-	companyCode string,
-	companyName string,
-	companyLocation string,
-	companyPhoneNumber string,
-	termStart time.Time,
-	termEnd time.Time,
-	createTime time.Time,
-	lastModify time.Time) (bool, int64) {
+func(dbObj *DB) InsertCompany(data *table.CompanyTable) (bool, int64) {
 
 		defer panichandler.Recover()
 		(*dbObj).companyMux.Lock()
@@ -790,28 +1135,23 @@ func(dbObj *DB) InsertCompany(
 		(*dbObj).checkErr(err)
 
 		res, err := stmt.Exec(
-			companyCode,
-			companyName,
-			companyLocation,
-			companyPhoneNumber,
-			termStart,
-			termEnd,
-			createTime,
-			lastModify,
+			(*data).CompanyCode,
+			(*data).CompanyName,
+			(*data).CompanyLocation,
+			(*data).CompanyPhoneNumber,
+			(*data).TermStart,
+			(*data).TermEnd,
+			(*data).CreateTime,
+			(*data).LastModify,
 		)
+		(*dbObj).checkErr(err)
 		id, _:= res.LastInsertId()
 		if err != nil {
 			return false, id
 		}
 		return true, id
 }
-func(dbObj *DB) InsertCompanyBanch(
-	companyId int64,
-	banchName string,
-	banchShiftStyle string,
-	createTime time.Time,
-	lastModify time.Time,
-	) (bool, int64) {
+func(dbObj *DB) InsertCompanyBanch(data *table.CompanyBanchTable) (bool, int64) {
 
 		defer panichandler.Recover()
 		(*dbObj).companyBanchMux.Lock()
@@ -820,28 +1160,20 @@ func(dbObj *DB) InsertCompanyBanch(
 		defer stmt.Close()
 		(*dbObj).checkErr(err)
 		res, err := stmt.Exec(
-			companyId,
-			banchName,
-			banchShiftStyle,
-			createTime,
-			lastModify,
+			(*data).CompanyId,
+			(*data).BanchName,
+			(*data).BanchShiftStyle,
+			(*data).CreateTime,
+			(*data).LastModify,
 		)
+		(*dbObj).checkErr(err)
 		id, _:= res.LastInsertId()
 		if err != nil {
 			return false, id
 		}
 		return true, id
 }
-func(dbObj *DB) InsertShift(
-	userId int64,
-	onShiftTime time.Time,
-	offShiftTime time.Time,
-	punchIn time.Time,
-	punchOut time.Time,
-	createTime time.Time,
-	lastModify time.Time,
-	specifyTag string,
-	) (bool, int64) {
+func(dbObj *DB) InsertShift(data *table.ShiftTable) (bool, int64) {
 
 		defer panichandler.Recover()
 		(*dbObj).shiftMux.Lock()
@@ -851,30 +1183,23 @@ func(dbObj *DB) InsertShift(
 
 		(*dbObj).checkErr(err)
 		res, err := stmt.Exec(
-			userId,
-			onShiftTime,
-			offShiftTime,
-			punchIn,
-			punchOut,
-			specifyTag,
-			createTime,
-			lastModify,
+			(*data).UserId,
+			(*data).OnShiftTime,
+			(*data).OffShiftTime,
+			(*data).PunchIn,
+			(*data).PunchOut,
+			(*data).SpecifyTag,
+			(*data).CreateTime,
+			(*data).LastModify,
 		)
+		(*dbObj).checkErr(err)
 		id, _:= res.LastInsertId()
 		if err != nil {
 			return false, id
 		}
 		return true, id
 }
-func(dbObj *DB) InsertShiftChange(
-	initiatorShiftId int64,
-	requestedShiftId int64,
-	reson string,
-	caseProcess string,
-	specifyTag string,
-	createTime time.Time,
-	lastModify time.Time,
-	) (bool, int64) {
+func(dbObj *DB) InsertShiftChange(data *table.ShiftChangeTable) (bool, int64) {
 
 		defer panichandler.Recover()
 		(*dbObj).shiftChangeMux.Lock()
@@ -883,14 +1208,15 @@ func(dbObj *DB) InsertShiftChange(
 		defer stmt.Close()
 		(*dbObj).checkErr(err)
 		res, err := stmt.Exec(
-			initiatorShiftId,
-			requestedShiftId,
-			reson,
-			caseProcess,
-			specifyTag,
-			createTime,
-			lastModify,
+			(*data).InitiatorShiftId,
+			(*data).RequestedShiftId,
+			(*data).Reason,
+			(*data).CaseProcess,
+			(*data).SpecifyTag,
+			(*data).CreateTime,
+			(*data).LastModify,
 		)
+		(*dbObj).checkErr(err)
 		id, _:= res.LastInsertId()
 		if err != nil {
 			return false, id
@@ -898,16 +1224,7 @@ func(dbObj *DB) InsertShiftChange(
 		return true, id
 }
 
-func(dbObj *DB) InsertShiftOverTime(
-	shiftId int64,
-	initiatorOnOverTime time.Time,
-	initiatorOffOverTime time.Time,
-	reson string,
-	caseProcess string,
-	specifyTag string,
-	createTime time.Time,
-	lastModify time.Time,
-	) (bool, int64) {
+func(dbObj *DB) InsertShiftOverTime(data *table.ShiftOverTimeTable) (bool, int64) {
 
 		defer panichandler.Recover()
 		(*dbObj).shiftOverTimeMux.Lock()
@@ -916,15 +1233,16 @@ func(dbObj *DB) InsertShiftOverTime(
 		defer stmt.Close()
 		(*dbObj).checkErr(err)
 		res, err := stmt.Exec(
-			shiftId,
-			initiatorOnOverTime,
-			initiatorOffOverTime,
-			reson,
-			caseProcess,
-			specifyTag,
-			createTime,
-			lastModify,
+			(*data).ShiftId,
+			(*data).InitiatorOnOverTime,
+			(*data).InitiatorOffOverTime,
+			(*data).Reason,
+			(*data).CaseProcess,
+			(*data).SpecifyTag,
+			(*data).CreateTime,
+			(*data).LastModify,
 		)
+		(*dbObj).checkErr(err)
 		id, _:= res.LastInsertId()
 		if err != nil {
 			return false, id
@@ -932,15 +1250,7 @@ func(dbObj *DB) InsertShiftOverTime(
 		return true, id
 }
 
-func(dbObj *DB) InsertForgetPunch(
-	shiftId int64,
-	targetPunch string,
-	reson string,
-	caseProcess string,
-	specifyTag string,
-	createTime time.Time,
-	lastModify time.Time,
-	) (bool, int64) {
+func(dbObj *DB) InsertForgetPunch(data *table.ForgetPunchTable) (bool, int64) {
 
 		defer panichandler.Recover()
 		(*dbObj).forgetPunchMux.Lock()
@@ -949,29 +1259,22 @@ func(dbObj *DB) InsertForgetPunch(
 		defer stmt.Close()
 		(*dbObj).checkErr(err)
 		res, err := stmt.Exec(
-			shiftId,
-			targetPunch,
-			reson,
-			caseProcess,
-			specifyTag,
-			createTime,
-			lastModify,
+			(*data).ShiftId,
+			(*data).TargetPunch,
+			(*data).Reason,
+			(*data).CaseProcess,
+			(*data).SpecifyTag,
+			(*data).CreateTime,
+			(*data).LastModify,
 		)
+		(*dbObj).checkErr(err)
 		id, _:= res.LastInsertId()
 		if err != nil {
 			return false, id
 		}
 		return true, id
 }
-func(dbObj *DB) InsertDayOff(
-	shiftId int64,
-	dayOffType string,
-	reson string,
-	caseProcess string,
-	specifyTag string,
-	createTime time.Time,
-	lastModify time.Time,
-	) (bool, int64) {
+func(dbObj *DB) InsertDayOff(data *table.DayOffTable) (bool, int64) {
 
 		defer panichandler.Recover()
 		(*dbObj).dayOffMux.Lock()
@@ -980,29 +1283,22 @@ func(dbObj *DB) InsertDayOff(
 		defer stmt.Close()
 		(*dbObj).checkErr(err)
 		res, err := stmt.Exec(
-			shiftId,
-			dayOffType,
-			reson,
-			caseProcess,
-			specifyTag,
-			createTime,
-			lastModify,
+			(*data).ShiftId,
+			(*data).DayOffType,
+			(*data).Reason,
+			(*data).CaseProcess,
+			(*data).SpecifyTag,
+			(*data).CreateTime,
+			(*data).LastModify,
 		)
+		(*dbObj).checkErr(err)
 		id, _:= res.LastInsertId()
 		if err != nil {
 			return false, id
 		}
 		return true, id
 }
-func(dbObj *DB) InsertLateExcused(
-	shiftId int64,
-	lateExcusedType string,
-	reson string,
-	caseProcess string,
-	specifyTag string,
-	createTime time.Time,
-	lastModify time.Time,
-	) (bool, int64) {
+func(dbObj *DB) InsertLateExcused(data *table.LateExcusedTable) (bool, int64) {
 
 		defer panichandler.Recover()
 		(*dbObj).lateExcusedMux.Lock()
@@ -1011,14 +1307,15 @@ func(dbObj *DB) InsertLateExcused(
 		defer stmt.Close()
 		(*dbObj).checkErr(err)
 		res, err := stmt.Exec(
-			shiftId,
-			lateExcusedType,
-			reson,
-			caseProcess,
-			specifyTag,
-			createTime,
-			lastModify,
+			(*data).ShiftId,
+			(*data).LateExcusedType,
+			(*data).Reason,
+			(*data).CaseProcess,
+			(*data).SpecifyTag,
+			(*data).CreateTime,
+			(*data).LastModify,
 		)
+		(*dbObj).checkErr(err)
 		id, _:= res.LastInsertId()
 		if err != nil {
 			return false, id

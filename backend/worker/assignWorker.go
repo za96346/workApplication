@@ -1,7 +1,6 @@
 package worker
 import (
 	"backend/service"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"sync"
 )
@@ -29,7 +28,7 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		waitJob := new(sync.WaitGroup)
 		waitJob.Add(1)
 		(*props).Writer.Header().Set("Transfer-Encoding", "chunked")
-		fmt.Println(*props)
+		// fmt.Println(*props)
 		(*WorkerSingleton()).JobChan <- func ()  {
 			routeFunc(props, waitJob)
 		}
