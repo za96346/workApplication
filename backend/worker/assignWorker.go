@@ -12,15 +12,23 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 	case 0:
 		//get method of fetch single user
 		routeFunc = service.FindSingleUser
-		break;
+		break
 	case 1:
 		//post method of create user
 		routeFunc = service.CreateUser
-		break;
+		break
 	case 2:
 		//put method of update user
 		routeFunc = service.UpdateUser
-		break;
+		break
+	case 3:
+		// post method of login
+		routeFunc = service.Login
+		break
+	case 4:
+		//post method of register
+		routeFunc = service.Register
+		break
 	default:
 		break;
 	}

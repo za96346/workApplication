@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"backend/worker"
 )
-func UserRouter(props *gin.RouterGroup) {
+func User(props *gin.RouterGroup) {
 
 	props.GET("/fetch/single/:userId", worker.AssignWorker(0))
 	props.POST("/create", worker.AssignWorker(1))

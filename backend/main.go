@@ -22,7 +22,7 @@ import (
 	"backend/handler"
 	_ "backend/handler"
 	"backend/middleWare"
-	. "backend/route"
+	"backend/route"
 	"backend/worker"
 )
 func init() {
@@ -46,7 +46,9 @@ func main() {
 	apiServer.Use(middleWare.RateLimit(time.Second, 100, 100))
 
 	userApi := apiServer.Group("/workApp/user")
-	UserRouter(userApi)
+	entryApi := apiServer.Group("/workApp/entry")
+	route.User(userApi)
+	route.EntryRoute(entryApi)
 	// apiServer.Use(permessionMiddleWare("a1234"))
 	apiServer.Run(":" + port)
 }

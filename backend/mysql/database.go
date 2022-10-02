@@ -35,19 +35,20 @@ type DB struct {
 	lateExcusedMux *sync.RWMutex
 	forgetPunchMux *sync.RWMutex
 	MysqlDB *sql.DB // 要先使用連線方法後才能使用這個
-	resStatus bool
+	containers
 }
 
-type dbInterface interface {
-	Conn()
-	SelectUserSingle() *table.UserTable
-	SelectUserAll()
-	SelectCompanySingle() *table.CompanyTable
-	InsertUserAll() bool
-	InsertUserPreferenceAll() bool
-	InsertCompanyAll() bool
-	InsertCompanyBanchAll() bool
-	InsertShiftAll() bool
+type containers struct {
+	user []interface{}
+	userPreference []interface{}
+	company []interface{}
+	companyBanch []interface{}
+	shift []interface{}
+	shiftOverTime []interface{}
+	shiftChange []interface{}
+	forgetPunch []interface{}
+	dayOff []interface{}
+	lateExcused []interface{}
 }
 
 func Singleton() *DB {
@@ -734,35 +735,39 @@ func(dbObj *DB) DeleteDayOff(deleteKey int, caseId interface{}) bool {
 
 
 // 0 => all
-func(dbObj *DB) UpdateUser(updateKey int, data *table.UserTable) bool {
+func(dbObj *DB) UpdateUser(updateKey int, data *table.UserTable, value... interface{}) bool {
 		defer panichandler.Recover()
 		(*dbObj).userMux.Lock()
 		defer (*dbObj).userMux.Unlock()
+		defer func ()  {
+			(*dbObj).containers.user = nil
+		}()
 		querys := ""
 		switch updateKey {
 		case 0:
 			querys = (*query.MysqlSingleton()).User.UpdateSingle
-		default:
-			querys = (*query.MysqlSingleton()).User.UpdateSingle
+			(*dbObj).containers.user = append(
+				(*dbObj).containers.user,
+				(*data).CompanyCode,
+				(*data).Account,
+				(*data).Password,
+				(*data).OnWorkDay,
+				(*data).Banch,
+				(*data).Permession,
+				(*data).WorkState,
+				(*data).CreateTime,
+				(*data).LastModify,
+				(*data).MonthSalary,
+				(*data).PartTimeSalary,
+				(*data).UserId,
+			)
+			break
 		}
 		
 		stmt, err := (*dbObj).MysqlDB.Prepare(querys)
 		defer stmt.Close()
 		(*dbObj).checkErr(err)
-		_, err = stmt.Exec(
-			(*data).CompanyCode,
-			(*data).Account,
-			(*data).Password,
-			(*data).OnWorkDay,
-			(*data).Banch,
-			(*data).Permession,
-			(*data).WorkState,
-			(*data).CreateTime,
-			(*data).LastModify,
-			(*data).MonthSalary,
-			(*data).PartTimeSalary,
-			(*data).UserId,
-		)
+		_, err = stmt.Exec((*dbObj).containers.user...)
 		if err != nil {
 			(*dbObj).checkErr(err)
 			return false
@@ -771,30 +776,33 @@ func(dbObj *DB) UpdateUser(updateKey int, data *table.UserTable) bool {
 }
 
 // 0 => all
-func(dbObj *DB) UpdateUserPreference(updateKey int, data *table.UserPreferenceTable) bool {
+func(dbObj *DB) UpdateUserPreference(updateKey int, data *table.UserPreferenceTable, value ...interface{}) bool {
 	defer panichandler.Recover()
 	(*dbObj).userPreferenceMux.Lock()
 	defer (*dbObj).userPreferenceMux.Unlock()
+	defer func ()  {
+		(*dbObj).containers.userPreference = nil
+	}()
 	querys := ""
 	switch updateKey {
 	case 0:
 		querys = (*query.MysqlSingleton()).UserPreference.UpdateSingle
+		(*dbObj).containers.userPreference = append(
+			(*dbObj).containers.userPreference,
+			(*data).Style,
+			(*data).FontSize,
+			(*data).SelfPhoto,
+			(*data).CreateTime,
+			(*data).LastModify,
+			(*data).UserId,
+		)
 		break;
-	default:
-		querys = (*query.MysqlSingleton()).UserPreference.UpdateSingle
 	}
 	
 	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
-	_, err = stmt.Exec(
-		(*data).Style,
-		(*data).FontSize,
-		(*data).SelfPhoto,
-		(*data).CreateTime,
-		(*data).LastModify,
-		(*data).UserId,
-	)
+	_, err = stmt.Exec((*dbObj).containers.userPreference...)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
@@ -803,33 +811,36 @@ func(dbObj *DB) UpdateUserPreference(updateKey int, data *table.UserPreferenceTa
 }
 
 // 0 => all
-func(dbObj *DB) UpdateCompany(updateKey int, data *table.CompanyTable) bool {
+func(dbObj *DB) UpdateCompany(updateKey int, data *table.CompanyTable, value ...interface{}) bool {
 	defer panichandler.Recover()
 	(*dbObj).companyMux.Lock()
 	defer (*dbObj).companyMux.Unlock()
+	defer func ()  {
+		(*dbObj).containers.company = nil
+	}()
 	querys := ""
 	switch updateKey {
 	case 0:
 		querys = (*query.MysqlSingleton()).Company.UpdateSingle
+		(*dbObj).containers.company = append(
+			(*dbObj).containers.company,
+			(*data).CompanyCode,
+			(*data).CompanyName,
+			(*data).CompanyLocation,
+			(*data).CompanyPhoneNumber,
+			(*data).TermStart,
+			(*data).TermEnd,
+			(*data).CreateTime,
+			(*data).LastModify,
+			(*data).CompanyId,
+		)
 		break;
-	default:
-		querys = (*query.MysqlSingleton()).Company.UpdateSingle
 	}
 	
 	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
-	_, err = stmt.Exec(
-		(*data).CompanyCode,
-		(*data).CompanyName,
-		(*data).CompanyLocation,
-		(*data).CompanyPhoneNumber,
-		(*data).TermStart,
-		(*data).TermEnd,
-		(*data).CreateTime,
-		(*data).LastModify,
-		(*data).CompanyId,
-	)
+	_, err = stmt.Exec((*dbObj).containers.company...)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
@@ -838,29 +849,32 @@ func(dbObj *DB) UpdateCompany(updateKey int, data *table.CompanyTable) bool {
 }
 
 // 0 => all
-func(dbObj *DB) UpdateCompanyBanch(updateKey int, data *table.CompanyBanchTable) bool {
+func(dbObj *DB) UpdateCompanyBanch(updateKey int, data *table.CompanyBanchTable, value ...interface{}) bool {
 	defer panichandler.Recover()
 	(*dbObj).companyBanchMux.Lock()
 	defer (*dbObj).companyBanchMux.Unlock()
+	defer func ()  {
+		(*dbObj).containers.companyBanch = nil	
+	}()
 	querys := ""
 	switch updateKey {
 	case 0:
 		querys = (*query.MysqlSingleton()).CompanyBanch.UpdateSingle
+		(*dbObj).containers.companyBanch = append(
+			(*dbObj).containers.companyBanch,
+			(*data).BanchName,
+			(*data).BanchShiftStyle,
+			(*data).CreateTime,
+			(*data).LastModify,
+			(*data).Id,
+		)
 		break;
-	default:
-		querys = (*query.MysqlSingleton()).CompanyBanch.UpdateSingle
 	}
 	
 	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
-	_, err = stmt.Exec(
-		(*data).BanchName,
-		(*data).BanchShiftStyle,
-		(*data).CreateTime,
-		(*data).LastModify,
-		(*data).Id,
-	)
+	_, err = stmt.Exec((*dbObj).containers.companyBanch...)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
@@ -869,32 +883,35 @@ func(dbObj *DB) UpdateCompanyBanch(updateKey int, data *table.CompanyBanchTable)
 }
 
 // 0 => all
-func(dbObj *DB) UpdateShift(updateKey int, data *table.ShiftTable) bool {
+func(dbObj *DB) UpdateShift(updateKey int, data *table.ShiftTable, value ...interface{}) bool {
 	defer panichandler.Recover()
 	(*dbObj).shiftMux.Lock()
 	defer (*dbObj).shiftMux.Unlock()
+	defer func ()  {
+		(*dbObj).containers.shift = nil	
+	}()
 	querys := ""
 	switch updateKey {
 	case 0:
 		querys = (*query.MysqlSingleton()).Shift.UpdateSingle
+		(*dbObj).containers.shift = append(
+			(*dbObj).containers.shift,
+			(*data).OnShiftTime,
+			(*data).OffShiftTime,
+			(*data).PunchIn,
+			(*data).PunchOut,
+			(*data).SpecifyTag,
+			(*data).CreateTime,
+			(*data).LastModify,
+			(*data).ShiftId,
+		)
 		break;
-	default:
-		querys = (*query.MysqlSingleton()).Shift.UpdateSingle
 	}
 	
 	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
-	_, err = stmt.Exec(
-		(*data).OnShiftTime,
-		(*data).OffShiftTime,
-		(*data).PunchIn,
-		(*data).PunchOut,
-		(*data).SpecifyTag,
-		(*data).CreateTime,
-		(*data).LastModify,
-		(*data).ShiftId,
-	)
+	_, err = stmt.Exec((*dbObj).containers.shift...)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
@@ -903,32 +920,35 @@ func(dbObj *DB) UpdateShift(updateKey int, data *table.ShiftTable) bool {
 }
 
 // 0 => all
-func(dbObj *DB) UpdateShiftChange(updateKey int, data *table.ShiftChangeTable) bool {
+func(dbObj *DB) UpdateShiftChange(updateKey int, data *table.ShiftChangeTable, value ...interface{}) bool {
 	defer panichandler.Recover()
 	(*dbObj).shiftChangeMux.Lock()
 	defer (*dbObj).shiftChangeMux.Unlock()
+	defer func ()  {
+		(*dbObj).containers.shiftChange = nil	
+	}()
 	querys := ""
 	switch updateKey {
 	case 0:
 		querys = (*query.MysqlSingleton()).ShiftChange.UpdateSingle
+		(*dbObj).containers.shiftChange = append(
+			(*dbObj).containers.shiftChange,
+			(*data).InitiatorShiftId,
+			(*data).RequestedShiftId,
+			(*data).Reason,
+			(*data).CaseProcess,
+			(*data).SpecifyTag,
+			(*data).CreateTime,
+			(*data).LastModify,
+			(*data).CaseId,
+		)
 		break;
-	default:
-		querys = (*query.MysqlSingleton()).ShiftChange.UpdateSingle
 	}
 	
 	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
-	_, err = stmt.Exec(
-		(*data).InitiatorShiftId,
-		(*data).RequestedShiftId,
-		(*data).Reason,
-		(*data).CaseProcess,
-		(*data).SpecifyTag,
-		(*data).CreateTime,
-		(*data).LastModify,
-		(*data).CaseId,
-	)
+	_, err = stmt.Exec((*dbObj).containers.shiftChange...)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
@@ -937,32 +957,35 @@ func(dbObj *DB) UpdateShiftChange(updateKey int, data *table.ShiftChangeTable) b
 }
 
 // 0 => all
-func(dbObj *DB) UpdateShiftOverTime(updateKey int, data *table.ShiftOverTimeTable) bool {
+func(dbObj *DB) UpdateShiftOverTime(updateKey int, data *table.ShiftOverTimeTable, value ...interface{}) bool {
 	defer panichandler.Recover()
 	(*dbObj).shiftOverTimeMux.Lock()
 	defer (*dbObj).shiftOverTimeMux.Unlock()
+	defer func ()  {
+		(*dbObj).containers.shiftOverTime = nil	
+	}()
 	querys := ""
 	switch updateKey {
 	case 0:
 		querys = (*query.MysqlSingleton()).ShiftOverTime.UpdateSingle
+		(*dbObj).containers.shiftOverTime = append(
+			(*dbObj).containers.shiftOverTime,
+			(*data).InitiatorOnOverTime,
+			(*data).InitiatorOffOverTime,
+			(*data).Reason,
+			(*data).CaseProcess,
+			(*data).SpecifyTag,
+			(*data).CreateTime,
+			(*data).LastModify,
+			(*data).CaseId,
+		)
 		break;
-	default:
-		querys = (*query.MysqlSingleton()).ShiftOverTime.UpdateSingle
 	}
 	
 	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
-	_, err = stmt.Exec(
-		(*data).InitiatorOnOverTime,
-		(*data).InitiatorOffOverTime,
-		(*data).Reason,
-		(*data).CaseProcess,
-		(*data).SpecifyTag,
-		(*data).CreateTime,
-		(*data).LastModify,
-		(*data).CaseId,
-	)
+	_, err = stmt.Exec((*dbObj).containers.shiftOverTime...)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
@@ -971,31 +994,34 @@ func(dbObj *DB) UpdateShiftOverTime(updateKey int, data *table.ShiftOverTimeTabl
 }
 
 // 0 => all
-func(dbObj *DB) UpdateForgetPunch(updateKey int, data *table.ForgetPunchTable) bool {
+func(dbObj *DB) UpdateForgetPunch(updateKey int, data *table.ForgetPunchTable, value ...interface{}) bool {
 	defer panichandler.Recover()
 	(*dbObj).forgetPunchMux.Lock()
 	defer (*dbObj).forgetPunchMux.Unlock()
+	defer func ()  {
+		(*dbObj).containers.forgetPunch = nil	
+	}()
 	querys := ""
 	switch updateKey {
 	case 0:
 		querys = (*query.MysqlSingleton()).ForgetPunch.UpdateSingle
+		(*dbObj).containers.forgetPunch = append(
+			(*dbObj).containers.forgetPunch,
+			(*data).TargetPunch,
+			(*data).Reason,
+			(*data).CaseProcess,
+			(*data).SpecifyTag,
+			(*data).CreateTime,
+			(*data).LastModify,
+			(*data).CaseId,
+		)
 		break;
-	default:
-		querys = (*query.MysqlSingleton()).ForgetPunch.UpdateSingle
 	}
 	
 	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
-	_, err = stmt.Exec(
-		(*data).TargetPunch,
-		(*data).Reason,
-		(*data).CaseProcess,
-		(*data).SpecifyTag,
-		(*data).CreateTime,
-		(*data).LastModify,
-		(*data).CaseId,
-	)
+	_, err = stmt.Exec((*dbObj).containers.forgetPunch...)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
@@ -1004,31 +1030,34 @@ func(dbObj *DB) UpdateForgetPunch(updateKey int, data *table.ForgetPunchTable) b
 }
 
 // 0 => all
-func(dbObj *DB) UpdateDayOff(updateKey int, data *table.DayOffTable) bool {
+func(dbObj *DB) UpdateDayOff(updateKey int, data *table.DayOffTable, value ...interface{}) bool {
 	defer panichandler.Recover()
 	(*dbObj).dayOffMux.Lock()
 	defer (*dbObj).dayOffMux.Unlock()
+	defer func ()  {
+		(*dbObj).containers.dayOff = nil	
+	}()
 	querys := ""
 	switch updateKey {
 	case 0:
 		querys = (*query.MysqlSingleton()).DayOff.UpdateSingle
+		(*dbObj).containers.dayOff = append(
+			(*dbObj).containers.dayOff,
+			(*data).DayOffType,
+			(*data).Reason,
+			(*data).CaseProcess,
+			(*data).SpecifyTag,
+			(*data).CreateTime,
+			(*data).LastModify,
+			(*data).CaseId,
+		)
 		break;
-	default:
-		querys = (*query.MysqlSingleton()).DayOff.UpdateSingle
 	}
 	
 	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
-	_, err = stmt.Exec(
-		(*data).DayOffType,
-		(*data).Reason,
-		(*data).CaseProcess,
-		(*data).SpecifyTag,
-		(*data).CreateTime,
-		(*data).LastModify,
-		(*data).CaseId,
-	)
+	_, err = stmt.Exec((*dbObj).containers.dayOff...)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
@@ -1037,31 +1066,34 @@ func(dbObj *DB) UpdateDayOff(updateKey int, data *table.DayOffTable) bool {
 }
 
 // 0 => all
-func(dbObj *DB) UpdateLateExcused(updateKey int, data *table.LateExcusedTable) bool {
+func(dbObj *DB) UpdateLateExcused(updateKey int, data *table.LateExcusedTable, value ...interface{}) bool {
 	defer panichandler.Recover()
 	(*dbObj).lateExcusedMux.Lock()
 	defer (*dbObj).lateExcusedMux.Unlock()
+	defer func ()  {
+		(*dbObj).containers.lateExcused = nil
+	}()
 	querys := ""
 	switch updateKey {
 	case 0:
 		querys = (*query.MysqlSingleton()).LateExcused.UpdateSingle
+		(*dbObj).containers.lateExcused = append(
+			(*dbObj).containers.lateExcused,
+			(*data).LateExcusedType,
+			(*data).Reason,
+			(*data).CaseProcess,
+			(*data).SpecifyTag,
+			(*data).CreateTime,
+			(*data).LastModify,
+			(*data).CaseId,
+		)
 		break;
-	default:
-		querys = (*query.MysqlSingleton()).LateExcused.UpdateSingle
 	}
 	
 	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
-	_, err = stmt.Exec(
-		(*data).LateExcusedType,
-		(*data).Reason,
-		(*data).CaseProcess,
-		(*data).SpecifyTag,
-		(*data).CreateTime,
-		(*data).LastModify,
-		(*data).CaseId,
-	)
+	_, err = stmt.Exec((*dbObj).containers.lateExcused...)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
