@@ -20,27 +20,25 @@ import (
 
 	// . "./middleWare/permessionMiddleWare"
 	"backend/handler"
-	_ "backend/handler"
 	"backend/middleWare"
 	"backend/route"
 	"backend/worker"
 )
 func init() {
 	handler.Init()
-}
-func main() {
 	runtime.SetMutexProfileFraction(-1)
 	worker.WorkerSingleton().CreateWorker(runtime.NumCPU() * 2)
 	fmt.Println("開啟的worker數量", runtime.NumCPU() * 2)
-
+	if godotenv.Load() != nil {
+		log.Fatal("error loading .env file")
+	}
 	go func ()  {
 		http.ListenAndServe("0.0.0.0:6060", nil)
 	}()
+}
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("error loading .env file")
-	}
+func main() {
+
 	port := os.Getenv("PORT")
 	apiServer := gin.Default()
 	apiServer.Use(middleWare.RateLimit(time.Second, 100, 100))

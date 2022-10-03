@@ -1,0 +1,13 @@
+host: localhost:8080
+info:
+  contact:
+    name: nathan.lu
+    url: https://tedmax100.github.io/
+  description: Gin swagger
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Gin swagger
+  version: "1.0"
+paths: {}
+swagger: "2.0"

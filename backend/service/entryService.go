@@ -3,6 +3,8 @@ package service
 import (
 	"backend/handler"
 	"backend/table"
+	"time"
+
 	// "fmt"
 	"net/http"
 	"sync"
@@ -20,14 +22,14 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 
 	// 檢查格式
 	if (*props).ShouldBindJSON(&reqBody) != nil {
-		(*props).JSON(http.StatusBadRequest, "登入失敗 請輸入有效的資料")
+		(*props).JSON(http.StatusExpectationFailed, StatusText(0))
 		return
 	}
 
 	// 檢查帳號是否存在
 	res := (*dbHandle).SelectUser(2, (*reqBody).Account)
 	if !IsExited(res) {
-		(*props).JSON(http.StatusOK, "沒有此使用者")
+		(*props).JSON(http.StatusUnauthorized, StatusText(1))
 		return
 	}
 
@@ -38,36 +40,41 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 				UserId: (*res)[0].UserId,
 				Account: (*res)[0].Account,
 			}
-			(*props).JSON(http.StatusOK, "登入成功" + tk.GetLoginToken())
+			(*dbHandle).Redis.InsertToken(tk.GetLoginToken())
+			(*props).JSON(http.StatusOK, tk.GetLoginToken())
 			return
 		}
 	}
-	(*props).JSON(http.StatusBadRequest, "帳號或密碼錯誤")
+	(*props).JSON(http.StatusBadRequest, StatusText(2))
 	
 }
 func Register(props *gin.Context, waitJob *sync.WaitGroup){
 	defer panicHandle()
 	defer (*waitJob).Done()
-	user := new(table.UserTable)
+	now := time.Now()
+	user := &table.UserTable{
+		CreateTime: now,
+		LastModify: now,
+	}
 
 	// 檢查格式
 	if (*props).ShouldBindJSON(&user) != nil {
-		(*props).JSON(http.StatusBadRequest, "註冊失敗， 資料不正確")
+		(*props).JSON(http.StatusExpectationFailed, StatusText(3))
 		return
 	}
 
 	// 檢查帳號是否被註冊
 	res := (*dbHandle).SelectUser(2, user.UserId)
 	if IsExited(res) {
-		(*props).JSON(http.StatusConflict, "此帳號已經被註冊了")
+		(*props).JSON(http.StatusConflict, StatusText(4))
 		return
 	}
 
 	// 新增
 	status, _ := (*dbHandle).InsertUser(user)
 	if !status {
-		(*props).JSON(http.StatusForbidden, "註冊失敗")
+		(*props).JSON(http.StatusForbidden, StatusText(5))
 		return
 	}
-	(*props).JSON(http.StatusOK, "註冊成功")
+	(*props).JSON(http.StatusOK, StatusText(6))
 }

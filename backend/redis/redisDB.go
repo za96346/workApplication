@@ -21,7 +21,6 @@ import (
 )
 type DB struct {
 	RedisDb *redis.Client // 要先使用連線方法後才能使用這個
-	fake *[]interface{}
 	table map[int]string
 	companyMux *sync.Mutex
 	userPreferenceMux *sync.RWMutex

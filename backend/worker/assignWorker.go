@@ -1,12 +1,16 @@
 package worker
+
 import (
+	"backend/panicHandler"
 	"backend/service"
-	"github.com/gin-gonic/gin"
 	"sync"
+
+	"github.com/gin-gonic/gin"
 )
 
 
 func AssignWorker(routerMethod int) func(props *gin.Context) {
+	defer panichandler.Recover()
 	routeFunc := service.FindSingleUser
 	switch routerMethod {
 	case 0:
