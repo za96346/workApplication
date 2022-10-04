@@ -384,7 +384,10 @@ func(dbObj *DB) UpdateUser(updateKey int, data *table.UserTable) bool {
 	isOk := (*dbObj).Mysql.UpdateUser(updateKey, data)
 	if isOk {
 		go func ()  {
-			(*dbObj).Redis.InsertUser(data)
+			res := (*dbObj).Mysql.SelectUser(1, int64((*data).UserId))
+			for _, v := range *res {
+				(*dbObj).Redis.InsertUser(&v)
+			}
 		}()
 	}
 	return isOk
@@ -394,7 +397,10 @@ func(dbObj *DB) UpdateUserPreference(updateKey int, data *table.UserPreferenceTa
 	isOk := (*dbObj).Mysql.UpdateUserPreference(updateKey, data)
 	if isOk {
 		go func ()  {
-			(*dbObj).Redis.InsertUserPreference(data)
+			res := (*dbObj).Mysql.SelectUserPreference(1, int64((*data).UserId))
+			for _, v := range *res {
+				(*dbObj).Redis.InsertUserPreference(&v)
+			}
 		}()
 	}
 	return isOk
@@ -404,7 +410,10 @@ func(dbObj *DB) UpdateCompany(updateKey int, data *table.CompanyTable) bool {
 	isOk := (*dbObj).Mysql.UpdateCompany(updateKey, data)
 	if isOk {
 		go func ()  {
-			(*dbObj).Redis.InsertCompany(data)
+			res := (*dbObj).Mysql.SelectCompany(1, int64((*data).CompanyId))
+			for _, v := range *res {
+				(*dbObj).Redis.InsertCompany(&v)
+			}
 		}()
 	}
 	return isOk
@@ -414,7 +423,11 @@ func(dbObj *DB) UpdateCompanyBanch(updateKey int, data *table.CompanyBanchTable)
 	isOk := (*dbObj).Mysql.UpdateCompanyBanch(updateKey, data)
 	if isOk {
 		go func ()  {
-			(*dbObj).Redis.InsertCompanyBanch(data)
+			res := (*dbObj).Mysql.SelectCompanyBanch(2, int64((*data).Id))
+			for _, v := range *res {
+				(*dbObj).Redis.InsertCompanyBanch(&v)
+			}
+
 		}()
 	}
 	return isOk
@@ -424,7 +437,10 @@ func(dbObj *DB) UpdateShift(updateKey int, data *table.ShiftTable) bool {
 	isOk := (*dbObj).Mysql.UpdateShift(updateKey, data)
 	if isOk {
 		go func ()  {
-			(*dbObj).Redis.InsertShift(data)
+			res := (*dbObj).Mysql.SelectShift(1, int64((*data).ShiftId))
+			for _, v := range *res {
+				(*dbObj).Redis.InsertShift(&v)
+			}
 		}()
 	}
 	return isOk
@@ -434,7 +450,10 @@ func(dbObj *DB) UpdateShiftChange(updateKey int, data *table.ShiftChangeTable) b
 	isOk := (*dbObj).Mysql.UpdateShiftChange(updateKey, data)
 	if isOk {
 		go func ()  {
-			(*dbObj).Redis.InsertShiftChange(data)
+			res := (*dbObj).Mysql.SelectShiftChange(1, int64((*data).CaseId))
+			for _, v := range *res {
+				(*dbObj).Redis.InsertShiftChange(&v)
+			}
 		}()
 	}
 	return isOk
@@ -444,7 +463,10 @@ func(dbObj *DB) UpdateShiftOverTime(updateKey int, data *table.ShiftOverTimeTabl
 	isOk := (*dbObj).Mysql.UpdateShiftOverTime(updateKey, data)
 	if isOk {
 		go func ()  {
-			(*dbObj).Redis.InsertShiftOverTime(data)
+			res := (*dbObj).Mysql.SelectShiftOverTime(1, int64((*data).CaseId))
+			for _, v := range *res {
+				(*dbObj).Redis.InsertShiftOverTime(&v)
+			}
 		}()
 	}
 	return isOk
@@ -454,7 +476,10 @@ func(dbObj *DB) UpdateDayOff(updateKey int, data *table.DayOffTable) bool {
 	isOk := (*dbObj).Mysql.UpdateDayOff(updateKey, data)
 	if isOk {
 		go func ()  {
-			(*dbObj).Redis.InsertDayOff(data)
+			res := (*dbObj).Mysql.SelectDayOff(1, int64((*data).CaseId))
+			for _, v := range *res {
+				(*dbObj).Redis.InsertDayOff(&v)
+			}
 		}()
 	}
 	return isOk
@@ -464,7 +489,10 @@ func(dbObj *DB) UpdateForgetPunch(updateKey int, data *table.ForgetPunchTable) b
 	isOk := (*dbObj).Mysql.UpdateForgetPunch(updateKey, data)
 	if isOk {
 		go func ()  {
-			(*dbObj).Redis.InsertForgetPunch(data)
+			res := (*dbObj).Mysql.SelectForgetPunch(1, int64((*data).CaseId))
+			for _, v := range *res {
+				(*dbObj).Redis.InsertForgetPunch(&v)
+			}
 		}()
 	}
 	return isOk
@@ -474,7 +502,10 @@ func(dbObj *DB) UpdateLateExcused(updateKey int, data *table.LateExcusedTable) b
 	isOk := (*dbObj).Mysql.UpdateLateExcused(updateKey, data)
 	if isOk {
 		go func ()  {
-			(*dbObj).Redis.InsertLateExcused(data)
+			res := (*dbObj).Mysql.SelectLateExcused(1, int64((*data).CaseId))
+			for _, v := range *res {
+				(*dbObj).Redis.InsertLateExcused(&v)
+			}
 		}()
 	}
 	return isOk

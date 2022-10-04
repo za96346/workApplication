@@ -10,6 +10,7 @@ import (
 	"net/http"
 	_ "net/http/pprof"
 	"os"
+	"io"
 	"runtime"
 	"time"
 
@@ -40,6 +41,7 @@ func init() {
 func main() {
 
 	port := os.Getenv("PORT")
+	loggers()
 	apiServer := gin.Default()
 	apiServer.Use(middleWare.RateLimit(time.Second, 100, 100))
 
@@ -47,6 +49,10 @@ func main() {
 	entryApi := apiServer.Group("/workApp/entry")
 	route.User(userApi)
 	route.EntryRoute(entryApi)
-	// apiServer.Use(permessionMiddleWare("a1234"))
 	apiServer.Run(":" + port)
+}
+
+func loggers() {
+	file, _ := os.Create("gin.log")                     // create log file
+    gin.DefaultWriter = io.MultiWriter(file, os.Stdout)
 }

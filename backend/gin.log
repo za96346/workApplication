@@ -1,0 +1,17 @@
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] GET    /workApp/user/single/:userId --> backend/worker.AssignWorker.func1 (5 handlers)
+[GIN-debug] GET    /workApp/user/my          --> backend/worker.AssignWorker.func1 (5 handlers)
+[GIN-debug] PUT    /workApp/user/update      --> backend/worker.AssignWorker.func1 (5 handlers)
+[GIN-debug] POST   /workApp/entry/login      --> backend/worker.AssignWorker.func1 (4 handlers)
+[GIN-debug] PUT    /workApp/entry/register   --> backend/worker.AssignWorker.func1 (4 handlers)
+[GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
+Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
+[GIN-debug] Listening and serving HTTP on :4000
+[GIN] 2022/10/05 - 00:53:30 | 200 |    6.103375ms |             ::1 | POST     "/workApp/entry/login"
+[GIN-debug] redirecting request 307: /workApp/user/update --> /workApp/user/update?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjIsIkFjY291bnQiOiJhY2NvdW50MyJ9.Y5BVxAiCpJgsA917L7-ANrsA6P3eZFCCQIOfV2CI1_w
+[GIN] 2022/10/05 - 00:53:54 | 200 |    8.175541ms |             ::1 | PUT      "/workApp/user/update?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjIsIkFjY291bnQiOiJhY2NvdW50MyJ9.Y5BVxAiCpJgsA917L7-ANrsA6P3eZFCCQIOfV2CI1_w"

@@ -27,7 +27,7 @@ func(tokenStruct *Token) GetLoginToken() string {
 }
 
 //解析 token
-func ParseToken(tokenString string)(jwt.MapClaims,error)  {
+func ParseToken(tokenString string) (jwt.MapClaims, error)  {
     token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
         // Don't forget to validate the alg is what you expect:
         if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -37,6 +37,7 @@ func ParseToken(tokenString string)(jwt.MapClaims,error)  {
         // hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
         return []byte(SECRETKEY), nil
     })
+	
     if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
         return claims, nil
     } else {

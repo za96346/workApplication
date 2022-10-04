@@ -18,8 +18,8 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		routeFunc = service.FindSingleUser
 		break
 	case 1:
-		//post method of create user
-		routeFunc = service.CreateUser
+		// get method of fetch my data
+		routeFunc = service.FindMine
 		break
 	case 2:
 		//put method of update user

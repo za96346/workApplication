@@ -3,12 +3,17 @@ package route
 import (
 	// "strconv"
 
-	"github.com/gin-gonic/gin"
+	"backend/middleWare"
 	"backend/worker"
+
+	"github.com/gin-gonic/gin"
 )
 func User(props *gin.RouterGroup) {
 
-	props.GET("/fetch/single/:userId", worker.AssignWorker(0))
-	props.POST("/create", worker.AssignWorker(1))
-	props.PUT("/update", worker.AssignWorker(2))
+	props.Use(middleWare.TokenPrase)
+	{
+		props.GET("/single/:userId", worker.AssignWorker(0))
+		props.GET("/my", worker.AssignWorker(1))
+		props.PUT("/update", worker.AssignWorker(2))
+	}
 }

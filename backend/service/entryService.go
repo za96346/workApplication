@@ -22,14 +22,18 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 
 	// 檢查格式
 	if (*props).ShouldBindJSON(&reqBody) != nil {
-		(*props).JSON(http.StatusExpectationFailed, StatusText(0))
+		(*props).JSON(http.StatusExpectationFailed, gin.H{
+			"message": StatusText(0),
+		})
 		return
 	}
 
 	// 檢查帳號是否存在
 	res := (*dbHandle).SelectUser(2, (*reqBody).Account)
 	if !IsExited(res) {
-		(*props).JSON(http.StatusUnauthorized, StatusText(1))
+		(*props).JSON(http.StatusUnauthorized, gin.H{
+			"message": StatusText(1),
+		})
 		return
 	}
 
@@ -45,7 +49,9 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 			return
 		}
 	}
-	(*props).JSON(http.StatusBadRequest, StatusText(2))
+	(*props).JSON(http.StatusBadRequest, gin.H{
+		"message": StatusText(2),
+	})
 	
 }
 func Register(props *gin.Context, waitJob *sync.WaitGroup){
@@ -59,22 +65,30 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 
 	// 檢查格式
 	if (*props).ShouldBindJSON(&user) != nil {
-		(*props).JSON(http.StatusExpectationFailed, StatusText(3))
+		(*props).JSON(http.StatusExpectationFailed, gin.H{
+			"message": StatusText(3),
+		})
 		return
 	}
 
 	// 檢查帳號是否被註冊
 	res := (*dbHandle).SelectUser(2, user.UserId)
 	if IsExited(res) {
-		(*props).JSON(http.StatusConflict, StatusText(4))
+		(*props).JSON(http.StatusConflict, gin.H{
+			"message": StatusText(4),
+		})
 		return
 	}
 
 	// 新增
 	status, _ := (*dbHandle).InsertUser(user)
 	if !status {
-		(*props).JSON(http.StatusForbidden, StatusText(5))
+		(*props).JSON(http.StatusForbidden, gin.H{
+			"message": StatusText(5),
+		})
 		return
 	}
-	(*props).JSON(http.StatusOK, StatusText(6))
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText(6),
+	})
 }

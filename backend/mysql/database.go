@@ -749,19 +749,19 @@ func(dbObj *DB) UpdateUser(updateKey int, data *table.UserTable, value... interf
 			(*dbObj).containers.user = append(
 				(*dbObj).containers.user,
 				(*data).CompanyCode,
-				(*data).Account,
 				(*data).Password,
 				(*data).OnWorkDay,
 				(*data).Banch,
 				(*data).Permession,
 				(*data).WorkState,
-				(*data).CreateTime,
 				(*data).LastModify,
 				(*data).MonthSalary,
 				(*data).PartTimeSalary,
 				(*data).UserId,
 			)
 			break
+		case 1:
+
 		}
 		
 		stmt, err := (*dbObj).MysqlDB.Prepare(querys)
@@ -792,7 +792,6 @@ func(dbObj *DB) UpdateUserPreference(updateKey int, data *table.UserPreferenceTa
 			(*data).Style,
 			(*data).FontSize,
 			(*data).SelfPhoto,
-			(*data).CreateTime,
 			(*data).LastModify,
 			(*data).UserId,
 		)
@@ -824,13 +823,11 @@ func(dbObj *DB) UpdateCompany(updateKey int, data *table.CompanyTable, value ...
 		querys = (*query.MysqlSingleton()).Company.UpdateSingle
 		(*dbObj).containers.company = append(
 			(*dbObj).containers.company,
-			(*data).CompanyCode,
 			(*data).CompanyName,
 			(*data).CompanyLocation,
 			(*data).CompanyPhoneNumber,
 			(*data).TermStart,
 			(*data).TermEnd,
-			(*data).CreateTime,
 			(*data).LastModify,
 			(*data).CompanyId,
 		)
@@ -864,7 +861,6 @@ func(dbObj *DB) UpdateCompanyBanch(updateKey int, data *table.CompanyBanchTable,
 			(*dbObj).containers.companyBanch,
 			(*data).BanchName,
 			(*data).BanchShiftStyle,
-			(*data).CreateTime,
 			(*data).LastModify,
 			(*data).Id,
 		)
@@ -901,7 +897,6 @@ func(dbObj *DB) UpdateShift(updateKey int, data *table.ShiftTable, value ...inte
 			(*data).PunchIn,
 			(*data).PunchOut,
 			(*data).SpecifyTag,
-			(*data).CreateTime,
 			(*data).LastModify,
 			(*data).ShiftId,
 		)
@@ -938,7 +933,6 @@ func(dbObj *DB) UpdateShiftChange(updateKey int, data *table.ShiftChangeTable, v
 			(*data).Reason,
 			(*data).CaseProcess,
 			(*data).SpecifyTag,
-			(*data).CreateTime,
 			(*data).LastModify,
 			(*data).CaseId,
 		)
@@ -975,7 +969,6 @@ func(dbObj *DB) UpdateShiftOverTime(updateKey int, data *table.ShiftOverTimeTabl
 			(*data).Reason,
 			(*data).CaseProcess,
 			(*data).SpecifyTag,
-			(*data).CreateTime,
 			(*data).LastModify,
 			(*data).CaseId,
 		)
@@ -1011,7 +1004,6 @@ func(dbObj *DB) UpdateForgetPunch(updateKey int, data *table.ForgetPunchTable, v
 			(*data).Reason,
 			(*data).CaseProcess,
 			(*data).SpecifyTag,
-			(*data).CreateTime,
 			(*data).LastModify,
 			(*data).CaseId,
 		)
@@ -1047,7 +1039,6 @@ func(dbObj *DB) UpdateDayOff(updateKey int, data *table.DayOffTable, value ...in
 			(*data).Reason,
 			(*data).CaseProcess,
 			(*data).SpecifyTag,
-			(*data).CreateTime,
 			(*data).LastModify,
 			(*data).CaseId,
 		)
@@ -1083,7 +1074,6 @@ func(dbObj *DB) UpdateLateExcused(updateKey int, data *table.LateExcusedTable, v
 			(*data).Reason,
 			(*data).CaseProcess,
 			(*data).SpecifyTag,
-			(*data).CreateTime,
 			(*data).LastModify,
 			(*data).CaseId,
 		)

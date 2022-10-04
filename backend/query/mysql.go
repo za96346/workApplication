@@ -123,13 +123,11 @@ func addUserQuery() {
 			companyCode=(
 				select ifNull(companyCode, "") from company where companyCode=?
 			),
-			account=?,
 			password=?,
 			onWorkDay=?,
 			banch=?,
 			permession=?,
 			workState=?,
-			createTime=?,
 			lastModify=?,
 			monthSalary=?,
 			partTimeSalary=?
@@ -158,7 +156,6 @@ func addUserPreferenceQuery() {
 		style=?,
 		fontSize=?,
 		selfPhoto=?,
-		createTime=?,
 		lastModify=?
 	where userId=?;
 	`;
@@ -183,13 +180,11 @@ func addCompanyQuery() {
 	sqlQueryInstance.Company.UpdateSingle = `
 	update company
 	set
-		companyCode=?,
 		companyName=?,
 		companyLocation=?,
 		companyPhoneNumber=?,
 		termStart=?,
 		termEnd=?,
-		createTime=?,
 		lastModify=?
 	where companyId=?;
 	`;
@@ -214,7 +209,6 @@ func addCompanyBanchQuery() {
 	set
 		banchName=?,
 		banchShiftStyle=?,
-		createTime=?,
 		lastModify=?
 	where id=?;
 	`;
@@ -245,7 +239,6 @@ func addShiftQuery() {
 		punchIn=?,
 		punchOut=?,
 		specifyTag=?,
-		createTime=?,
 		lastModify=?
 	where shiftId=?;
 	`;
@@ -276,7 +269,6 @@ func addShiftChangeQuery() {
 		reason=?,
 		caseProcess=?,
 		specifyTag=?,
-		createTime=?,
 		lastModify=?
 	where caseId=?;
 	`;
@@ -306,7 +298,6 @@ func  addShiftOverTimeQuery() {
 		reason=?,
 		caseProcess=?,
 		specifyTag=?,
-		createTime=?,
 		lastModify=?
 	where caseId=?;
 	`;
@@ -334,7 +325,6 @@ func addForgetPunchQuery() {
 		reason=?,
 		caseProcess=?,
 		specifyTag=?,
-		createTime=?,
 		lastModify=?
 	where caseId=?;
 	`;
@@ -362,7 +352,6 @@ func addLateExcusedQuery() {
 		reason=?,
 		caseProcess=?,
 		specifyTag=?,
-		createTime=?,
 		lastModify=?
 	where caseId=?;
 	`;
@@ -390,7 +379,6 @@ func addDayOffQuery() {
 		reason=?,
 		caseProcess=?,
 		specifyTag=?,
-		createTime=?,
 		lastModify=?
 	where caseId=?;
 	`;

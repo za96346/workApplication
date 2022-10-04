@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"sync"
+	"time"
 
 	// "strconv"
 	"backend/table"
+
 	"github.com/gin-gonic/gin"
 )
 func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
@@ -17,16 +19,11 @@ func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	(*props).JSON(http.StatusOK, "hi")
 }
 
-func CreateUser(props *gin.Context, waitJob *sync.WaitGroup) {
+func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
-	// post
 	defer (*waitJob).Done()
-	user := table.UserTable{}
-	(*props).ShouldBindJSON(&user)
 
-	fmt.Println("do create user", &user)
-	(*dbHandle).InsertUser(&user)
-	(*props).JSON(http.StatusOK, user)
+
 }
 
 func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
@@ -34,6 +31,7 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer (*waitJob).Done()
 	user := table.UserTable{}
 	(*props).ShouldBindJSON(&user)
+	user.LastModify = time.Now()
 	res := (*dbHandle).UpdateUser(0, &user)
 	fmt.Println(user)
 	if res {
@@ -41,6 +39,9 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	} else {
 		(*props).JSON(http.StatusNotFound, "更新失敗")
 	}
+	// account, _ := (*props).Get("Account")
+	// userId, _ := (*props).Get("UserId")
+	// fmt.Println("im get data =>", account, userId)
 }
 
 func DeleteUser(props *gin.Context, waitJob *sync.WaitGroup) {
