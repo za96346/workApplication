@@ -1,9 +1,10 @@
 package handler
 
 import (
-	"github.com/dgrijalva/jwt-go"
-	"os"
 	"fmt"
+	"os"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 //宣告JWT 結構

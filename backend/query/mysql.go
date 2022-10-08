@@ -80,6 +80,7 @@ func MysqlSingleton() *sqlQuery {
 	queryMux = new(sync.Mutex)
 	if sqlQueryInstance == nil {
 		queryMux.Lock()
+		defer queryMux.Unlock()
 		if sqlQueryInstance == nil {
 			sqlQueryInstance = &sqlQuery{}
 			addUserQuery()
@@ -92,7 +93,6 @@ func MysqlSingleton() *sqlQuery {
 			addForgetPunchQuery()
 			addLateExcusedQuery()
 			addDayOffQuery()
-			defer queryMux.Unlock()
 			return sqlQueryInstance
 		}
 	}

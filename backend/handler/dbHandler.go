@@ -45,8 +45,8 @@ func Singleton() *DB {
 	defer panichandler.Recover()
 	if dbHandlerInstance == nil {
 		dbHandlerInstanceMux.Lock()
+		defer dbHandlerInstanceMux.Unlock()
 		if dbHandlerInstance == nil {
-			defer dbHandlerInstanceMux.Unlock()
 			dbHandlerInstance = &DB{
 				Redis: redis.Singleton(),
 				Mysql: mysql.Singleton(),
@@ -127,13 +127,13 @@ func selectAllHandler[
 	defer panichandler.Recover()
 	if (*redis.Singleton()).IsAlive() && !(*isLocked) {
 		// redis
-		fmt.Println("redis")
+		fmt.Println("從 redis 拿取資料 開始")
 		res := redisCallback()
 		return res
 
 	} else {
 		// mysql
-		fmt.Println("mysql")
+		fmt.Println("從 mysql 拿取資料 開始")
 		res := mysqlCallback()
 		return res
 	}

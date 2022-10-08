@@ -6,16 +6,17 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
-	"io"
 	"runtime"
 	"time"
 
 	// "time"
 
+	// "github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 
@@ -43,12 +44,15 @@ func main() {
 	port := os.Getenv("PORT")
 	loggers()
 	apiServer := gin.Default()
-	apiServer.Use(middleWare.RateLimit(time.Second, 100, 100))
+	apiServer.Use(middleWare.RateLimit(time.Second, 100, 100), middleWare.CORS)
 
+	// route group
 	userApi := apiServer.Group("/workApp/user")
 	entryApi := apiServer.Group("/workApp/entry")
 	route.User(userApi)
 	route.EntryRoute(entryApi)
+
+	// start
 	apiServer.Run(":" + port)
 }
 

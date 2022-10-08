@@ -1,44 +1,50 @@
-import React from 'react';
+import React from 'react'
 
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  useNavigate,
-} from 'react-router-dom';
-import styles from "./index.module.scss";
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Navigate
+} from 'react-router-dom'
+import styles from './index.module.scss'
+import 'antd/dist/antd.min.css'
 
-import Layout from './page/Layout';
-import ListSettingPage from './page/ListSettingPage';
-import EditPage from './page/EditPage';
-import NoticePage from './page/NoticePage';
-import SelfSettingPage from './page/SelfSettingPage';
-import ListSearchPage from './page/ListSearchPage';
-import language from './language';
-import ErrorPage from './page/ErrorPage';
-
+import Layout from './page/Layout'
+import ShiftSettingPage from './page/shiftSetting/ShiftSettingPage'
+import ShiftPage from './page/Shift/ShiftPage'
+import SettingPage from './page/Setting/SettingPage'
+import ShiftSearchPage from './page/ShiftSearch/ShiftSearchPage'
+import language from './language'
+import ErrorPage from './page/ErrorPage'
+import Entry from './page/Entry/EntryPage'
+import statics from './statics'
 
 // global init
-window.styles = styles;
-window.language = language;
+window.styles = styles
+window.language = language
+window.statics = statics
 
-function App() {
+const App = (): JSX.Element => {
     console.log(window.language)
     return (
-      	<Router>
+        <Router>
             <Routes>
-                <Route element={<Layout />}>
-                    <Route path='/' element={<NoticePage />} />
-                    <Route path='edit' element={<EditPage />} />
-                    <Route path='listSetting' element={<ListSettingPage />} />
-                    <Route path='selfSetting' element={<SelfSettingPage />} />
-                    <Route path='listSearch' element={<ListSearchPage />} />
+                <Route path='/' element={<Layout />}>
+                    <Route path='/' element={<Navigate to={'entry/login'} />}/>
+                    <Route path='entry/:path' element={<Entry />} />
+
+                    <Route path='shift' element={<ShiftPage />} />
+                    <Route path='shift/:banch' element={<ShiftPage />} />
+
+                    <Route path='shiftSetting/:banch' element={<ShiftSettingPage />} />
+                    <Route path='shiftSearch' element={<ShiftSearchPage />} />
+
+                    <Route path='setting/:types' element={<SettingPage />} />
                 </Route>
                 <Route path='*' element={<ErrorPage/>} />
             </Routes>
         </Router>
-    );
+    )
 }
 
-export default App;
+export default App

@@ -22,12 +22,12 @@ type workers interface {
 func WorkerSingleton() *WorkerPool {
     if workerInstance == nil {
         workerMux.Lock()
+        defer workerMux.Unlock()
         if workerInstance == nil {
             workerInstance = &WorkerPool{
                 JobChan: make(chan func(), 10000),
                 // ResultChan: make(chan bool, 100),
             }
-            defer workerMux.Unlock()
             return  workerInstance
         }
     }

@@ -23,7 +23,7 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 	// 檢查格式
 	if (*props).ShouldBindJSON(&reqBody) != nil {
 		(*props).JSON(http.StatusExpectationFailed, gin.H{
-			"message": StatusText(0),
+			"message": StatusText().LoginFail,
 		})
 		return
 	}
@@ -32,25 +32,29 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 	res := (*dbHandle).SelectUser(2, (*reqBody).Account)
 	if !IsExited(res) {
 		(*props).JSON(http.StatusUnauthorized, gin.H{
-			"message": StatusText(1),
+			"message": StatusText().NoUser,
 		})
 		return
 	}
 
 	// 檢查帳號密碼是否正確
-	if (*res)[0].Account == (reqBody).Account {
-		if (*res)[0].Password == (reqBody).Password {
-			tk := handler.Token {
-				UserId: (*res)[0].UserId,
-				Account: (*res)[0].Account,
-			}
-			(*dbHandle).Redis.InsertToken(tk.GetLoginToken())
-			(*props).JSON(http.StatusOK, tk.GetLoginToken())
-			return
-		}
+	if (*res)[0].Account != (reqBody).Account || (*res)[0].Password != (reqBody).Password {
+		//登入失敗
+		(*props).JSON(http.StatusBadRequest, gin.H{
+			"message": StatusText().AccountOrPasswordError,
+		})
+		return
 	}
-	(*props).JSON(http.StatusBadRequest, gin.H{
-		"message": StatusText(2),
+
+	//登入成功
+	tk := handler.Token {
+		UserId: (*res)[0].UserId,
+		Account: (*res)[0].Account,
+	}
+	(*dbHandle).Redis.InsertToken(tk.GetLoginToken())
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().LoginSuccess,
+		"token": tk.GetLoginToken(),
 	})
 	
 }
@@ -66,7 +70,7 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 	// 檢查格式
 	if (*props).ShouldBindJSON(&user) != nil {
 		(*props).JSON(http.StatusExpectationFailed, gin.H{
-			"message": StatusText(3),
+			"message": StatusText().RegisterFailNotAcceptDataFormat,
 		})
 		return
 	}
@@ -75,7 +79,7 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 	res := (*dbHandle).SelectUser(2, user.UserId)
 	if IsExited(res) {
 		(*props).JSON(http.StatusConflict, gin.H{
-			"message": StatusText(4),
+			"message": StatusText().AccountHasBeenRegisted,
 		})
 		return
 	}
@@ -83,12 +87,15 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 	// 新增
 	status, _ := (*dbHandle).InsertUser(user)
 	if !status {
+		// 註冊失敗
 		(*props).JSON(http.StatusForbidden, gin.H{
-			"message": StatusText(5),
+			"message": StatusText().RegisterFail,
 		})
 		return
 	}
+
+	// 註冊成功
 	(*props).JSON(http.StatusOK, gin.H{
-		"message": StatusText(6),
+		"message": StatusText().RegisterSuccess,
 	})
 }

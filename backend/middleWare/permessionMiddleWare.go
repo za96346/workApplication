@@ -1,13 +1,9 @@
 package middleWare
 import (
-	"github.com/gin-gonic/gin"
-	"fmt"
+	// "github.com/gin-gonic/gin"
 )
 
-func permessionMiddleWare(account string) gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		fmt.Println(ctx)
-
-        ctx.Next()
-	}
-}
+// func permessionMiddleWare(props *gin.Context) gin.HandlerFunc {
+// 	userId := (*props).Query("userId")
+// 	(*han)
+// }

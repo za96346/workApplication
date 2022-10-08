@@ -42,6 +42,7 @@ func Singleton() *DB {
 	defer panichandler.Recover()
 	if redisInstance == nil {
 		dbSingletonMux.Lock()
+		defer dbSingletonMux.Unlock()
 		if redisInstance == nil {
 			redisInstance = &DB{
 				table: make(map[int]string),
@@ -66,7 +67,6 @@ func Singleton() *DB {
 			(*redisInstance).table[7] = "dayOff"
 			(*redisInstance).table[8] = "forgetPunch"
 			(*redisInstance).table[9] = "lateExcused"
-			defer dbSingletonMux.Unlock()
 		}
 	}
 	return redisInstance

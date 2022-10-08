@@ -1,17 +1,35 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
-import Footer from "../component/Footer";
-import Header from "../component/Header";
+import Menu from '../component/Menu'
+import React, { useEffect } from 'react'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
-const Layout = ():JSX.Element => {
-    return (
-        <>
-        <Header />
-            <div className={styles.article}>
+const Layout = (): JSX.Element => {
+    const { pathname } = useLocation()
+    const navigate = useNavigate()
+    const { token } = useSelector((state: any) => state.user)
+
+    useEffect(() => {
+        if (!token) {
+            navigate('/entry/login')
+        }
+    }, [token, navigate])
+
+    if (pathname.includes('entry')) {
+        return (
+            <div className={styles.entryLayOut}>
                 <Outlet />
             </div>
-        <Footer />
+        )
+    }
+    return (
+        <>
+            <div className={styles.article}>
+                <Menu />
+                <div className={styles.rightBlock}>
+                    <Outlet />
+                </div>
+            </div>
         </>
     )
 }
-export default Layout;
+export default Layout

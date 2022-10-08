@@ -11,8 +11,8 @@ type UserTable struct {
 	Account string `json:"Account"`// 帳號
 	Password string `json:"Password"`// 密碼
 	OnWorkDay time.Time `json:"OnWorkDay"` // 到職日
-	Banch string `json:"Banch"` // 部門
-	Permession string `json:"Permession"` // 權限
+	Banch int64 `json:"Banch"` // 部門
+	Permession int `json:"Permession"` // 權限  (0 admin , 1 manager, 2 personal)
 	WorkState string `json:"WorkState"` // 工作狀態 (到職on or 離職off)
 	MonthSalary int `json:"MonthSalary"` // 月薪
 	PartTimeSalary int `json:"PartTimeSalary"` // 時薪

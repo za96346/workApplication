@@ -55,6 +55,7 @@ func Singleton() *DB {
 	defer panichandler.Recover()
 	if dbInstance == nil {
 		dbSingletonMux.Lock()
+		defer dbSingletonMux.Unlock()
 		if dbInstance == nil {
 			dbInstance = &DB{
 				companyMux: new(sync.RWMutex),
@@ -68,7 +69,6 @@ func Singleton() *DB {
 				lateExcusedMux: new(sync.RWMutex),
 				forgetPunchMux: new(sync.RWMutex),
 			}
-			defer dbSingletonMux.Unlock()
 		}
 	}
 	return dbInstance

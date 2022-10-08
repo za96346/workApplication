@@ -4,12 +4,20 @@
 	justify-content: center;
 }
 %shadowNormal {
-  	box-shadow:0px 0px 10px rgb(78, 78, 78),;
+  	box-shadow:0px 0px 10px rgb(0, 0, 0);
 }
 %verticleBlock {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+}
+%whiteBoard {
+	padding: 20px;
+	border-radius: 20px;
+	background-color: white;
+}
+%boderGray {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 body{
 	height: 100vh;
@@ -18,144 +26,121 @@ body{
 	margin: 0;
 }
 .article {
-	height: 80vh;
-	min-height: 80vh;
-	max-height: 80vh;
-	overflow-y: scroll;
-	background-color: blanchedalmond;
-}
-div::-webkit-scrollbar {
-	display: none;
-	scroll-behavior: smooth;
-	scroll-snap-type: mandatory;
-}
-.headerBlock{
+	min-height: 100vh;
 	width: 100vw;
-	height: 15vh;
-	background-color: rgb(149, 215, 215);
-}
-.navBarBlock {
-	margin: 0px;
-	padding: 0px;
-	width: 100vw;
-	height: 5vh;
-	background-color: cadetblue;
 	display: flex;
-	align-items: center;
-	color: #fff;
-	font-size: 1rem;
-	>div {
-		flex: 1;
-		height: 100%;
-		@extend %center;
-		transition: 0.4s;
-		&:hover {
-		cursor: pointer;
-			@extend %shadowNormal;
-			border-radius: 10px;
-		}
-	}
-	.navBlur {
-	}
-	.navFocus {
-		background-color: rgb(42, 164, 130);
-	}
-}
-
-.editBlock {
-	@extend %verticleBlock;
-	width: 100%;
-	.editHeader {
-		width: 90%;
-		height: 30px;
-		border-radius: 20px 20px 0px 0px;
-		background-color: rgb(189, 143, 143);
-		color: #fff;
-		padding-left: 20px;
-		@extend %center;
-		margin-top: 20px;
-	}
-	.editBody{
-		background:linear-gradient(rgba(75, 141, 163, 0.4), rgba(79, 90, 255, 0.4), rgba(0, 214, 211, 0.4));
-		overflow-x: scroll;
-		border-radius: 0px 0px 20px 20px;
-		width: 90%;
-		.editPerson {
-			width: fit-content;
-			min-width: 100%;
+	height: fit-content;
+	overflow-y: scroll;
+	background-color: rgb(255, 255, 255);
+	.menuBlock {
+		position: relative;
+		>div:last-child {
+			position: fixed;
+			bottom: 0;
 			height: 50px;
-			border-top: 1px gray solid;
-			display: flex;
-			align-items: center;
-			>div:first-child {
-				position: sticky;
-				left: 0;
-				background-color: rgb(38, 172, 169);
-				
-			}
-			>div:last-child {
-				border-bottom: 1px solid #fff;
-			}
-			.editDay {
-				@extend %center;
-				min-width: 40px;
-				height: 100%;
-				flex: 1;
-				border-left: 1px solid #fff;
-				transition: 0.4s;
-				&:hover {
-					background-color: black;
-					color: #fff;
-					@extend %shadowNormal;
-					cursor: pointer;
-				}
+			color: #fff;
+			background-color: rgb(117, 114, 110);
+			width: 100%;
+			@extend %center;
+			&:hover {
+				cursor: pointer;
+				@extend %shadowNormal;
 			}
 		}
 	}
+	.rightBlock {
+		padding: 20px;
+		height: 100vh;
+		flex-grow: 1;
+		box-shadow: inset 1px 1px 10px rgb(50, 50, 50);
+		background-color: rgba(0, 0, 0, 0.2);
+	}
 }
 
-.selfSettingBlock {
+div {
+	&::-webkit-scrollbar {
+		display: none;
+		scroll-behavior: smooth;
+		scroll-snap-type: mandatory;
+	}
+	transition: 0.6s;
+}
+
+
+
+.entryLayOut {
+    width: 100vw;
+    height: 100vh;
+	position: relative;
+	background-image: url(asserts/bg1.jpeg);
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+.entryBlock {
+	width: 90%;
+	max-width: 350px;
+	height: fit-content;
+	background-color: rgba(0, 0, 0, 0.1);
+	border-radius: 20px;
+	padding: 20px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.mainBtn {
+	background-color: rgb(48, 178, 217);
+	border: none;
+	color: #fff;
+	width: 100%;
+	border-radius: 5px;
+	padding: 1rem;
+	&:hover {
+		cursor: pointer;
+		opacity: 0.7;
+
+	}
+}
+
+.settingBlock {
 	width: 100%;
 	height: 100%;
 	display: flex;
-	flex-direction: column;
-	align-items: center;
-	.selfSettingHead {
-		margin-top: 20px;
-		width: 150px;
-		height: 150px;
-		background-color: #fff;
+	flex-wrap: wrap;
+	.settingPic {
+		min-width: 200px;
+		width: 200px;
+		height: 200px;
+		min-height: 200px;
 		border-radius: 50%;
-		@extend %shadowNormal;
-		position: relative;
-		>div {
-			font-size: 2rem;
-			position: absolute;
-			bottom: -50px;
-			left: 50%;
-			transform: translateX(-50%);
+		margin-right: 20px;
+		background-color: rgba(149, 148, 148, 0.3);
+		img {
+			width: 100%;
+			height: 100%;
+			border-radius: 50%;
 		}
 	}
-	.selfSettingBody {
-		margin-top: 50px;
-		max-width: 300px;
-		width: 100%;
-		height: 70%;
-		padding: 0px 20px;
+	.settingBody {
+		@extend %whiteBoard;
+		min-width: 500px;
+		flex-grow: 1;
 		>div {
-			font-size: 1rem;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			height: 10%;
-			&:hover {
-				cursor: pointer;
-				
-			}
+			width: 90%;
+			margin: 0px auto;
+		}
+		>div:first-child {
+			height: 60px;
+			@extend %boderGray;
+			text-align: center;
+			font-size: 2rem;
+			font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+			letter-spacing: 3px;
+			margin-bottom: 20px;
 		}
 		>div:last-child {
-			justify-content: center;
-
+			
 		}
 	}
 }

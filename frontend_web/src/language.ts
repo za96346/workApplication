@@ -1,24 +1,8 @@
-import { lang } from "./type";
-
-class language implements lang{
-    constructor() {
-        console.log('language is init');
-    }
-
-    setLang():any {
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        const currentLanguage = (window.navigator.language)
-        if (currentLanguage === 'zh-TW') {
-            return this.ch
-        } else {
-            return this.en
-        }
-    }
-    private ch() {
-
-    }
-    private en() {
-
-    }
+class Language {
+    msg: any
+    loginSuccess = '登入成功'
+    formatError = '資料格式錯誤'
+    noUser = '沒有此使用者'
+    accountOrPasswordError = '帳號或密碼錯誤'
 }
-export default new language();
+export default new Language()
