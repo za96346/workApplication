@@ -14,18 +14,13 @@ import ShiftSettingPage from './page/shiftSetting/ShiftSettingPage'
 import ShiftPage from './page/Shift/ShiftPage'
 import SettingPage from './page/Setting/SettingPage'
 import ShiftSearchPage from './page/ShiftSearch/ShiftSearchPage'
-import language from './language'
 import ErrorPage from './page/ErrorPage'
 import Entry from './page/Entry/EntryPage'
-import statics from './statics'
 
 // global init
 window.styles = styles
-window.language = language
-window.statics = statics
 
 const App = (): JSX.Element => {
-    console.log(window.language)
     return (
         <Router>
             <Routes>

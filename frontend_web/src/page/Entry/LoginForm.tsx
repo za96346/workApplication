@@ -3,8 +3,8 @@ import { Button, Form, Input } from 'antd'
 import { KeyOutlined, UserOutlined } from '@ant-design/icons'
 // import { useNavigate } from 'react-router-dom'
 import rule from '../../method/rule'
-import api from '../../api/api'
 import { LoginType } from '../../type'
+import api from '../../api/api'
 
 const Login = (): JSX.Element => {
     // const navigate = useNavigate()

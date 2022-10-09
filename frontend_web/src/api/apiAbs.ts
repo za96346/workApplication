@@ -1,5 +1,5 @@
 abstract class api {
-    protected route: any
+    protected readonly route: any
 
     protected async GET (url: any, params: any, callBack: any): Promise<any> {}
 

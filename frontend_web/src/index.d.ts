@@ -14,8 +14,6 @@ declare module '*.module.scss' {
 }
 declare interface Window {
     styles: object
-    language: any
-    statics: any
 }
 declare module '*.webp' {
     const classes: string

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import pic1 from '../../asserts/pic1.webp'
 import CompanyForm from './CompanyForm'
 import PersonalForm from './PersonalForm'
+import statics from '../../statics'
 
 const SettingPage = (): JSX.Element => {
     const { types } = useParams()
@@ -12,7 +13,7 @@ const SettingPage = (): JSX.Element => {
             <div className={styles.settingBlock}>
                 {/* 個人資料設定 */}
                 {
-                    types === window.statics.personalSetting && (
+                    types === statics.personalSetting && (
                         <>
 
                             <div className={styles.settingPic}>
@@ -30,7 +31,7 @@ const SettingPage = (): JSX.Element => {
                 }
                 {/* 公司資料設定 */}
                 {
-                    types === window.statics.companySetting && (
+                    types === statics.companySetting && (
                         <>
                             <div className={styles.settingBody}>
                                 <div>公司資料</div>
