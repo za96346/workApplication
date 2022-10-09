@@ -65,24 +65,28 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 	defer panicHandle()
 	defer (*waitJob).Done()
 	now := time.Now()
-	user := &table.UserTable{
-		CreateTime: now,
-		LastModify: now,
-	}
-	var userCaptcha map[string]interface{}
-	err1 := (*props).ShouldBindBodyWith(&userCaptcha, binding.JSON)
-	err2 := (*props).ShouldBindBodyWith(&user, binding.JSON)
+
+	registeForm := &response.Register{}
+	err1 := (*props).ShouldBindBodyWith(&registeForm, binding.JSON)
 	// 檢查格式
-	if err1 != nil || err2 != nil  {
+	if err1 != nil  {
 		(*props).JSON(http.StatusExpectationFailed, gin.H{
 			"message": StatusText().RegisterFailNotAcceptDataFormat,
 		})
-		fmt.Println(err1, err2)
+		fmt.Println(err1)
+		return
+	}
+
+	// 是否是電子信箱的格式
+	if !handler.VerifyEmailFormat((*registeForm).Account) {
+		(*props).JSON(http.StatusUnavailableForLegalReasons, gin.H{
+			"message": StatusText().EmailIsNotRight,
+		})
 		return
 	}
 
 	// 檢查帳號是否被註冊
-	res := (*dbHandle).SelectUser(2, user.UserId)
+	res := (*dbHandle).SelectUser(2, (*registeForm).Account)
 	if IsExited(res) {
 		(*props).JSON(http.StatusConflict, gin.H{
 			"message": StatusText().AccountHasBeenRegisted,
@@ -91,30 +95,37 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 	}
 
 	// 檢查驗證碼是否正確
-	rightCaptcha := (*dbHandle).Redis.SelectEmailCaptcha((*user).Account)
-	v := 0
-	switch userCaptcha["Captcha"].(type) {
-	case int:
-		v = userCaptcha["Captcha"].(int)
-		break
-	case float64:
-		v = int(userCaptcha["Captcha"].(float64))
-		break
-	default:
-		fmt.Println("cap => ", userCaptcha["Captcha"], rightCaptcha)
-		(*props).JSON(http.StatusBadRequest, gin.H{
-			"message": StatusText().EmailCaptchaIsNotRight,
-		})
-		return
-	}
-	if v != rightCaptcha || rightCaptcha == -1 {
+	rightCaptcha := (*dbHandle).Redis.SelectEmailCaptcha((*registeForm).Account)
+	if (*registeForm).Captcha != rightCaptcha || rightCaptcha == -1 {
 		(*props).JSON(http.StatusBadRequest, gin.H{
 			"message": StatusText().EmailCaptchaIsNotRight,
 		})
 		return
 	}
 
+	// 密碼是否相等
+	if (*registeForm).Password != (*registeForm).PasswordConfirm {
+		(*props).JSON(http.StatusUnprocessableEntity, gin.H{
+			"message": StatusText().PasswordIsNotSame,
+		})
+		return
+	}
+
 	// 新增使用者
+
+	user := &table.UserTable{
+		Account: (*registeForm).Account,
+		Password: (*registeForm).Password,
+		CompanyCode: (*registeForm).CompanyCode,
+		Permession: 2,
+		WorkState: "on",
+		Banch: -1,
+		MonthSalary: 0,
+		PartTimeSalary: 0,
+		OnWorkDay: now,
+		CreateTime: now,
+		LastModify: now,
+	}
 	status, _ := (*dbHandle).InsertUser(user)
 	if !status {
 		// 註冊失敗

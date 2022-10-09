@@ -29,3 +29,10 @@ func NewResponse(message string, data string, status bool) *Response {
 type OnlyEmail struct {
 	Email string `json: "Email"`
 }
+type Register struct {
+	Account string
+	Captcha	int
+	Password string
+	PasswordConfirm string
+	CompanyCode string
+}

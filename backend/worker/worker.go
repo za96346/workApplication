@@ -38,9 +38,9 @@ func(t *WorkerPool) worker(id int) {
 			
     for job := range (*t).JobChan {
         
-        fmt.Println("worker", id, "started  job")
+        fmt.Println("------------------------------------worker", id, "started  job------------------------------------")
         job()//do task
-        fmt.Println("worker", id, "finished job")
+        fmt.Println("------------------------------------worker", id, "finished job------------------------------------")
     }
     
     

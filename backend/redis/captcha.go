@@ -9,6 +9,7 @@ import (
 
 func(dbObj *DB) InsertEmailCaptcha(email string, captcha int) {
 	defer panichandler.Recover()
+	(*dbObj).RedisOfCaptcha.Del(email)
 	err := (*dbObj).RedisOfCaptcha.SetNX(email, captcha, time.Minute * 3)
 	fmt.Println(err)
 }

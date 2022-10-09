@@ -27,6 +27,8 @@ type statusText struct {
 	EmailCaptchaSendSuccess string
 	EmailCaptchaSendFail string
 	EmailCaptchaIsNotRight string
+	PasswordIsNotSame string
+	EmailIsNotRight string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -54,6 +56,8 @@ func StatusText() *statusText {
 				EmailCaptchaSendSuccess: "電子郵件驗證碼發送成功",
 				EmailCaptchaSendFail: "電子郵件驗證碼發送失敗",
 				EmailCaptchaIsNotRight: "驗證碼錯誤",
+				PasswordIsNotSame: "密碼不相等",
+				EmailIsNotRight: "電子信箱格式錯誤",
 			}
 		}
 	}
