@@ -19,9 +19,8 @@ import (
 	// "github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-
-	// . "./middleWare/permessionMiddleWare"
 	"backend/handler"
+	// . "./middleWare/permessionMiddleWare"
 	"backend/middleWare"
 	"backend/route"
 	"backend/worker"

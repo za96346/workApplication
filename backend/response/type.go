@@ -26,4 +26,6 @@ func NewResponse(message string, data string, status bool) *Response {
 	res.Status = status
 	return res
 }
-
+type OnlyEmail struct {
+	Email string `json: "Email"`
+}

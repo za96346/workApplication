@@ -22,6 +22,7 @@ import (
 type DB struct {
 	RedisDb *redis.Client // 要先使用連線方法後才能使用這個
 	RedisOfToken *redis.Client // token
+	RedisOfCaptcha *redis.Client // captcha
 	table map[int]string
 	companyMux *sync.Mutex
 	userPreferenceMux *sync.RWMutex
@@ -95,6 +96,13 @@ func(dbObj *DB) Conn() { // 實體化redis.Client 並返回實體的位址
 		Addr: redisIp + ":" + redisPort,
 		Password: redisPassword, // no password set
 		DB: 1,  // use default DB
+		PoolSize:    64,
+        MinIdleConns: 16,
+	})
+	(*dbObj).RedisOfCaptcha = redis.NewClient(&redis.Options{
+		Addr: redisIp + ":" + redisPort,
+		Password: redisPassword, // no password set
+		DB: 2,  // use default DB
 		PoolSize:    64,
         MinIdleConns: 16,
 	})

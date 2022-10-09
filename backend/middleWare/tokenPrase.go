@@ -2,6 +2,7 @@ package middleWare
 
 import (
 	"backend/handler"
+	panichandler "backend/panicHandler"
 	// "fmt"
 	// "log"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 )
 
 func TokenPrase(props *gin.Context) {
+	defer panichandler.Recover()
 	method := props.Request.Method
 	tokenParams := ""
 	if method == "GET" {
@@ -31,7 +33,7 @@ func TokenPrase(props *gin.Context) {
 	// 解析 token
 	userInfo, err := handler.ParseToken(tokenParams)
 	if err != nil {
-		props.AbortWithStatusJSON(http.StatusNotAcceptable, "not Allow")
+		props.AbortWithStatusJSON(http.StatusNotFound, "not Allow")
 		return
 	}
 	

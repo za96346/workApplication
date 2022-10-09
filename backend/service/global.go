@@ -24,6 +24,9 @@ type statusText struct {
 	UserIdNotFound string
 	userDataNotFound string
 	FindSuccess string
+	EmailCaptchaSendSuccess string
+	EmailCaptchaSendFail string
+	EmailCaptchaIsNotRight string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -48,6 +51,9 @@ func StatusText() *statusText {
 				UserIdNotFound: "找不到使用者id",
 				userDataNotFound: "找不到使用者資料",
 				FindSuccess: "資料獲取成功",
+				EmailCaptchaSendSuccess: "電子郵件驗證碼發送成功",
+				EmailCaptchaSendFail: "電子郵件驗證碼發送失敗",
+				EmailCaptchaIsNotRight: "驗證碼錯誤",
 			}
 		}
 	}

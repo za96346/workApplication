@@ -33,6 +33,13 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		//post method of register
 		routeFunc = service.Register
 		break
+	case 5:
+		// get method of check user access
+		routeFunc = service.CheckAccess
+		break
+	case 6:
+		routeFunc = service.EmailCaptcha
+		break;
 	default:
 		break;
 	}
