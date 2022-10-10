@@ -1,9 +1,9 @@
-import * as React from 'react';
+import * as React from 'react'
 
-const Footer = ():JSX.Element => {
-    return(
+const Footer = (): JSX.Element => {
+    return (
         <>
         </>
     )
 }
-export default Footer;
+export default Footer

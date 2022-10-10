@@ -1,7 +1,7 @@
-import React from "react";
-import { Spin } from "antd";
+import React from 'react'
+import { Spin } from 'antd'
 
-const Loading = () => {
+const Loading = (): JSX.Element => {
     return (
         <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Spin size="large" tip={'數據加載中'} />
@@ -9,4 +9,4 @@ const Loading = () => {
     )
 }
 
-export default Loading;
+export default Loading

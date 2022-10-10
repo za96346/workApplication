@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import * as React from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-const Header = ():JSX.Element => {
-    const navigate = useNavigate();
-    const {pathname, key} = useLocation();
+const Header = (): JSX.Element => {
+    const navigate = useNavigate()
+    const { pathname, key } = useLocation()
     console.log(pathname, key)
     return (
         <>
@@ -13,8 +13,8 @@ const Header = ():JSX.Element => {
                 <div
                     className={
                         pathname === '/edit'
-                        ? styles.navFocus
-                        : styles.navBlur
+                            ? styles.navFocus
+                            : styles.navBlur
                     }
                     onClick={() => navigate('edit')}>
                     排班
@@ -22,8 +22,8 @@ const Header = ():JSX.Element => {
                 <div
                     className={
                         pathname === '/listSetting'
-                        ? styles.navFocus
-                        : styles.navBlur
+                            ? styles.navFocus
+                            : styles.navBlur
                     }
                     onClick={() => navigate('listSetting')}>
                     班表設定
@@ -31,8 +31,8 @@ const Header = ():JSX.Element => {
                 <div
                     className={
                         pathname === '/listSearch'
-                        ? styles.navFocus
-                        : styles.navBlur
+                            ? styles.navFocus
+                            : styles.navBlur
                     }
                     onClick={() => navigate('listSearch')}>
                     查看班表
@@ -40,8 +40,8 @@ const Header = ():JSX.Element => {
                 <div
                     className={
                         pathname === '/selfSetting'
-                        ? styles.navFocus
-                        : styles.navBlur
+                            ? styles.navFocus
+                            : styles.navBlur
                     }
                     onClick={() => navigate('selfSetting')}>
                     個人
@@ -50,4 +50,4 @@ const Header = ():JSX.Element => {
         </>
     )
 }
-export default Header;
+export default Header

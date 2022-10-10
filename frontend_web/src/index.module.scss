@@ -88,6 +88,32 @@ div {
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
+	>div:first-child {
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		flex: 1;
+		margin-bottom: 20px;
+		>div {
+			width: 46%;
+			height: 2rem;
+			@extend %center;
+			color: #fff;
+			border-radius: 20px;
+			&:hover {
+				transform: scale(1.1);
+				color: cadetblue;
+				cursor: pointer;
+				background-color: #fff;
+			}
+		}
+	}
+	.tabActive {
+		transform: scale(1.1);
+		color: cadetblue!important;
+		cursor: pointer;
+		background-color: #fff;
+	}
 }
 
 .mainBtn {

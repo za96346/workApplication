@@ -6,6 +6,6 @@
       "tests",
   
       // 添加我们看到“parserOptions.project”错误的所有文件
-      ".eslintrc.js"
+      ".eslintrc.json"
     ]
   }

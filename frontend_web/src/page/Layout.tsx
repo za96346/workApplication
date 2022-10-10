@@ -12,7 +12,7 @@ const Layout = (): JSX.Element => {
         if (!token) {
             navigate('/entry/login')
         }
-    }, [token, navigate])
+    }, [token])
 
     if (pathname.includes('entry')) {
         return (

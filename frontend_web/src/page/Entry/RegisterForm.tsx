@@ -6,8 +6,10 @@ import rule from '../../method/rule'
 import { Button } from '../../component/Button'
 import { Modal } from '../../component/Modal'
 import api from '../../api/api'
+import { useNavigate } from 'react-router-dom'
 
 const Register = (): JSX.Element => {
+    const navigate = useNavigate()
     const [status, setStatus] = useState({
         modalText: '註冊成功',
         modalOpen: false,
@@ -21,9 +23,10 @@ const Register = (): JSX.Element => {
     const onFinish = async (v: any): Promise<void> => {
         setStatus((prev) => ({ ...prev, confirmBtn: true }))
         const res = await api.register({ ...v, Captcha: parseInt(v.Captcha, 10) })
-        updateModalOpen()
         setStatus((prev) => ({ ...prev, confirmBtn: false }))
-        if (res) console.log('success')
+        if (res) {
+            navigate('/entry/login')
+        }
     }
     const getEmailCaptcha = async (): Promise<any> => {
         setStatus((prev) => ({ ...prev, captchaBtn: true }))
