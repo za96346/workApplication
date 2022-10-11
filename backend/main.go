@@ -24,13 +24,14 @@ import (
 	"backend/middleWare"
 	"backend/route"
 	"backend/worker"
+	"path/filepath"
 )
 func init() {
 	handler.Init()
 	runtime.SetMutexProfileFraction(-1)
 	worker.WorkerSingleton().CreateWorker(runtime.NumCPU() * 2)
 	fmt.Println("開啟的worker數量", runtime.NumCPU() * 2)
-	if godotenv.Load() != nil {
+	if godotenv.Load(filepath.Join("./", ".env")) != nil {
 		log.Fatal("error loading .env file")
 	}
 	go func ()  {

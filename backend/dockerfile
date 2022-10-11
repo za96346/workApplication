@@ -1,0 +1,22 @@
+FROM golang as build
+WORKDIR /backend
+ENV GO111MODULE=on\
+    GIN_MODE=release\
+    GOPROXY=direct\
+    GOSUMDB=off\
+    CGO_ENABLED=0\
+    GOOS=linux\
+    GOARCH=amd64
+
+COPY . .
+RUN rm -rf go.mod\
+    && go mod init backend\
+    && rm .env\
+    && mv env .env\
+    && go mod tidy\
+    # && go mod download\
+    # && go get ./...
+    && go build -o app .
+# EXPOSE 4000
+# ENTRYPOINT ./app
+# CMD ["go run main.go" ]
