@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && cat certificate.crt ca_bundle.crt >> certificate.crt && cp dockerfile nginx.conf workhard.app/. ./build",
+    "build": "react-scripts build && rm certificate.crt ca_bundle.crt && unzip workhard.app.zip && cat certificate.crt ca_bundle.crt >> certificate.crt && cp dockerfile nginx.conf workhard.app/. ./build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "ts": "react-scripts tsc --init",
