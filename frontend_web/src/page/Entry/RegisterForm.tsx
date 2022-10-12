@@ -29,7 +29,6 @@ const Register = (): JSX.Element => {
         }
     }
     const getEmailCaptcha = async (): Promise<any> => {
-        alert('hihi')
         setStatus((prev) => ({ ...prev, captchaBtn: true }))
         const res = await api.getEmailCaptcha(status.email)
         console.log(res)

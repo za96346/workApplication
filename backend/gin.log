@@ -14,3 +14,4 @@
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :4000
+[GIN] 2022/10/12 - 17:29:44 | 200 |   20.908667ms |             ::1 | POST     "/workApp/entry/login?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsIkFjY291bnQiOiJhY2NvdW50MyJ9.IiLYywGEcTgnNElkIqO4CyLiyZQ8h5bE--S-8uSyLEI"
