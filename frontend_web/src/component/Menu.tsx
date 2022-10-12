@@ -41,12 +41,7 @@ const items: MenuItem[] = [
         getItem('公關組', 94)
     // getItem('Submenu', 'sub3', null, [getItem('Option 7', '7'), getItem('Option 8', '8')]),
     ]),
-    getItem('員工管理', 'employeeManager', <IdcardOutlined />, [
-        getItem('保育組', 2),
-        getItem('社工組', 3),
-        getItem('行政組', 4),
-        getItem('公關組', 5)
-    ]),
+    getItem('員工管理', 'employeeManager', <IdcardOutlined />),
 
     getItem('設定', 'setting', <SettingOutlined />, [
         getItem('個人資料', 1000),

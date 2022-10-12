@@ -1,8 +1,9 @@
-import { Form, Input, Select, Popconfirm, Table, Typography } from 'antd'
+import { Form, Input, Select, Popconfirm, Table, Typography, Button } from 'antd'
 import React, { ReactNode, useState } from 'react'
 import dateHandle from '../../method/dateHandle'
 import EditableCell from './EditableCell'
 import { EmpManagerCellType } from '../../type'
+import { SearchOutlined } from '@ant-design/icons'
 
 const originData: EmpManagerCellType[] = []
 for (let i = 0; i < 100; i++) {
@@ -179,7 +180,19 @@ const EmployeeManager = (): JSX.Element => {
     return (
         <Form form={form} component={false}>
             <div className={styles.empMangerFilter}>
-                <div>組別</div>
+                <div>xx組</div>
+                <div>
+                    <Input style={{ width: '150px', marginRight: '0.4rem' }} prefix={<SearchOutlined />} placeholder={'請輸入姓名'} />
+                    <Select defaultValue={'保育組'} >
+                        <Select.Option value={'保育組'} key={0}>保育組</Select.Option>
+                        <Select.Option value={'公關組'} key={1}>公關組</Select.Option>
+                    </Select>
+                    <Select defaultValue={'在職'}>
+                        <Select.Option value={'在職'} key={0}>在職</Select.Option>
+                        <Select.Option value={'離職'} key={1}>離職</Select.Option>
+                    </Select>
+                    <Button>搜尋</Button>
+                </div>
             </div>
             <div style={{ maxHeight: '80%', overflow: 'scroll' }}>
                 <Table

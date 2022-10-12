@@ -177,7 +177,19 @@ div {
 
 .empMangerFilter {
 	width: 100%;
-	height: 100px;
+	min-height: 100px;
+	height: fit-content;
 	background-color: #fff;
+	border-radius: 20px;
 	margin-bottom: 20px;
+	padding: 20px;
+	>div:last-child {
+		margin-top: 20px;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		>div {
+			margin-right: 0.4rem;
+		}
+	}
 }
