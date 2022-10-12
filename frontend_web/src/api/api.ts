@@ -15,7 +15,8 @@ class ApiControl extends api {
 
     constructor () {
         super()
-        this.baseUrl = 'https:///workhard.app/workApp'
+        console.log("process env =>", process.env)
+        this.baseUrl = process.env.REACT_APP_API
     }
 
     protected async GET<T> (url: any, params: any, callBack: any): Promise<{ data: T, status: boolean }> {
