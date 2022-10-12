@@ -21,6 +21,7 @@ import Entry from './page/Entry/EntryPage'
 window.styles = styles
 
 const App = (): JSX.Element => {
+    console.log('process env =>', process.env)
     return (
         <Router>
             <Routes>

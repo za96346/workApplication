@@ -15,7 +15,6 @@ class ApiControl extends api {
 
     constructor () {
         super()
-        console.log("process env =>", process.env)
         this.baseUrl = process.env.REACT_APP_API
     }
 
