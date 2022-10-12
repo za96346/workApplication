@@ -16,6 +16,7 @@ import SettingPage from './page/Setting/SettingPage'
 import ShiftSearchPage from './page/ShiftSearch/ShiftSearchPage'
 import ErrorPage from './page/ErrorPage'
 import Entry from './page/Entry/EntryPage'
+import EmployeeManager from './page/EmployeeManager/EmployeeManager'
 
 // global init
 window.styles = styles
@@ -28,6 +29,8 @@ const App = (): JSX.Element => {
                 <Route path='/' element={<Layout />}>
                     <Route path='/' element={<Navigate to={'entry/login'} />}/>
                     <Route path='entry/:path' element={<Entry />} />
+
+                    <Route path='employeeManager' element={<EmployeeManager />} />
 
                     <Route path='shift' element={<ShiftPage />} />
                     <Route path='shift/:banch' element={<ShiftPage />} />

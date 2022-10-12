@@ -31,3 +31,13 @@ export interface RegisterType {
     PartTimeSalary: number // 時薪
     Captcha: number // 驗證碼
 }
+
+export interface EmpManagerCellType {
+    key: string
+    empIdx: string | number
+    name: string
+    onWorkDay: string
+    workState: string
+    banch: string
+    permession: string
+}

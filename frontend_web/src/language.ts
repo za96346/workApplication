@@ -3,6 +3,7 @@ class Language {
     loginSuccess = '登入成功'
     formatError = '資料格式錯誤'
     noUser = '沒有此使用者'
+    thisAccountIsNotRegisted = '此帳號還沒有被註冊 請先註冊帳號'
     accountOrPasswordError = '帳號或密碼錯誤'
     emailCaptchaSendedSuccess = '驗證碼發送成功'
     emailCaptchaSendedFail = '驗證碼發送失敗'

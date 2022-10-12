@@ -84,6 +84,10 @@ const App: React.FC = () => {
             navigate(`setting/${current.key}`)
             return
         }
+        if (path1 === 'employeeManager' || path2 === 'employeeManager') {
+            navigate('employeeManager')
+            return
+        }
         if (path1 === 'shift' || path2 === 'shift') {
             navigate(`shift/${current.key}`)
             return

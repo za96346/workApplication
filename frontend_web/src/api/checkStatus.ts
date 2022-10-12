@@ -37,7 +37,7 @@ class checkStatus {
                 await FullMessage.error(language.accountOrPasswordError)
                 break
             case 401:
-                await FullMessage.error(language.noUser)
+                await FullMessage.error(language.thisAccountIsNotRegisted)
                 break
             case 417:
                 await FullMessage.error(language.formatError)
