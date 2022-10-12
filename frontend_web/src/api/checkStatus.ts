@@ -7,6 +7,30 @@ class checkStatus {
         this.a = ''
     }
 
+    static async TkPrase (code: number): Promise<any> {
+        switch (code) {
+            case 510:
+                await FullMessage.error(language.tokenExpire)
+                break
+            case 511:
+                await FullMessage.error(language.tokenNotAcceptable)
+                break
+        }
+    }
+
+    static async SameCompany (code: number): Promise<any> {
+        switch (code) {
+            case 404:
+                await FullMessage.error(language.noUser)
+                break
+            case 403:
+                await FullMessage.error(language.notAcceptableId)
+                break
+            case 422:
+                await FullMessage.error(language.noUser)
+        }
+    }
+
     static async Login (code: number): Promise<any> {
         switch (code) {
             case 400:

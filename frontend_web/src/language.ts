@@ -12,5 +12,8 @@ class Language {
     captchaIsNotCorrect = '驗證碼不正確'
     passwordIsNotSame = '密碼不相等'
     emailIsNotCorrect = '電子信箱格式錯誤'
+    tokenExpire = 'token過期'
+    tokenNotAcceptable = '無效token'
+    notAcceptableId = '無效的id, 請重新查詢'
 }
 export default new Language()
