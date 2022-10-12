@@ -12,8 +12,8 @@ func User(props *gin.RouterGroup) {
 
 	props.Use(middleWare.TokenPrase)
 	{
-		props.GET("/single", worker.AssignWorker(0))
 		props.GET("/my", worker.AssignWorker(1))
-		props.POST("/update", worker.AssignWorker(2))
+		props.GET("/single", middleWare.SameCompany, worker.AssignWorker(0))
+		props.POST("/update", middleWare.SameCompany, worker.AssignWorker(2))	
 	}
 }

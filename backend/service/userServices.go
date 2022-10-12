@@ -94,15 +94,14 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		(*props).JSON(http.StatusOK, gin.H{
 			"message": StatusText().UpdateSuccess,
 		})
+		return
 	// 更新資料失敗
 	} else {
-		(*props).JSON(http.StatusNotFound, gin.H{
+		(*props).JSON(http.StatusBadRequest, gin.H{
 			"message": StatusText().UpdateFail,
 		})
+		return
 	}
-	// account, _ := (*props).Get("Account")
-	// userId, _ := (*props).Get("UserId")
-	// fmt.Println("im get data =>", account, userId)
 }
 
 func DeleteUser(props *gin.Context, waitJob *sync.WaitGroup) {

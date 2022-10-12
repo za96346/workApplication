@@ -689,6 +689,7 @@ func forEach[T any](callback func() ([]string, error), filterCallBack func(T) bo
 	var container []T
 	list := new(T)
 	jsonData, _ := callback()
+
 	for _, v := range jsonData {
 		json.Unmarshal([]byte(v), list)
 		if filterCallBack(*list) {
@@ -707,8 +708,14 @@ func(dbObj *DB) hmGet(tableKey string, field... interface{}) ([]string, error) {
 	}
 	returnValue := []string{}
 	res, err := (*dbObj).RedisDb.HMGet(tableKey, transArr...).Result()
-	for _, v:= range res {
-		returnValue = append(returnValue, v.(string))
+	for _, v := range res {
+		switch v.(type) {
+		case string:
+			returnValue = append(returnValue, v.(string))
+			break
+		case nil:
+			break;
+		}
 	}
 	return returnValue, err
 }

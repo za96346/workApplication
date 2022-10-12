@@ -26,18 +26,18 @@ func TokenPrase(props *gin.Context) {
 
 	// 判斷 token 是否過期
 	if !handler.Singleton().Redis.IsTokenExited(tokenParams) {
-		props.AbortWithStatusJSON(http.StatusNotAcceptable, "token Expire")
+		(*props).AbortWithStatusJSON(http.StatusNotExtended, "token Expire")
 		return
 	}
 	
 	// 解析 token
 	userInfo, err := handler.ParseToken(tokenParams)
 	if err != nil {
-		props.AbortWithStatusJSON(http.StatusNotFound, "not Allow")
+		(*props).AbortWithStatusJSON(http.StatusNetworkAuthenticationRequired, "not Allow")
 		return
 	}
 	
-	props.Set("Account", userInfo["Account"].(string))
-	props.Set("UserId", int64(userInfo["UserId"].(float64)))
-	props.Next()
+	(*props).Set("Account", userInfo["Account"].(string))
+	(*props).Set("UserId", int64(userInfo["UserId"].(float64)))
+	(*props).Next()
 }

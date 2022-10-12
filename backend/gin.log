@@ -4,9 +4,9 @@
  - using env:	export GIN_MODE=release
  - using code:	gin.SetMode(gin.ReleaseMode)
 
-[GIN-debug] GET    /workApp/user/single      --> backend/worker.AssignWorker.func1 (6 handlers)
 [GIN-debug] GET    /workApp/user/my          --> backend/worker.AssignWorker.func1 (6 handlers)
-[GIN-debug] POST   /workApp/user/update      --> backend/worker.AssignWorker.func1 (6 handlers)
+[GIN-debug] GET    /workApp/user/single      --> backend/worker.AssignWorker.func1 (7 handlers)
+[GIN-debug] POST   /workApp/user/update      --> backend/worker.AssignWorker.func1 (7 handlers)
 [GIN-debug] POST   /workApp/entry/login      --> backend/worker.AssignWorker.func1 (5 handlers)
 [GIN-debug] PUT    /workApp/entry/register   --> backend/worker.AssignWorker.func1 (5 handlers)
 [GIN-debug] POST   /workApp/entry/email/captcha --> backend/worker.AssignWorker.func1 (5 handlers)
@@ -14,4 +14,9 @@
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :4000
-[GIN] 2022/10/12 - 17:29:44 | 200 |   20.908667ms |             ::1 | POST     "/workApp/entry/login?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjgsIkFjY291bnQiOiJhY2NvdW50MyJ9.IiLYywGEcTgnNElkIqO4CyLiyZQ8h5bE--S-8uSyLEI"
+[GIN] 2022/10/12 - 19:44:50 | 406 |    4.633291ms |       127.0.0.1 | GET      "/workApp/user/single?userId=9&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjcsIkFjY291bnQiOiJhY2NvdW50MSJ9.hTlx2BjEOS7ghtAFLO8oFZgHJY47C1GAscrxZa9josA"
+[GIN] 2022/10/12 - 19:44:55 | 200 |    5.793167ms |       127.0.0.1 | POST     "/workApp/entry/login"
+[GIN] 2022/10/12 - 19:45:03 | 200 |    2.620583ms |       127.0.0.1 | GET      "/workApp/user/single?userId=9&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjUsIkFjY291bnQiOiJhY2NvdW50MSJ9.hNYT0RIYbzDLOm41wgYCoqSVyoJTULzAwtBOaeH8ij4"
+[GIN] 2022/10/12 - 19:45:19 | 200 |    2.002958ms |       127.0.0.1 | GET      "/workApp/user/single?userId=10&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjUsIkFjY291bnQiOiJhY2NvdW50MSJ9.hNYT0RIYbzDLOm41wgYCoqSVyoJTULzAwtBOaeH8ij4"
+[GIN] 2022/10/12 - 19:45:27 | 404 |    1.171625ms |       127.0.0.1 | GET      "/workApp/user/single?userId=22&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjUsIkFjY291bnQiOiJhY2NvdW50MSJ9.hNYT0RIYbzDLOm41wgYCoqSVyoJTULzAwtBOaeH8ij4"
+[GIN] 2022/10/12 - 19:46:48 | 404 |    1.631542ms |       127.0.0.1 | GET      "/workApp/user/single?userId=22&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjUsIkFjY291bnQiOiJhY2NvdW50MSJ9.hNYT0RIYbzDLOm41wgYCoqSVyoJTULzAwtBOaeH8ij4"
