@@ -18,7 +18,7 @@
 	background-color: white;
 }
 %boderGray {
-	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 body{
 	height: 100vh;
@@ -198,7 +198,7 @@ div {
 	width: 100%;
 	padding: 10px;
 	height: 50px;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+	@extend %boderGray;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -217,7 +217,8 @@ div {
 	width: 50px;
 	height: 50px;
 	border-radius: 50%;
-	background-color: white;
+	background-color: rgb(67, 67, 67);
+	color: white;
 	position: fixed;
 	bottom: 10px;
 	right: 10px;
@@ -236,6 +237,33 @@ div {
 	margin: 0px auto;
 	@extend %whiteBoard;
 }
+.shiftEdit{
+	background-color: #fff;
+	width: 100%;
+	height: fit-content;
+	margin: 20px auto;
+	@extend %whiteBoard;
+}
 .shiftTable {
+	width: 100%;
+	min-height: 100%;
+	height: fit-content;
+	overflow-x: scroll;
+	margin-bottom: 20px;
+	text-align: center;
+	>table {
 
+		width: 100%;
+		height: fit-content;
+	}
+	td, tr, thead {
+		border: 1px solid rgba(0, 0, 0, 0.2);
+		border-collapse: collapse;
+	}
+}
+.stickyTd {
+	position: sticky;
+	z-index: 5;
+	padding: 5px;
+	background-color: white;
 }

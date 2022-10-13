@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { HolderOutlined } from '@ant-design/icons'
-import { Drawer, Steps } from 'antd'
+import { Drawer, Steps, Tabs } from 'antd'
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Loading from '../../component/Loading'
+import EditTable from './EditTable'
 import PeopleStatus from './PeopleStatus'
 const ShiftPage = (): JSX.Element => {
     const { banch } = useParams()
@@ -45,18 +46,22 @@ const ShiftPage = (): JSX.Element => {
                 }
             </Drawer>
             <div className={styles.shiftProcessBar}>
+                <h3>{banch}</h3>
                 <Steps current={2}>
                     <Steps.Step title="開放編輯" description="2022-11-01 ~ 2022-11-09" />
                     <Steps.Step title="主管審核" subTitle="2022-11-10" description="部門主管確認班表無誤" />
                     <Steps.Step title="確認發布" description="進行中..." />
                 </Steps>
             </div>
-            <div>
-                {/* <table>
-                        <td>
-                            <tr>hi</tr>
-                        </td>
-                    </table> */}
+            <div className={styles.shiftEdit}>
+                <Tabs>
+                    <Tabs.TabPane tab={'當前編輯'} key={0}>
+                        <EditTable />
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab={'歷史班表'} key={1}>
+                        <EditTable />
+                    </Tabs.TabPane>
+                </Tabs>
             </div>
         </>
     )
