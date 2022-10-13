@@ -284,3 +284,21 @@ div {
 		font-size: 1.4rem;
 	}
 }
+
+.shiftSettingBlock {
+	@extend %whiteBoard;
+	.editLabel {
+		&:hover {
+			cursor: pointer;
+			opacity: 0.6;
+			scale: 1.1;
+		}
+	}
+}
+.ShiftSettingEdit {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	@extend %whiteBoard;
+	margin-bottom: 20px;
+}
