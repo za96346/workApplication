@@ -1,11 +1,21 @@
-import { Result, Select } from 'antd'
+import { Result } from 'antd'
 import React from 'react'
+import useTableCache from './TableCache'
 
-const EditTable = (): JSX.Element => {
+interface EditTableProps {
+    currentTabs: number
+}
+const EditTable = ({ currentTabs }: EditTableProps): JSX.Element => {
+    const { tb } = useTableCache()
     return (
         <>
             {
-                false && (
+                currentTabs === 1 && (
+                    <>search bar</>
+                )
+            }
+            {
+                currentTabs === 1 && (
                     <Result
                         status="404"
                         title="404"
@@ -14,61 +24,21 @@ const EditTable = (): JSX.Element => {
                     />
                 )
             }
-            <div className={styles.shiftTable}>
-                <table >
-                    <thead>
+            {
+                currentTabs === 0 && (
+                    <>
+                        <div className={styles.shiftSignBlock}>
+                            <div>19:00 - 21:00: <span>▲</span></div>
+                            <div>08:00 - 21:00: <span>☼</span></div>
+
+                        </div>
                         {
-                            new Array(31).fill('').map((item, index) => {
-                                return (
-                                    <>
-                                        {
-                                            index === 0
-                                                ? <td style={{ left: '1px' }} className={styles.stickyTd}>員工</td>
-                                                : <td>
-                                                    {index}<br/>
-                                                    {'一'}
-                                                </td>
-
-                                        }
-                                    </>
-                                )
-                            })
+                            tb
                         }
-                    </thead>
-                    {
-                        new Array(10).fill('').map((i, idx) => {
-                            return (
-                                <tr key={idx}>
-                                    {
-                                        new Array(31).fill('').map((item, index) => {
-                                            return (
-                                                <>
-                                                    {
-                                                        index === 0
-                                                            ? <td style={{ left: '1px' }} className={styles.stickyTd}>
-                                                                    jack
-                                                            </td>
-                                                            : <td style={{ height: '10px', width: '10px' }}>
-                                                                <div>
-                                                                    <Select suffixIcon={null}>
-                                                                        <Select.Option value={'*'} key={0}>*</Select.Option>
-                                                                        <Select.Option value={'%'} key={1}>%</Select.Option>
-                                                                        <Select.Option value={'#'} key={2}>#</Select.Option>
-                                                                    </Select>
-                                                                </div>
-                                                            </td>
-                                                    }
 
-                                                </>
-                                            )
-                                        })
-                                    }
-                                </tr>
-                            )
-                        })
-                    }
-                </table>
-            </div>
+                    </>
+                )
+            }
         </>
     )
 }

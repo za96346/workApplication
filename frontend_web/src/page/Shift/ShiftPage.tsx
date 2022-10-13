@@ -9,7 +9,8 @@ import PeopleStatus from './PeopleStatus'
 const ShiftPage = (): JSX.Element => {
     const { banch } = useParams()
     const [status, setStatus] = useState({
-        drawerOpen: false
+        drawerOpen: false,
+        currentTabs: 0
     })
     if (!banch) {
         return (
@@ -54,12 +55,12 @@ const ShiftPage = (): JSX.Element => {
                 </Steps>
             </div>
             <div className={styles.shiftEdit}>
-                <Tabs>
+                <Tabs onChange={(key) => setStatus((prev) => ({ ...prev, currentTabs: parseInt(key, 10) }))}>
                     <Tabs.TabPane tab={'當前編輯'} key={0}>
-                        <EditTable />
+                        <EditTable currentTabs={status.currentTabs} />
                     </Tabs.TabPane>
                     <Tabs.TabPane tab={'歷史班表'} key={1}>
-                        <EditTable />
+                        <EditTable currentTabs={status.currentTabs} />
                     </Tabs.TabPane>
                 </Tabs>
             </div>

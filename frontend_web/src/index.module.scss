@@ -217,11 +217,13 @@ div {
 	width: 50px;
 	height: 50px;
 	border-radius: 50%;
+	opacity: 0.4;
 	background-color: rgb(67, 67, 67);
 	color: white;
 	position: fixed;
 	bottom: 10px;
 	right: 10px;
+	z-index: 10;
 	@extend %center;
 	font-size: 1.5rem;
 	&:hover {
@@ -266,4 +268,19 @@ div {
 	z-index: 5;
 	padding: 5px;
 	background-color: white;
+}
+
+.shiftSignBlock {
+	background-color: rgba(0, 0, 0, 0.2);
+	border-radius: 20px;
+	width: 300px;
+	height: 100px;
+	margin-bottom: 20px;
+	padding: 20px;
+	display: flex;
+	flex-wrap: wrap;
+	span {
+		color: chocolate;
+		font-size: 1.4rem;
+	}
 }
