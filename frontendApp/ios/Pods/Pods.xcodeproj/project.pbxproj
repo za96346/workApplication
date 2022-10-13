@@ -16,6 +16,7 @@
 				46EB2E0001B670 /* PBXTargetDependency */,
 			);
 			name = "React-RCTActionSheet";
+			productName = "React-RCTActionSheet";
 		};
 		1BEE828C124E6416179B904A9F66D794 /* React */ = {
 			isa = PBXAggregateTarget;
@@ -35,6 +36,7 @@
 				46EB2E0001B250 /* PBXTargetDependency */,
 			);
 			name = React;
+			productName = React;
 		};
 		2681CB7EF647E61F4F9A43029C235607 /* React-callinvoker */ = {
 			isa = PBXAggregateTarget;
@@ -44,6 +46,7 @@
 			dependencies = (
 			);
 			name = "React-callinvoker";
+			productName = "React-callinvoker";
 		};
 		54EB12219122432FA744088BC5A680D2 /* React-runtimeexecutor */ = {
 			isa = PBXAggregateTarget;
@@ -54,6 +57,7 @@
 				46EB2E0001BE90 /* PBXTargetDependency */,
 			);
 			name = "React-runtimeexecutor";
+			productName = "React-runtimeexecutor";
 		};
 		6A9637F1BC8154F777335A6420579C05 /* Flipper-Glog */ = {
 			isa = PBXAggregateTarget;
@@ -64,6 +68,7 @@
 			dependencies = (
 			);
 			name = "Flipper-Glog";
+			productName = "Flipper-Glog";
 		};
 		8CC4EAA817AA86310D1900F1DAB3580F /* FBLazyVector */ = {
 			isa = PBXAggregateTarget;
@@ -73,6 +78,7 @@
 			dependencies = (
 			);
 			name = FBLazyVector;
+			productName = FBLazyVector;
 		};
 		B9ED5194E665042005069EF06C82A050 /* OpenSSL-Universal */ = {
 			isa = PBXAggregateTarget;
@@ -83,6 +89,7 @@
 			dependencies = (
 			);
 			name = "OpenSSL-Universal";
+			productName = "OpenSSL-Universal";
 		};
 		C3496D0495E700CF08A90C41EA8FA4BB /* FBReactNativeSpec */ = {
 			isa = PBXAggregateTarget;
@@ -99,6 +106,7 @@
 				46EB2E0001AA90 /* PBXTargetDependency */,
 			);
 			name = FBReactNativeSpec;
+			productName = FBReactNativeSpec;
 		};
 		D9245543B79C09FAC40FC8B9F291536A /* Flipper-DoubleConversion */ = {
 			isa = PBXAggregateTarget;
@@ -109,6 +117,7 @@
 			dependencies = (
 			);
 			name = "Flipper-DoubleConversion";
+			productName = "Flipper-DoubleConversion";
 		};
 		E7E7CE52C8C68B17224FF8C262D80ABF /* RCTRequired */ = {
 			isa = PBXAggregateTarget;
@@ -118,6 +127,7 @@
 			dependencies = (
 			);
 			name = RCTRequired;
+			productName = RCTRequired;
 		};
 		EFEA55B1B776B6EB4B16F363BFE64D1A /* boost */ = {
 			isa = PBXAggregateTarget;
@@ -127,6 +137,7 @@
 			dependencies = (
 			);
 			name = boost;
+			productName = boost;
 		};
 /* End PBXAggregateTarget section */
 
@@ -5195,23 +5206,23 @@
 		37592FDAD45752511010F4B06AC57355 /* React-cxxreact */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "React-cxxreact"; path = "libReact-cxxreact.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		396DAFDC3DCFBF31A37A3CC9488C0DDC /* Flipper-Fmt */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Flipper-Fmt"; path = "libFlipper-Fmt.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CA7A9404CCDD6BA22C97F8348CE3209 /* glog */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = glog; path = libglog.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		46EB2E00000440 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E00000450 /* bignum-dtoa.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = "bignum-dtoa.cc"; path = "double-conversion/bignum-dtoa.cc"; sourceTree = "<group>"; };
+		46EB2E00000440 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E00000450 /* bignum-dtoa.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = "bignum-dtoa.cc"; path = "double-conversion/bignum-dtoa.cc"; sourceTree = "<group>"; };
 		46EB2E00000460 /* bignum-dtoa.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "bignum-dtoa.h"; path = "double-conversion/bignum-dtoa.h"; sourceTree = "<group>"; };
-		46EB2E00000470 /* bignum.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = bignum.cc; path = "double-conversion/bignum.cc"; sourceTree = "<group>"; };
+		46EB2E00000470 /* bignum.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = bignum.cc; path = "double-conversion/bignum.cc"; sourceTree = "<group>"; };
 		46EB2E00000480 /* bignum.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = bignum.h; path = "double-conversion/bignum.h"; sourceTree = "<group>"; };
-		46EB2E00000490 /* cached-powers.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = "cached-powers.cc"; path = "double-conversion/cached-powers.cc"; sourceTree = "<group>"; };
+		46EB2E00000490 /* cached-powers.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = "cached-powers.cc"; path = "double-conversion/cached-powers.cc"; sourceTree = "<group>"; };
 		46EB2E000004A0 /* cached-powers.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "cached-powers.h"; path = "double-conversion/cached-powers.h"; sourceTree = "<group>"; };
-		46EB2E000004B0 /* diy-fp.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = "diy-fp.cc"; path = "double-conversion/diy-fp.cc"; sourceTree = "<group>"; };
+		46EB2E000004B0 /* diy-fp.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = "diy-fp.cc"; path = "double-conversion/diy-fp.cc"; sourceTree = "<group>"; };
 		46EB2E000004C0 /* diy-fp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "diy-fp.h"; path = "double-conversion/diy-fp.h"; sourceTree = "<group>"; };
-		46EB2E000004D0 /* double-conversion.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = "double-conversion.cc"; path = "double-conversion/double-conversion.cc"; sourceTree = "<group>"; };
+		46EB2E000004D0 /* double-conversion.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = "double-conversion.cc"; path = "double-conversion/double-conversion.cc"; sourceTree = "<group>"; };
 		46EB2E000004E0 /* double-conversion.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "double-conversion.h"; path = "double-conversion/double-conversion.h"; sourceTree = "<group>"; };
-		46EB2E000004F0 /* fast-dtoa.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = "fast-dtoa.cc"; path = "double-conversion/fast-dtoa.cc"; sourceTree = "<group>"; };
+		46EB2E000004F0 /* fast-dtoa.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = "fast-dtoa.cc"; path = "double-conversion/fast-dtoa.cc"; sourceTree = "<group>"; };
 		46EB2E00000500 /* fast-dtoa.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "fast-dtoa.h"; path = "double-conversion/fast-dtoa.h"; sourceTree = "<group>"; };
-		46EB2E00000510 /* fixed-dtoa.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = "fixed-dtoa.cc"; path = "double-conversion/fixed-dtoa.cc"; sourceTree = "<group>"; };
+		46EB2E00000510 /* fixed-dtoa.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = "fixed-dtoa.cc"; path = "double-conversion/fixed-dtoa.cc"; sourceTree = "<group>"; };
 		46EB2E00000520 /* fixed-dtoa.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "fixed-dtoa.h"; path = "double-conversion/fixed-dtoa.h"; sourceTree = "<group>"; };
 		46EB2E00000530 /* ieee.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ieee.h; path = "double-conversion/ieee.h"; sourceTree = "<group>"; };
-		46EB2E00000540 /* strtod.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = strtod.cc; path = "double-conversion/strtod.cc"; sourceTree = "<group>"; };
+		46EB2E00000540 /* strtod.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = strtod.cc; path = "double-conversion/strtod.cc"; sourceTree = "<group>"; };
 		46EB2E00000550 /* strtod.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = strtod.h; path = "double-conversion/strtod.h"; sourceTree = "<group>"; };
 		46EB2E00000560 /* utils.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = utils.h; path = "double-conversion/utils.h"; sourceTree = "<group>"; };
 		46EB2E00000570 /* String.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = String.cpp; path = folly/String.cpp; sourceTree = "<group>"; };
@@ -5504,7 +5515,7 @@
 		46EB2E00001760 /* RNVectorIconsManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNVectorIconsManager.h; path = RNVectorIconsManager/RNVectorIconsManager.h; sourceTree = "<group>"; };
 		46EB2E00001770 /* RNVectorIconsManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNVectorIconsManager.m; path = RNVectorIconsManager/RNVectorIconsManager.m; sourceTree = "<group>"; };
 		46EB2E000017A0 /* RCTAppSetupUtils.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTAppSetupUtils.h; sourceTree = "<group>"; };
-		46EB2E000017B0 /* RCTAppSetupUtils.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTAppSetupUtils.mm; sourceTree = "<group>"; };
+		46EB2E000017B0 /* RCTAppSetupUtils.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTAppSetupUtils.mm; sourceTree = "<group>"; };
 		46EB2E000017D0 /* RCTAssert.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTAssert.h; sourceTree = "<group>"; };
 		46EB2E000017E0 /* RCTAssert.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTAssert.m; sourceTree = "<group>"; };
 		46EB2E000017F0 /* RCTBridge+Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "RCTBridge+Private.h"; sourceTree = "<group>"; };
@@ -5517,7 +5528,7 @@
 		46EB2E00001860 /* RCTBridgeModuleDecorator.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTBridgeModuleDecorator.m; sourceTree = "<group>"; };
 		46EB2E00001870 /* RCTBundleManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTBundleManager.m; sourceTree = "<group>"; };
 		46EB2E00001880 /* RCTBundleURLProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTBundleURLProvider.h; sourceTree = "<group>"; };
-		46EB2E00001890 /* RCTBundleURLProvider.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTBundleURLProvider.mm; sourceTree = "<group>"; };
+		46EB2E00001890 /* RCTBundleURLProvider.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTBundleURLProvider.mm; sourceTree = "<group>"; };
 		46EB2E000018A0 /* RCTCallableJSModules.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTCallableJSModules.m; sourceTree = "<group>"; };
 		46EB2E000018B0 /* RCTComponentEvent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTComponentEvent.h; sourceTree = "<group>"; };
 		46EB2E000018C0 /* RCTComponentEvent.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTComponentEvent.m; sourceTree = "<group>"; };
@@ -5543,7 +5554,7 @@
 		46EB2E00001A00 /* RCTInvalidating.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTInvalidating.h; sourceTree = "<group>"; };
 		46EB2E00001A10 /* RCTJavaScriptExecutor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTJavaScriptExecutor.h; sourceTree = "<group>"; };
 		46EB2E00001A20 /* RCTJavaScriptLoader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTJavaScriptLoader.h; sourceTree = "<group>"; };
-		46EB2E00001A30 /* RCTJavaScriptLoader.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTJavaScriptLoader.mm; sourceTree = "<group>"; };
+		46EB2E00001A30 /* RCTJavaScriptLoader.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTJavaScriptLoader.mm; sourceTree = "<group>"; };
 		46EB2E00001A40 /* RCTJSScriptLoaderModule.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTJSScriptLoaderModule.h; sourceTree = "<group>"; };
 		46EB2E00001A50 /* RCTJSStackFrame.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTJSStackFrame.h; sourceTree = "<group>"; };
 		46EB2E00001A60 /* RCTJSStackFrame.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTJSStackFrame.m; sourceTree = "<group>"; };
@@ -5552,14 +5563,14 @@
 		46EB2E00001A90 /* RCTKeyCommands.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTKeyCommands.h; sourceTree = "<group>"; };
 		46EB2E00001AA0 /* RCTKeyCommands.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTKeyCommands.m; sourceTree = "<group>"; };
 		46EB2E00001AB0 /* RCTLog.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTLog.h; sourceTree = "<group>"; };
-		46EB2E00001AC0 /* RCTLog.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTLog.mm; sourceTree = "<group>"; };
+		46EB2E00001AC0 /* RCTLog.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTLog.mm; sourceTree = "<group>"; };
 		46EB2E00001AD0 /* RCTManagedPointer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTManagedPointer.h; sourceTree = "<group>"; };
-		46EB2E00001AE0 /* RCTManagedPointer.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTManagedPointer.mm; sourceTree = "<group>"; };
+		46EB2E00001AE0 /* RCTManagedPointer.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTManagedPointer.mm; sourceTree = "<group>"; };
 		46EB2E00001AF0 /* RCTMockDef.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTMockDef.h; sourceTree = "<group>"; };
 		46EB2E00001B00 /* RCTModuleData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTModuleData.h; sourceTree = "<group>"; };
-		46EB2E00001B10 /* RCTModuleData.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTModuleData.mm; sourceTree = "<group>"; };
+		46EB2E00001B10 /* RCTModuleData.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTModuleData.mm; sourceTree = "<group>"; };
 		46EB2E00001B20 /* RCTModuleMethod.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTModuleMethod.h; sourceTree = "<group>"; };
-		46EB2E00001B30 /* RCTModuleMethod.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTModuleMethod.mm; sourceTree = "<group>"; };
+		46EB2E00001B30 /* RCTModuleMethod.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTModuleMethod.mm; sourceTree = "<group>"; };
 		46EB2E00001B40 /* RCTModuleRegistry.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTModuleRegistry.m; sourceTree = "<group>"; };
 		46EB2E00001B50 /* RCTMultipartDataTask.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTMultipartDataTask.h; sourceTree = "<group>"; };
 		46EB2E00001B60 /* RCTMultipartDataTask.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTMultipartDataTask.m; sourceTree = "<group>"; };
@@ -5599,50 +5610,50 @@
 		46EB2E00001D80 /* RCTWeakProxy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTWeakProxy.h; sourceTree = "<group>"; };
 		46EB2E00001D90 /* RCTWeakProxy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTWeakProxy.m; sourceTree = "<group>"; };
 		46EB2E00001DB0 /* RCTSurface.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTSurface.h; sourceTree = "<group>"; };
-		46EB2E00001DC0 /* RCTSurface.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTSurface.mm; sourceTree = "<group>"; };
+		46EB2E00001DC0 /* RCTSurface.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTSurface.mm; sourceTree = "<group>"; };
 		46EB2E00001DD0 /* RCTSurfaceDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTSurfaceDelegate.h; sourceTree = "<group>"; };
 		46EB2E00001DE0 /* RCTSurfaceProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTSurfaceProtocol.h; sourceTree = "<group>"; };
 		46EB2E00001DF0 /* RCTSurfaceRootShadowView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTSurfaceRootShadowView.h; sourceTree = "<group>"; };
 		46EB2E00001E00 /* RCTSurfaceRootShadowView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTSurfaceRootShadowView.m; sourceTree = "<group>"; };
 		46EB2E00001E10 /* RCTSurfaceRootShadowViewDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTSurfaceRootShadowViewDelegate.h; sourceTree = "<group>"; };
 		46EB2E00001E20 /* RCTSurfaceRootView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTSurfaceRootView.h; sourceTree = "<group>"; };
-		46EB2E00001E30 /* RCTSurfaceRootView.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTSurfaceRootView.mm; sourceTree = "<group>"; };
+		46EB2E00001E30 /* RCTSurfaceRootView.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTSurfaceRootView.mm; sourceTree = "<group>"; };
 		46EB2E00001E40 /* RCTSurfaceStage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTSurfaceStage.h; sourceTree = "<group>"; };
 		46EB2E00001E50 /* RCTSurfaceStage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTSurfaceStage.m; sourceTree = "<group>"; };
 		46EB2E00001E60 /* RCTSurfaceView+Internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "RCTSurfaceView+Internal.h"; sourceTree = "<group>"; };
 		46EB2E00001E70 /* RCTSurfaceView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTSurfaceView.h; sourceTree = "<group>"; };
-		46EB2E00001E80 /* RCTSurfaceView.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTSurfaceView.mm; sourceTree = "<group>"; };
+		46EB2E00001E80 /* RCTSurfaceView.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTSurfaceView.mm; sourceTree = "<group>"; };
 		46EB2E00001EA0 /* RCTSurfaceHostingProxyRootView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTSurfaceHostingProxyRootView.h; sourceTree = "<group>"; };
-		46EB2E00001EB0 /* RCTSurfaceHostingProxyRootView.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTSurfaceHostingProxyRootView.mm; sourceTree = "<group>"; };
+		46EB2E00001EB0 /* RCTSurfaceHostingProxyRootView.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTSurfaceHostingProxyRootView.mm; sourceTree = "<group>"; };
 		46EB2E00001EC0 /* RCTSurfaceHostingView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTSurfaceHostingView.h; sourceTree = "<group>"; };
-		46EB2E00001ED0 /* RCTSurfaceHostingView.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTSurfaceHostingView.mm; sourceTree = "<group>"; };
+		46EB2E00001ED0 /* RCTSurfaceHostingView.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTSurfaceHostingView.mm; sourceTree = "<group>"; };
 		46EB2E00001EE0 /* RCTSurfaceSizeMeasureMode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTSurfaceSizeMeasureMode.h; sourceTree = "<group>"; };
-		46EB2E00001EF0 /* RCTSurfaceSizeMeasureMode.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTSurfaceSizeMeasureMode.mm; sourceTree = "<group>"; };
+		46EB2E00001EF0 /* RCTSurfaceSizeMeasureMode.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTSurfaceSizeMeasureMode.mm; sourceTree = "<group>"; };
 		46EB2E00001F10 /* JSCExecutorFactory.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = JSCExecutorFactory.h; sourceTree = "<group>"; };
-		46EB2E00001F20 /* JSCExecutorFactory.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = JSCExecutorFactory.mm; sourceTree = "<group>"; };
+		46EB2E00001F20 /* JSCExecutorFactory.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = JSCExecutorFactory.mm; sourceTree = "<group>"; };
 		46EB2E00001F30 /* NSDataBigString.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = NSDataBigString.h; sourceTree = "<group>"; };
-		46EB2E00001F40 /* NSDataBigString.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = NSDataBigString.mm; sourceTree = "<group>"; };
-		46EB2E00001F50 /* RCTCxxBridge.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTCxxBridge.mm; sourceTree = "<group>"; };
+		46EB2E00001F40 /* NSDataBigString.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = NSDataBigString.mm; sourceTree = "<group>"; };
+		46EB2E00001F50 /* RCTCxxBridge.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTCxxBridge.mm; sourceTree = "<group>"; };
 		46EB2E00001F60 /* RCTCxxBridgeDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTCxxBridgeDelegate.h; sourceTree = "<group>"; };
 		46EB2E00001F70 /* RCTJSIExecutorRuntimeInstaller.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTJSIExecutorRuntimeInstaller.h; sourceTree = "<group>"; };
-		46EB2E00001F80 /* RCTJSIExecutorRuntimeInstaller.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTJSIExecutorRuntimeInstaller.mm; sourceTree = "<group>"; };
+		46EB2E00001F80 /* RCTJSIExecutorRuntimeInstaller.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTJSIExecutorRuntimeInstaller.mm; sourceTree = "<group>"; };
 		46EB2E00001F90 /* RCTMessageThread.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTMessageThread.h; sourceTree = "<group>"; };
-		46EB2E00001FA0 /* RCTMessageThread.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTMessageThread.mm; sourceTree = "<group>"; };
+		46EB2E00001FA0 /* RCTMessageThread.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTMessageThread.mm; sourceTree = "<group>"; };
 		46EB2E00001FB0 /* RCTObjcExecutor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTObjcExecutor.h; sourceTree = "<group>"; };
-		46EB2E00001FC0 /* RCTObjcExecutor.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTObjcExecutor.mm; sourceTree = "<group>"; };
+		46EB2E00001FC0 /* RCTObjcExecutor.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTObjcExecutor.mm; sourceTree = "<group>"; };
 		46EB2E00001FE0 /* RCTDefaultCxxLogFunction.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTDefaultCxxLogFunction.h; sourceTree = "<group>"; };
-		46EB2E00001FF0 /* RCTDefaultCxxLogFunction.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTDefaultCxxLogFunction.mm; sourceTree = "<group>"; };
+		46EB2E00001FF0 /* RCTDefaultCxxLogFunction.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTDefaultCxxLogFunction.mm; sourceTree = "<group>"; };
 		46EB2E00002010 /* DispatchMessageQueueThread.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = DispatchMessageQueueThread.h; sourceTree = "<group>"; };
 		46EB2E00002020 /* RCTCxxMethod.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTCxxMethod.h; sourceTree = "<group>"; };
-		46EB2E00002030 /* RCTCxxMethod.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTCxxMethod.mm; sourceTree = "<group>"; };
+		46EB2E00002030 /* RCTCxxMethod.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTCxxMethod.mm; sourceTree = "<group>"; };
 		46EB2E00002040 /* RCTCxxModule.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTCxxModule.h; sourceTree = "<group>"; };
-		46EB2E00002050 /* RCTCxxModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTCxxModule.mm; sourceTree = "<group>"; };
+		46EB2E00002050 /* RCTCxxModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTCxxModule.mm; sourceTree = "<group>"; };
 		46EB2E00002060 /* RCTCxxUtils.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTCxxUtils.h; sourceTree = "<group>"; };
-		46EB2E00002070 /* RCTCxxUtils.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTCxxUtils.mm; sourceTree = "<group>"; };
+		46EB2E00002070 /* RCTCxxUtils.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTCxxUtils.mm; sourceTree = "<group>"; };
 		46EB2E00002080 /* RCTNativeModule.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTNativeModule.h; sourceTree = "<group>"; };
-		46EB2E00002090 /* RCTNativeModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTNativeModule.mm; sourceTree = "<group>"; };
+		46EB2E00002090 /* RCTNativeModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTNativeModule.mm; sourceTree = "<group>"; };
 		46EB2E000020B0 /* RCTFollyConvert.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTFollyConvert.h; sourceTree = "<group>"; };
-		46EB2E000020C0 /* RCTFollyConvert.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTFollyConvert.mm; sourceTree = "<group>"; };
+		46EB2E000020C0 /* RCTFollyConvert.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTFollyConvert.mm; sourceTree = "<group>"; };
 		46EB2E000020E0 /* RCTEventEmitter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTEventEmitter.h; sourceTree = "<group>"; };
 		46EB2E000020F0 /* RCTEventEmitter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTEventEmitter.m; sourceTree = "<group>"; };
 		46EB2E00002100 /* RCTI18nUtil.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTI18nUtil.h; sourceTree = "<group>"; };
@@ -5658,16 +5669,16 @@
 		46EB2E000021A0 /* RCTUIManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTUIManager.h; sourceTree = "<group>"; };
 		46EB2E000021B0 /* RCTUIManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTUIManager.m; sourceTree = "<group>"; };
 		46EB2E000021C0 /* RCTUIManagerObserverCoordinator.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTUIManagerObserverCoordinator.h; sourceTree = "<group>"; };
-		46EB2E000021D0 /* RCTUIManagerObserverCoordinator.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTUIManagerObserverCoordinator.mm; sourceTree = "<group>"; };
+		46EB2E000021D0 /* RCTUIManagerObserverCoordinator.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTUIManagerObserverCoordinator.mm; sourceTree = "<group>"; };
 		46EB2E000021E0 /* RCTUIManagerUtils.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTUIManagerUtils.h; sourceTree = "<group>"; };
 		46EB2E000021F0 /* RCTUIManagerUtils.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTUIManagerUtils.m; sourceTree = "<group>"; };
 		46EB2E00002210 /* RCTMacros.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTMacros.h; sourceTree = "<group>"; };
 		46EB2E00002220 /* RCTProfile.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTProfile.h; sourceTree = "<group>"; };
 		46EB2E00002230 /* RCTProfile.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTProfile.m; sourceTree = "<group>"; };
-		46EB2E00002240 /* RCTProfileTrampoline-arm.S */ = {isa = PBXFileReference; includeInIndex = 1; path = "RCTProfileTrampoline-arm.S"; sourceTree = "<group>"; };
-		46EB2E00002250 /* RCTProfileTrampoline-arm64.S */ = {isa = PBXFileReference; includeInIndex = 1; path = "RCTProfileTrampoline-arm64.S"; sourceTree = "<group>"; };
-		46EB2E00002260 /* RCTProfileTrampoline-i386.S */ = {isa = PBXFileReference; includeInIndex = 1; path = "RCTProfileTrampoline-i386.S"; sourceTree = "<group>"; };
-		46EB2E00002270 /* RCTProfileTrampoline-x86_64.S */ = {isa = PBXFileReference; includeInIndex = 1; path = "RCTProfileTrampoline-x86_64.S"; sourceTree = "<group>"; };
+		46EB2E00002240 /* RCTProfileTrampoline-arm.S */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.asm; path = "RCTProfileTrampoline-arm.S"; sourceTree = "<group>"; };
+		46EB2E00002250 /* RCTProfileTrampoline-arm64.S */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.asm; path = "RCTProfileTrampoline-arm64.S"; sourceTree = "<group>"; };
+		46EB2E00002260 /* RCTProfileTrampoline-i386.S */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.asm; path = "RCTProfileTrampoline-i386.S"; sourceTree = "<group>"; };
+		46EB2E00002270 /* RCTProfileTrampoline-x86_64.S */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.asm; path = "RCTProfileTrampoline-x86_64.S"; sourceTree = "<group>"; };
 		46EB2E00002290 /* RCTUIUtils.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTUIUtils.h; sourceTree = "<group>"; };
 		46EB2E000022A0 /* RCTUIUtils.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTUIUtils.m; sourceTree = "<group>"; };
 		46EB2E000022C0 /* RCTActivityIndicatorView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTActivityIndicatorView.h; sourceTree = "<group>"; };
@@ -5691,7 +5702,7 @@
 		46EB2E000023E0 /* RCTDatePickerManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTDatePickerManager.h; sourceTree = "<group>"; };
 		46EB2E000023F0 /* RCTDatePickerManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTDatePickerManager.m; sourceTree = "<group>"; };
 		46EB2E00002400 /* RCTFont.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTFont.h; sourceTree = "<group>"; };
-		46EB2E00002410 /* RCTFont.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTFont.mm; sourceTree = "<group>"; };
+		46EB2E00002410 /* RCTFont.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTFont.mm; sourceTree = "<group>"; };
 		46EB2E00002420 /* RCTLayout.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTLayout.h; sourceTree = "<group>"; };
 		46EB2E00002430 /* RCTLayout.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTLayout.m; sourceTree = "<group>"; };
 		46EB2E00002440 /* RCTMaskedView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTMaskedView.h; sourceTree = "<group>"; };
@@ -5800,13 +5811,13 @@
 		46EB2E00002B10 /* RCTDevLoadingViewSetEnabled.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTDevLoadingViewSetEnabled.h; sourceTree = "<group>"; };
 		46EB2E00002B20 /* RCTDevLoadingViewSetEnabled.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTDevLoadingViewSetEnabled.m; sourceTree = "<group>"; };
 		46EB2E00002B30 /* RCTInspectorDevServerHelper.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTInspectorDevServerHelper.h; sourceTree = "<group>"; };
-		46EB2E00002B40 /* RCTInspectorDevServerHelper.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTInspectorDevServerHelper.mm; sourceTree = "<group>"; };
+		46EB2E00002B40 /* RCTInspectorDevServerHelper.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTInspectorDevServerHelper.mm; sourceTree = "<group>"; };
 		46EB2E00002B50 /* RCTPackagerClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTPackagerClient.h; sourceTree = "<group>"; };
 		46EB2E00002B60 /* RCTPackagerClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTPackagerClient.m; sourceTree = "<group>"; };
 		46EB2E00002B70 /* RCTPackagerConnection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTPackagerConnection.h; sourceTree = "<group>"; };
-		46EB2E00002B80 /* RCTPackagerConnection.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTPackagerConnection.mm; sourceTree = "<group>"; };
+		46EB2E00002B80 /* RCTPackagerConnection.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTPackagerConnection.mm; sourceTree = "<group>"; };
 		46EB2E00002BA0 /* RCTInspector.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTInspector.h; sourceTree = "<group>"; };
-		46EB2E00002BB0 /* RCTInspector.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTInspector.mm; sourceTree = "<group>"; };
+		46EB2E00002BB0 /* RCTInspector.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTInspector.mm; sourceTree = "<group>"; };
 		46EB2E00002BC0 /* RCTInspectorPackagerConnection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTInspectorPackagerConnection.h; sourceTree = "<group>"; };
 		46EB2E00002BD0 /* RCTInspectorPackagerConnection.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTInspectorPackagerConnection.m; sourceTree = "<group>"; };
 		46EB2E00002C00 /* RCTAnimationDriver.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTAnimationDriver.h; sourceTree = "<group>"; };
@@ -5993,7 +6004,7 @@
 		46EB2E00003890 /* Yoga.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; path = Yoga.cpp; sourceTree = "<group>"; };
 		46EB2E000038A0 /* Yoga.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = Yoga.h; sourceTree = "<group>"; };
 		46EB2E000038B0 /* Yoga-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Yoga-umbrella.h"; sourceTree = "<group>"; };
-		46EB2E000038C0 /* format.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = format.cc; path = src/format.cc; sourceTree = "<group>"; };
+		46EB2E000038C0 /* format.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = format.cc; path = src/format.cc; sourceTree = "<group>"; };
 		46EB2E000038D0 /* chrono.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = chrono.h; path = include/fmt/chrono.h; sourceTree = "<group>"; };
 		46EB2E000038E0 /* color.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = color.h; path = include/fmt/color.h; sourceTree = "<group>"; };
 		46EB2E000038F0 /* compile.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = compile.h; path = include/fmt/compile.h; sourceTree = "<group>"; };
@@ -6011,13 +6022,13 @@
 		46EB2E000039B0 /* raw_logging.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = raw_logging.h; path = src/glog/raw_logging.h; sourceTree = "<group>"; };
 		46EB2E000039C0 /* stl_logging.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = stl_logging.h; path = src/glog/stl_logging.h; sourceTree = "<group>"; };
 		46EB2E000039D0 /* vlog_is_on.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = vlog_is_on.h; path = src/glog/vlog_is_on.h; sourceTree = "<group>"; };
-		46EB2E000039E0 /* demangle.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = demangle.cc; path = src/demangle.cc; sourceTree = "<group>"; };
-		46EB2E000039F0 /* logging.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = logging.cc; path = src/logging.cc; sourceTree = "<group>"; };
-		46EB2E00003A00 /* raw_logging.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = raw_logging.cc; path = src/raw_logging.cc; sourceTree = "<group>"; };
-		46EB2E00003A10 /* signalhandler.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = signalhandler.cc; path = src/signalhandler.cc; sourceTree = "<group>"; };
-		46EB2E00003A20 /* symbolize.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = symbolize.cc; path = src/symbolize.cc; sourceTree = "<group>"; };
-		46EB2E00003A30 /* utilities.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = utilities.cc; path = src/utilities.cc; sourceTree = "<group>"; };
-		46EB2E00003A40 /* vlog_is_on.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = vlog_is_on.cc; path = src/vlog_is_on.cc; sourceTree = "<group>"; };
+		46EB2E000039E0 /* demangle.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = demangle.cc; path = src/demangle.cc; sourceTree = "<group>"; };
+		46EB2E000039F0 /* logging.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = logging.cc; path = src/logging.cc; sourceTree = "<group>"; };
+		46EB2E00003A00 /* raw_logging.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = raw_logging.cc; path = src/raw_logging.cc; sourceTree = "<group>"; };
+		46EB2E00003A10 /* signalhandler.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = signalhandler.cc; path = src/signalhandler.cc; sourceTree = "<group>"; };
+		46EB2E00003A20 /* symbolize.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = symbolize.cc; path = src/symbolize.cc; sourceTree = "<group>"; };
+		46EB2E00003A30 /* utilities.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = utilities.cc; path = src/utilities.cc; sourceTree = "<group>"; };
+		46EB2E00003A40 /* vlog_is_on.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = vlog_is_on.cc; path = src/vlog_is_on.cc; sourceTree = "<group>"; };
 		46EB2E00003A50 /* BVLinearGradient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = BVLinearGradient.h; path = ios/BVLinearGradient.h; sourceTree = "<group>"; };
 		46EB2E00003A60 /* BVLinearGradient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = BVLinearGradient.m; path = ios/BVLinearGradient.m; sourceTree = "<group>"; };
 		46EB2E00003A70 /* BVLinearGradientLayer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = BVLinearGradientLayer.h; path = ios/BVLinearGradientLayer.h; sourceTree = "<group>"; };
@@ -6068,10 +6079,10 @@
 		46EB2E00003D40 /* Log.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = Log.cpp; path = xplat/Flipper/Log.cpp; sourceTree = "<group>"; };
 		46EB2E00003D50 /* Log.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Log.h; path = xplat/Flipper/Log.h; sourceTree = "<group>"; };
 		46EB2E00003D60 /* CallstackHelper.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = CallstackHelper.h; path = xplat/Flipper/utils/CallstackHelper.h; sourceTree = "<group>"; };
-		46EB2E00003D70 /* ontop_combined_all_macho_gas.S */ = {isa = PBXFileReference; includeInIndex = 1; name = ontop_combined_all_macho_gas.S; path = asm/ontop_combined_all_macho_gas.S; sourceTree = "<group>"; };
-		46EB2E00003D80 /* make_combined_all_macho_gas.S */ = {isa = PBXFileReference; includeInIndex = 1; name = make_combined_all_macho_gas.S; path = asm/make_combined_all_macho_gas.S; sourceTree = "<group>"; };
-		46EB2E00003D90 /* jump_combined_all_macho_gas.S */ = {isa = PBXFileReference; includeInIndex = 1; name = jump_combined_all_macho_gas.S; path = asm/jump_combined_all_macho_gas.S; sourceTree = "<group>"; };
-		46EB2E00003DA0 /* format.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = format.cc; path = src/format.cc; sourceTree = "<group>"; };
+		46EB2E00003D70 /* ontop_combined_all_macho_gas.S */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.asm; name = ontop_combined_all_macho_gas.S; path = asm/ontop_combined_all_macho_gas.S; sourceTree = "<group>"; };
+		46EB2E00003D80 /* make_combined_all_macho_gas.S */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.asm; name = make_combined_all_macho_gas.S; path = asm/make_combined_all_macho_gas.S; sourceTree = "<group>"; };
+		46EB2E00003D90 /* jump_combined_all_macho_gas.S */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.asm; name = jump_combined_all_macho_gas.S; path = asm/jump_combined_all_macho_gas.S; sourceTree = "<group>"; };
+		46EB2E00003DA0 /* format.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = format.cc; path = src/format.cc; sourceTree = "<group>"; };
 		46EB2E00003DB0 /* args.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = args.h; path = include/fmt/args.h; sourceTree = "<group>"; };
 		46EB2E00003DC0 /* chrono.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = chrono.h; path = include/fmt/chrono.h; sourceTree = "<group>"; };
 		46EB2E00003DD0 /* color.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = color.h; path = include/fmt/color.h; sourceTree = "<group>"; };
@@ -7114,53 +7125,53 @@
 		46EB2E00007EA0 /* RSocketStats.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RSocketStats.h; path = rsocket/RSocketStats.h; sourceTree = "<group>"; };
 		46EB2E00007EC0 /* FlipperClient+Testing.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "FlipperClient+Testing.h"; path = "iOS/FlipperKit/FlipperClient+Testing.h"; sourceTree = "<group>"; };
 		46EB2E00007ED0 /* FlipperClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperClient.h; path = iOS/FlipperKit/FlipperClient.h; sourceTree = "<group>"; };
-		46EB2E00007EE0 /* FlipperClient.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = FlipperClient.mm; path = iOS/FlipperKit/FlipperClient.mm; sourceTree = "<group>"; };
+		46EB2E00007EE0 /* FlipperClient.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = FlipperClient.mm; path = iOS/FlipperKit/FlipperClient.mm; sourceTree = "<group>"; };
 		46EB2E00007EF0 /* FlipperConnection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperConnection.h; path = iOS/FlipperKit/FlipperConnection.h; sourceTree = "<group>"; };
 		46EB2E00007F00 /* FlipperDiagnosticsViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperDiagnosticsViewController.h; path = iOS/FlipperKit/FlipperDiagnosticsViewController.h; sourceTree = "<group>"; };
 		46EB2E00007F10 /* FlipperDiagnosticsViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FlipperDiagnosticsViewController.m; path = iOS/FlipperKit/FlipperDiagnosticsViewController.m; sourceTree = "<group>"; };
 		46EB2E00007F20 /* FlipperKitCertificateProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperKitCertificateProvider.h; path = iOS/FlipperKit/FlipperKitCertificateProvider.h; sourceTree = "<group>"; };
 		46EB2E00007F30 /* FlipperPlatformWebSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperPlatformWebSocket.h; path = iOS/FlipperKit/FlipperPlatformWebSocket.h; sourceTree = "<group>"; };
-		46EB2E00007F40 /* FlipperPlatformWebSocket.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = FlipperPlatformWebSocket.mm; path = iOS/FlipperKit/FlipperPlatformWebSocket.mm; sourceTree = "<group>"; };
+		46EB2E00007F40 /* FlipperPlatformWebSocket.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = FlipperPlatformWebSocket.mm; path = iOS/FlipperKit/FlipperPlatformWebSocket.mm; sourceTree = "<group>"; };
 		46EB2E00007F50 /* FlipperPlugin.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperPlugin.h; path = iOS/FlipperKit/FlipperPlugin.h; sourceTree = "<group>"; };
 		46EB2E00007F60 /* FlipperResponder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperResponder.h; path = iOS/FlipperKit/FlipperResponder.h; sourceTree = "<group>"; };
 		46EB2E00007F70 /* FlipperStateUpdateListener.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperStateUpdateListener.h; path = iOS/FlipperKit/FlipperStateUpdateListener.h; sourceTree = "<group>"; };
 		46EB2E00007F80 /* FlipperUtil.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FlipperUtil.m; path = iOS/FlipperKit/FlipperUtil.m; sourceTree = "<group>"; };
 		46EB2E00007F90 /* FlipperWebSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperWebSocket.h; path = iOS/FlipperKit/FlipperWebSocket.h; sourceTree = "<group>"; };
-		46EB2E00007FA0 /* FlipperWebSocket.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = FlipperWebSocket.mm; path = iOS/FlipperKit/FlipperWebSocket.mm; sourceTree = "<group>"; };
+		46EB2E00007FA0 /* FlipperWebSocket.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = FlipperWebSocket.mm; path = iOS/FlipperKit/FlipperWebSocket.mm; sourceTree = "<group>"; };
 		46EB2E00007FB0 /* SKEnvironmentVariables.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKEnvironmentVariables.h; path = iOS/FlipperKit/SKEnvironmentVariables.h; sourceTree = "<group>"; };
 		46EB2E00007FC0 /* SKEnvironmentVariables.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SKEnvironmentVariables.m; path = iOS/FlipperKit/SKEnvironmentVariables.m; sourceTree = "<group>"; };
 		46EB2E00007FD0 /* SKMacros.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKMacros.h; path = iOS/FlipperKit/SKMacros.h; sourceTree = "<group>"; };
 		46EB2E00007FE0 /* SKStateUpdateCPPWrapper.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKStateUpdateCPPWrapper.h; path = iOS/FlipperKit/SKStateUpdateCPPWrapper.h; sourceTree = "<group>"; };
-		46EB2E00007FF0 /* SKStateUpdateCPPWrapper.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = SKStateUpdateCPPWrapper.mm; path = iOS/FlipperKit/SKStateUpdateCPPWrapper.mm; sourceTree = "<group>"; };
+		46EB2E00007FF0 /* SKStateUpdateCPPWrapper.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = SKStateUpdateCPPWrapper.mm; path = iOS/FlipperKit/SKStateUpdateCPPWrapper.mm; sourceTree = "<group>"; };
 		46EB2E00008000 /* FlipperCppBridgingConnection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperCppBridgingConnection.h; path = iOS/FlipperKit/CppBridge/FlipperCppBridgingConnection.h; sourceTree = "<group>"; };
-		46EB2E00008010 /* FlipperCppBridgingConnection.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = FlipperCppBridgingConnection.mm; path = iOS/FlipperKit/CppBridge/FlipperCppBridgingConnection.mm; sourceTree = "<group>"; };
+		46EB2E00008010 /* FlipperCppBridgingConnection.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = FlipperCppBridgingConnection.mm; path = iOS/FlipperKit/CppBridge/FlipperCppBridgingConnection.mm; sourceTree = "<group>"; };
 		46EB2E00008020 /* FlipperCppBridgingResponder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperCppBridgingResponder.h; path = iOS/FlipperKit/CppBridge/FlipperCppBridgingResponder.h; sourceTree = "<group>"; };
-		46EB2E00008030 /* FlipperCppBridgingResponder.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = FlipperCppBridgingResponder.mm; path = iOS/FlipperKit/CppBridge/FlipperCppBridgingResponder.mm; sourceTree = "<group>"; };
+		46EB2E00008030 /* FlipperCppBridgingResponder.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = FlipperCppBridgingResponder.mm; path = iOS/FlipperKit/CppBridge/FlipperCppBridgingResponder.mm; sourceTree = "<group>"; };
 		46EB2E00008040 /* FlipperCppWrapperPlugin.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperCppWrapperPlugin.h; path = iOS/FlipperKit/CppBridge/FlipperCppWrapperPlugin.h; sourceTree = "<group>"; };
 		46EB2E00008070 /* FBCxxFollyDynamicConvert.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBCxxFollyDynamicConvert.h; path = iOS/FlipperKit/FBCxxFollyDynamicConvert/FBCxxFollyDynamicConvert.h; sourceTree = "<group>"; };
-		46EB2E00008080 /* FBCxxFollyDynamicConvert.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = FBCxxFollyDynamicConvert.mm; path = iOS/FlipperKit/FBCxxFollyDynamicConvert/FBCxxFollyDynamicConvert.mm; sourceTree = "<group>"; };
+		46EB2E00008080 /* FBCxxFollyDynamicConvert.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = FBCxxFollyDynamicConvert.mm; path = iOS/FlipperKit/FBCxxFollyDynamicConvert/FBCxxFollyDynamicConvert.mm; sourceTree = "<group>"; };
 		46EB2E000080A0 /* FBDefines.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBDefines.h; path = iOS/FBDefines/FBDefines.h; sourceTree = "<group>"; };
 		46EB2E000080C0 /* FKPortForwardingCommon.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FKPortForwardingCommon.h; path = iOS/FlipperKit/FKPortForwarding/FKPortForwardingCommon.h; sourceTree = "<group>"; };
 		46EB2E000080D0 /* FKPortForwardingServer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FKPortForwardingServer.h; path = iOS/FlipperKit/FKPortForwarding/FKPortForwardingServer.h; sourceTree = "<group>"; };
 		46EB2E000080E0 /* FKPortForwardingServer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FKPortForwardingServer.m; path = iOS/FlipperKit/FKPortForwarding/FKPortForwardingServer.m; sourceTree = "<group>"; };
 		46EB2E00008100 /* SKHighlightOverlay.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKHighlightOverlay.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitHighlightOverlay/SKHighlightOverlay.h; sourceTree = "<group>"; };
-		46EB2E00008110 /* SKHighlightOverlay.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = SKHighlightOverlay.mm; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitHighlightOverlay/SKHighlightOverlay.mm; sourceTree = "<group>"; };
+		46EB2E00008110 /* SKHighlightOverlay.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = SKHighlightOverlay.mm; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitHighlightOverlay/SKHighlightOverlay.mm; sourceTree = "<group>"; };
 		46EB2E00008130 /* FlipperKitLayoutDescriptorMapperProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperKitLayoutDescriptorMapperProtocol.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/FlipperKitLayoutDescriptorMapperProtocol.h; sourceTree = "<group>"; };
 		46EB2E00008140 /* SKHiddenWindow.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKHiddenWindow.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKHiddenWindow.h; sourceTree = "<group>"; };
 		46EB2E00008150 /* SKHiddenWindow.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SKHiddenWindow.m; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKHiddenWindow.m; sourceTree = "<group>"; };
 		46EB2E00008160 /* SKInvalidation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKInvalidation.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKInvalidation.h; sourceTree = "<group>"; };
 		46EB2E00008170 /* SKInvalidation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SKInvalidation.m; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKInvalidation.m; sourceTree = "<group>"; };
 		46EB2E00008180 /* SKNamed.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKNamed.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKNamed.h; sourceTree = "<group>"; };
-		46EB2E00008190 /* SKNamed.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = SKNamed.mm; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKNamed.mm; sourceTree = "<group>"; };
+		46EB2E00008190 /* SKNamed.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = SKNamed.mm; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKNamed.mm; sourceTree = "<group>"; };
 		46EB2E000081A0 /* SKNodeDescriptor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKNodeDescriptor.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKNodeDescriptor.h; sourceTree = "<group>"; };
-		46EB2E000081B0 /* SKNodeDescriptor.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = SKNodeDescriptor.mm; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKNodeDescriptor.mm; sourceTree = "<group>"; };
+		46EB2E000081B0 /* SKNodeDescriptor.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = SKNodeDescriptor.mm; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKNodeDescriptor.mm; sourceTree = "<group>"; };
 		46EB2E000081C0 /* SKObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKObject.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKObject.h; sourceTree = "<group>"; };
-		46EB2E000081D0 /* SKObject.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = SKObject.mm; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKObject.mm; sourceTree = "<group>"; };
+		46EB2E000081D0 /* SKObject.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = SKObject.mm; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKObject.mm; sourceTree = "<group>"; };
 		46EB2E000081E0 /* SKObjectHash.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKObjectHash.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKObjectHash.h; sourceTree = "<group>"; };
 		46EB2E000081F0 /* SKSearchResultNode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKSearchResultNode.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKSearchResultNode.h; sourceTree = "<group>"; };
 		46EB2E00008200 /* SKSearchResultNode.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SKSearchResultNode.m; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKSearchResultNode.m; sourceTree = "<group>"; };
 		46EB2E00008210 /* SKSwizzle.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKSwizzle.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKSwizzle.h; sourceTree = "<group>"; };
-		46EB2E00008220 /* SKSwizzle.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = SKSwizzle.mm; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKSwizzle.mm; sourceTree = "<group>"; };
+		46EB2E00008220 /* SKSwizzle.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = SKSwizzle.mm; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKSwizzle.mm; sourceTree = "<group>"; };
 		46EB2E00008230 /* SKTapListener.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKTapListener.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKTapListener.h; sourceTree = "<group>"; };
 		46EB2E00008240 /* SKTapListenerImpl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKTapListenerImpl.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKTapListenerImpl.h; sourceTree = "<group>"; };
 		46EB2E00008250 /* SKTapListenerImpl.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SKTapListenerImpl.m; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKTapListenerImpl.m; sourceTree = "<group>"; };
@@ -7168,31 +7179,31 @@
 		46EB2E00008270 /* SKTouch.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SKTouch.m; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKTouch.m; sourceTree = "<group>"; };
 		46EB2E00008280 /* SKYogaKitHelper.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKYogaKitHelper.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/SKYogaKitHelper.h; sourceTree = "<group>"; };
 		46EB2E00008290 /* UICollectionView+SKInvalidation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UICollectionView+SKInvalidation.h"; path = "iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/UICollectionView+SKInvalidation.h"; sourceTree = "<group>"; };
-		46EB2E000082A0 /* UICollectionView+SKInvalidation.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = "UICollectionView+SKInvalidation.mm"; path = "iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/UICollectionView+SKInvalidation.mm"; sourceTree = "<group>"; };
+		46EB2E000082A0 /* UICollectionView+SKInvalidation.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = "UICollectionView+SKInvalidation.mm"; path = "iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/UICollectionView+SKInvalidation.mm"; sourceTree = "<group>"; };
 		46EB2E000082B0 /* UIColor+SKSonarValueCoder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIColor+SKSonarValueCoder.h"; path = "iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/UIColor+SKSonarValueCoder.h"; sourceTree = "<group>"; };
-		46EB2E000082C0 /* UIColor+SKSonarValueCoder.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = "UIColor+SKSonarValueCoder.mm"; path = "iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/UIColor+SKSonarValueCoder.mm"; sourceTree = "<group>"; };
+		46EB2E000082C0 /* UIColor+SKSonarValueCoder.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = "UIColor+SKSonarValueCoder.mm"; path = "iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/UIColor+SKSonarValueCoder.mm"; sourceTree = "<group>"; };
 		46EB2E000082D0 /* UIView+SKInvalidation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIView+SKInvalidation.h"; path = "iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/UIView+SKInvalidation.h"; sourceTree = "<group>"; };
-		46EB2E000082E0 /* UIView+SKInvalidation.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = "UIView+SKInvalidation.mm"; path = "iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/UIView+SKInvalidation.mm"; sourceTree = "<group>"; };
+		46EB2E000082E0 /* UIView+SKInvalidation.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = "UIView+SKInvalidation.mm"; path = "iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutHelpers/FlipperKitLayoutHelpers/UIView+SKInvalidation.mm"; sourceTree = "<group>"; };
 		46EB2E00008300 /* SKApplicationDescriptor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKApplicationDescriptor.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutIOSDescriptors/FlipperKitLayoutIOSDescriptors/SKApplicationDescriptor.h; sourceTree = "<group>"; };
 		46EB2E00008310 /* SKApplicationDescriptor.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SKApplicationDescriptor.m; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutIOSDescriptors/FlipperKitLayoutIOSDescriptors/SKApplicationDescriptor.m; sourceTree = "<group>"; };
 		46EB2E00008320 /* SKButtonDescriptor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKButtonDescriptor.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutIOSDescriptors/FlipperKitLayoutIOSDescriptors/SKButtonDescriptor.h; sourceTree = "<group>"; };
-		46EB2E00008330 /* SKButtonDescriptor.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = SKButtonDescriptor.mm; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutIOSDescriptors/FlipperKitLayoutIOSDescriptors/SKButtonDescriptor.mm; sourceTree = "<group>"; };
+		46EB2E00008330 /* SKButtonDescriptor.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = SKButtonDescriptor.mm; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutIOSDescriptors/FlipperKitLayoutIOSDescriptors/SKButtonDescriptor.mm; sourceTree = "<group>"; };
 		46EB2E00008340 /* SKScrollViewDescriptor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKScrollViewDescriptor.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutIOSDescriptors/FlipperKitLayoutIOSDescriptors/SKScrollViewDescriptor.h; sourceTree = "<group>"; };
 		46EB2E00008350 /* SKScrollViewDescriptor.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SKScrollViewDescriptor.m; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutIOSDescriptors/FlipperKitLayoutIOSDescriptors/SKScrollViewDescriptor.m; sourceTree = "<group>"; };
 		46EB2E00008360 /* SKViewControllerDescriptor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKViewControllerDescriptor.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutIOSDescriptors/FlipperKitLayoutIOSDescriptors/SKViewControllerDescriptor.h; sourceTree = "<group>"; };
 		46EB2E00008370 /* SKViewControllerDescriptor.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SKViewControllerDescriptor.m; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutIOSDescriptors/FlipperKitLayoutIOSDescriptors/SKViewControllerDescriptor.m; sourceTree = "<group>"; };
 		46EB2E00008380 /* SKViewDescriptor.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKViewDescriptor.h; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutIOSDescriptors/FlipperKitLayoutIOSDescriptors/SKViewDescriptor.h; sourceTree = "<group>"; };
-		46EB2E00008390 /* SKViewDescriptor.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = SKViewDescriptor.mm; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutIOSDescriptors/FlipperKitLayoutIOSDescriptors/SKViewDescriptor.mm; sourceTree = "<group>"; };
+		46EB2E00008390 /* SKViewDescriptor.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = SKViewDescriptor.mm; path = iOS/Plugins/FlipperKitPluginUtils/FlipperKitLayoutIOSDescriptors/FlipperKitLayoutIOSDescriptors/SKViewDescriptor.mm; sourceTree = "<group>"; };
 		46EB2E000083B0 /* FlipperKitLayoutPlugin.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperKitLayoutPlugin.h; path = iOS/Plugins/FlipperKitLayoutPlugin/FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h; sourceTree = "<group>"; };
-		46EB2E000083C0 /* FlipperKitLayoutPlugin.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = FlipperKitLayoutPlugin.mm; path = iOS/Plugins/FlipperKitLayoutPlugin/FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.mm; sourceTree = "<group>"; };
+		46EB2E000083C0 /* FlipperKitLayoutPlugin.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = FlipperKitLayoutPlugin.mm; path = iOS/Plugins/FlipperKitLayoutPlugin/FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.mm; sourceTree = "<group>"; };
 		46EB2E000083D0 /* SKDescriptorMapper.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKDescriptorMapper.h; path = iOS/Plugins/FlipperKitLayoutPlugin/FlipperKitLayoutPlugin/SKDescriptorMapper.h; sourceTree = "<group>"; };
-		46EB2E000083E0 /* SKDescriptorMapper.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = SKDescriptorMapper.mm; path = iOS/Plugins/FlipperKitLayoutPlugin/FlipperKitLayoutPlugin/SKDescriptorMapper.mm; sourceTree = "<group>"; };
+		46EB2E000083E0 /* SKDescriptorMapper.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = SKDescriptorMapper.mm; path = iOS/Plugins/FlipperKitLayoutPlugin/FlipperKitLayoutPlugin/SKDescriptorMapper.mm; sourceTree = "<group>"; };
 		46EB2E00008400 /* FKTextSearchable.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FKTextSearchable.h; path = iOS/Plugins/FlipperKitLayoutPlugin/FlipperKitLayoutTextSearchable/FKTextSearchable.h; sourceTree = "<group>"; };
 		46EB2E00008420 /* FlipperKitNetworkPlugin.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FlipperKitNetworkPlugin.h; path = iOS/Plugins/FlipperKitNetworkPlugin/FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.h; sourceTree = "<group>"; };
-		46EB2E00008430 /* FlipperKitNetworkPlugin.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = FlipperKitNetworkPlugin.mm; path = iOS/Plugins/FlipperKitNetworkPlugin/FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.mm; sourceTree = "<group>"; };
+		46EB2E00008430 /* FlipperKitNetworkPlugin.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = FlipperKitNetworkPlugin.mm; path = iOS/Plugins/FlipperKitNetworkPlugin/FlipperKitNetworkPlugin/FlipperKitNetworkPlugin.mm; sourceTree = "<group>"; };
 		46EB2E00008440 /* SKBufferingPlugin+CPPInitialization.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "SKBufferingPlugin+CPPInitialization.h"; path = "iOS/Plugins/FlipperKitNetworkPlugin/FlipperKitNetworkPlugin/SKBufferingPlugin+CPPInitialization.h"; sourceTree = "<group>"; };
 		46EB2E00008450 /* SKBufferingPlugin.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKBufferingPlugin.h; path = iOS/Plugins/FlipperKitNetworkPlugin/FlipperKitNetworkPlugin/SKBufferingPlugin.h; sourceTree = "<group>"; };
-		46EB2E00008460 /* SKBufferingPlugin.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = SKBufferingPlugin.mm; path = iOS/Plugins/FlipperKitNetworkPlugin/FlipperKitNetworkPlugin/SKBufferingPlugin.mm; sourceTree = "<group>"; };
+		46EB2E00008460 /* SKBufferingPlugin.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = SKBufferingPlugin.mm; path = iOS/Plugins/FlipperKitNetworkPlugin/FlipperKitNetworkPlugin/SKBufferingPlugin.mm; sourceTree = "<group>"; };
 		46EB2E00008470 /* SKDispatchQueue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKDispatchQueue.h; path = iOS/Plugins/FlipperKitNetworkPlugin/FlipperKitNetworkPlugin/SKDispatchQueue.h; sourceTree = "<group>"; };
 		46EB2E00008480 /* SKNetworkReporter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKNetworkReporter.h; path = iOS/Plugins/FlipperKitNetworkPlugin/FlipperKitNetworkPlugin/SKNetworkReporter.h; sourceTree = "<group>"; };
 		46EB2E00008490 /* SKRequestInfo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKRequestInfo.h; path = iOS/Plugins/FlipperKitNetworkPlugin/FlipperKitNetworkPlugin/SKRequestInfo.h; sourceTree = "<group>"; };
@@ -7207,20 +7218,20 @@
 		46EB2E00008540 /* FKUserDefaultsSwizzleUtility.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FKUserDefaultsSwizzleUtility.h; path = iOS/Plugins/FlipperKitUserDefaultsPlugin/FKUserDefaultsSwizzleUtility.h; sourceTree = "<group>"; };
 		46EB2E00008550 /* FKUserDefaultsSwizzleUtility.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FKUserDefaultsSwizzleUtility.m; path = iOS/Plugins/FlipperKitUserDefaultsPlugin/FKUserDefaultsSwizzleUtility.m; sourceTree = "<group>"; };
 		46EB2E00008570 /* FLEXNetworkObserver.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FLEXNetworkObserver.h; path = iOS/Plugins/FlipperKitNetworkPlugin/SKIOSNetworkPlugin/FLEXNetworkLib/FLEXNetworkObserver.h; sourceTree = "<group>"; };
-		46EB2E00008580 /* FLEXNetworkObserver.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = FLEXNetworkObserver.mm; path = iOS/Plugins/FlipperKitNetworkPlugin/SKIOSNetworkPlugin/FLEXNetworkLib/FLEXNetworkObserver.mm; sourceTree = "<group>"; };
+		46EB2E00008580 /* FLEXNetworkObserver.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = FLEXNetworkObserver.mm; path = iOS/Plugins/FlipperKitNetworkPlugin/SKIOSNetworkPlugin/FLEXNetworkLib/FLEXNetworkObserver.mm; sourceTree = "<group>"; };
 		46EB2E00008590 /* FLEXNetworkRecorder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FLEXNetworkRecorder.h; path = iOS/Plugins/FlipperKitNetworkPlugin/SKIOSNetworkPlugin/FLEXNetworkLib/FLEXNetworkRecorder.h; sourceTree = "<group>"; };
-		46EB2E000085A0 /* FLEXNetworkRecorder.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = FLEXNetworkRecorder.mm; path = iOS/Plugins/FlipperKitNetworkPlugin/SKIOSNetworkPlugin/FLEXNetworkLib/FLEXNetworkRecorder.mm; sourceTree = "<group>"; };
+		46EB2E000085A0 /* FLEXNetworkRecorder.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = FLEXNetworkRecorder.mm; path = iOS/Plugins/FlipperKitNetworkPlugin/SKIOSNetworkPlugin/FLEXNetworkLib/FLEXNetworkRecorder.mm; sourceTree = "<group>"; };
 		46EB2E000085B0 /* FLEXNetworkTransaction.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FLEXNetworkTransaction.h; path = iOS/Plugins/FlipperKitNetworkPlugin/SKIOSNetworkPlugin/FLEXNetworkLib/FLEXNetworkTransaction.h; sourceTree = "<group>"; };
 		46EB2E000085C0 /* FLEXNetworkTransaction.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLEXNetworkTransaction.m; path = iOS/Plugins/FlipperKitNetworkPlugin/SKIOSNetworkPlugin/FLEXNetworkLib/FLEXNetworkTransaction.m; sourceTree = "<group>"; };
 		46EB2E000085D0 /* FLEXUtility.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FLEXUtility.h; path = iOS/Plugins/FlipperKitNetworkPlugin/SKIOSNetworkPlugin/FLEXNetworkLib/FLEXUtility.h; sourceTree = "<group>"; };
-		46EB2E000085E0 /* FLEXUtility.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = FLEXUtility.mm; path = iOS/Plugins/FlipperKitNetworkPlugin/SKIOSNetworkPlugin/FLEXNetworkLib/FLEXUtility.mm; sourceTree = "<group>"; };
+		46EB2E000085E0 /* FLEXUtility.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = FLEXUtility.mm; path = iOS/Plugins/FlipperKitNetworkPlugin/SKIOSNetworkPlugin/FLEXNetworkLib/FLEXUtility.mm; sourceTree = "<group>"; };
 		46EB2E000085F0 /* SKIOSNetworkAdapter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SKIOSNetworkAdapter.h; path = iOS/Plugins/FlipperKitNetworkPlugin/SKIOSNetworkPlugin/SKIOSNetworkAdapter.h; sourceTree = "<group>"; };
-		46EB2E00008600 /* SKIOSNetworkAdapter.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = SKIOSNetworkAdapter.mm; path = iOS/Plugins/FlipperKitNetworkPlugin/SKIOSNetworkPlugin/SKIOSNetworkAdapter.mm; sourceTree = "<group>"; };
+		46EB2E00008600 /* SKIOSNetworkAdapter.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = SKIOSNetworkAdapter.mm; path = iOS/Plugins/FlipperKitNetworkPlugin/SKIOSNetworkPlugin/SKIOSNetworkAdapter.mm; sourceTree = "<group>"; };
 		46EB2E00008610 /* RCTRequired.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RCTRequired.h; path = RCTRequired/RCTRequired.h; sourceTree = "<group>"; };
 		46EB2E00008620 /* RCTConvertHelpers.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTConvertHelpers.h; sourceTree = "<group>"; };
-		46EB2E00008630 /* RCTConvertHelpers.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTConvertHelpers.mm; sourceTree = "<group>"; };
+		46EB2E00008630 /* RCTConvertHelpers.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTConvertHelpers.mm; sourceTree = "<group>"; };
 		46EB2E00008640 /* RCTTypedModuleConstants.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTTypedModuleConstants.h; sourceTree = "<group>"; };
-		46EB2E00008650 /* RCTTypedModuleConstants.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTTypedModuleConstants.mm; sourceTree = "<group>"; };
+		46EB2E00008650 /* RCTTypedModuleConstants.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTTypedModuleConstants.mm; sourceTree = "<group>"; };
 		46EB2E00008660 /* RNCAsyncStorage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNCAsyncStorage.h; path = ios/RNCAsyncStorage.h; sourceTree = "<group>"; };
 		46EB2E00008670 /* RNCAsyncStorage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNCAsyncStorage.m; path = ios/RNCAsyncStorage.m; sourceTree = "<group>"; };
 		46EB2E00008680 /* RNCAsyncStorageDelegate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNCAsyncStorageDelegate.h; path = ios/RNCAsyncStorageDelegate.h; sourceTree = "<group>"; };
@@ -7237,7 +7248,7 @@
 		46EB2E00008740 /* RNManualHandler.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RNManualHandler.h; sourceTree = "<group>"; };
 		46EB2E00008750 /* RNManualHandler.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RNManualHandler.m; sourceTree = "<group>"; };
 		46EB2E00008760 /* RNNativeViewHandler.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RNNativeViewHandler.h; sourceTree = "<group>"; };
-		46EB2E00008770 /* RNNativeViewHandler.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RNNativeViewHandler.mm; sourceTree = "<group>"; };
+		46EB2E00008770 /* RNNativeViewHandler.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RNNativeViewHandler.mm; sourceTree = "<group>"; };
 		46EB2E00008780 /* RNPanHandler.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RNPanHandler.h; sourceTree = "<group>"; };
 		46EB2E00008790 /* RNPanHandler.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RNPanHandler.m; sourceTree = "<group>"; };
 		46EB2E000087A0 /* RNPinchHandler.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RNPinchHandler.h; sourceTree = "<group>"; };
@@ -7252,21 +7263,21 @@
 		46EB2E00008830 /* RNGestureHandlerButton.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNGestureHandlerButton.h; path = ios/RNGestureHandlerButton.h; sourceTree = "<group>"; };
 		46EB2E00008840 /* RNGestureHandlerButton.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNGestureHandlerButton.m; path = ios/RNGestureHandlerButton.m; sourceTree = "<group>"; };
 		46EB2E00008850 /* RNGestureHandlerButtonComponentView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNGestureHandlerButtonComponentView.h; path = ios/RNGestureHandlerButtonComponentView.h; sourceTree = "<group>"; };
-		46EB2E00008860 /* RNGestureHandlerButtonComponentView.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNGestureHandlerButtonComponentView.mm; path = ios/RNGestureHandlerButtonComponentView.mm; sourceTree = "<group>"; };
+		46EB2E00008860 /* RNGestureHandlerButtonComponentView.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNGestureHandlerButtonComponentView.mm; path = ios/RNGestureHandlerButtonComponentView.mm; sourceTree = "<group>"; };
 		46EB2E00008870 /* RNGestureHandlerButtonManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNGestureHandlerButtonManager.h; path = ios/RNGestureHandlerButtonManager.h; sourceTree = "<group>"; };
 		46EB2E00008880 /* RNGestureHandlerButtonManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNGestureHandlerButtonManager.m; path = ios/RNGestureHandlerButtonManager.m; sourceTree = "<group>"; };
 		46EB2E00008890 /* RNGestureHandlerDirection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNGestureHandlerDirection.h; path = ios/RNGestureHandlerDirection.h; sourceTree = "<group>"; };
 		46EB2E000088A0 /* RNGestureHandlerEvents.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNGestureHandlerEvents.h; path = ios/RNGestureHandlerEvents.h; sourceTree = "<group>"; };
 		46EB2E000088B0 /* RNGestureHandlerEvents.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNGestureHandlerEvents.m; path = ios/RNGestureHandlerEvents.m; sourceTree = "<group>"; };
 		46EB2E000088C0 /* RNGestureHandlerManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNGestureHandlerManager.h; path = ios/RNGestureHandlerManager.h; sourceTree = "<group>"; };
-		46EB2E000088D0 /* RNGestureHandlerManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNGestureHandlerManager.mm; path = ios/RNGestureHandlerManager.mm; sourceTree = "<group>"; };
+		46EB2E000088D0 /* RNGestureHandlerManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNGestureHandlerManager.mm; path = ios/RNGestureHandlerManager.mm; sourceTree = "<group>"; };
 		46EB2E000088E0 /* RNGestureHandlerModule.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNGestureHandlerModule.h; path = ios/RNGestureHandlerModule.h; sourceTree = "<group>"; };
-		46EB2E000088F0 /* RNGestureHandlerModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNGestureHandlerModule.mm; path = ios/RNGestureHandlerModule.mm; sourceTree = "<group>"; };
+		46EB2E000088F0 /* RNGestureHandlerModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNGestureHandlerModule.mm; path = ios/RNGestureHandlerModule.mm; sourceTree = "<group>"; };
 		46EB2E00008900 /* RNGestureHandlerPointerTracker.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNGestureHandlerPointerTracker.h; path = ios/RNGestureHandlerPointerTracker.h; sourceTree = "<group>"; };
 		46EB2E00008910 /* RNGestureHandlerPointerTracker.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNGestureHandlerPointerTracker.m; path = ios/RNGestureHandlerPointerTracker.m; sourceTree = "<group>"; };
 		46EB2E00008920 /* RNGestureHandlerRegistry.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNGestureHandlerRegistry.h; path = ios/RNGestureHandlerRegistry.h; sourceTree = "<group>"; };
 		46EB2E00008930 /* RNGestureHandlerRegistry.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNGestureHandlerRegistry.m; path = ios/RNGestureHandlerRegistry.m; sourceTree = "<group>"; };
-		46EB2E00008940 /* RNGestureHandlerRootViewComponentView.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNGestureHandlerRootViewComponentView.mm; path = ios/RNGestureHandlerRootViewComponentView.mm; sourceTree = "<group>"; };
+		46EB2E00008940 /* RNGestureHandlerRootViewComponentView.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNGestureHandlerRootViewComponentView.mm; path = ios/RNGestureHandlerRootViewComponentView.mm; sourceTree = "<group>"; };
 		46EB2E00008950 /* RNGestureHandlerState.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNGestureHandlerState.h; path = ios/RNGestureHandlerState.h; sourceTree = "<group>"; };
 		46EB2E00008960 /* RNGestureHandlerStateManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNGestureHandlerStateManager.h; path = ios/RNGestureHandlerStateManager.h; sourceTree = "<group>"; };
 		46EB2E00008970 /* RNGHTouchEventType.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNGHTouchEventType.h; path = ios/RNGHTouchEventType.h; sourceTree = "<group>"; };
@@ -7279,21 +7290,21 @@
 		46EB2E00008A00 /* REASnapshot.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = REASnapshot.h; sourceTree = "<group>"; };
 		46EB2E00008A10 /* REASnapshot.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = REASnapshot.m; sourceTree = "<group>"; };
 		46EB2E00008A20 /* REAUIManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = REAUIManager.h; sourceTree = "<group>"; };
-		46EB2E00008A30 /* REAUIManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = REAUIManager.mm; sourceTree = "<group>"; };
+		46EB2E00008A30 /* REAUIManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = REAUIManager.mm; sourceTree = "<group>"; };
 		46EB2E00008A50 /* NativeMethods.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = NativeMethods.h; sourceTree = "<group>"; };
-		46EB2E00008A60 /* NativeMethods.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = NativeMethods.mm; sourceTree = "<group>"; };
+		46EB2E00008A60 /* NativeMethods.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = NativeMethods.mm; sourceTree = "<group>"; };
 		46EB2E00008A70 /* NativeProxy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = NativeProxy.h; sourceTree = "<group>"; };
-		46EB2E00008A80 /* NativeProxy.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = NativeProxy.mm; sourceTree = "<group>"; };
+		46EB2E00008A80 /* NativeProxy.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = NativeProxy.mm; sourceTree = "<group>"; };
 		46EB2E00008A90 /* REAInitializer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = REAInitializer.h; sourceTree = "<group>"; };
-		46EB2E00008AA0 /* REAInitializer.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = REAInitializer.mm; sourceTree = "<group>"; };
+		46EB2E00008AA0 /* REAInitializer.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = REAInitializer.mm; sourceTree = "<group>"; };
 		46EB2E00008AB0 /* REAIOSErrorHandler.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = REAIOSErrorHandler.h; sourceTree = "<group>"; };
-		46EB2E00008AC0 /* REAIOSErrorHandler.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = REAIOSErrorHandler.mm; sourceTree = "<group>"; };
+		46EB2E00008AC0 /* REAIOSErrorHandler.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = REAIOSErrorHandler.mm; sourceTree = "<group>"; };
 		46EB2E00008AD0 /* REAIOSLogger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = REAIOSLogger.h; sourceTree = "<group>"; };
-		46EB2E00008AE0 /* REAIOSLogger.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = REAIOSLogger.mm; sourceTree = "<group>"; };
+		46EB2E00008AE0 /* REAIOSLogger.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = REAIOSLogger.mm; sourceTree = "<group>"; };
 		46EB2E00008AF0 /* REAIOSScheduler.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = REAIOSScheduler.h; sourceTree = "<group>"; };
-		46EB2E00008B00 /* REAIOSScheduler.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = REAIOSScheduler.mm; sourceTree = "<group>"; };
+		46EB2E00008B00 /* REAIOSScheduler.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = REAIOSScheduler.mm; sourceTree = "<group>"; };
 		46EB2E00008B10 /* UIResponder+Reanimated.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UIResponder+Reanimated.h"; sourceTree = "<group>"; };
-		46EB2E00008B20 /* UIResponder+Reanimated.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = "UIResponder+Reanimated.mm"; sourceTree = "<group>"; };
+		46EB2E00008B20 /* UIResponder+Reanimated.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIResponder+Reanimated.mm"; sourceTree = "<group>"; };
 		46EB2E00008B40 /* REAAlwaysNode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = REAAlwaysNode.h; sourceTree = "<group>"; };
 		46EB2E00008B50 /* REAAlwaysNode.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = REAAlwaysNode.m; sourceTree = "<group>"; };
 		46EB2E00008B60 /* REABezierNode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = REABezierNode.h; sourceTree = "<group>"; };
@@ -7401,67 +7412,67 @@
 		46EB2E000092E0 /* Scheduler.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = Scheduler.h; sourceTree = "<group>"; };
 		46EB2E000092F0 /* WorkletEventHandler.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = WorkletEventHandler.h; sourceTree = "<group>"; };
 		46EB2E00009300 /* RNSConvert.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNSConvert.h; path = ios/RNSConvert.h; sourceTree = "<group>"; };
-		46EB2E00009310 /* RNSConvert.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNSConvert.mm; path = ios/RNSConvert.mm; sourceTree = "<group>"; };
+		46EB2E00009310 /* RNSConvert.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNSConvert.mm; path = ios/RNSConvert.mm; sourceTree = "<group>"; };
 		46EB2E00009320 /* RNSEnums.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNSEnums.h; path = ios/RNSEnums.h; sourceTree = "<group>"; };
 		46EB2E00009330 /* RNSFullWindowOverlay.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNSFullWindowOverlay.h; path = ios/RNSFullWindowOverlay.h; sourceTree = "<group>"; };
-		46EB2E00009340 /* RNSFullWindowOverlay.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNSFullWindowOverlay.mm; path = ios/RNSFullWindowOverlay.mm; sourceTree = "<group>"; };
+		46EB2E00009340 /* RNSFullWindowOverlay.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNSFullWindowOverlay.mm; path = ios/RNSFullWindowOverlay.mm; sourceTree = "<group>"; };
 		46EB2E00009350 /* RNSScreen.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNSScreen.h; path = ios/RNSScreen.h; sourceTree = "<group>"; };
-		46EB2E00009360 /* RNSScreen.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNSScreen.mm; path = ios/RNSScreen.mm; sourceTree = "<group>"; };
+		46EB2E00009360 /* RNSScreen.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNSScreen.mm; path = ios/RNSScreen.mm; sourceTree = "<group>"; };
 		46EB2E00009370 /* RNSScreenContainer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNSScreenContainer.h; path = ios/RNSScreenContainer.h; sourceTree = "<group>"; };
-		46EB2E00009380 /* RNSScreenContainer.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNSScreenContainer.mm; path = ios/RNSScreenContainer.mm; sourceTree = "<group>"; };
+		46EB2E00009380 /* RNSScreenContainer.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNSScreenContainer.mm; path = ios/RNSScreenContainer.mm; sourceTree = "<group>"; };
 		46EB2E00009390 /* RNSScreenNavigationContainer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNSScreenNavigationContainer.h; path = ios/RNSScreenNavigationContainer.h; sourceTree = "<group>"; };
-		46EB2E000093A0 /* RNSScreenNavigationContainer.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNSScreenNavigationContainer.mm; path = ios/RNSScreenNavigationContainer.mm; sourceTree = "<group>"; };
+		46EB2E000093A0 /* RNSScreenNavigationContainer.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNSScreenNavigationContainer.mm; path = ios/RNSScreenNavigationContainer.mm; sourceTree = "<group>"; };
 		46EB2E000093B0 /* RNSScreenStack.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNSScreenStack.h; path = ios/RNSScreenStack.h; sourceTree = "<group>"; };
-		46EB2E000093C0 /* RNSScreenStack.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNSScreenStack.mm; path = ios/RNSScreenStack.mm; sourceTree = "<group>"; };
+		46EB2E000093C0 /* RNSScreenStack.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNSScreenStack.mm; path = ios/RNSScreenStack.mm; sourceTree = "<group>"; };
 		46EB2E000093D0 /* RNSScreenStackAnimator.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNSScreenStackAnimator.h; path = ios/RNSScreenStackAnimator.h; sourceTree = "<group>"; };
-		46EB2E000093E0 /* RNSScreenStackAnimator.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNSScreenStackAnimator.mm; path = ios/RNSScreenStackAnimator.mm; sourceTree = "<group>"; };
+		46EB2E000093E0 /* RNSScreenStackAnimator.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNSScreenStackAnimator.mm; path = ios/RNSScreenStackAnimator.mm; sourceTree = "<group>"; };
 		46EB2E000093F0 /* RNSScreenStackHeaderConfig.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNSScreenStackHeaderConfig.h; path = ios/RNSScreenStackHeaderConfig.h; sourceTree = "<group>"; };
-		46EB2E00009400 /* RNSScreenStackHeaderConfig.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNSScreenStackHeaderConfig.mm; path = ios/RNSScreenStackHeaderConfig.mm; sourceTree = "<group>"; };
+		46EB2E00009400 /* RNSScreenStackHeaderConfig.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNSScreenStackHeaderConfig.mm; path = ios/RNSScreenStackHeaderConfig.mm; sourceTree = "<group>"; };
 		46EB2E00009410 /* RNSScreenStackHeaderSubview.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNSScreenStackHeaderSubview.h; path = ios/RNSScreenStackHeaderSubview.h; sourceTree = "<group>"; };
-		46EB2E00009420 /* RNSScreenStackHeaderSubview.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNSScreenStackHeaderSubview.mm; path = ios/RNSScreenStackHeaderSubview.mm; sourceTree = "<group>"; };
+		46EB2E00009420 /* RNSScreenStackHeaderSubview.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNSScreenStackHeaderSubview.mm; path = ios/RNSScreenStackHeaderSubview.mm; sourceTree = "<group>"; };
 		46EB2E00009430 /* RNSScreenViewEvent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNSScreenViewEvent.h; path = ios/RNSScreenViewEvent.h; sourceTree = "<group>"; };
-		46EB2E00009440 /* RNSScreenViewEvent.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNSScreenViewEvent.mm; path = ios/RNSScreenViewEvent.mm; sourceTree = "<group>"; };
+		46EB2E00009440 /* RNSScreenViewEvent.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNSScreenViewEvent.mm; path = ios/RNSScreenViewEvent.mm; sourceTree = "<group>"; };
 		46EB2E00009450 /* RNSScreenWindowTraits.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNSScreenWindowTraits.h; path = ios/RNSScreenWindowTraits.h; sourceTree = "<group>"; };
-		46EB2E00009460 /* RNSScreenWindowTraits.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNSScreenWindowTraits.mm; path = ios/RNSScreenWindowTraits.mm; sourceTree = "<group>"; };
+		46EB2E00009460 /* RNSScreenWindowTraits.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNSScreenWindowTraits.mm; path = ios/RNSScreenWindowTraits.mm; sourceTree = "<group>"; };
 		46EB2E00009470 /* RNSSearchBar.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNSSearchBar.h; path = ios/RNSSearchBar.h; sourceTree = "<group>"; };
-		46EB2E00009480 /* RNSSearchBar.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNSSearchBar.mm; path = ios/RNSSearchBar.mm; sourceTree = "<group>"; };
+		46EB2E00009480 /* RNSSearchBar.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNSSearchBar.mm; path = ios/RNSSearchBar.mm; sourceTree = "<group>"; };
 		46EB2E00009490 /* UIViewController+RNScreens.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIViewController+RNScreens.h"; path = "ios/UIViewController+RNScreens.h"; sourceTree = "<group>"; };
-		46EB2E000094A0 /* UIViewController+RNScreens.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = "UIViewController+RNScreens.mm"; path = "ios/UIViewController+RNScreens.mm"; sourceTree = "<group>"; };
+		46EB2E000094A0 /* UIViewController+RNScreens.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = "UIViewController+RNScreens.mm"; path = "ios/UIViewController+RNScreens.mm"; sourceTree = "<group>"; };
 		46EB2E000094B0 /* UIWindow+RNScreens.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIWindow+RNScreens.h"; path = "ios/UIWindow+RNScreens.h"; sourceTree = "<group>"; };
-		46EB2E000094C0 /* UIWindow+RNScreens.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = "UIWindow+RNScreens.mm"; path = "ios/UIWindow+RNScreens.mm"; sourceTree = "<group>"; };
+		46EB2E000094C0 /* UIWindow+RNScreens.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = "UIWindow+RNScreens.mm"; path = "ios/UIWindow+RNScreens.mm"; sourceTree = "<group>"; };
 		46EB2E000094E0 /* RNSUIBarButtonItem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RNSUIBarButtonItem.h; sourceTree = "<group>"; };
-		46EB2E000094F0 /* RNSUIBarButtonItem.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RNSUIBarButtonItem.mm; sourceTree = "<group>"; };
-		46EB2E00009500 /* FBReactNativeSpec-generated.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = "FBReactNativeSpec-generated.mm"; path = "FBReactNativeSpec/FBReactNativeSpec-generated.mm"; sourceTree = "<group>"; };
+		46EB2E000094F0 /* RNSUIBarButtonItem.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RNSUIBarButtonItem.mm; sourceTree = "<group>"; };
+		46EB2E00009500 /* FBReactNativeSpec-generated.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = "FBReactNativeSpec-generated.mm"; path = "FBReactNativeSpec/FBReactNativeSpec-generated.mm"; sourceTree = "<group>"; };
 		46EB2E00009510 /* FBReactNativeSpec.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBReactNativeSpec.h; path = FBReactNativeSpec/FBReactNativeSpec.h; sourceTree = "<group>"; };
-		46EB2E00009520 /* CoreModulesPlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = CoreModulesPlugins.mm; sourceTree = "<group>"; };
-		46EB2E00009530 /* RCTAccessibilityManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTAccessibilityManager.mm; sourceTree = "<group>"; };
-		46EB2E00009540 /* RCTActionSheetManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTActionSheetManager.mm; sourceTree = "<group>"; };
+		46EB2E00009520 /* CoreModulesPlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = CoreModulesPlugins.mm; sourceTree = "<group>"; };
+		46EB2E00009530 /* RCTAccessibilityManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTAccessibilityManager.mm; sourceTree = "<group>"; };
+		46EB2E00009540 /* RCTActionSheetManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTActionSheetManager.mm; sourceTree = "<group>"; };
 		46EB2E00009550 /* RCTAlertController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTAlertController.m; sourceTree = "<group>"; };
-		46EB2E00009560 /* RCTAlertManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTAlertManager.mm; sourceTree = "<group>"; };
-		46EB2E00009570 /* RCTAppearance.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTAppearance.mm; sourceTree = "<group>"; };
-		46EB2E00009580 /* RCTAppState.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTAppState.mm; sourceTree = "<group>"; };
-		46EB2E00009590 /* RCTAsyncLocalStorage.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTAsyncLocalStorage.mm; sourceTree = "<group>"; };
-		46EB2E000095A0 /* RCTClipboard.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTClipboard.mm; sourceTree = "<group>"; };
-		46EB2E000095B0 /* RCTDeviceInfo.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTDeviceInfo.mm; sourceTree = "<group>"; };
-		46EB2E000095C0 /* RCTDevLoadingView.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTDevLoadingView.mm; sourceTree = "<group>"; };
-		46EB2E000095D0 /* RCTDevMenu.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTDevMenu.mm; sourceTree = "<group>"; };
-		46EB2E000095E0 /* RCTDevSettings.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTDevSettings.mm; sourceTree = "<group>"; };
-		46EB2E000095F0 /* RCTDevSplitBundleLoader.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTDevSplitBundleLoader.mm; sourceTree = "<group>"; };
-		46EB2E00009600 /* RCTEventDispatcher.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTEventDispatcher.mm; sourceTree = "<group>"; };
-		46EB2E00009610 /* RCTExceptionsManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTExceptionsManager.mm; sourceTree = "<group>"; };
+		46EB2E00009560 /* RCTAlertManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTAlertManager.mm; sourceTree = "<group>"; };
+		46EB2E00009570 /* RCTAppearance.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTAppearance.mm; sourceTree = "<group>"; };
+		46EB2E00009580 /* RCTAppState.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTAppState.mm; sourceTree = "<group>"; };
+		46EB2E00009590 /* RCTAsyncLocalStorage.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTAsyncLocalStorage.mm; sourceTree = "<group>"; };
+		46EB2E000095A0 /* RCTClipboard.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTClipboard.mm; sourceTree = "<group>"; };
+		46EB2E000095B0 /* RCTDeviceInfo.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTDeviceInfo.mm; sourceTree = "<group>"; };
+		46EB2E000095C0 /* RCTDevLoadingView.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTDevLoadingView.mm; sourceTree = "<group>"; };
+		46EB2E000095D0 /* RCTDevMenu.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTDevMenu.mm; sourceTree = "<group>"; };
+		46EB2E000095E0 /* RCTDevSettings.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTDevSettings.mm; sourceTree = "<group>"; };
+		46EB2E000095F0 /* RCTDevSplitBundleLoader.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTDevSplitBundleLoader.mm; sourceTree = "<group>"; };
+		46EB2E00009600 /* RCTEventDispatcher.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTEventDispatcher.mm; sourceTree = "<group>"; };
+		46EB2E00009610 /* RCTExceptionsManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTExceptionsManager.mm; sourceTree = "<group>"; };
 		46EB2E00009620 /* RCTFPSGraph.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTFPSGraph.m; sourceTree = "<group>"; };
-		46EB2E00009630 /* RCTI18nManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTI18nManager.mm; sourceTree = "<group>"; };
-		46EB2E00009640 /* RCTKeyboardObserver.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTKeyboardObserver.mm; sourceTree = "<group>"; };
-		46EB2E00009650 /* RCTLogBox.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTLogBox.mm; sourceTree = "<group>"; };
-		46EB2E00009660 /* RCTLogBoxView.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTLogBoxView.mm; sourceTree = "<group>"; };
-		46EB2E00009670 /* RCTPerfMonitor.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTPerfMonitor.mm; sourceTree = "<group>"; };
-		46EB2E00009680 /* RCTPlatform.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTPlatform.mm; sourceTree = "<group>"; };
-		46EB2E00009690 /* RCTRedBox.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTRedBox.mm; sourceTree = "<group>"; };
-		46EB2E000096A0 /* RCTSourceCode.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTSourceCode.mm; sourceTree = "<group>"; };
-		46EB2E000096B0 /* RCTStatusBarManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTStatusBarManager.mm; sourceTree = "<group>"; };
-		46EB2E000096C0 /* RCTTiming.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTTiming.mm; sourceTree = "<group>"; };
-		46EB2E000096D0 /* RCTWebSocketExecutor.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTWebSocketExecutor.mm; sourceTree = "<group>"; };
-		46EB2E000096E0 /* RCTWebSocketModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTWebSocketModule.mm; sourceTree = "<group>"; };
+		46EB2E00009630 /* RCTI18nManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTI18nManager.mm; sourceTree = "<group>"; };
+		46EB2E00009640 /* RCTKeyboardObserver.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTKeyboardObserver.mm; sourceTree = "<group>"; };
+		46EB2E00009650 /* RCTLogBox.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTLogBox.mm; sourceTree = "<group>"; };
+		46EB2E00009660 /* RCTLogBoxView.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTLogBoxView.mm; sourceTree = "<group>"; };
+		46EB2E00009670 /* RCTPerfMonitor.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTPerfMonitor.mm; sourceTree = "<group>"; };
+		46EB2E00009680 /* RCTPlatform.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTPlatform.mm; sourceTree = "<group>"; };
+		46EB2E00009690 /* RCTRedBox.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTRedBox.mm; sourceTree = "<group>"; };
+		46EB2E000096A0 /* RCTSourceCode.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTSourceCode.mm; sourceTree = "<group>"; };
+		46EB2E000096B0 /* RCTStatusBarManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTStatusBarManager.mm; sourceTree = "<group>"; };
+		46EB2E000096C0 /* RCTTiming.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTTiming.mm; sourceTree = "<group>"; };
+		46EB2E000096D0 /* RCTWebSocketExecutor.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTWebSocketExecutor.mm; sourceTree = "<group>"; };
+		46EB2E000096E0 /* RCTWebSocketModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTWebSocketModule.mm; sourceTree = "<group>"; };
 		46EB2E00009700 /* RCTDecayAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTDecayAnimation.m; sourceTree = "<group>"; };
 		46EB2E00009710 /* RCTEventAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTEventAnimation.m; sourceTree = "<group>"; };
 		46EB2E00009720 /* RCTFrameAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTFrameAnimation.m; sourceTree = "<group>"; };
@@ -7480,44 +7491,44 @@
 		46EB2E00009800 /* RCTTrackingAnimatedNode.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTTrackingAnimatedNode.m; sourceTree = "<group>"; };
 		46EB2E00009810 /* RCTTransformAnimatedNode.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTTransformAnimatedNode.m; sourceTree = "<group>"; };
 		46EB2E00009820 /* RCTValueAnimatedNode.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTValueAnimatedNode.m; sourceTree = "<group>"; };
-		46EB2E00009830 /* RCTAnimationPlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTAnimationPlugins.mm; sourceTree = "<group>"; };
+		46EB2E00009830 /* RCTAnimationPlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTAnimationPlugins.mm; sourceTree = "<group>"; };
 		46EB2E00009840 /* RCTAnimationUtils.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTAnimationUtils.m; sourceTree = "<group>"; };
-		46EB2E00009850 /* RCTNativeAnimatedModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTNativeAnimatedModule.mm; sourceTree = "<group>"; };
+		46EB2E00009850 /* RCTNativeAnimatedModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTNativeAnimatedModule.mm; sourceTree = "<group>"; };
 		46EB2E00009860 /* RCTNativeAnimatedNodesManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTNativeAnimatedNodesManager.m; sourceTree = "<group>"; };
-		46EB2E00009870 /* RCTNativeAnimatedTurboModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTNativeAnimatedTurboModule.mm; sourceTree = "<group>"; };
+		46EB2E00009870 /* RCTNativeAnimatedTurboModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTNativeAnimatedTurboModule.mm; sourceTree = "<group>"; };
 		46EB2E00009880 /* RCTBlobCollector.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTBlobCollector.h; sourceTree = "<group>"; };
-		46EB2E00009890 /* RCTBlobCollector.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTBlobCollector.mm; sourceTree = "<group>"; };
-		46EB2E000098A0 /* RCTBlobManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTBlobManager.mm; sourceTree = "<group>"; };
+		46EB2E00009890 /* RCTBlobCollector.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTBlobCollector.mm; sourceTree = "<group>"; };
+		46EB2E000098A0 /* RCTBlobManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTBlobManager.mm; sourceTree = "<group>"; };
 		46EB2E000098B0 /* RCTBlobPlugins.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTBlobPlugins.h; sourceTree = "<group>"; };
-		46EB2E000098C0 /* RCTBlobPlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTBlobPlugins.mm; sourceTree = "<group>"; };
-		46EB2E000098D0 /* RCTFileReaderModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTFileReaderModule.mm; sourceTree = "<group>"; };
+		46EB2E000098C0 /* RCTBlobPlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTBlobPlugins.mm; sourceTree = "<group>"; };
+		46EB2E000098D0 /* RCTFileReaderModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTFileReaderModule.mm; sourceTree = "<group>"; };
 		46EB2E000098E0 /* RCTAnimatedImage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTAnimatedImage.m; sourceTree = "<group>"; };
 		46EB2E000098F0 /* RCTDisplayWeakRefreshable.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTDisplayWeakRefreshable.m; sourceTree = "<group>"; };
-		46EB2E00009900 /* RCTGIFImageDecoder.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTGIFImageDecoder.mm; sourceTree = "<group>"; };
+		46EB2E00009900 /* RCTGIFImageDecoder.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTGIFImageDecoder.mm; sourceTree = "<group>"; };
 		46EB2E00009910 /* RCTImageBlurUtils.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTImageBlurUtils.m; sourceTree = "<group>"; };
 		46EB2E00009920 /* RCTImageCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTImageCache.m; sourceTree = "<group>"; };
-		46EB2E00009930 /* RCTImageEditingManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTImageEditingManager.mm; sourceTree = "<group>"; };
-		46EB2E00009940 /* RCTImageLoader.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTImageLoader.mm; sourceTree = "<group>"; };
-		46EB2E00009950 /* RCTImagePlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTImagePlugins.mm; sourceTree = "<group>"; };
+		46EB2E00009930 /* RCTImageEditingManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTImageEditingManager.mm; sourceTree = "<group>"; };
+		46EB2E00009940 /* RCTImageLoader.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTImageLoader.mm; sourceTree = "<group>"; };
+		46EB2E00009950 /* RCTImagePlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTImagePlugins.mm; sourceTree = "<group>"; };
 		46EB2E00009960 /* RCTImageShadowView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTImageShadowView.m; sourceTree = "<group>"; };
-		46EB2E00009970 /* RCTImageStoreManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTImageStoreManager.mm; sourceTree = "<group>"; };
-		46EB2E00009980 /* RCTImageURLLoaderWithAttribution.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTImageURLLoaderWithAttribution.mm; sourceTree = "<group>"; };
+		46EB2E00009970 /* RCTImageStoreManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTImageStoreManager.mm; sourceTree = "<group>"; };
+		46EB2E00009980 /* RCTImageURLLoaderWithAttribution.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTImageURLLoaderWithAttribution.mm; sourceTree = "<group>"; };
 		46EB2E00009990 /* RCTImageUtils.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTImageUtils.m; sourceTree = "<group>"; };
-		46EB2E000099A0 /* RCTImageView.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTImageView.mm; sourceTree = "<group>"; };
-		46EB2E000099B0 /* RCTImageViewManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTImageViewManager.mm; sourceTree = "<group>"; };
-		46EB2E000099C0 /* RCTLocalAssetImageLoader.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTLocalAssetImageLoader.mm; sourceTree = "<group>"; };
+		46EB2E000099A0 /* RCTImageView.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTImageView.mm; sourceTree = "<group>"; };
+		46EB2E000099B0 /* RCTImageViewManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTImageViewManager.mm; sourceTree = "<group>"; };
+		46EB2E000099C0 /* RCTLocalAssetImageLoader.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTLocalAssetImageLoader.mm; sourceTree = "<group>"; };
 		46EB2E000099D0 /* RCTResizeMode.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTResizeMode.m; sourceTree = "<group>"; };
 		46EB2E000099E0 /* RCTUIImageViewAnimated.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTUIImageViewAnimated.m; sourceTree = "<group>"; };
-		46EB2E000099F0 /* RCTLinkingManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTLinkingManager.mm; sourceTree = "<group>"; };
-		46EB2E00009A00 /* RCTLinkingPlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTLinkingPlugins.mm; sourceTree = "<group>"; };
-		46EB2E00009A10 /* RCTDataRequestHandler.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTDataRequestHandler.mm; sourceTree = "<group>"; };
-		46EB2E00009A20 /* RCTFileRequestHandler.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTFileRequestHandler.mm; sourceTree = "<group>"; };
-		46EB2E00009A30 /* RCTHTTPRequestHandler.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTHTTPRequestHandler.mm; sourceTree = "<group>"; };
-		46EB2E00009A40 /* RCTNetworking.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTNetworking.mm; sourceTree = "<group>"; };
-		46EB2E00009A50 /* RCTNetworkPlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTNetworkPlugins.mm; sourceTree = "<group>"; };
-		46EB2E00009A60 /* RCTNetworkTask.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTNetworkTask.mm; sourceTree = "<group>"; };
-		46EB2E00009A70 /* RCTSettingsManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTSettingsManager.mm; sourceTree = "<group>"; };
-		46EB2E00009A80 /* RCTSettingsPlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTSettingsPlugins.mm; sourceTree = "<group>"; };
+		46EB2E000099F0 /* RCTLinkingManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTLinkingManager.mm; sourceTree = "<group>"; };
+		46EB2E00009A00 /* RCTLinkingPlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTLinkingPlugins.mm; sourceTree = "<group>"; };
+		46EB2E00009A10 /* RCTDataRequestHandler.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTDataRequestHandler.mm; sourceTree = "<group>"; };
+		46EB2E00009A20 /* RCTFileRequestHandler.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTFileRequestHandler.mm; sourceTree = "<group>"; };
+		46EB2E00009A30 /* RCTHTTPRequestHandler.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTHTTPRequestHandler.mm; sourceTree = "<group>"; };
+		46EB2E00009A40 /* RCTNetworking.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTNetworking.mm; sourceTree = "<group>"; };
+		46EB2E00009A50 /* RCTNetworkPlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTNetworkPlugins.mm; sourceTree = "<group>"; };
+		46EB2E00009A60 /* RCTNetworkTask.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTNetworkTask.mm; sourceTree = "<group>"; };
+		46EB2E00009A70 /* RCTSettingsManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTSettingsManager.mm; sourceTree = "<group>"; };
+		46EB2E00009A80 /* RCTSettingsPlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTSettingsPlugins.mm; sourceTree = "<group>"; };
 		46EB2E00009AA0 /* RCTBaseTextShadowView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTBaseTextShadowView.m; sourceTree = "<group>"; };
 		46EB2E00009AB0 /* RCTBaseTextViewManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTBaseTextViewManager.m; sourceTree = "<group>"; };
 		46EB2E00009AD0 /* RCTRawTextShadowView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTRawTextShadowView.m; sourceTree = "<group>"; };
@@ -7545,8 +7556,8 @@
 		46EB2E00009C70 /* RCTUITextField.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTUITextField.m; sourceTree = "<group>"; };
 		46EB2E00009C90 /* RCTVirtualTextShadowView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTVirtualTextShadowView.m; sourceTree = "<group>"; };
 		46EB2E00009CA0 /* RCTVirtualTextViewManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTVirtualTextViewManager.m; sourceTree = "<group>"; };
-		46EB2E00009CB0 /* RCTVibration.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTVibration.mm; sourceTree = "<group>"; };
-		46EB2E00009CC0 /* RCTVibrationPlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTVibrationPlugins.mm; sourceTree = "<group>"; };
+		46EB2E00009CB0 /* RCTVibration.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTVibration.mm; sourceTree = "<group>"; };
+		46EB2E00009CC0 /* RCTVibrationPlugins.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTVibrationPlugins.mm; sourceTree = "<group>"; };
 		46EB2E00009CD0 /* Array.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = Array.h; sourceTree = "<group>"; };
 		46EB2E00009CE0 /* AString.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = AString.h; sourceTree = "<group>"; };
 		46EB2E00009CF0 /* Base.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
@@ -7575,11 +7586,11 @@
 		46EB2E00009E90 /* TurboModuleUtils.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; path = TurboModuleUtils.cpp; sourceTree = "<group>"; };
 		46EB2E00009EA0 /* TurboModuleUtils.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = TurboModuleUtils.h; sourceTree = "<group>"; };
 		46EB2E00009ED0 /* RCTBlockGuard.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTBlockGuard.h; sourceTree = "<group>"; };
-		46EB2E00009EE0 /* RCTBlockGuard.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTBlockGuard.mm; sourceTree = "<group>"; };
+		46EB2E00009EE0 /* RCTBlockGuard.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTBlockGuard.mm; sourceTree = "<group>"; };
 		46EB2E00009EF0 /* RCTTurboModule.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTTurboModule.h; sourceTree = "<group>"; };
-		46EB2E00009F00 /* RCTTurboModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTTurboModule.mm; sourceTree = "<group>"; };
+		46EB2E00009F00 /* RCTTurboModule.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTTurboModule.mm; sourceTree = "<group>"; };
 		46EB2E00009F10 /* RCTTurboModuleManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = RCTTurboModuleManager.h; sourceTree = "<group>"; };
-		46EB2E00009F20 /* RCTTurboModuleManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; path = RCTTurboModuleManager.mm; sourceTree = "<group>"; };
+		46EB2E00009F20 /* RCTTurboModuleManager.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTTurboModuleManager.mm; sourceTree = "<group>"; };
 		46EB2E00009F30 /* SRDelegateController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SRDelegateController.h; path = SocketRocket/Internal/Delegate/SRDelegateController.h; sourceTree = "<group>"; };
 		46EB2E00009F40 /* SRDelegateController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SRDelegateController.m; path = SocketRocket/Internal/Delegate/SRDelegateController.m; sourceTree = "<group>"; };
 		46EB2E00009F50 /* SRIOConsumer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SRIOConsumer.h; path = SocketRocket/Internal/IOConsumer/SRIOConsumer.h; sourceTree = "<group>"; };
@@ -7655,29 +7666,29 @@
 		46EB2E0000A3B0 /* strlcpy-internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "strlcpy-internal.h"; sourceTree = "<group>"; };
 		46EB2E0000A3C0 /* time-internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "time-internal.h"; sourceTree = "<group>"; };
 		46EB2E0000A3D0 /* util-internal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "util-internal.h"; sourceTree = "<group>"; };
-		46EB2E0000A3E0 /* buffer.c */ = {isa = PBXFileReference; includeInIndex = 1; path = buffer.c; sourceTree = "<group>"; };
-		46EB2E0000A3F0 /* bufferevent.c */ = {isa = PBXFileReference; includeInIndex = 1; path = bufferevent.c; sourceTree = "<group>"; };
-		46EB2E0000A400 /* bufferevent_filter.c */ = {isa = PBXFileReference; includeInIndex = 1; path = bufferevent_filter.c; sourceTree = "<group>"; };
-		46EB2E0000A410 /* bufferevent_pair.c */ = {isa = PBXFileReference; includeInIndex = 1; path = bufferevent_pair.c; sourceTree = "<group>"; };
-		46EB2E0000A420 /* bufferevent_ratelim.c */ = {isa = PBXFileReference; includeInIndex = 1; path = bufferevent_ratelim.c; sourceTree = "<group>"; };
-		46EB2E0000A430 /* bufferevent_sock.c */ = {isa = PBXFileReference; includeInIndex = 1; path = bufferevent_sock.c; sourceTree = "<group>"; };
-		46EB2E0000A440 /* event.c */ = {isa = PBXFileReference; includeInIndex = 1; path = event.c; sourceTree = "<group>"; };
-		46EB2E0000A450 /* evmap.c */ = {isa = PBXFileReference; includeInIndex = 1; path = evmap.c; sourceTree = "<group>"; };
-		46EB2E0000A460 /* evthread.c */ = {isa = PBXFileReference; includeInIndex = 1; path = evthread.c; sourceTree = "<group>"; };
-		46EB2E0000A470 /* evutil.c */ = {isa = PBXFileReference; includeInIndex = 1; path = evutil.c; sourceTree = "<group>"; };
-		46EB2E0000A480 /* evutil_rand.c */ = {isa = PBXFileReference; includeInIndex = 1; path = evutil_rand.c; sourceTree = "<group>"; };
-		46EB2E0000A490 /* evutil_time.c */ = {isa = PBXFileReference; includeInIndex = 1; path = evutil_time.c; sourceTree = "<group>"; };
-		46EB2E0000A4A0 /* kqueue.c */ = {isa = PBXFileReference; includeInIndex = 1; path = kqueue.c; sourceTree = "<group>"; };
-		46EB2E0000A4B0 /* listener.c */ = {isa = PBXFileReference; includeInIndex = 1; path = listener.c; sourceTree = "<group>"; };
-		46EB2E0000A4C0 /* log.c */ = {isa = PBXFileReference; includeInIndex = 1; path = log.c; sourceTree = "<group>"; };
-		46EB2E0000A4D0 /* poll.c */ = {isa = PBXFileReference; includeInIndex = 1; path = poll.c; sourceTree = "<group>"; };
-		46EB2E0000A4E0 /* select.c */ = {isa = PBXFileReference; includeInIndex = 1; path = select.c; sourceTree = "<group>"; };
-		46EB2E0000A4F0 /* signal.c */ = {isa = PBXFileReference; includeInIndex = 1; path = signal.c; sourceTree = "<group>"; };
-		46EB2E0000A500 /* strlcpy.c */ = {isa = PBXFileReference; includeInIndex = 1; path = strlcpy.c; sourceTree = "<group>"; };
-		46EB2E0000A510 /* evdns.c */ = {isa = PBXFileReference; includeInIndex = 1; path = evdns.c; sourceTree = "<group>"; };
-		46EB2E0000A520 /* event_tagging.c */ = {isa = PBXFileReference; includeInIndex = 1; path = event_tagging.c; sourceTree = "<group>"; };
-		46EB2E0000A530 /* evrpc.c */ = {isa = PBXFileReference; includeInIndex = 1; path = evrpc.c; sourceTree = "<group>"; };
-		46EB2E0000A540 /* http.c */ = {isa = PBXFileReference; includeInIndex = 1; path = http.c; sourceTree = "<group>"; };
+		46EB2E0000A3E0 /* buffer.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = buffer.c; sourceTree = "<group>"; };
+		46EB2E0000A3F0 /* bufferevent.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = bufferevent.c; sourceTree = "<group>"; };
+		46EB2E0000A400 /* bufferevent_filter.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = bufferevent_filter.c; sourceTree = "<group>"; };
+		46EB2E0000A410 /* bufferevent_pair.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = bufferevent_pair.c; sourceTree = "<group>"; };
+		46EB2E0000A420 /* bufferevent_ratelim.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = bufferevent_ratelim.c; sourceTree = "<group>"; };
+		46EB2E0000A430 /* bufferevent_sock.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = bufferevent_sock.c; sourceTree = "<group>"; };
+		46EB2E0000A440 /* event.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = event.c; sourceTree = "<group>"; };
+		46EB2E0000A450 /* evmap.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = evmap.c; sourceTree = "<group>"; };
+		46EB2E0000A460 /* evthread.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = evthread.c; sourceTree = "<group>"; };
+		46EB2E0000A470 /* evutil.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = evutil.c; sourceTree = "<group>"; };
+		46EB2E0000A480 /* evutil_rand.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = evutil_rand.c; sourceTree = "<group>"; };
+		46EB2E0000A490 /* evutil_time.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = evutil_time.c; sourceTree = "<group>"; };
+		46EB2E0000A4A0 /* kqueue.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = kqueue.c; sourceTree = "<group>"; };
+		46EB2E0000A4B0 /* listener.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = listener.c; sourceTree = "<group>"; };
+		46EB2E0000A4C0 /* log.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = log.c; sourceTree = "<group>"; };
+		46EB2E0000A4D0 /* poll.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = poll.c; sourceTree = "<group>"; };
+		46EB2E0000A4E0 /* select.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = select.c; sourceTree = "<group>"; };
+		46EB2E0000A4F0 /* signal.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = signal.c; sourceTree = "<group>"; };
+		46EB2E0000A500 /* strlcpy.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = strlcpy.c; sourceTree = "<group>"; };
+		46EB2E0000A510 /* evdns.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = evdns.c; sourceTree = "<group>"; };
+		46EB2E0000A520 /* event_tagging.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = event_tagging.c; sourceTree = "<group>"; };
+		46EB2E0000A530 /* evrpc.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = evrpc.c; sourceTree = "<group>"; };
+		46EB2E0000A540 /* http.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; path = http.c; sourceTree = "<group>"; };
 		46EB2E0000A550 /* AIRMap.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AIRMap.h; path = ios/AirMaps/AIRMap.h; sourceTree = "<group>"; };
 		46EB2E0000A560 /* AIRMap.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AIRMap.m; path = ios/AirMaps/AIRMap.m; sourceTree = "<group>"; };
 		46EB2E0000A570 /* AIRMapCallout.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AIRMapCallout.h; path = ios/AirMaps/AIRMapCallout.h; sourceTree = "<group>"; };
@@ -7742,7 +7753,7 @@
 		46EB2E0000A930 /* RCTConvert+AirMap.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "RCTConvert+AirMap.h"; path = "ios/AirMaps/RCTConvert+AirMap.h"; sourceTree = "<group>"; };
 		46EB2E0000A940 /* RCTConvert+AirMap.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "RCTConvert+AirMap.m"; path = "ios/AirMaps/RCTConvert+AirMap.m"; sourceTree = "<group>"; };
 		46EB2E0000A950 /* RNCSafeAreaContext.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNCSafeAreaContext.h; path = ios/RNCSafeAreaContext.h; sourceTree = "<group>"; };
-		46EB2E0000A960 /* RNCSafeAreaContext.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = RNCSafeAreaContext.mm; path = ios/RNCSafeAreaContext.mm; sourceTree = "<group>"; };
+		46EB2E0000A960 /* RNCSafeAreaContext.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = RNCSafeAreaContext.mm; path = ios/RNCSafeAreaContext.mm; sourceTree = "<group>"; };
 		46EB2E0000A970 /* RNCSafeAreaProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNCSafeAreaProvider.h; path = ios/RNCSafeAreaProvider.h; sourceTree = "<group>"; };
 		46EB2E0000A980 /* RNCSafeAreaProvider.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RNCSafeAreaProvider.m; path = ios/RNCSafeAreaProvider.m; sourceTree = "<group>"; };
 		46EB2E0000A990 /* RNCSafeAreaProviderManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RNCSafeAreaProviderManager.h; path = ios/RNCSafeAreaProviderManager.h; sourceTree = "<group>"; };
@@ -7777,81 +7788,81 @@
 		46EB2E0000AB60 /* ReactViewPagerManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ReactViewPagerManager.m; path = ios/ReactViewPagerManager.m; sourceTree = "<group>"; };
 		46EB2E0000AB70 /* UIViewController+CreateExtension.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIViewController+CreateExtension.h"; path = "ios/UIViewController+CreateExtension.h"; sourceTree = "<group>"; };
 		46EB2E0000AB80 /* UIViewController+CreateExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+CreateExtension.m"; path = "ios/UIViewController+CreateExtension.m"; sourceTree = "<group>"; };
-		46EB2E0000ABA0 /* double-conversion.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; name = "double-conversion.xcframework"; path = "Frameworks/double-conversion.xcframework"; sourceTree = "<group>"; };
-		46EB2E0000ABC0 /* glog.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; name = glog.xcframework; path = Frameworks/glog.xcframework; sourceTree = "<group>"; };
-		46EB2E0000ABE0 /* OpenSSL.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; name = OpenSSL.xcframework; path = Frameworks/OpenSSL.xcframework; sourceTree = "<group>"; };
-		46EB2E0000ABF0 /* AntDesign.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = AntDesign.ttf; path = Fonts/AntDesign.ttf; sourceTree = "<group>"; };
-		46EB2E0000AC00 /* Entypo.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = Entypo.ttf; path = Fonts/Entypo.ttf; sourceTree = "<group>"; };
-		46EB2E0000AC10 /* EvilIcons.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = EvilIcons.ttf; path = Fonts/EvilIcons.ttf; sourceTree = "<group>"; };
-		46EB2E0000AC20 /* Feather.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = Feather.ttf; path = Fonts/Feather.ttf; sourceTree = "<group>"; };
-		46EB2E0000AC30 /* FontAwesome.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = FontAwesome.ttf; path = Fonts/FontAwesome.ttf; sourceTree = "<group>"; };
-		46EB2E0000AC40 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = FontAwesome5_Brands.ttf; path = Fonts/FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
-		46EB2E0000AC50 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = FontAwesome5_Regular.ttf; path = Fonts/FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
-		46EB2E0000AC60 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = FontAwesome5_Solid.ttf; path = Fonts/FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
-		46EB2E0000AC70 /* Fontisto.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = Fontisto.ttf; path = Fonts/Fontisto.ttf; sourceTree = "<group>"; };
-		46EB2E0000AC80 /* Foundation.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = Foundation.ttf; path = Fonts/Foundation.ttf; sourceTree = "<group>"; };
-		46EB2E0000AC90 /* Ionicons.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = Ionicons.ttf; path = Fonts/Ionicons.ttf; sourceTree = "<group>"; };
-		46EB2E0000ACA0 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = MaterialCommunityIcons.ttf; path = Fonts/MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
-		46EB2E0000ACB0 /* MaterialIcons.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = MaterialIcons.ttf; path = Fonts/MaterialIcons.ttf; sourceTree = "<group>"; };
-		46EB2E0000ACC0 /* Octicons.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = Octicons.ttf; path = Fonts/Octicons.ttf; sourceTree = "<group>"; };
-		46EB2E0000ACD0 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = SimpleLineIcons.ttf; path = Fonts/SimpleLineIcons.ttf; sourceTree = "<group>"; };
-		46EB2E0000ACE0 /* Zocial.ttf */ = {isa = PBXFileReference; includeInIndex = 1; name = Zocial.ttf; path = Fonts/Zocial.ttf; sourceTree = "<group>"; };
-		46EB2E0000ACF0 /* en.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = en.lproj; path = React/AccessibilityResources/en.lproj; sourceTree = "<group>"; };
-		46EB2E0000AD10 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		46EB2E0000AD20 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		46EB2E0000AD30 /* RNVectorIcons.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = RNVectorIcons.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000AD50 /* React-Core.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-Core.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000AD70 /* React-callinvoker.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-callinvoker.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000AD90 /* React-cxxreact.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-cxxreact.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000ADB0 /* React-jsi.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-jsi.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000ADD0 /* React-jsiexecutor.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-jsiexecutor.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000ADF0 /* React-jsinspector.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-jsinspector.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000AE10 /* React-logger.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-logger.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000AE30 /* React-perflogger.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-perflogger.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000AE50 /* React-runtimeexecutor.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-runtimeexecutor.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000ABA0 /* double-conversion.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcframework; name = "double-conversion.xcframework"; path = "Frameworks/double-conversion.xcframework"; sourceTree = "<group>"; };
+		46EB2E0000ABC0 /* glog.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcframework; name = glog.xcframework; path = Frameworks/glog.xcframework; sourceTree = "<group>"; };
+		46EB2E0000ABE0 /* OpenSSL.xcframework */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcframework; name = OpenSSL.xcframework; path = Frameworks/OpenSSL.xcframework; sourceTree = "<group>"; };
+		46EB2E0000ABF0 /* AntDesign.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = AntDesign.ttf; path = Fonts/AntDesign.ttf; sourceTree = "<group>"; };
+		46EB2E0000AC00 /* Entypo.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = Entypo.ttf; path = Fonts/Entypo.ttf; sourceTree = "<group>"; };
+		46EB2E0000AC10 /* EvilIcons.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = EvilIcons.ttf; path = Fonts/EvilIcons.ttf; sourceTree = "<group>"; };
+		46EB2E0000AC20 /* Feather.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = Feather.ttf; path = Fonts/Feather.ttf; sourceTree = "<group>"; };
+		46EB2E0000AC30 /* FontAwesome.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = FontAwesome.ttf; path = Fonts/FontAwesome.ttf; sourceTree = "<group>"; };
+		46EB2E0000AC40 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = FontAwesome5_Brands.ttf; path = Fonts/FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
+		46EB2E0000AC50 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = FontAwesome5_Regular.ttf; path = Fonts/FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
+		46EB2E0000AC60 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = FontAwesome5_Solid.ttf; path = Fonts/FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
+		46EB2E0000AC70 /* Fontisto.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = Fontisto.ttf; path = Fonts/Fontisto.ttf; sourceTree = "<group>"; };
+		46EB2E0000AC80 /* Foundation.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = Foundation.ttf; path = Fonts/Foundation.ttf; sourceTree = "<group>"; };
+		46EB2E0000AC90 /* Ionicons.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = Ionicons.ttf; path = Fonts/Ionicons.ttf; sourceTree = "<group>"; };
+		46EB2E0000ACA0 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = Fonts/MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
+		46EB2E0000ACB0 /* MaterialIcons.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = MaterialIcons.ttf; path = Fonts/MaterialIcons.ttf; sourceTree = "<group>"; };
+		46EB2E0000ACC0 /* Octicons.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = Octicons.ttf; path = Fonts/Octicons.ttf; sourceTree = "<group>"; };
+		46EB2E0000ACD0 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = SimpleLineIcons.ttf; path = Fonts/SimpleLineIcons.ttf; sourceTree = "<group>"; };
+		46EB2E0000ACE0 /* Zocial.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = Zocial.ttf; path = Fonts/Zocial.ttf; sourceTree = "<group>"; };
+		46EB2E0000ACF0 /* en.lproj */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; name = en.lproj; path = React/AccessibilityResources/en.lproj; sourceTree = "<group>"; };
+		46EB2E0000AD10 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		46EB2E0000AD20 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		46EB2E0000AD30 /* RNVectorIcons.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = RNVectorIcons.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000AD50 /* React-Core.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-Core.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000AD70 /* React-callinvoker.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-callinvoker.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000AD90 /* React-cxxreact.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-cxxreact.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000ADB0 /* React-jsi.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-jsi.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000ADD0 /* React-jsiexecutor.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-jsiexecutor.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000ADF0 /* React-jsinspector.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-jsinspector.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000AE10 /* React-logger.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-logger.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000AE30 /* React-perflogger.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-perflogger.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000AE50 /* React-runtimeexecutor.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-runtimeexecutor.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		46EB2E0000AE70 /* Yoga.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Yoga.modulemap; sourceTree = "<group>"; };
-		46EB2E0000AE80 /* Yoga.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = Yoga.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000AEA0 /* BVLinearGradient.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = BVLinearGradient.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000AEB0 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		46EB2E0000AEC0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		46EB2E0000AEE0 /* FBLazyVector.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = FBLazyVector.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000AF00 /* FBReactNativeSpec.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = FBReactNativeSpec.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000AF20 /* RCTRequired.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = RCTRequired.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000AF40 /* RCTTypeSafety.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = RCTTypeSafety.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000AF60 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		46EB2E0000AF70 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		46EB2E0000AF80 /* RNCAsyncStorage.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = RNCAsyncStorage.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000AFA0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		46EB2E0000AFB0 /* RNCMaskedView.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = RNCMaskedView.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000AFD0 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		46EB2E0000AFE0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		46EB2E0000AFF0 /* RNGestureHandler.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = RNGestureHandler.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B010 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		46EB2E0000B020 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		46EB2E0000B030 /* RNReanimated.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = RNReanimated.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B050 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		46EB2E0000B060 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		46EB2E0000B070 /* RNScreens.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = RNScreens.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B090 /* React.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = React.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B0B0 /* React-Codegen.podspec.json */ = {isa = PBXFileReference; includeInIndex = 1; path = "React-Codegen.podspec.json"; sourceTree = "<group>"; };
-		46EB2E0000B0D0 /* React-CoreModules.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-CoreModules.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B0F0 /* React-RCTActionSheet.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-RCTActionSheet.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B110 /* React-RCTAnimation.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-RCTAnimation.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B130 /* React-RCTBlob.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-RCTBlob.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B150 /* React-RCTImage.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-RCTImage.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B170 /* React-RCTLinking.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-RCTLinking.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B190 /* React-RCTNetwork.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-RCTNetwork.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B1B0 /* React-RCTSettings.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-RCTSettings.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B1D0 /* React-RCTText.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-RCTText.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B1F0 /* React-RCTVibration.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-RCTVibration.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B210 /* React-bridging.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "React-bridging.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B230 /* react-native-maps.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "react-native-maps.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B250 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		46EB2E0000B260 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		46EB2E0000B270 /* react-native-safe-area-context.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "react-native-safe-area-context.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		46EB2E0000B290 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		46EB2E0000B2A0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		46EB2E0000B2B0 /* react-native-viewpager.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = "react-native-viewpager.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000AE80 /* Yoga.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = Yoga.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000AEA0 /* BVLinearGradient.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = BVLinearGradient.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000AEB0 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		46EB2E0000AEC0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		46EB2E0000AEE0 /* FBLazyVector.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = FBLazyVector.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000AF00 /* FBReactNativeSpec.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = FBReactNativeSpec.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000AF20 /* RCTRequired.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = RCTRequired.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000AF40 /* RCTTypeSafety.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = RCTTypeSafety.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000AF60 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		46EB2E0000AF70 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		46EB2E0000AF80 /* RNCAsyncStorage.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = RNCAsyncStorage.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000AFA0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		46EB2E0000AFB0 /* RNCMaskedView.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = RNCMaskedView.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000AFD0 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		46EB2E0000AFE0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		46EB2E0000AFF0 /* RNGestureHandler.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = RNGestureHandler.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B010 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		46EB2E0000B020 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		46EB2E0000B030 /* RNReanimated.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = RNReanimated.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B050 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		46EB2E0000B060 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		46EB2E0000B070 /* RNScreens.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = RNScreens.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B090 /* React.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = React.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B0B0 /* React-Codegen.podspec.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = "React-Codegen.podspec.json"; sourceTree = "<group>"; };
+		46EB2E0000B0D0 /* React-CoreModules.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-CoreModules.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B0F0 /* React-RCTActionSheet.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-RCTActionSheet.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B110 /* React-RCTAnimation.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-RCTAnimation.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B130 /* React-RCTBlob.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-RCTBlob.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B150 /* React-RCTImage.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-RCTImage.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B170 /* React-RCTLinking.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-RCTLinking.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B190 /* React-RCTNetwork.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-RCTNetwork.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B1B0 /* React-RCTSettings.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-RCTSettings.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B1D0 /* React-RCTText.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-RCTText.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B1F0 /* React-RCTVibration.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-RCTVibration.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B210 /* React-bridging.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "React-bridging.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B230 /* react-native-maps.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "react-native-maps.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B250 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		46EB2E0000B260 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		46EB2E0000B270 /* react-native-safe-area-context.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "react-native-safe-area-context.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		46EB2E0000B290 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		46EB2E0000B2A0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		46EB2E0000B2B0 /* react-native-viewpager.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = "react-native-viewpager.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		46EB2E0000B3B0 /* BVLinearGradient.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BVLinearGradient.debug.xcconfig; sourceTree = "<group>"; };
 		46EB2E0000B3C0 /* BVLinearGradient.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = BVLinearGradient.release.xcconfig; sourceTree = "<group>"; };
 		46EB2E0000B3D0 /* BVLinearGradient-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "BVLinearGradient-prefix.pch"; sourceTree = "<group>"; };
@@ -8102,7 +8113,7 @@
 		46EB2E00019AF0 /* Pods-chatBox-chatBoxTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-chatBox-chatBoxTests-acknowledgements.plist"; sourceTree = "<group>"; };
 		46EB2E00019B00 /* Pods-chatBox-chatBoxTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-chatBox-chatBoxTests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		46EB2E00019B10 /* Pods-chatBox-chatBoxTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-chatBox-chatBoxTests-dummy.m"; sourceTree = "<group>"; };
-		4A2817BD5B75353502C1DAC60B4F2577 /* React-Core-60309c9c-AccessibilityResources */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "React-Core-60309c9c-AccessibilityResources"; path = AccessibilityResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A2817BD5B75353502C1DAC60B4F2577 /* AccessibilityResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AccessibilityResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		50B5347C9A6E93B7D4CFC3673BA6FB7E /* RNScreens */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = RNScreens; path = libRNScreens.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		52FCF98CEFF94C742080B6965D537AD0 /* react-native-safe-area-context */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "react-native-safe-area-context"; path = "libreact-native-safe-area-context.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5737DDB4BC95AD399B3206838AB97095 /* RNCAsyncStorage */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = RNCAsyncStorage; path = libRNCAsyncStorage.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -8142,7 +8153,7 @@
 		F958876A082BF810B342435CE3FB5AF6 /* RCTTypeSafety */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = RCTTypeSafety; path = libRCTTypeSafety.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB6FAD8F0183E86ACBFBD8A81BA7BF3A /* libevent */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libevent; path = liblibevent.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCD9E6BDEA805B0522EE9965F54B4CE4 /* Pods-chatBox */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Pods-chatBox"; path = "libPods-chatBox.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		FE6D792B6328AAF68E46924D7F466631 /* React-Core-AccessibilityResources */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "React-Core-AccessibilityResources"; path = AccessibilityResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE6D792B6328AAF68E46924D7F466631 /* AccessibilityResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AccessibilityResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE7B9294FF05AAFD1653E2104E10844A /* React-RCTAnimation */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "React-RCTAnimation"; path = "libReact-RCTAnimation.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFDC7746794AB17CFB7150820479DF40 /* Flipper-RSocket */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "Flipper-RSocket"; path = "libFlipper-RSocket.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -8544,8 +8555,8 @@
 				E7178FECB829C9576A3723658B07F087 /* React-Codegen */,
 				BD71E2539823621820F84384064C253A /* React-Core */,
 				BF9149C577F92CA3C3CEDA103253A332 /* React-Core-60309c9c */,
-				4A2817BD5B75353502C1DAC60B4F2577 /* React-Core-60309c9c-AccessibilityResources */,
-				FE6D792B6328AAF68E46924D7F466631 /* React-Core-AccessibilityResources */,
+				4A2817BD5B75353502C1DAC60B4F2577 /* AccessibilityResources.bundle */,
+				FE6D792B6328AAF68E46924D7F466631 /* AccessibilityResources.bundle */,
 				6771D231F4C8C5976470A369C474B32E /* React-CoreModules */,
 				37592FDAD45752511010F4B06AC57355 /* React-cxxreact */,
 				D9F334F2E90E3EE462FC4192AF5C03BD /* React-jsi */,
@@ -8688,7 +8699,6 @@
 				46EB2E00000560 /* utils.h */,
 				46EB2E0000B6C0 /* Support Files */,
 			);
-			name = DoubleConversion;
 			path = DoubleConversion;
 			sourceTree = "<group>";
 		};
@@ -8984,7 +8994,6 @@
 				46EB2E00001750 /* Windows.h */,
 				46EB2E00011C60 /* Support Files */,
 			);
-			name = "RCT-Folly";
 			path = "RCT-Folly";
 			sourceTree = "<group>";
 		};
@@ -9185,7 +9194,6 @@
 			children = (
 				46EB2E00018850 /* Support Files */,
 			);
-			name = boost;
 			path = boost;
 			sourceTree = "<group>";
 		};
@@ -9207,7 +9215,6 @@
 				46EB2E00003980 /* ranges.h */,
 				46EB2E000189D0 /* Support Files */,
 			);
-			name = fmt;
 			path = fmt;
 			sourceTree = "<group>";
 		};
@@ -9228,7 +9235,6 @@
 				46EB2E000039D0 /* vlog_is_on.h */,
 				46EB2E00018B70 /* Support Files */,
 			);
-			name = glog;
 			path = glog;
 			sourceTree = "<group>";
 		};
@@ -9257,7 +9263,6 @@
 				46EB2E00003AE0 /* GCDAsyncUdpSocket.m */,
 				46EB2E0000B4C0 /* Support Files */,
 			);
-			name = CocoaAsyncSocket;
 			path = CocoaAsyncSocket;
 			sourceTree = "<group>";
 		};
@@ -9326,7 +9331,6 @@
 				46EB2E00003D50 /* Log.h */,
 				46EB2E0000BAE0 /* Support Files */,
 			);
-			name = Flipper;
 			path = Flipper;
 			sourceTree = "<group>";
 		};
@@ -9338,7 +9342,6 @@
 				46EB2E00003D70 /* ontop_combined_all_macho_gas.S */,
 				46EB2E0000BBF0 /* Support Files */,
 			);
-			name = "Flipper-Boost-iOSX";
 			path = "Flipper-Boost-iOSX";
 			sourceTree = "<group>";
 		};
@@ -9348,7 +9351,6 @@
 				46EB2E0000AB90 /* Frameworks */,
 				46EB2E0000BC90 /* Support Files */,
 			);
-			name = "Flipper-DoubleConversion";
 			path = "Flipper-DoubleConversion";
 			sourceTree = "<group>";
 		};
@@ -9370,7 +9372,6 @@
 				46EB2E00003E60 /* ranges.h */,
 				46EB2E0000BE20 /* Support Files */,
 			);
-			name = "Flipper-Fmt";
 			path = "Flipper-Fmt";
 			sourceTree = "<group>";
 		};
@@ -10242,7 +10243,6 @@
 				46EB2E00006E10 /* xlog.h */,
 				46EB2E0000F4F0 /* Support Files */,
 			);
-			name = "Flipper-Folly";
 			path = "Flipper-Folly";
 			sourceTree = "<group>";
 		};
@@ -10252,7 +10252,6 @@
 				46EB2E0000ABB0 /* Frameworks */,
 				46EB2E0000F590 /* Support Files */,
 			);
-			name = "Flipper-Glog";
 			path = "Flipper-Glog";
 			sourceTree = "<group>";
 		};
@@ -10269,7 +10268,6 @@
 				46EB2E000074D0 /* PTUSBHub.m */,
 				46EB2E0000F6D0 /* Support Files */,
 			);
-			name = "Flipper-PeerTalk";
 			path = "Flipper-PeerTalk";
 			sourceTree = "<group>";
 		};
@@ -10435,7 +10433,6 @@
 				46EB2E000078F0 /* WarmResumeManager.h */,
 				46EB2E00010180 /* Support Files */,
 			);
-			name = "Flipper-RSocket";
 			path = "Flipper-RSocket";
 			sourceTree = "<group>";
 		};
@@ -10458,7 +10455,6 @@
 				46EB2E00008560 /* SKIOSNetworkPlugin */,
 				46EB2E000108E0 /* Support Files */,
 			);
-			name = FlipperKit;
 			path = FlipperKit;
 			sourceTree = "<group>";
 		};
@@ -10468,7 +10464,6 @@
 				46EB2E0000ABD0 /* Frameworks */,
 				46EB2E000109B0 /* Support Files */,
 			);
-			name = "OpenSSL-Universal";
 			path = "OpenSSL-Universal";
 			sourceTree = "<group>";
 		};
@@ -10897,7 +10892,6 @@
 				46EB2E0000A1B0 /* SRWebSocket.m */,
 				46EB2E00018350 /* Support Files */,
 			);
-			name = SocketRocket;
 			path = SocketRocket;
 			sourceTree = "<group>";
 		};
@@ -10912,7 +10906,6 @@
 				46EB2E0000A210 /* YGLayoutExtensions.swift */,
 				46EB2E00018770 /* Support Files */,
 			);
-			name = YogaKit;
 			path = YogaKit;
 			sourceTree = "<group>";
 		};
@@ -10972,7 +10965,6 @@
 				46EB2E0000A3D0 /* util-internal.h */,
 				46EB2E00018F80 /* Support Files */,
 			);
-			name = libevent;
 			path = libevent;
 			sourceTree = "<group>";
 		};
@@ -11252,7 +11244,6 @@
 				46EB2E00001E60 /* RCTSurfaceView+Internal.h */,
 				46EB2E00001E90 /* SurfaceHostingView */,
 			);
-			name = Surface;
 			path = Surface;
 			sourceTree = "<group>";
 		};
@@ -11266,7 +11257,6 @@
 				46EB2E00001EE0 /* RCTSurfaceSizeMeasureMode.h */,
 				46EB2E00001EF0 /* RCTSurfaceSizeMeasureMode.mm */,
 			);
-			name = SurfaceHostingView;
 			path = SurfaceHostingView;
 			sourceTree = "<group>";
 		};
@@ -11469,7 +11459,6 @@
 				46EB2E00002740 /* RCTRefreshControlManager.h */,
 				46EB2E00002750 /* RCTRefreshControlManager.m */,
 			);
-			name = RefreshControl;
 			path = RefreshControl;
 			sourceTree = "<group>";
 		};
@@ -11485,7 +11474,6 @@
 				46EB2E000027D0 /* RCTSafeAreaViewManager.h */,
 				46EB2E000027E0 /* RCTSafeAreaViewManager.m */,
 			);
-			name = SafeAreaView;
 			path = SafeAreaView;
 			sourceTree = "<group>";
 		};
@@ -11506,7 +11494,6 @@
 				46EB2E000028B0 /* RCTScrollViewManager.h */,
 				46EB2E000028C0 /* RCTScrollViewManager.m */,
 			);
-			name = ScrollView;
 			path = ScrollView;
 			sourceTree = "<group>";
 		};
@@ -11777,7 +11764,6 @@
 				46EB2E00003120 /* RCTMultilineTextInputViewManager.h */,
 				46EB2E00003130 /* RCTUITextView.h */,
 			);
-			name = Multiline;
 			path = Multiline;
 			sourceTree = "<group>";
 		};
@@ -11788,7 +11774,6 @@
 				46EB2E00003210 /* RCTSinglelineTextInputViewManager.h */,
 				46EB2E00003220 /* RCTUITextField.h */,
 			);
-			name = Singleline;
 			path = Singleline;
 			sourceTree = "<group>";
 		};
@@ -11837,7 +11822,6 @@
 				46EB2E000035B0 /* jsilib-windows.cpp */,
 				46EB2E000035D0 /* threadsafe.h */,
 			);
-			name = jsi;
 			path = jsi;
 			sourceTree = "<group>";
 		};
@@ -11872,7 +11856,6 @@
 				46EB2E000036D0 /* event */,
 				46EB2E00003700 /* internal */,
 			);
-			name = yoga;
 			path = yoga;
 			sourceTree = "<group>";
 		};
@@ -11882,7 +11865,6 @@
 				46EB2E000036E0 /* event.cpp */,
 				46EB2E000036F0 /* event.h */,
 			);
-			name = event;
 			path = event;
 			sourceTree = "<group>";
 		};
@@ -11893,7 +11875,6 @@
 				46EB2E00003730 /* experiments.h */,
 				46EB2E00003710 /* experiments-inl.h */,
 			);
-			name = internal;
 			path = internal;
 			sourceTree = "<group>";
 		};
@@ -12142,7 +12123,6 @@
 				46EB2E00008E20 /* sensor */,
 				46EB2E00008E80 /* Transitioning */,
 			);
-			name = ios;
 			path = ios;
 			sourceTree = "<group>";
 		};
@@ -12156,7 +12136,6 @@
 				46EB2E00008A20 /* REAUIManager.h */,
 				46EB2E00008A30 /* REAUIManager.mm */,
 			);
-			name = LayoutReanimation;
 			path = LayoutReanimation;
 			sourceTree = "<group>";
 		};
@@ -12178,7 +12157,6 @@
 				46EB2E00008B10 /* UIResponder+Reanimated.h */,
 				46EB2E00008B20 /* UIResponder+Reanimated.mm */,
 			);
-			name = native;
 			path = native;
 			sourceTree = "<group>";
 		};
@@ -12224,7 +12202,6 @@
 				46EB2E00008D80 /* REAValueNode.h */,
 				46EB2E00008D90 /* REAValueNode.m */,
 			);
-			name = Nodes;
 			path = Nodes;
 			sourceTree = "<group>";
 		};
@@ -12237,7 +12214,6 @@
 				46EB2E00008E60 /* ReanimatedSensorContainer.m */,
 				46EB2E00008E70 /* ReanimatedSensorType.h */,
 			);
-			name = sensor;
 			path = sensor;
 			sourceTree = "<group>";
 		};
@@ -12257,7 +12233,6 @@
 				46EB2E00008F30 /* REATransitionValues.h */,
 				46EB2E00008F40 /* REATransitionValues.m */,
 			);
-			name = Transitioning;
 			path = Transitioning;
 			sourceTree = "<group>";
 		};
@@ -12266,7 +12241,6 @@
 			children = (
 				46EB2E00008F60 /* cpp */,
 			);
-			name = Common;
 			path = Common;
 			sourceTree = "<group>";
 		};
@@ -12281,7 +12255,6 @@
 				46EB2E00009020 /* SharedItems */,
 				46EB2E00009080 /* Tools */,
 			);
-			name = cpp;
 			path = cpp;
 			sourceTree = "<group>";
 		};
@@ -12290,7 +12263,6 @@
 			children = (
 				46EB2E00008F80 /* AnimatedSensorModule.cpp */,
 			);
-			name = AnimatedSensor;
 			path = AnimatedSensor;
 			sourceTree = "<group>";
 		};
@@ -12299,7 +12271,6 @@
 			children = (
 				46EB2E00008FA0 /* LayoutAnimationsProxy.cpp */,
 			);
-			name = LayoutAnimations;
 			path = LayoutAnimations;
 			sourceTree = "<group>";
 		};
@@ -12309,7 +12280,6 @@
 				46EB2E00008FC0 /* NativeReanimatedModule.cpp */,
 				46EB2E00008FD0 /* NativeReanimatedModuleSpec.cpp */,
 			);
-			name = NativeModules;
 			path = NativeModules;
 			sourceTree = "<group>";
 		};
@@ -12320,7 +12290,6 @@
 				46EB2E00009000 /* MapperRegistry.cpp */,
 				46EB2E00009010 /* WorkletsCache.cpp */,
 			);
-			name = Registries;
 			path = Registries;
 			sourceTree = "<group>";
 		};
@@ -12333,7 +12302,6 @@
 				46EB2E00009060 /* RemoteObject.cpp */,
 				46EB2E00009070 /* ShareableValue.cpp */,
 			);
-			name = SharedItems;
 			path = SharedItems;
 			sourceTree = "<group>";
 		};
@@ -12347,7 +12315,6 @@
 				46EB2E000090D0 /* Scheduler.cpp */,
 				46EB2E000090E0 /* WorkletEventHandler.cpp */,
 			);
-			name = Tools;
 			path = Tools;
 			sourceTree = "<group>";
 		};
@@ -12362,7 +12329,6 @@
 				46EB2E00009250 /* SpecTools */,
 				46EB2E00009270 /* Tools */,
 			);
-			name = headers;
 			path = headers;
 			sourceTree = "<group>";
 		};
@@ -12371,7 +12337,6 @@
 			children = (
 				46EB2E00009110 /* AnimatedSensorModule.h */,
 			);
-			name = AnimatedSensor;
 			path = AnimatedSensor;
 			sourceTree = "<group>";
 		};
@@ -12380,7 +12345,6 @@
 			children = (
 				46EB2E00009130 /* LayoutAnimationsProxy.h */,
 			);
-			name = LayoutAnimations;
 			path = LayoutAnimations;
 			sourceTree = "<group>";
 		};
@@ -12390,7 +12354,6 @@
 				46EB2E00009150 /* NativeReanimatedModule.h */,
 				46EB2E00009160 /* NativeReanimatedModuleSpec.h */,
 			);
-			name = NativeModules;
 			path = NativeModules;
 			sourceTree = "<group>";
 		};
@@ -12401,7 +12364,6 @@
 				46EB2E00009190 /* MapperRegistry.h */,
 				46EB2E000091A0 /* WorkletsCache.h */,
 			);
-			name = Registries;
 			path = Registries;
 			sourceTree = "<group>";
 		};
@@ -12418,7 +12380,6 @@
 				46EB2E00009230 /* SharedParent.h */,
 				46EB2E00009240 /* ValueWrapper.h */,
 			);
-			name = SharedItems;
 			path = SharedItems;
 			sourceTree = "<group>";
 		};
@@ -12427,7 +12388,6 @@
 			children = (
 				46EB2E00009260 /* ErrorHandler.h */,
 			);
-			name = SpecTools;
 			path = SpecTools;
 			sourceTree = "<group>";
 		};
@@ -12443,7 +12403,6 @@
 				46EB2E000092E0 /* Scheduler.h */,
 				46EB2E000092F0 /* WorkletEventHandler.h */,
 			);
-			name = Tools;
 			path = Tools;
 			sourceTree = "<group>";
 		};
@@ -12465,7 +12424,6 @@
 				46EB2E00009720 /* RCTFrameAnimation.m */,
 				46EB2E00009730 /* RCTSpringAnimation.m */,
 			);
-			name = Drivers;
 			path = Drivers;
 			sourceTree = "<group>";
 		};
@@ -12487,7 +12445,6 @@
 				46EB2E00009810 /* RCTTransformAnimatedNode.m */,
 				46EB2E00009820 /* RCTValueAnimatedNode.m */,
 			);
-			name = Nodes;
 			path = Nodes;
 			sourceTree = "<group>";
 		};
@@ -12497,7 +12454,6 @@
 				46EB2E00009AA0 /* RCTBaseTextShadowView.m */,
 				46EB2E00009AB0 /* RCTBaseTextViewManager.m */,
 			);
-			name = BaseText;
 			path = BaseText;
 			sourceTree = "<group>";
 		};
@@ -12507,7 +12463,6 @@
 				46EB2E00009AD0 /* RCTRawTextShadowView.m */,
 				46EB2E00009AE0 /* RCTRawTextViewManager.m */,
 			);
-			name = RawText;
 			path = RawText;
 			sourceTree = "<group>";
 		};
@@ -12519,7 +12474,6 @@
 				46EB2E00009B40 /* RCTTextView.m */,
 				46EB2E00009B50 /* RCTTextViewManager.m */,
 			);
-			name = Text;
 			path = Text;
 			sourceTree = "<group>";
 		};
@@ -12538,7 +12492,6 @@
 				46EB2E00009B70 /* Multiline */,
 				46EB2E00009C40 /* Singleline */,
 			);
-			name = TextInput;
 			path = TextInput;
 			sourceTree = "<group>";
 		};
@@ -12549,7 +12502,6 @@
 				46EB2E00009B90 /* RCTMultilineTextInputViewManager.m */,
 				46EB2E00009BA0 /* RCTUITextView.m */,
 			);
-			name = Multiline;
 			path = Multiline;
 			sourceTree = "<group>";
 		};
@@ -12560,7 +12512,6 @@
 				46EB2E00009C60 /* RCTSinglelineTextInputViewManager.m */,
 				46EB2E00009C70 /* RCTUITextField.m */,
 			);
-			name = Singleline;
 			path = Singleline;
 			sourceTree = "<group>";
 		};
@@ -12570,7 +12521,6 @@
 				46EB2E00009C90 /* RCTVirtualTextShadowView.m */,
 				46EB2E00009CA0 /* RCTVirtualTextViewManager.m */,
 			);
-			name = VirtualText;
 			path = VirtualText;
 			sourceTree = "<group>";
 		};
@@ -12629,7 +12579,6 @@
 				46EB2E00009F10 /* RCTTurboModuleManager.h */,
 				46EB2E00009F20 /* RCTTurboModuleManager.mm */,
 			);
-			name = ios;
 			path = ios;
 			sourceTree = "<group>";
 		};
@@ -16137,7 +16086,7 @@
 			);
 			name = "React-Core-60309c9c-AccessibilityResources";
 			productName = AccessibilityResources;
-			productReference = 4A2817BD5B75353502C1DAC60B4F2577 /* React-Core-60309c9c-AccessibilityResources */;
+			productReference = 4A2817BD5B75353502C1DAC60B4F2577 /* AccessibilityResources.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 		2AB2EF542954AB1C999E03BFEF8DE806 /* DoubleConversion */ = {
@@ -16574,7 +16523,7 @@
 			);
 			name = "React-Core-AccessibilityResources";
 			productName = AccessibilityResources;
-			productReference = FE6D792B6328AAF68E46924D7F466631 /* React-Core-AccessibilityResources */;
+			productReference = FE6D792B6328AAF68E46924D7F466631 /* AccessibilityResources.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 		7ACAA9BE580DD31A5CB9D97C45D9492D /* React-Core */ = {
@@ -17337,8 +17286,8 @@
 				"${PODS_TARGET_SRCROOT}/../../Libraries/Utilities/NativePlatformConstantsIOS.js",
 				"${PODS_TARGET_SRCROOT}/../../Libraries/Vibration/NativeVibration.js",
 				"${PODS_TARGET_SRCROOT}/../../Libraries/WebSocket/NativeWebSocketModule.js",
-				"$PODS_ROOT/../.xcode.env.local",
-				"$PODS_ROOT/../.xcode.env",
+				$PODS_ROOT/../.xcode.env.local,
+				$PODS_ROOT/../.xcode.env,
 			);
 			name = "[CP-User] Generate Specs";
 			outputPaths = (
@@ -21954,9 +21903,11 @@
 			baseConfigurationReference = 46EB2E00014480 /* React-Core.release.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/React-Core";
+				DEVELOPMENT_TEAM = KYZNGMFFFZ;
 				IBSC_MODULE = React;
 				INFOPLIST_FILE = "Target Support Files/React-Core/ResourceBundle-AccessibilityResources-React-Core-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = org.cocoapods.AccessibilityResources;
 				PRODUCT_NAME = AccessibilityResources;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -21970,9 +21921,11 @@
 			baseConfigurationReference = 46EB2E00014490 /* React-Core.debug.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/React-Core";
+				DEVELOPMENT_TEAM = KYZNGMFFFZ;
 				IBSC_MODULE = React;
 				INFOPLIST_FILE = "Target Support Files/React-Core/ResourceBundle-AccessibilityResources-React-Core-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = org.cocoapods.AccessibilityResources;
 				PRODUCT_NAME = AccessibilityResources;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -22037,9 +21990,11 @@
 			baseConfigurationReference = 46EB2E00015F30 /* React-Core-60309c9c.release.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/React-Core-60309c9c";
+				DEVELOPMENT_TEAM = KYZNGMFFFZ;
 				IBSC_MODULE = React;
 				INFOPLIST_FILE = "Target Support Files/React-Core-60309c9c/ResourceBundle-AccessibilityResources-React-Core-60309c9c-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = org.cocoapods.AccessibilityResources;
 				PRODUCT_NAME = AccessibilityResources;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -22053,9 +22008,11 @@
 			baseConfigurationReference = 46EB2E00015F20 /* React-Core-60309c9c.debug.xcconfig */;
 			buildSettings = {
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/React-Core-60309c9c";
+				DEVELOPMENT_TEAM = KYZNGMFFFZ;
 				IBSC_MODULE = React;
 				INFOPLIST_FILE = "Target Support Files/React-Core-60309c9c/ResourceBundle-AccessibilityResources-React-Core-60309c9c-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = org.cocoapods.AccessibilityResources;
 				PRODUCT_NAME = AccessibilityResources;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;

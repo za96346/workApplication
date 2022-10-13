@@ -1,11 +1,11 @@
-import { Text, View } from "native-base";
+import { Avatar, Text, View } from "native-base";
 import React from "react";
-import CO_NavigateList from "../component/CO_NavigateList";
+import CO_NavigateList from "../../component/CO_NavigateList";
 import { Icon } from "native-base";
 import lonicon from 'react-native-vector-icons/Ionicons'
-import { language } from "../language";
+import { language } from "../../language";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { circle } from "../style/styles";
+import { circle } from "../../style/styles";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
 const container = [
@@ -74,13 +74,9 @@ class Setting extends React.Component <any, any>{
                         alignItems: 'center',
                         justifyContent: 'space-evenly'
                     }}>
-                    <View
-                        style={{
-                            ...circle(120),
-                            backgroundColor: '#333'
-                        }}>
-
-                    </View>
+                        <Avatar size={20} source={{
+                            uri: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80'
+                        }}></Avatar>
 
                     <View
                         style={{

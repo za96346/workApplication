@@ -1,21 +1,21 @@
 import { Text, View } from "native-base";
 import React from "react";
-import CO_FormUI from "../component/CO_FormUI";
-import { language } from "../language";
-import { interfaceCO_FormUIProps } from "../type/type";
+import CO_FormUI from "../../component/CO_FormUI";
+import { language } from "../../language";
+import { interfaceCO_FormUIProps } from "../../type/type";
 
 const form: Array < Array < interfaceCO_FormUIProps> > = [
     [
         {
             styIdex: 'one',
             Label: language.applyChangeWork,
-            imgUrl: require('../assert/formChange.png'),
+            imgUrl: require('../../assert/formChange.png'),
             btnAction: () => {},
         },
         {
             styIdex: 'one',
             Label: language.applyUpWork,
-            imgUrl: require('../assert/workUp.png'),
+            imgUrl: require('../../assert/workUp.png'),
             btnAction: () => {},
         },
     ],
@@ -23,13 +23,13 @@ const form: Array < Array < interfaceCO_FormUIProps> > = [
         {
             styIdex: 'one',
             Label: language.forgetCheckIn,
-            imgUrl: require('../assert/forget.png'),
+            imgUrl: require('../../assert/forget.png'),
             btnAction: () => {},
         },
         {
             styIdex: 'one',
             Label: language.late,
-            imgUrl: require('../assert/late.png'),
+            imgUrl: require('../../assert/late.png'),
             btnAction: () => {},
         },
     ],
@@ -37,13 +37,13 @@ const form: Array < Array < interfaceCO_FormUIProps> > = [
         {
             styIdex: 'one',
             Label: language.applyRequestLeave,
-            imgUrl: require('../assert/sick.png'),
+            imgUrl: require('../../assert/sick.png'),
             btnAction: () => {},
         },
         {
             styIdex: 'one',
             Label: language.elseOnWork,
-            imgUrl: require('../assert/else.png'),
+            imgUrl: require('../../assert/else.png'),
             btnAction: () => {},
         },
     ]

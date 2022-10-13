@@ -1,6 +1,6 @@
 import { Text, View } from "native-base";
 import React from "react";
-import CO_ChangeWorkTime from "../component/CO_ChangeWorkTIme";
+import CO_ChangeWorkTime from "../../component/CO_ChangeWorkTIme";
 class WorkList extends React.Component <any, any>{
     constructor(props: any) {
         super(props)

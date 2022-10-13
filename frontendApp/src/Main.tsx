@@ -4,7 +4,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { SafeAreaView } from "react-native";
 import TabNavigator from 'react-native-tab-navigator';
 import { language } from "./language";
-import Home from "./page/Home";
+import Home from "./page/HomePage/Home";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'native-base';
 import FontAwesome from 'react-native-vector-icons/FontAwesome5';
@@ -12,10 +12,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import materialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import lonicons from 'react-native-vector-icons/Ionicons'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import WorkList from './page/WorkList';
-import Setting from './page/Setting';
-import CheckIn from './page/CheckIn';
-import StaffChange from './page/StaffChange';
+import WorkList from './page/WorkListPage/WorkList';
+import Setting from './page/SettingPage/Setting';
+import CheckIn from './page/CheckInPage/CheckIn';
+import StaffChange from './page/StaffChangePage/StaffChange';
 import { navigation } from './type/type';
 
 const Tab: any = createBottomTabNavigator();
