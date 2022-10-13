@@ -53,7 +53,7 @@ class DateHandle implements DateHandleInterface {
 
     // 格式化日期：yyyy-MM-dd
     formatDate (date: any): any {
-        console.log(date)
+        // console.log(date)
         const myyear = date.getFullYear()
         // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
         let mymonth = date.getMonth() + 1

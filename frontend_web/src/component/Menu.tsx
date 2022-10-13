@@ -74,7 +74,6 @@ const App: React.FC = () => {
 
     useEffect(() => {
         const [path1, path2] = current.keyPath
-        console.log(path1, path2)
         if (path1 === 'setting' || path2 === 'setting') {
             navigate(`setting/${current.key}`)
             return

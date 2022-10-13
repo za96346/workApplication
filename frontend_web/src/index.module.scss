@@ -193,3 +193,39 @@ div {
 		}
 	}
 }
+
+.peopleList {
+	width: 100%;
+	padding: 10px;
+	height: 50px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	.peopleText {
+		width: 60%;
+		>div:first-child {
+			font-size: 1.2rem;
+		}
+		>div:last-child {
+			font-size: 0.6rem;
+			opacity: 0.4;
+		}
+	}
+}
+.peopleListBtn {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	background-color: white;
+	position: fixed;
+	top: 10px;
+	right: 10px;
+	@extend %center;
+	font-size: 1.5rem;
+	&:hover {
+		cursor: pointer;
+		transform: scale(1.1);
+		@extend %shadowNormal;
+	}
+}
