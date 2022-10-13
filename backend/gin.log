@@ -7,6 +7,7 @@
 [GIN-debug] GET    /workApp/user/my          --> backend/worker.AssignWorker.func1 (6 handlers)
 [GIN-debug] GET    /workApp/user/single      --> backend/worker.AssignWorker.func1 (7 handlers)
 [GIN-debug] POST   /workApp/user/update      --> backend/worker.AssignWorker.func1 (7 handlers)
+[GIN-debug] GET    /workApp/user/all         --> backend/worker.AssignWorker.func1 (7 handlers)
 [GIN-debug] POST   /workApp/entry/login      --> backend/worker.AssignWorker.func1 (5 handlers)
 [GIN-debug] PUT    /workApp/entry/register   --> backend/worker.AssignWorker.func1 (5 handlers)
 [GIN-debug] POST   /workApp/entry/email/captcha --> backend/worker.AssignWorker.func1 (5 handlers)
@@ -14,35 +15,6 @@
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :4000
-[GIN] 2022/10/12 - 19:44:50 | 406 |    4.633291ms |       127.0.0.1 | GET      "/workApp/user/single?userId=9&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjcsIkFjY291bnQiOiJhY2NvdW50MSJ9.hTlx2BjEOS7ghtAFLO8oFZgHJY47C1GAscrxZa9josA"
-[GIN] 2022/10/12 - 19:44:55 | 200 |    5.793167ms |       127.0.0.1 | POST     "/workApp/entry/login"
-[GIN] 2022/10/12 - 19:45:03 | 200 |    2.620583ms |       127.0.0.1 | GET      "/workApp/user/single?userId=9&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjUsIkFjY291bnQiOiJhY2NvdW50MSJ9.hNYT0RIYbzDLOm41wgYCoqSVyoJTULzAwtBOaeH8ij4"
-[GIN] 2022/10/12 - 19:45:19 | 200 |    2.002958ms |       127.0.0.1 | GET      "/workApp/user/single?userId=10&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjUsIkFjY291bnQiOiJhY2NvdW50MSJ9.hNYT0RIYbzDLOm41wgYCoqSVyoJTULzAwtBOaeH8ij4"
-[GIN] 2022/10/12 - 19:45:27 | 404 |    1.171625ms |       127.0.0.1 | GET      "/workApp/user/single?userId=22&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjUsIkFjY291bnQiOiJhY2NvdW50MSJ9.hNYT0RIYbzDLOm41wgYCoqSVyoJTULzAwtBOaeH8ij4"
-[GIN] 2022/10/12 - 19:46:48 | 404 |    1.631542ms |       127.0.0.1 | GET      "/workApp/user/single?userId=22&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjUsIkFjY291bnQiOiJhY2NvdW50MSJ9.hNYT0RIYbzDLOm41wgYCoqSVyoJTULzAwtBOaeH8ij4"
-[GIN] 2022/10/12 - 20:28:55 | 204 |    2.655417ms |       127.0.0.1 | OPTIONS  "/workApp/entry/login"
-[GIN] 2022/10/12 - 20:28:55 | 401 |   13.189333ms |       127.0.0.1 | POST     "/workApp/entry/login"
-[GIN] 2022/10/12 - 20:28:57 | 401 |     665.167µs |       127.0.0.1 | POST     "/workApp/entry/login"
-[GIN] 2022/10/12 - 20:29:09 | 204 |      14.541µs |       127.0.0.1 | OPTIONS  "/workApp/entry/email/captcha"
-[GIN] 2022/10/12 - 20:29:12 | 200 |  2.558123542s |       127.0.0.1 | POST     "/workApp/entry/email/captcha"
-[GIN] 2022/10/12 - 20:30:34 | 204 |      38.584µs |       127.0.0.1 | OPTIONS  "/workApp/entry/login"
-[GIN] 2022/10/12 - 20:30:34 | 401 |    1.391917ms |       127.0.0.1 | POST     "/workApp/entry/login"
-[GIN] 2022/10/12 - 20:30:51 | 204 |      31.083µs |       127.0.0.1 | OPTIONS  "/workApp/entry/email/captcha"
-[GIN] 2022/10/12 - 20:30:53 | 200 |  1.288932791s |       127.0.0.1 | POST     "/workApp/entry/email/captcha"
-[GIN] 2022/10/12 - 20:31:20 | 204 |      20.625µs |       127.0.0.1 | OPTIONS  "/workApp/entry/register"
-[GIN] 2022/10/12 - 20:31:20 | 400 |    5.683458ms |       127.0.0.1 | PUT      "/workApp/entry/register"
-[GIN] 2022/10/12 - 20:31:44 | 204 |      53.083µs |       127.0.0.1 | OPTIONS  "/workApp/entry/register"
-[GIN] 2022/10/12 - 20:31:44 | 200 |  120.907459ms |       127.0.0.1 | PUT      "/workApp/entry/register"
-[GIN] 2022/10/12 - 20:31:53 | 204 |      12.583µs |       127.0.0.1 | OPTIONS  "/workApp/entry/login"
-[GIN] 2022/10/12 - 20:31:53 | 200 |    2.281291ms |       127.0.0.1 | POST     "/workApp/entry/login"
-[GIN] 2022/10/13 - 00:25:49 | 204 |     2.05025ms |       127.0.0.1 | OPTIONS  "/workApp/entry/email/captcha"
-[GIN] 2022/10/13 - 00:25:49 | 404 |   15.214583ms |       127.0.0.1 | POST     "/workApp/entry/email/captcha"
-[GIN] 2022/10/13 - 00:25:54 | 404 |  1.540887333s |       127.0.0.1 | POST     "/workApp/entry/email/captcha"
-[GIN] 2022/10/13 - 00:29:03 | 204 |      41.125µs |       127.0.0.1 | OPTIONS  "/workApp/entry/email/captcha"
-[GIN] 2022/10/13 - 00:29:05 | 404 |  1.115282417s |       127.0.0.1 | POST     "/workApp/entry/email/captcha"
-[GIN] 2022/10/13 - 00:29:10 | 204 |      23.208µs |       127.0.0.1 | OPTIONS  "/workApp/entry/email/captcha"
-[GIN] 2022/10/13 - 00:29:11 | 404 |  917.621833ms |       127.0.0.1 | POST     "/workApp/entry/email/captcha"
-[GIN] 2022/10/13 - 12:03:52 | 204 |    2.606875ms |       127.0.0.1 | OPTIONS  "/workApp/entry/email/captcha"
-[GIN] 2022/10/13 - 12:03:54 | 404 |  2.325545208s |       127.0.0.1 | POST     "/workApp/entry/email/captcha"
-[GIN] 2022/10/13 - 12:05:15 | 204 |     117.875µs |       127.0.0.1 | OPTIONS  "/workApp/entry/login"
-[GIN] 2022/10/13 - 12:05:15 | 200 |   15.451334ms |       127.0.0.1 | POST     "/workApp/entry/login"
+[GIN] 2022/10/13 - 23:12:33 | 200 |   10.057375ms |       127.0.0.1 | POST     "/workApp/entry/login"
+[GIN] 2022/10/13 - 23:12:41 | 500 |    2.893125ms |       127.0.0.1 | GET      "/workApp/user/all?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjIsIkFjY291bnQiOiJhY2NvdW50MSJ9.z_HC7zSStvRsDFLcjBvq301gRr1QbmIUNb8IoZoAzHw"
+[GIN] 2022/10/13 - 23:13:17 | 406 |     14.5265ms |       127.0.0.1 | GET      "/workApp/user/all?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjIsIkFjY291bnQiOiJhY2NvdW50MSJ9.z_HC7zSStvRsDFLcjBvq301gRr1QbmIUNb8IoZoAzHw"

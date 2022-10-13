@@ -29,6 +29,7 @@ type statusText struct {
 	EmailCaptchaIsNotRight string
 	PasswordIsNotSame string
 	EmailIsNotRight string
+	GetCompanyCodeFailed string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -58,6 +59,7 @@ func StatusText() *statusText {
 				EmailCaptchaIsNotRight: "驗證碼錯誤",
 				PasswordIsNotSame: "密碼不相等",
 				EmailIsNotRight: "電子信箱格式錯誤",
+				GetCompanyCodeFailed: "獲取公司碼失敗",
 			}
 		}
 	}

@@ -38,8 +38,13 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		routeFunc = service.CheckAccess
 		break
 	case 6:
+		// post method of send email captcha
 		routeFunc = service.EmailCaptcha
 		break;
+	case 7:
+		// get method of fetch all user data
+		routeFunc = service.GetAllUser
+		break
 	default:
 		break;
 	}

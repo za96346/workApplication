@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 	"sync"
 	"time"
 
@@ -18,7 +19,14 @@ func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	userId := (*props).Query("userId")
 	fmt.Println("userId => ", userId)
 	// 尋找 userData
-	res := (*dbHandle).SelectUser(1, userId)
+	intUserId, err := strconv.ParseInt(userId, 10, 64)
+	if err != nil {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": "轉換格式失敗",
+		})
+		return
+	}
+	res := (*dbHandle).SelectUser(1, intUserId)
 	if len(*res) == 0 {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,
@@ -26,13 +34,12 @@ func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 	data := []response.User{}
-	banch := (*dbHandle).FindBanch((*res)[0].Banch)
 
 	data = append(data, response.User{
 		UserId: (*res)[0].UserId,
 		CompanyCode: (*res)[0].CompanyCode,
 		OnWorkDay: (*res)[0].OnWorkDay,
-		Banch: banch,
+		Banch: (*res)[0].Banch,
 		Permession: (*res)[0].Permession,
 		WorkState: (*res)[0].WorkState,
 	})
@@ -72,6 +79,34 @@ func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 		"data": *res,
 	})
 
+}
+
+func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+	companyCode, existed := (*props).Get("CompanyCode")
+	if !existed {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().GetCompanyCodeFailed,
+		})
+		return
+	}
+	userList := (*dbHandle).SelectUser(3, companyCode.(string))
+	data := []response.User{}
+	for _, v := range *userList {
+		data = append(data, response.User{
+			UserId: v.UserId,
+			CompanyCode: v.CompanyCode,
+			OnWorkDay: v.OnWorkDay,
+			Banch: v.Banch,
+			Permession: v.Permession,
+			WorkState: v.WorkState,
+		})
+	}
+	(*props).JSON(http.StatusNotAcceptable, gin.H{
+		"message": StatusText().FindSuccess,
+		"data": data,
+	})
 }
 
 func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {

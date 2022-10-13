@@ -627,6 +627,7 @@ func(dbObj *DB) DeleteLateExcused(deleteKey int, caseId int64) bool {
 // 0 => 全部, value => nil
 //  1 =>  userId, value => int64
 //  2 => account, value => string
+// 3 => companyCode, value => string
 func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTable {
 	defer panichandler.Recover()
 	return selectAllHandler(

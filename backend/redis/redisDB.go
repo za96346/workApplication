@@ -124,6 +124,7 @@ func(dbObj *DB) IsAlive() bool {
 // 0 => 全部, value =>  nil
 //  1 =>  userId, value => int64
 //  2 => account, value => string
+// 3 => companyCode, value => string
 func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTable {
 	defer panichandler.Recover()
 	tableKey := (*dbObj).table[0]
@@ -150,6 +151,20 @@ func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTab
 			func(v table.UserTable) bool {
 				for _, filterItem := range value {
 					if filterItem == v.Account {
+						return true
+					}
+				}
+				return false
+			},
+		)
+	case 3:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.UserTable) bool {
+				for _, filterItem := range value {
+					if filterItem == v.CompanyCode {
 						return true
 					}
 				}

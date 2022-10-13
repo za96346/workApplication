@@ -105,6 +105,7 @@ func(dbObj *DB) Conn() {
 // 0 => 全部, value => nil
 //  1 =>  userId, value => int64
 //  2 => account, value => string
+// 3 => companyCode, value => string
 func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTable {
 	defer panichandler.Recover()
 	querys := ""
@@ -119,6 +120,10 @@ func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTab
 	case 2:
 		// value need string
 		querys = (*query.MysqlSingleton()).User.SelectSingleByAccount
+		break
+	case 3:
+		// value need string
+		querys = (*query.MysqlSingleton()).User.SelectAllByCompanyCode
 		break
 	default:
 		querys = (*query.MysqlSingleton()).User.SelectAll

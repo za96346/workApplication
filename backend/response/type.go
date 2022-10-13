@@ -14,7 +14,7 @@ type User struct {
 	UserId int64 `json:"UserId"`// 使用者的編號
 	CompanyCode string `json:"CompanyCode"` //公司碼
 	OnWorkDay time.Time `json:"OnWorkDay"` // 到職日
-	Banch string `json:"Banch"` // 部門
+	Banch int64 `json:"Banch"` // 部門
 	Permession int `json:"Permession"` // 權限
 	WorkState string `json:"WorkState"` // 工作狀態 (到職on or 離職off)
 }
