@@ -262,7 +262,7 @@ func(dbObj *DB) SelectCompanyBanch(selectKey int, value... interface{}) *[]table
 			},
 			func(v table.CompanyBanchTable) bool {
 				for _, filterItem := range value {
-					if int64(filterItem.(int)) == v.CompanyId {
+					if filterItem == v.CompanyId {
 						return true
 					}
 				}
@@ -724,9 +724,9 @@ func(dbObj *DB) hmGet(tableKey string, field... interface{}) ([]string, error) {
 	returnValue := []string{}
 	res, err := (*dbObj).RedisDb.HMGet(tableKey, transArr...).Result()
 	for _, v := range res {
-		switch v.(type) {
+		switch x := v.(type) {
 		case string:
-			returnValue = append(returnValue, v.(string))
+			returnValue = append(returnValue, x)
 			break
 		case nil:
 			break;

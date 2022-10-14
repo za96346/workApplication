@@ -30,6 +30,7 @@ type statusText struct {
 	PasswordIsNotSame string
 	EmailIsNotRight string
 	GetCompanyCodeFailed string
+	IsNotHaveCompany string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -60,15 +61,17 @@ func StatusText() *statusText {
 				PasswordIsNotSame: "密碼不相等",
 				EmailIsNotRight: "電子信箱格式錯誤",
 				GetCompanyCodeFailed: "獲取公司碼失敗",
+				IsNotHaveCompany: "尚未有公司",
 			}
 		}
 	}
 	return statusTextInstance
 }
 
-func IsExited[T any](value *[]T) bool {
-	if len(*value) > 0 {
+func IsNotExited[T any](value *[]T) bool {
+	if len(*value) == 0 {
 		return true
 	}
 	return false
 }
+

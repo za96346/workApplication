@@ -12,9 +12,10 @@
 [GIN-debug] PUT    /workApp/entry/register   --> backend/worker.AssignWorker.func1 (5 handlers)
 [GIN-debug] POST   /workApp/entry/email/captcha --> backend/worker.AssignWorker.func1 (5 handlers)
 [GIN-debug] GET    /workApp/entry/checkAccess --> backend/worker.AssignWorker.func1 (6 handlers)
+[GIN-debug] GET    /workApp/company/banch/all --> backend/worker.AssignWorker.func1 (6 handlers)
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :4000
-[GIN] 2022/10/14 - 12:47:58 | 200 |   33.853084ms |       127.0.0.1 | POST     "/workApp/entry/login"
-[GIN] 2022/10/14 - 12:48:29 | 500 |    8.885333ms |       127.0.0.1 | GET      "/workApp/user/all?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjQsIkFjY291bnQiOiJhY2NvdW50MSJ9.cHYG33Ua_vsxQr9LNYiTOJZtppQE4iWDTRKNLfYy4TA"
-[GIN] 2022/10/14 - 12:48:48 | 406 |      2.8805ms |       127.0.0.1 | GET      "/workApp/user/all?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjQsIkFjY291bnQiOiJhY2NvdW50MSJ9.cHYG33Ua_vsxQr9LNYiTOJZtppQE4iWDTRKNLfYy4TA"
+[GIN] 2022/10/14 - 14:13:15 | 200 |   12.860625ms |       127.0.0.1 | POST     "/workApp/entry/login"
+[GIN] 2022/10/14 - 14:13:22 | 200 |    5.489625ms |             ::1 | GET      "/workApp/company/banch/all?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjExLCJBY2NvdW50IjoiYWNjb3VudDEifQ.qq84aHxc_fs1rjrTrXZok2wH0_HAxEY90JwbXIsCF_Q"
+[GIN] 2022/10/14 - 14:14:39 | 200 |    1.919958ms |             ::1 | GET      "/workApp/company/banch/all?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjExLCJBY2NvdW50IjoiYWNjb3VudDEifQ.qq84aHxc_fs1rjrTrXZok2wH0_HAxEY90JwbXIsCF_Q"

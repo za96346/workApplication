@@ -49,8 +49,10 @@ func main() {
 	// route group
 	userApi := apiServer.Group("/workApp/user")
 	entryApi := apiServer.Group("/workApp/entry")
+	companyApi := apiServer.Group("/workApp/company")
 	route.User(userApi)
 	route.EntryRoute(entryApi)
+	route.Company(companyApi)
 
 	// start
 	apiServer.Run(":" + port)

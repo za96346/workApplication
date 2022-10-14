@@ -3,11 +3,11 @@ package service
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 	"sync"
 	"time"
 
 	// "strconv"
+	"backend/methods"
 	"backend/response"
 	"backend/table"
 
@@ -19,7 +19,7 @@ func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	userId := (*props).Query("userId")
 	fmt.Println("userId => ", userId)
 	// 尋找 userData
-	intUserId, err := strconv.ParseInt(userId, 10, 64)
+	intUserId, err := methods.AnyToInt64(userId)
 	if err != nil {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": "轉換格式失敗",
@@ -27,7 +27,7 @@ func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 	res := (*dbHandle).SelectUser(1, intUserId)
-	if len(*res) == 0 {
+	if IsNotExited(res) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,
 		})
@@ -62,10 +62,16 @@ func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
-
+	converUserId, err := methods.AnyToInt64(userId)
+	if err != nil {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": "轉換格式失敗",
+		})
+		return
+	}
 	// 尋找資料
-	res := (*dbHandle).SelectUser(1, userId.(int64))
-	if len(*res) == 0 {
+	res := (*dbHandle).SelectUser(1, converUserId)
+	if IsNotExited(res) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,
 			"data": *res,

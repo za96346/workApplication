@@ -33,7 +33,7 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 
 	// 檢查帳號是否存在
 	res := (*dbHandle).SelectUser(2, (*reqBody).Account)
-	if !IsExited(res) {
+	if IsNotExited(res) {
 		(*props).JSON(http.StatusUnauthorized, gin.H{
 			"message": StatusText().NoUser,
 		})
@@ -87,7 +87,7 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 
 	// 檢查帳號是否被註冊
 	res := (*dbHandle).SelectUser(2, (*registeForm).Account)
-	if IsExited(res) {
+	if !IsNotExited(res) {
 		(*props).JSON(http.StatusConflict, gin.H{
 			"message": StatusText().AccountHasBeenRegisted,
 		})
