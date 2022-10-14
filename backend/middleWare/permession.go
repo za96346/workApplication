@@ -12,7 +12,7 @@ func Permession(allowPermession ...int) gin.HandlerFunc {
 		userId, existed := (*props).Get("UserId")
 		// user id 尋找
 		if !existed {
-			(*props).AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			(*props).AbortWithStatusJSON(http.StatusVariantAlsoNegotiates, gin.H{
 				"message": "找不到使用者2",
 			})
 			return
@@ -21,7 +21,7 @@ func Permession(allowPermession ...int) gin.HandlerFunc {
 		// 尋找user
 		user := (*handler.Singleton()).SelectUser(1, userId.(int64))
 		if len(*user) == 0 {
-			(*props).AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+			(*props).AbortWithStatusJSON(http.StatusVariantAlsoNegotiates, gin.H{
 				"message": "找不到使用者3",
 			})
 			return

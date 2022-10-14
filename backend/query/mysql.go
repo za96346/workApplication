@@ -107,6 +107,7 @@ func addUserQuery() {
 		companyCode,
 		account,
 		password,
+		userName,
 		onWorkDay,
 		banch,
 		permession,
@@ -116,7 +117,7 @@ func addUserQuery() {
 		monthSalary,
 		partTimeSalary
 		) values(
-		?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+		?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 	);`;
 	sqlQueryInstance.User.UpdateSingle = `
 		update user
@@ -125,6 +126,7 @@ func addUserQuery() {
 				select ifNull(companyCode, "") from company where companyCode=?
 			),
 			password=?,
+			userName=?,
 			onWorkDay=?,
 			banch=?,
 			permession=?,

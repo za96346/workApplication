@@ -15,6 +15,6 @@
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :4000
-[GIN] 2022/10/13 - 23:12:33 | 200 |   10.057375ms |       127.0.0.1 | POST     "/workApp/entry/login"
-[GIN] 2022/10/13 - 23:12:41 | 500 |    2.893125ms |       127.0.0.1 | GET      "/workApp/user/all?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjIsIkFjY291bnQiOiJhY2NvdW50MSJ9.z_HC7zSStvRsDFLcjBvq301gRr1QbmIUNb8IoZoAzHw"
-[GIN] 2022/10/13 - 23:13:17 | 406 |     14.5265ms |       127.0.0.1 | GET      "/workApp/user/all?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjIsIkFjY291bnQiOiJhY2NvdW50MSJ9.z_HC7zSStvRsDFLcjBvq301gRr1QbmIUNb8IoZoAzHw"
+[GIN] 2022/10/14 - 12:47:58 | 200 |   33.853084ms |       127.0.0.1 | POST     "/workApp/entry/login"
+[GIN] 2022/10/14 - 12:48:29 | 500 |    8.885333ms |       127.0.0.1 | GET      "/workApp/user/all?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjQsIkFjY291bnQiOiJhY2NvdW50MSJ9.cHYG33Ua_vsxQr9LNYiTOJZtppQE4iWDTRKNLfYy4TA"
+[GIN] 2022/10/14 - 12:48:48 | 406 |      2.8805ms |       127.0.0.1 | GET      "/workApp/user/all?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjQsIkFjY291bnQiOiJhY2NvdW50MSJ9.cHYG33Ua_vsxQr9LNYiTOJZtppQE4iWDTRKNLfYy4TA"

@@ -98,6 +98,7 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 			UserId: v.UserId,
 			CompanyCode: v.CompanyCode,
 			OnWorkDay: v.OnWorkDay,
+			UserName: v.UserName,
 			Banch: v.Banch,
 			Permession: v.Permession,
 			WorkState: v.WorkState,

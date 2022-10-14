@@ -25,6 +25,7 @@ func DataBaseInit() {
 		create table user(
 			userId bigint not null AUTO_INCREMENT unique,
 			companyCode varchar(50),
+			userName varchar(20),
 			account varchar(50) primary key,
 			password varchar(50),
 			onWorkDay timestamp,
@@ -470,6 +471,7 @@ func simulateData() {
 				CompanyCode: "fei32fej",
 				Account: "account" + strconv.Itoa(i),
 				Password: "aa20010722",
+				UserName: "siou" + strconv.Itoa(i),
 				OnWorkDay: time.Now(),
 				Banch: 1,
 				Permession: 0,

@@ -139,6 +139,7 @@ func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTab
 		err = res.Scan(
 			&user.UserId,
 			companyCode,
+			&user.UserName,
 			&user.Account,
 			&user.Password,
 			&user.OnWorkDay,
@@ -755,6 +756,7 @@ func(dbObj *DB) UpdateUser(updateKey int, data *table.UserTable, value... interf
 				(*dbObj).containers.user,
 				(*data).CompanyCode,
 				(*data).Password,
+				(*data).UserName,
 				(*data).OnWorkDay,
 				(*data).Banch,
 				(*data).Permession,
@@ -1112,6 +1114,7 @@ func(dbObj *DB) InsertUser(data *table.UserTable) (bool, int64) {
 			(*data).CompanyCode,
 			(*data).Account,
 			(*data).Password,
+			(*data).UserName,
 			(*data).OnWorkDay,
 			(*data).Banch,
 			(*data).Permession,
