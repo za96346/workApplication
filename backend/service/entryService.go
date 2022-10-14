@@ -57,7 +57,7 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 	(*dbHandle).Redis.InsertToken(tk.GetLoginToken())
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().LoginSuccess,
-		"token": tk.GetLoginToken(),
+		"data": tk.GetLoginToken(),
 	})
 	
 }

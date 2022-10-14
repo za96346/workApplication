@@ -8,16 +8,18 @@ import {
     applyMiddleware
 } from 'redux'
 import { userReducer } from './reducer/userReducer'
+import { companyReducer } from './reducer/companyReducer'
 
 export const reducer = combineReducers({
-    user: userReducer
+    user: userReducer,
+    company: companyReducer
 })
 
 // 持久化根reducers
 const persistedReducer = persistReducer({
     key: 'root',
     storage,
-    whitelist: ['user']
+    blacklist: []
 },
 reducer
 )

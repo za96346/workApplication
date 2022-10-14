@@ -2,6 +2,7 @@ import Menu from '../component/Menu'
 import React, { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import api from '../api/api'
 
 const Layout = (): JSX.Element => {
     const { pathname } = useLocation()
@@ -11,6 +12,8 @@ const Layout = (): JSX.Element => {
     useEffect(() => {
         if (!token) {
             navigate('/entry/login')
+        } else {
+            void api.getBanch()
         }
     }, [token])
 

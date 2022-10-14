@@ -10,10 +10,6 @@ export interface LoginType {
     Account: string
     Password: string
 }
-export interface LoginResponse {
-    token: string
-    message: string
-}
 
 export interface GetEmailCaptcha {
     Email: string
@@ -40,4 +36,18 @@ export interface EmpManagerCellType {
     workState: string
     banch: string
     permession: string
+}
+
+export interface BanchType {
+    Id: number
+    CompanyId: string
+    BanchName: string
+    BanchShiftStyle: string
+    CreateTime: string | Date
+    LastModify: string | Date
+}
+
+export interface ResType<T> extends ResMessage {
+    data?: T
+    status: boolean
 }
