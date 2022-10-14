@@ -1,9 +1,9 @@
 import api from './apiAbs'
 import axios from 'axios'
 import { LoginResponse, LoginType, RegisterType, ResMessage } from '../type'
-import checkStatus from './checkStatus'
 import userAction from '../reduxer/action/userAction'
 import { store } from '../reduxer/store'
+import { FullMessage } from '../method/notice'
 
 class ApiControl extends api {
     baseUrl: string
@@ -18,16 +18,16 @@ class ApiControl extends api {
         this.baseUrl = process.env.REACT_APP_API
     }
 
-    protected async GET<T> (url: any, params: any, callBack: any): Promise<{ data: T, status: boolean }> {
+    protected async GET<T> (url: any, params: any): Promise<{ data: T, status: boolean }> {
         try {
             const res = await axios.get(`${this.baseUrl}/${url}`, { ...params })
-            callBack(res.status)
+            void FullMessage.success(res.data.message)
             return {
                 data: res.data,
                 status: true
             }
         } catch (e) {
-            callBack(e.response.status)
+            void FullMessage.error(e.response.data.message)
             return {
                 data: e.response.data,
                 status: true
@@ -35,18 +35,18 @@ class ApiControl extends api {
         }
     }
 
-    protected async POST<T> (url: any, body: any, callBack: any, params?: any): Promise<{ data: T, status: boolean }> {
+    protected async POST<T> (url: any, body: any, params?: any): Promise<{ data: T, status: boolean }> {
         try {
             const res = await axios.post(`${this.baseUrl}/${url}`, body, {
                 ...params
             })
-            callBack(res.status)
+            void FullMessage.success(res.data.message)
             return {
                 data: res.data,
                 status: true
             }
         } catch (e) {
-            callBack(e.response.status)
+            void FullMessage.error(e.response.data.message)
             return {
                 data: e.response.data,
                 status: false
@@ -54,18 +54,18 @@ class ApiControl extends api {
         }
     }
 
-    protected async PUT<T> (url: any, body: any, callBack: any, params?: any): Promise<{ data: T, status: boolean }> {
+    protected async PUT<T> (url: any, body: any, params?: any): Promise<{ data: T, status: boolean }> {
         try {
             const res = await axios.put(`${this.baseUrl}/${url}`, body, {
                 ...params
             })
-            callBack(res.status)
+            void FullMessage.success(res.data.message)
             return {
                 data: res.data,
                 status: true
             }
         } catch (e) {
-            callBack(e.response.status)
+            void FullMessage.error(e.response.data.message)
             return {
                 data: e.response.data,
                 status: false
@@ -76,8 +76,7 @@ class ApiControl extends api {
     async login (data: LoginType): Promise<void> {
         const res = await this.POST<LoginResponse>(
             this.route.login,
-            data,
-            async (e: number) => await checkStatus.Login(e)
+            data
         )
         console.log(res)
         if (res.status) {
@@ -88,8 +87,7 @@ class ApiControl extends api {
     async register (data: RegisterType): Promise<boolean> {
         const res = await this.PUT<ResMessage>(
             this.route.registe,
-            data,
-            async (e: number) => await checkStatus.Register(e)
+            data
         )
         return res.status
     }
@@ -97,8 +95,7 @@ class ApiControl extends api {
     async getEmailCaptcha (email: string): Promise<void> {
         const res = await this.POST<ResMessage>(
             this.route.getEmailCaptcha,
-            { Email: email },
-            async (e: number) => await checkStatus.GetEmailCaptcha(e)
+            { Email: email }
         )
         console.log(res)
     }

@@ -75,7 +75,7 @@ func Singleton() *DB {
 
 func(dbObj *DB) Conn() { // 實體化redis.Client 並返回實體的位址
 	defer panichandler.Recover()
-	err := godotenv.Load("../.env")
+	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("error loading .env file")
 	}

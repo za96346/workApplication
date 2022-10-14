@@ -76,7 +76,7 @@ func Singleton() *DB {
 
 func(dbObj *DB) Conn() {
 	defer panichandler.Recover()
-	err := godotenv.Load("../.env")
+	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("error loading .env file")
 	}

@@ -67,7 +67,7 @@ func TestSelectUserPreference(t *testing.T) {
 		}
 		return false
 	}
-	handler.Init()
+	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectUserPreference(0)
@@ -95,7 +95,7 @@ func TestSelectCompany (t *testing.T) {
 		}
 		return false
 	}
-	handler.Init()
+	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectCompany(0)
@@ -134,7 +134,7 @@ func TestSelectCompanyBanch(t *testing.T) {
 		}
 		return false
 	}
-	handler.Init()
+	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectCompanyBanch(0)
@@ -172,7 +172,7 @@ func TestSelectShift(t *testing.T) {
 		}
 		return false
 	}
-	handler.Init()
+	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectShift(0)
@@ -199,7 +199,7 @@ func TestSelectShiftChange(t *testing.T) {
 		}
 		return false
 	}
-	handler.Init()
+	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectShiftChange(0)
@@ -227,7 +227,7 @@ func TestSelectShiftOverTime(t *testing.T) {
 		}
 		return false
 	}
-	handler.Init()
+	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectShiftOverTime(0)
@@ -255,7 +255,7 @@ func TestSelectForgetPunch(t *testing.T) {
 		}
 		return false
 	}
-	handler.Init()
+	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectForgetPunch(0)
@@ -283,7 +283,7 @@ func TestSelectLateExcused(t *testing.T) {
 		}
 		return false
 	}
-	handler.Init()
+	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectLateExcused(0)
@@ -311,7 +311,7 @@ func TestSelectDayOff(t *testing.T) {
 		}
 		return false
 	}
-	handler.Init()
+	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectDayOff(0)
