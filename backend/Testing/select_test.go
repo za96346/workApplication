@@ -127,6 +127,44 @@ func TestSelectCompany (t *testing.T) {
 
 }
 
+func TestSelectCompanyBanch(t *testing.T) {
+	compareFunc := func(v table.CompanyBanchTable, vNext table.CompanyBanchTable) bool {
+		if v.Id > vNext.Id {
+			return true
+		}
+		return false
+	}
+	handler.Init()
+
+	// test 0
+	r := (*redis.Singleton()).SelectCompanyBanch(0)
+	m := (*mysql.Singleton()).SelectCompanyBanch(0)
+	res := testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+
+	// test 1
+	r = (*redis.Singleton()).SelectCompanyBanch(1, int64(1))
+	m = (*mysql.Singleton()).SelectCompanyBanch(1, int64(1))
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+
+	r = (*redis.Singleton()).SelectCompanyBanch(1, int64(1))
+	m = (*mysql.Singleton()).SelectCompanyBanch(1, int64(2))
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
+
+	// test 2
+	r = (*redis.Singleton()).SelectCompanyBanch(2, int64(1))
+	m = (*mysql.Singleton()).SelectCompanyBanch(2, int64(1))
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+
+	r = (*redis.Singleton()).SelectCompanyBanch(2, int64(1))
+	m = (*mysql.Singleton()).SelectCompanyBanch(2, int64(2))
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
+}
+
 func sorted[T comparable](arr *[]T, compareFunc func(T, T) bool) *[]T {
 	a := *arr
 	for oldStep := len(*arr) - 1;oldStep > 0; oldStep -- {
