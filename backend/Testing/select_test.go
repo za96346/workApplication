@@ -248,6 +248,34 @@ func TestSelectShiftOverTime(t *testing.T) {
 	
 }
 
+func TestSelectForgetPunch(t *testing.T) {
+	compareFunc := func(v table.ForgetPunchTable, vNext table.ForgetPunchTable) bool {
+		if v.CaseId > vNext.CaseId {
+			return true
+		}
+		return false
+	}
+	handler.Init()
+
+	// test 0
+	r := (*redis.Singleton()).SelectForgetPunch(0)
+	m := (*mysql.Singleton()).SelectForgetPunch(0)
+	res := testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+
+	// test 1
+	r = (*redis.Singleton()).SelectForgetPunch(1, int64(1))
+	m = (*mysql.Singleton()).SelectForgetPunch(1, int64(1))
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+
+	r = (*redis.Singleton()).SelectForgetPunch(1, int64(1))
+	m = (*mysql.Singleton()).SelectForgetPunch(1, int64(2))
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
+	
+}
+
 func sorted[T comparable](arr *[]T, compareFunc func(T, T) bool) *[]T {
 	a := *arr
 	for oldStep := len(*arr) - 1;oldStep > 0; oldStep -- {
