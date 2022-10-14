@@ -449,7 +449,7 @@ func simulateData() {
 		handleError(resStatus)
 		// company banch
 		resData := (*Singleton()).SelectCompany(2, "fei32fej")
-		fmt.Println("接收SelectCompanySingle 記憶體位置 => ", resData, "\n")
+		fmt.Println("接收SelectCompanySingle 記憶體位置 => ", resData)
 		companyBanch := table.CompanyBanchTable{
 			CompanyId :(*resData)[0].CompanyId,
 			BanchName: "公關組",

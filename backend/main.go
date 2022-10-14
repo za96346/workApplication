@@ -40,7 +40,11 @@ func init() {
 }
 
 func main() {
+	SetRouter()
 
+}
+
+func SetRouter() *gin.Engine {
 	port := os.Getenv("PORT")
 	loggers()
 	apiServer := gin.Default()
@@ -56,6 +60,7 @@ func main() {
 
 	// start
 	apiServer.Run(":" + port)
+	return apiServer
 }
 
 func loggers() {
