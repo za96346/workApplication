@@ -108,6 +108,7 @@ func addUserQuery() {
 		account,
 		password,
 		userName,
+		employeeNumber,
 		onWorkDay,
 		banch,
 		permession,
@@ -117,7 +118,7 @@ func addUserQuery() {
 		monthSalary,
 		partTimeSalary
 		) values(
-		?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+		?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 	);`;
 	sqlQueryInstance.User.UpdateSingle = `
 		update user

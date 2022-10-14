@@ -118,6 +118,7 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 		Password: (*registeForm).Password,
 		CompanyCode: (*registeForm).CompanyCode,
 		UserName: (*registeForm).UserName,
+		EmployeeNumber: "",
 		Permession: 2,
 		WorkState: "on",
 		Banch: -1,

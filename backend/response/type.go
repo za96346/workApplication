@@ -13,6 +13,7 @@ type Response struct {
 type User struct {
 	UserId int64 `json:"UserId"`// 使用者的編號
 	CompanyCode string `json:"CompanyCode"` //公司碼
+	EmployeeNumber string `json:"EmployeeNumber"` // 員工編號
 	OnWorkDay time.Time `json:"OnWorkDay"` // 到職日
 	UserName string `json:"UserName"`  // 姓名
 	Banch int64 `json:"Banch"` // 部門

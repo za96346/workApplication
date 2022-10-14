@@ -11,6 +11,7 @@ type UserTable struct {
 	Account string `json:"Account"`// 帳號
 	Password string `json:"Password"`// 密碼
 	UserName string `json:"UserName"` // 名字
+	EmployeeNumber string `json:"EmployeeNumber"` // 員工編號
 	OnWorkDay time.Time `json:"OnWorkDay"` // 到職日
 	Banch int64 `json:"Banch"` // 部門
 	Permession int `json:"Permession"` // 權限  (100 admin , 1 manager, 2 personal)
