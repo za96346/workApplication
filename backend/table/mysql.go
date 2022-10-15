@@ -32,6 +32,8 @@ type UserPreferenceTable struct {
 	LastModify time.Time `json:"LastModify"`// 上次修改的時間
 }
 
+
+
 //班表
 type ShiftTable struct {
 	ShiftId int64 `json:"ShiftId"` // 班表的編號
@@ -125,6 +127,32 @@ type CompanyBanchTable struct {
 	CompanyId int64 `json:"CompanyId"` // 公司編號
 	BanchName string `json:"BanchName"` // 公司部們名稱
 	BanchShiftStyle string `json:"BanchShiftStyle"` // 部門班表樣式
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
+}
+
+//部門班表的樣式規則
+type BanchStyle struct {
+	StyleId int64 `json:"StyleId"` // 此樣式的id
+	BanchId int64 `json:"Id"` // 部門id
+	Icon string `json:"Icon"` // 時段圖標
+	TimeRangeName string `json:"TimeRangeName"` // 時段名稱
+	OnShiftTime string  `json:"OnShiftTime"`// 開始上班時間
+	OffShiftTime string `json:"OffShiftTime"` //結束上班的時間
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
+}
+
+// 個部門的 每天上班規則
+type BanchRule struct {
+	RuleId int64 `json:"RuleId"` // 此規則的id
+	BanchId int64 `json:"Id"` // 部門id
+	MinPeople int `json:"MinPeople"` // 限制最少員工
+	MaxPeople int `json:"MaxPeople"` // 限制做多的員工
+	WeekDay int `json:"WeekDay"` // 星期幾 (1, 2, 3, 4, 5, 6, 7)
+	WeekType int `json:"weekType"` // 寒暑假 或 平常(1, 2, 3)
+	OnShiftTime string  `json:"OnShiftTime"`// 開始上班時間
+	OffShiftTime string `json:"OffShiftTime"` //結束上班的時間
 	CreateTime time.Time `json:"CreateTime"`//創建的時間
 	LastModify time.Time `json:"LastModify"`// 上次修改的時間
 }

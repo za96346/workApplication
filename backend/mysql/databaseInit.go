@@ -20,6 +20,8 @@ func DataBaseInit() {
 	(*Singleton()).MysqlDB.Exec(`drop table lateExcused;`)
 	(*Singleton()).MysqlDB.Exec(`drop table company;`)
 	(*Singleton()).MysqlDB.Exec(`drop table companyBanch;`)
+	(*Singleton()).MysqlDB.Exec(`drop table banchStyle;`)
+	(*Singleton()).MysqlDB.Exec(`drop table banchRule;`)
 /// user table
 	_, err := (*Singleton()).MysqlDB.Exec(`
 		create table user(
@@ -220,6 +222,43 @@ func DataBaseInit() {
 		log.Fatal(err)
 	}
 
+/// banch style table
+
+	_, err = (*Singleton()).MysqlDB.Exec(`
+		create table banchStyle(
+			styleId bigint not null unique auto_increment,
+			banchId bigint,
+			icon varchar(100),
+			timeRangeName varchar(20),
+			onShiftTime time,
+			offShiftTime time,
+			createTime timestamp,
+			lastModify timestamp
+		);
+	`)
+
+	if err == nil {
+		fmt.Println("banchStyle table is created success")
+	} else {
+		fmt.Println("banchStyle table is created failed")
+	}
+
+/// banch rule table
+
+	_, err = (*Singleton()).MysqlDB.Exec(`
+		create table banchRule(
+			ruleId bigint not null unique auto_increment,
+			banchId bigint,
+			maxPeople int,
+			minPeople int,
+			weekDay int,
+			weekType int,
+			onShiftTime time,
+			offShiftTime time,
+			createTime timestamp,
+			lastModify timestamp
+		);
+	`)
 
 /// userPreference alter
 	_, err = (*Singleton()).MysqlDB.Exec("alter table userPreference add foreign key(userId) references user(userId) on update cascade on delete cascade;")
@@ -418,6 +457,51 @@ func DataBaseInit() {
 		log.Fatal(err)
 	}
 
+/// banch style
+	_, err = (*Singleton()).MysqlDB.Exec("alter table banchStyle auto_increment=1;")
+
+	if err == nil {
+		fmt.Println("banchStyle alter set auto increment success")
+	} else {
+		fmt.Println("banchStyle alter set auto increment failed")
+		log.Fatal(err)
+	}
+
+	_, err = (*Singleton()).MysqlDB.Exec("alter table banchStyle add foreign key (banchId) references companyBanch(id) on update cascade on delete cascade;")
+	if err == nil {
+		fmt.Println("banchStyle alter foreign key success")
+	} else {
+		fmt.Println("banchStyle alter foreign key failed")
+		log.Fatal(err)
+	}
+
+/// banch rule
+	_, err = (*Singleton()).MysqlDB.Exec("alter table banchRule auto_increment=1;")
+
+	if err == nil {
+		fmt.Println("banchRule alter set auto increment success")
+	} else {
+		fmt.Println("banchRule alter set auto increment failed")
+		log.Fatal(err)
+	}
+
+	_, err = (*Singleton()).MysqlDB.Exec("alter table banchRule add primary key (banchId, weekDay, weekType);")
+
+	if err == nil {
+		fmt.Println("banchRule alter set primary key success")
+	} else {
+		fmt.Println("banchRule alter set primary key failed")
+		log.Fatal(err)
+	}
+
+	_, err = (*Singleton()).MysqlDB.Exec("alter table banchRule add foreign key (banchId) references companyBanch(id) on update cascade on delete cascade;")
+	if err == nil {
+		fmt.Println("banchRule alter foreign key success")
+	} else {
+		fmt.Println("banchRule alter foreign key failed")
+		log.Fatal(err)
+	}
+
 }
 func simulateData() {
 	wg := new(sync.WaitGroup)
@@ -449,7 +533,6 @@ func simulateData() {
 		handleError(resStatus)
 		// company banch
 		resData := (*Singleton()).SelectCompany(2, "fei32fej")
-		fmt.Println("接收SelectCompanySingle 記憶體位置 => ", resData)
 		companyBanch := table.CompanyBanchTable{
 			CompanyId :(*resData)[0].CompanyId,
 			BanchName: "公關組",
@@ -457,8 +540,31 @@ func simulateData() {
 			CreateTime: time.Now(),
 			LastModify: time.Now(),
 		}
-		resStatus, _ = (*Singleton()).InsertCompanyBanch(&companyBanch)
+		resStatus, id := (*Singleton()).InsertCompanyBanch(&companyBanch)
 		handleError(resStatus)
+
+		banchStyle := table.BanchStyle{
+			BanchId: id,
+			OnShiftTime: "09:00",
+			OffShiftTime: "18:00",
+			Icon: ">'..'<",
+			TimeRangeName: "平日早班",
+			CreateTime: time.Now(),
+			LastModify: time.Now(),
+		}
+		(*Singleton()).InsertBanchStyle(&banchStyle)
+		banchRule := table.BanchRule{
+			BanchId: id,
+			MaxPeople: 2,
+			MinPeople: 1,
+			WeekDay: 1,
+			WeekType: 2,
+			OnShiftTime: "09:00",
+			OffShiftTime: "18:00",
+			CreateTime: time.Now(),
+			LastModify: time.Now(),
+		}
+		(*Singleton()).InsertBanchRule(&banchRule)
 		(*wg).Done()
 	}()
 	(*wg).Wait()

@@ -33,6 +33,8 @@ type DB struct {
 	shiftOverTimeMux *sync.RWMutex
 	dayOffMux *sync.RWMutex
 	lateExcusedMux *sync.RWMutex
+	banchStyleMux *sync.RWMutex
+	banchRuleMux *sync.RWMutex
 	forgetPunchMux *sync.RWMutex
 	MysqlDB *sql.DB // 要先使用連線方法後才能使用這個
 	containers
@@ -68,6 +70,8 @@ func Singleton() *DB {
 				dayOffMux: new(sync.RWMutex),
 				lateExcusedMux: new(sync.RWMutex),
 				forgetPunchMux: new(sync.RWMutex),
+				banchStyleMux: new(sync.RWMutex),
+				banchRuleMux: new(sync.RWMutex),
 			}
 		}
 	}
@@ -548,6 +552,79 @@ func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.
 	return &carry
 }
 
+// 0 => all, value => nil
+func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.BanchStyle {
+	defer panichandler.Recover()
+	querys := ""
+	switch selectKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).BanchStyle.SelectAll
+		break
+	default:
+		querys = (*query.MysqlSingleton()).BanchStyle.SelectAll
+		break
+	}
+	banchStyle := new(table.BanchStyle)
+	carry := []table.BanchStyle{}
+	res, err := (*dbObj).MysqlDB.Query(querys, value...)
+	defer res.Close()
+	(*dbObj).checkErr(err)
+	for res.Next() {
+		err = res.Scan(
+			&banchStyle.StyleId,
+			&banchStyle.BanchId,
+			&banchStyle.Icon,
+			&banchStyle.TimeRangeName,
+			&banchStyle.OnShiftTime,
+			&banchStyle.OffShiftTime,
+			&banchStyle.CreateTime,
+			&banchStyle.LastModify,
+		)
+		(*dbObj).checkErr(err)
+		if err == nil {
+			carry = append(carry, *banchStyle)
+		}
+	}
+	return &carry
+}
+
+// 0 => all, value => nil
+func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.BanchRule {
+	defer panichandler.Recover()
+	querys := ""
+	switch selectKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).BanchRule.SelectAll
+		break
+	default:
+		querys = (*query.MysqlSingleton()).BanchRule.SelectAll
+		break
+	}
+	banchRule := new(table.BanchRule)
+	carry := []table.BanchRule{}
+	res, err := (*dbObj).MysqlDB.Query(querys, value...)
+	defer res.Close()
+	(*dbObj).checkErr(err)
+	for res.Next() {
+		err = res.Scan(
+			&banchRule.RuleId,
+			&banchRule.BanchId,
+			&banchRule.MaxPeople,
+			&banchRule.MinPeople,
+			&banchRule.WeekDay,
+			&banchRule.WeekType,
+			&banchRule.OnShiftTime,
+			&banchRule.OffShiftTime,
+			&banchRule.CreateTime,
+			&banchRule.LastModify,
+		)
+		(*dbObj).checkErr(err)
+		if err == nil {
+			carry = append(carry, *banchRule)
+		}
+	}
+	return &carry
+}
 
 // ---------------------------------delete------------------------------------
 
@@ -1353,6 +1430,58 @@ func(dbObj *DB) InsertLateExcused(data *table.LateExcusedTable) (bool, int64) {
 			return false, id
 		}
 		return true, id
+}
+
+func(dbObj *DB) InsertBanchStyle(data *table.BanchStyle) (bool, int64) {
+
+	defer panichandler.Recover()
+	(*dbObj).banchStyleMux.Lock()
+	defer (*dbObj).banchStyleMux.Unlock()
+	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).BanchStyle.InsertAll)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	res, err := stmt.Exec(
+		(*data).BanchId,
+		(*data).Icon,
+		(*data).TimeRangeName,
+		(*data).OnShiftTime,
+		(*data).OffShiftTime,
+		(*data).CreateTime,
+		(*data).LastModify,
+	)
+	(*dbObj).checkErr(err)
+	id, _:= res.LastInsertId()
+	if err != nil {
+		return false, id
+	}
+	return true, id
+}
+
+func(dbObj *DB) InsertBanchRule(data *table.BanchRule) (bool, int64) {
+
+	defer panichandler.Recover()
+	(*dbObj).banchRuleMux.Lock()
+	defer (*dbObj).banchRuleMux.Unlock()
+	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).BanchRule.InsertAll)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	res, err := stmt.Exec(
+		(*data).BanchId,
+		(*data).MaxPeople,
+		(*data).MinPeople,
+		(*data).WeekDay,
+		(*data).WeekType,
+		(*data).OnShiftTime,
+		(*data).OffShiftTime,
+		(*data).CreateTime,
+		(*data).LastModify,
+	)
+	(*dbObj).checkErr(err)
+	id, _:= res.LastInsertId()
+	if err != nil {
+		return false, id
+	}
+	return true, id
 }
 func(dbObj *DB) checkErr(err error) {
 	if err != nil {

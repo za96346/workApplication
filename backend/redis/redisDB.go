@@ -34,6 +34,8 @@ type DB struct {
 	dayOffMux *sync.RWMutex
 	lateExcusedMux *sync.RWMutex
 	forgetPunchMux *sync.RWMutex
+	banchStyleMux *sync.RWMutex
+	banchRuleMux *sync.RWMutex
 }
 var redisInstance *DB
 
@@ -57,6 +59,8 @@ func Singleton() *DB {
 				dayOffMux: new(sync.RWMutex),
 				lateExcusedMux: new(sync.RWMutex),
 				forgetPunchMux: new(sync.RWMutex),
+				banchStyleMux: new(sync.RWMutex),
+				banchRuleMux: new(sync.RWMutex),
 			}
 			(*redisInstance).table[0] = "user"
 			(*redisInstance).table[1] = "userPreference"
@@ -68,6 +72,8 @@ func Singleton() *DB {
 			(*redisInstance).table[7] = "dayOff"
 			(*redisInstance).table[8] = "forgetPunch"
 			(*redisInstance).table[9] = "lateExcused"
+			(*redisInstance).table[10] = "banchStyle"
+			(*redisInstance).table[11] = "banchRule"
 		}
 	}
 	return redisInstance
@@ -431,6 +437,40 @@ func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.
 	}
 }
 
+// 0 => all, value => nil
+func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.BanchStyle {
+	defer panichandler.Recover()
+	tableKey := (*dbObj).table[10]
+	switch selectKey {
+	case 0:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.BanchStyle) bool {return true},
+		)
+	default:
+		return &[]table.BanchStyle{}
+	}
+}
+
+// 0 => all, value => nil
+func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.BanchRule {
+	defer panichandler.Recover()
+	tableKey := (*dbObj).table[11]
+	switch selectKey {
+	case 0:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.BanchRule) bool {return true},
+		)
+	default:
+		return &[]table.BanchRule{}
+	}
+}
+
 //  ------------------------------delete------------------------------
 
 //使用者的唯一id
@@ -522,6 +562,25 @@ func(dbObj *DB) DeleteLateExcused(deleteKey int, caseId int64) bool {
 	(*dbObj).RedisDb.HDel((*dbObj).table[9], strconv.FormatInt(caseId, 10))
 	return true
 }
+
+// style的唯一id
+func(dbObj *DB) DeleteBanchStyle(deleteKey int, caseId int64) bool {
+	defer panichandler.Recover()
+	(*dbObj).banchStyleMux.Lock()
+	defer (*dbObj).banchStyleMux.Unlock()
+	(*dbObj).RedisDb.HDel((*dbObj).table[10], strconv.FormatInt(caseId, 10))
+	return true
+}
+
+// style的唯一id
+func(dbObj *DB) DeleteBanchRule(deleteKey int, caseId int64) bool {
+	defer panichandler.Recover()
+	(*dbObj).banchRuleMux.Lock()
+	defer (*dbObj).banchRuleMux.Unlock()
+	(*dbObj).RedisDb.HDel((*dbObj).table[11], strconv.FormatInt(caseId, 10))
+	return true
+}
+
 
 
 
@@ -646,6 +705,30 @@ func(dbObj *DB) InsertLateExcused(data *table.LateExcusedTable) bool {
 	return true
 }
 
+func(dbObj *DB) InsertBanchStyle(data *table.BanchStyle) bool {
+	defer panichandler.Recover()
+	(*dbObj).banchStyleMux.Lock()
+	defer (*dbObj).banchStyleMux.Unlock()
+	key := strconv.FormatInt((*data).StyleId, 10)
+	jsonData, _ := json.Marshal(*data)
+	_, err := (*dbObj).RedisDb.HSet((*dbObj).table[10], key, jsonData).Result()
+	
+	(*dbObj).checkErr(err)
+	return true
+}
+
+func(dbObj *DB) InsertBanchRule(data *table.BanchRule) bool {
+	defer panichandler.Recover()
+	(*dbObj).banchRuleMux.Lock()
+	defer (*dbObj).banchRuleMux.Unlock()
+	key := strconv.FormatInt((*data).RuleId, 10)
+	jsonData, _ := json.Marshal(*data)
+	_, err := (*dbObj).RedisDb.HSet((*dbObj).table[11], key, jsonData).Result()
+	
+	(*dbObj).checkErr(err)
+	return true
+}
+
 
 
 //  ------------------------------delete key------------------------------
@@ -688,6 +771,15 @@ func(dbObj *DB) DeleteKeyForgetPunch(){
 func(dbObj *DB) DeleteKeyLateExcused(){
 	defer panichandler.Recover()
 	(*dbObj).RedisDb.Del((*dbObj).table[9])
+}
+
+func(dbObj *DB) DeleteKeyBanchStyle(){
+	defer panichandler.Recover()
+	(*dbObj).RedisDb.Del((*dbObj).table[10])
+}
+func(dbObj *DB) DeleteKeyBanchRule(){
+	defer panichandler.Recover()
+	(*dbObj).RedisDb.Del((*dbObj).table[11])
 }
 
 

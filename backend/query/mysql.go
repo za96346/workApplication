@@ -20,6 +20,8 @@ type sqlQuery struct {
 	ForgetPunch forgetPunchQuery
 	LateExcused lateExcusedQuery
 	DayOff dayOffQuery
+	BanchStyle banchStyle
+	BanchRule banchRule
 }
 type queryCommonColumn struct {
 	InsertAll string
@@ -76,6 +78,12 @@ type  dayOffQuery struct {
 	queryCommonColumn
 	SelectSingleByCaseId string
 }
+type banchStyle struct {
+	queryCommonColumn
+}
+type banchRule struct {
+	queryCommonColumn
+}
 
 func MysqlSingleton() *sqlQuery {
 	queryMux = new(sync.Mutex)
@@ -94,6 +102,8 @@ func MysqlSingleton() *sqlQuery {
 			addForgetPunchQuery()
 			addLateExcusedQuery()
 			addDayOffQuery()
+			addBanchStyleQuery()
+			addBanchRuleQuery()
 			return sqlQueryInstance
 		}
 	}
@@ -390,4 +400,38 @@ func addDayOffQuery() {
 	sqlQueryInstance.DayOff.SelectAll = `select * from dayOff;`;
 	sqlQueryInstance.DayOff.Delete = `delete from dayOff where caseId = ?;`;
 	sqlQueryInstance.DayOff.SelectSingleByCaseId = `select * from dayOff where caseId = ?;`;
+}
+func addBanchStyleQuery() {
+	sqlQueryInstance.BanchStyle.InsertAll = `
+		insert into banchStyle(
+			banchId,
+			icon,
+			timeRangeName,
+			onShiftTime,
+			offShiftTime,
+			createTime,
+			lastModify
+		) values(
+			?, ?, ?, ?, ?, ?, ?
+		);
+	`
+	sqlQueryInstance.BanchStyle.SelectAll = `select * from banchStyle;`;
+}
+func addBanchRuleQuery() {
+	sqlQueryInstance.BanchRule.InsertAll = `
+		insert into banchRule(
+			banchId,
+			maxPeople,
+			minPeople,
+			weekDay,
+			weekType,
+			onShiftTime,
+			offShiftTime,
+			createTime,
+			lastModify
+		) values(
+			?, ?, ?, ?, ?, ?, ?, ?, ?
+		);
+	`
+	sqlQueryInstance.BanchRule.SelectAll = `select * from banchRule;`;
 }

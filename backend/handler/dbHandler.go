@@ -35,6 +35,8 @@ type DB struct {
 	dayOffLock *bool
 	forgetPunchLock *bool
 	lateExcusedLock *bool
+	banchStyleLock *bool
+	banchRuleLock *bool
 }
 
 func newBool(b bool) *bool {
@@ -60,6 +62,8 @@ func Singleton() *DB {
 				dayOffLock: newBool(false),
 				forgetPunchLock: newBool(false),
 				lateExcusedLock: newBool(false),
+				banchStyleLock: newBool(false),
+				banchRuleLock: newBool(false),
 			}
 		}
 	}
@@ -78,34 +82,9 @@ func(dbObj *DB) TakeAllFromMysql() {
 	(*dbObj).restoreDayOffAll()
 	(*dbObj).restoreForgetPunchAll()
 	(*dbObj).restoreLateExcusedAll()
+	(*dbObj).restoreBanchStyleAll()
+	(*dbObj).restoreBanchRuleAll()
 
-	user := (*dbObj).SelectUser(2, "account8")
-	fmt.Println("user select by account =>", (*user))
-	company := (*dbObj).SelectCompany(2, "fei32fej")
-	fmt.Println("company select by companyCode =>", (*company))
-	(*dbObj).SelectUserPreference(0)
-	companyBanch := (*dbObj).SelectCompanyBanch(1, 1)
-	fmt.Println("companyBanch select by companyId =>", (*companyBanch))
-	(*dbObj).SelectShift(0)
-	(*dbObj).SelectShiftChange(0)
-	(*dbObj).SelectShiftOverTime(0)
-	(*dbObj).SelectDayOff(0)
-	(*dbObj).SelectForgetPunch(0)
-	(*dbObj).SelectLateExcused(0)
-
-	// (*dbObj).UpdateUser(0, &table.UserTable{
-	// 	UserId: 10,
-	// 	Account: "i",
-	// 	Password: "i",
-	// 	OnWorkDay: time.Now(),
-	// 	Banch: "ck ck ",
-	// 	Permession: "none",
-	// 	WorkState: "hoho",
-	// 	MonthSalary: 102932,
-	// 	PartTimeSalary: 190,
-	// 	CreateTime: time.Now(),
-	// 	LastModify: time.Now(),
-	// })
 }
 
 
@@ -231,6 +210,24 @@ func(dbObj *DB) restoreLateExcusedAll() {
 	arr := (*dbObj.Mysql).SelectLateExcused(0)
 	forEach(arr, (*dbObj.Redis).InsertLateExcused)
 	(*(*dbObj).lateExcusedLock) = false
+}
+
+func(dbObj *DB) restoreBanchStyleAll() {
+	defer panichandler.Recover()
+	(*(*dbObj).banchStyleLock) = true
+	(*dbObj).Redis.DeleteKeyBanchStyle()
+	arr := (*dbObj.Mysql).SelectBanchStyle(0)
+	forEach(arr, (*dbObj.Redis).InsertBanchStyle)
+	(*(*dbObj).banchStyleLock) = false
+}
+
+func(dbObj *DB) restoreBanchRuleAll() {
+	defer panichandler.Recover()
+	(*(*dbObj).banchRuleLock) = true
+	(*dbObj).Redis.DeleteKeyBanchRule()
+	arr := (*dbObj.Mysql).SelectBanchRule(0)
+	forEach(arr, (*dbObj.Redis).InsertBanchRule)
+	(*(*dbObj).banchRuleLock) = false
 }
 
 
@@ -361,7 +358,7 @@ func(dbObj *DB) InsertForgetPunch(data *table.ForgetPunchTable) (bool, int64) {
 	}
 	return isOk, id
 }
-func(dbObj *DB) InsertLateExcusedAll(data *table.LateExcusedTable) (bool, int64) {
+func(dbObj *DB) InsertLateExcused(data *table.LateExcusedTable) (bool, int64) {
 	defer panichandler.Recover()
 	isOk, id := (*dbObj).Mysql.InsertLateExcused(data)
 	if isOk {
@@ -374,6 +371,20 @@ func(dbObj *DB) InsertLateExcusedAll(data *table.LateExcusedTable) (bool, int64)
 	}
 	return isOk, id
 }
+
+// func(dbObj *DB) InsertBanchStyle(data *table.BanchStyle) (bool, int64) {
+// 	defer panichandler.Recover()
+// 	isOk, id := (*dbObj).Mysql.InsertBanchStyle(data)
+// 	if isOk {
+// 		go func ()  {
+// 			res := (*dbObj).Mysql.SelectBanchStyle(1, id)
+// 			for _, value := range *res {
+// 				(*dbObj).Redis.InsertLateExcused(&value)
+// 			}
+// 		}()
+// 	}
+// 	return isOk, id
+// }
 
 
 //  ------------------------------update------------------------------
@@ -775,5 +786,33 @@ func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.
 			return (*dbObj.Mysql).SelectLateExcused(selectKey, value...)
 		},
 		(*dbObj).lateExcusedLock,
+	)
+}
+
+// 0 => all, value => nil
+func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.BanchStyle {
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.BanchStyle {
+			return (*dbObj.Redis).SelectBanchStyle(selectKey, value...)
+		},
+		func() *[]table.BanchStyle {
+			return (*dbObj.Mysql).SelectBanchStyle(selectKey, value...)
+		},
+		(*dbObj).banchStyleLock,
+	)
+}
+
+// 0 => all, value => nil
+func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.BanchRule {
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.BanchRule {
+			return (*dbObj.Redis).SelectBanchRule(selectKey, value...)
+		},
+		func() *[]table.BanchRule {
+			return (*dbObj.Mysql).SelectBanchRule(selectKey, value...)
+		},
+		(*dbObj).banchRuleLock,
 	)
 }
