@@ -10,10 +10,10 @@ interface BanchSelectorProps {
 
 const BanchSelector = ({ defaultValue }: BanchSelectorProps): JSX.Element => {
     const { banch }: { banch: BanchType[] } = useSelector((state: RootState) => state.company)
-    const df = banch.find((item: BanchType) => item.Id === defaultValue)
-    console.log(df)
+    const df = banch?.find((item: BanchType) => item.Id === defaultValue)
+    console.log(df, defaultValue)
     return (
-        <Select defaultValue={df?.BanchName}>
+        <Select defaultValue={df?.Id}>
             {
                 banch.map((item) => (
                     <Select.Option

@@ -22,7 +22,9 @@ const items = (value: UserType[], banch: BanchType[]): any => {
             onWorkDay: dateHandle.formatDate(new Date(i.OnWorkDay)),
             workState: i.WorkState === 'on' ? '在職' : '離職',
             banch: b.BanchName,
-            permession: statics.permession[i.Permession]
+            banchId: i.Banch,
+            permession: statics.permession[i.Permession],
+            permessionId: i.Permession
         }
     })
 }
@@ -87,7 +89,7 @@ const EmployeeManager = (): JSX.Element => {
             editable: true,
             inputCop: (record: EmpManagerCellType): ReactNode => {
                 return (
-                    <BanchSelector defaultValue={record.banch} />
+                    <BanchSelector defaultValue={record.banchId} />
                 )
             }
         },
@@ -118,7 +120,7 @@ const EmployeeManager = (): JSX.Element => {
             editable: true,
             inputCop: (record: EmpManagerCellType): ReactNode => {
                 return (
-                    <PermessionSelector defaultValue={record.permession} />
+                    <PermessionSelector defaultValue={record.permessionId} />
                 )
             }
         },
