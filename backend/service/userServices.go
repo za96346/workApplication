@@ -113,7 +113,7 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 			WorkState: v.WorkState,
 		})
 	}
-	(*props).JSON(http.StatusNotAcceptable, gin.H{
+	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().FindSuccess,
 		"data": data,
 	})
