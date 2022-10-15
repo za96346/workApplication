@@ -473,7 +473,7 @@ func simulateData() {
 				Account: "account" + strconv.Itoa(i),
 				Password: "aa20010722",
 				UserName: "siou" + strconv.Itoa(i),
-				EmployeeNumber: "",
+				EmployeeNumber: "a0000" + strconv.Itoa(i),
 				OnWorkDay: time.Now(),
 				Banch: 1,
 				Permession: 2,

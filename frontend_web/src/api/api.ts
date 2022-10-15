@@ -46,7 +46,6 @@ class ApiControl extends api {
                 status: true
             }
         } catch (e) {
-            console.log(e)
             if (e.response.status >= 510) {
                 clearAll()
             }

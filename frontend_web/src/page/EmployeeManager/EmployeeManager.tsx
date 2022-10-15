@@ -2,21 +2,25 @@ import { Form, Input, Select, Popconfirm, Table, Typography, Button } from 'antd
 import React, { ReactNode, useEffect, useState } from 'react'
 import dateHandle from '../../method/dateHandle'
 import EditableCell from './EditableCell'
-import { EmpManagerCellType, UserType } from '../../type'
+import { BanchType, EmpManagerCellType, UserType } from '../../type'
 import { SearchOutlined } from '@ant-design/icons'
 import api from '../../api/api'
 import { useSelector } from 'react-redux'
+import BanchSelector from '../../component/BanchSelector'
+import PermessionSelector from '../../component/PermessionSelector'
+import statics from '../../statics'
 
-const items = (value: UserType[]): any => {
+const items = (value: UserType[], banch: BanchType[]): any => {
     return value?.map((i, index) => {
+        const b = banch?.find((item) => item.Id === i.Banch)
         return {
-            empIdx: i.UserId,
+            empIdx: i.EmployeeNumber,
             key: i.UserId.toString(),
             name: i.UserName,
-            onWorkDay: dateHandle.formatDate(new Date()),
-            workState: i.WorkState,
-            banch: i.Banch,
-            permession: i.Permession
+            onWorkDay: dateHandle.formatDate(new Date(i.OnWorkDay)),
+            workState: i.WorkState === 'on' ? '在職' : '離職',
+            banch: b.BanchName,
+            permession: statics.permession[i.Permession]
         }
     })
 }
@@ -25,7 +29,8 @@ const EmployeeManager = (): JSX.Element => {
     const [form] = Form.useForm()
     const [data, setData] = useState([])
     const [editingKey, setEditingKey] = useState('')
-    const { employee } = useSelector((state: any) => state.company)
+    const { employee, banch } = useSelector((state: any) => state.company)
+    const { onFetchEmployee } = useSelector((state: any) => state.status)
 
     const isEditing = (record: EmpManagerCellType): any => record.key === editingKey
 
@@ -80,10 +85,7 @@ const EmployeeManager = (): JSX.Element => {
             editable: true,
             inputCop: (record: EmpManagerCellType): ReactNode => {
                 return (
-                    <Select defaultValue={record.banch} >
-                        <Select.Option value={'保育組'} key={0}>保育組</Select.Option>
-                        <Select.Option value={'公關組'} key={1}>公關組</Select.Option>
-                    </Select>
+                    <BanchSelector defaultValue={record.banch} />
                 )
             }
         },
@@ -94,7 +96,7 @@ const EmployeeManager = (): JSX.Element => {
             editable: true,
             inputCop: (record: EmpManagerCellType): ReactNode => {
                 return (
-                    <Input placeholder={`${record.empIdx}`} />
+                    <Input disabled placeholder={`${record.empIdx}`} />
                 )
             }
         },
@@ -114,11 +116,7 @@ const EmployeeManager = (): JSX.Element => {
             editable: true,
             inputCop: (record: EmpManagerCellType): ReactNode => {
                 return (
-                    <Select defaultValue={record.permession}>
-                        <Select.Option value={0} key={0}>管理員</Select.Option>
-                        <Select.Option value={1} key={1}>主管</Select.Option>
-                        <Select.Option value={2} key={1}>一般職員</Select.Option>
-                    </Select>
+                    <PermessionSelector />
                 )
             }
         },
@@ -185,6 +183,10 @@ const EmployeeManager = (): JSX.Element => {
         void api.getUserAll()
     }, [])
 
+    useEffect(() => {
+        setData(items(employee, banch))
+    }, [employee, banch])
+
     return (
         <Form form={form} component={false}>
             <div className={styles.empMangerFilter}>
@@ -209,10 +211,11 @@ const EmployeeManager = (): JSX.Element => {
                             cell: EditableCell
                         }
                     }}
+                    loading={onFetchEmployee}
                     sticky
                     showHeader
                     bordered
-                    dataSource={items(employee)}
+                    dataSource={data}
                     columns={mergedColumns}
                     rowClassName="editable-row"
                     pagination={false}

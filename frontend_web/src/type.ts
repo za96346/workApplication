@@ -34,7 +34,7 @@ export interface EmpManagerCellType {
     name: string
     onWorkDay: string
     workState: string
-    banch: string
+    banch: number
     permession: string
 }
 
