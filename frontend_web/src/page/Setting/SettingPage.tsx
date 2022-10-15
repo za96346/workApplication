@@ -1,13 +1,21 @@
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import pic1 from '../../asserts/pic1.webp'
 import CompanyForm from './CompanyForm'
 import PersonalForm from './PersonalForm'
 import statics from '../../statics'
+import api from '../../api/api'
 
 const SettingPage = (): JSX.Element => {
     const { types } = useParams()
+    // const {}
+
+    useEffect(() => {
+        if (types === statics.personalSetting) {
+            void api.getSelfData()
+        }
+    }, [types])
     return (
         <>
             <div className={styles.settingBlock}>

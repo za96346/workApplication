@@ -1,6 +1,6 @@
 import api from './apiAbs'
 import axios from 'axios'
-import { BanchType, LoginType, RegisterType, ResMessage, ResType, UserType } from '../type'
+import { BanchType, LoginType, RegisterType, ResMessage, ResType, SelfDataType, UserType } from '../type'
 import userAction from '../reduxer/action/userAction'
 import { store } from '../reduxer/store'
 import { FullMessage } from '../method/notice'
@@ -15,7 +15,8 @@ class ApiControl extends api {
         getEmailCaptcha: 'entry/email/captcha',
         registe: 'entry/register',
         getBanchAll: 'company/banch/all',
-        getUserAll: 'user/all'
+        getUserAll: 'user/all',
+        getSelfData: 'user/my'
     }
 
     constructor () {
@@ -186,6 +187,19 @@ class ApiControl extends api {
         }
         store.dispatch(statusAction.onFetchUserAll(false))
         // console.log(res)
+        return res
+    }
+
+    async getSelfData (): Promise<ResType<SelfDataType>> {
+        store.dispatch(statusAction.onFetchSelfData(true))
+        const res = await this.GET<SelfDataType>({
+            url: this.route.getSelfData
+        })
+        console.log(res)
+        if (res.status) {
+            store.dispatch(userAction.setSelfData(res.data))
+        }
+        store.dispatch(statusAction.onFetchSelfData(false))
         return res
     }
 }

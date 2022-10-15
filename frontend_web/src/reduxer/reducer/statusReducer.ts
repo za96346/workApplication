@@ -2,7 +2,8 @@ import { action, statusType } from '../types'
 
 const statusState = {
     onFetchBanch: false,
-    onFetchUserAll: false
+    onFetchUserAll: false,
+    onFetchSelfData: false
 }
 
 export const statusReducer = (state = statusState, action: action): any => {
@@ -20,6 +21,14 @@ export const statusReducer = (state = statusState, action: action): any => {
                 ...action.payload
             }
         case statusType.FETCH_USER_ALL_OFF:
+            return {
+                ...action.payload
+            }
+        case statusType.FETCH_SELF_DATA_ON:
+            return {
+                ...action.payload
+            }
+        case statusType.FETCH_SELF_DATA_OFF:
             return {
                 ...action.payload
             }

@@ -1,3 +1,5 @@
+import { SelfDataType } from '../../type'
+import { store } from '../store'
 import { userType, action } from '../types'
 
 class userAction {
@@ -9,14 +11,30 @@ class userAction {
     setToken (token: string): action {
         return {
             type: userType.SET_TOKEN,
-            payload: token
+            payload: {
+                ...store.getState().user,
+                token
+            }
+        }
+    }
+
+    setSelfData (selfData: SelfDataType): action {
+        return {
+            type: userType.SET_SELF_DATA,
+            payload: {
+                ...store.getState().user,
+                selfData
+            }
         }
     }
 
     clearToken (): action {
         return {
             type: userType.CLEAR_TOKEN,
-            payload: ''
+            payload: {
+                ...store.getState().user,
+                token: ''
+            }
         }
     }
 

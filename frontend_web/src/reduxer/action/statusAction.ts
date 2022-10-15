@@ -27,6 +27,16 @@ class statusAcion {
         }
     }
 
+    onFetchSelfData (s: boolean): action {
+        return {
+            type: s ? statusType.FETCH_SELF_DATA_ON : statusType.FETCH_SELF_DATA_OFF,
+            payload: {
+                ...store.getState().status,
+                onFetchSelfData: s
+            }
+        }
+    }
+
     clearStatusAll (): action {
         return {
             type: statusType.CLEAR_STATUS_ALL,
