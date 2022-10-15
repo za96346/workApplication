@@ -33,9 +33,9 @@ export interface EmpManagerCellType {
     empIdx: string | number
     name: string
     onWorkDay: string
-    workState: string
+    workState: 'on' | 'off'
     banch: number
-    permession: string
+    permession: number
 }
 
 export interface BanchType {
@@ -47,21 +47,6 @@ export interface BanchType {
     LastModify: string | Date
 }
 
-export interface SelfDataType {
-    UserId: number // 使用者的編號
-    CompanyCode: string // 公司碼
-    Account: string // 帳號
-    Password: string // 密碼
-    OnWorkDay: string | Date // 到職日
-    Banch: number // 部門
-    Permession: number // 權限  (0 admin , 1 manager, 2 personal)
-    WorkState: string // 工作狀態 (到職on or 離職off)
-    MonthSalary: number // 月薪
-    PartTimeSalary: number // 時薪
-    CreateTime: Date | string // 創建的時間
-    LastModify: Date | string // 上次修改的時間
-}
-
 export interface UserType {
     UserId: number // 使用者id
     CompanyCode: string // 公司碼
@@ -69,8 +54,17 @@ export interface UserType {
     EmployeeNumber: string // 員工編號
     OnWorkDay: string | Date // 到職日
     Banch: number // 部門編號
-    Permession: number // 權限
+    Permession: number // 權限(0 admin , 1 manager, 2 personal)
     WorkState: string // 工作狀態
+}
+
+export interface SelfDataType extends UserType {
+    Account: string // 帳號
+    Password: string // 密碼
+    MonthSalary: number // 月薪
+    PartTimeSalary: number // 時薪
+    CreateTime: Date | string // 創建的時間
+    LastModify: Date | string // 上次修改的時間
 }
 
 export interface ResType<T> extends ResMessage {

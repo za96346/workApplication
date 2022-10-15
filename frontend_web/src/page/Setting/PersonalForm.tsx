@@ -1,8 +1,20 @@
 import React from 'react'
-import { Button, DatePicker, Form, Input, Select } from 'antd'
+import { Button, DatePicker, Form, Input, Spin } from 'antd'
 import { FullMessage } from '../../method/notice'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../reduxer/store'
+import { SelfDataType } from '../../type'
+import moment from 'moment'
+import BanchSelector from '../../component/BanchSelector'
+import PermessionSelector from '../../component/PermessionSelector'
+import StatusSelector from '../../component/StatusSelector'
 
 const personalForm = (): JSX.Element => {
+    const { onFetchSelfData } = useSelector((state: RootState) => state.status)
+    const { selfData }: { selfData: SelfDataType } = useSelector((state: RootState) => state.user)
+    if (onFetchSelfData) {
+        return <Spin size='large' />
+    }
     return (
         <>
             <Form
@@ -17,56 +29,56 @@ const personalForm = (): JSX.Element => {
                     name="Name"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                    <Input />
+                    <Input defaultValue={selfData?.UserName || ''} />
                 </Form.Item>
                 <Form.Item
                     label="公司編號"
                     name="CompanyCode"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                    <Input />
+                    <Input defaultValue={selfData?.CompanyCode || ''} />
                 </Form.Item>
                 <Form.Item
                     label="帳號"
                     name="Account"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                    <Input />
+                    <Input defaultValue={selfData?.Account || ''} />
                 </Form.Item>
                 <Form.Item
                     label="密碼"
                     name="Password"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                    <Input.Password visibilityToggle />
+                    <Input.Password defaultValue={selfData?.Password || ''} visibilityToggle />
                 </Form.Item>
                 <Form.Item
                     label="到職日"
                     name="OnWorkDay"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                    <DatePicker />
+                    <DatePicker defaultValue={moment(selfData?.OnWorkDay || '2001-07-01')} />
                 </Form.Item>
                 <Form.Item
                     label="部門"
                     name="Banch"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                    <Select />
+                    <BanchSelector defaultValue={selfData?.Banch || 0} />
                 </Form.Item>
                 <Form.Item
                     label="權限"
                     name="Permession"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                    <Select />
+                    <PermessionSelector defaultValue={selfData?.Permession} />
                 </Form.Item>
                 <Form.Item
                     label="狀態"
                     name="WorkState"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                    <Select />
+                    <StatusSelector defaultValue={selfData?.WorkState} />
                 </Form.Item>
                 <Form.Item
                     style={{ marginTop: '130px' }}

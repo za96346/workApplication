@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import userAction from '../reduxer/action/userAction'
+import { RootState } from '../reduxer/store'
 import { BanchType } from '../type'
 
 type MenuItem = Required<MenuProps>['items'][number]
@@ -41,8 +42,8 @@ const items = (banch: BanchType[]): MenuItem[] => {
 }
 const App: React.FC = () => {
     const dispatch = useDispatch()
-    const { banch } = useSelector((state: any) => state.company)
-    const { onFetchBanch } = useSelector((state: any) => state.status)
+    const { banch } = useSelector((state: RootState) => state.company)
+    const { onFetchBanch } = useSelector((state: RootState) => state.status)
     const [current, setCurrent] = useState<any>({
         keyPath: 'shift',
         key: ''

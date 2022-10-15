@@ -197,7 +197,7 @@ class ApiControl extends api {
         })
         console.log(res)
         if (res.status) {
-            store.dispatch(userAction.setSelfData(res.data))
+            store.dispatch(userAction.setSelfData(res.data[0]))
         }
         store.dispatch(statusAction.onFetchSelfData(false))
         return res

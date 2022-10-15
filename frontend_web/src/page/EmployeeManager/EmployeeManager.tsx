@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux'
 import BanchSelector from '../../component/BanchSelector'
 import PermessionSelector from '../../component/PermessionSelector'
 import statics from '../../statics'
+import { RootState } from '../../reduxer/store'
+import StatusSelector from '../../component/StatusSelector'
 
 const items = (value: UserType[], banch: BanchType[]): any => {
     return value?.map((i, index) => {
@@ -29,8 +31,8 @@ const EmployeeManager = (): JSX.Element => {
     const [form] = Form.useForm()
     const [data, setData] = useState([])
     const [editingKey, setEditingKey] = useState('')
-    const { employee, banch } = useSelector((state: any) => state.company)
-    const { onFetchEmployee } = useSelector((state: any) => state.status)
+    const { employee, banch } = useSelector((state: RootState) => state.company)
+    const { onFetchEmployee } = useSelector((state: RootState) => state.status)
 
     const isEditing = (record: EmpManagerCellType): any => record.key === editingKey
 
@@ -116,7 +118,7 @@ const EmployeeManager = (): JSX.Element => {
             editable: true,
             inputCop: (record: EmpManagerCellType): ReactNode => {
                 return (
-                    <PermessionSelector />
+                    <PermessionSelector defaultValue={record.permession} />
                 )
             }
         },
@@ -126,10 +128,7 @@ const EmployeeManager = (): JSX.Element => {
             editable: true,
             inputCop: (record: EmpManagerCellType): ReactNode => {
                 return (
-                    <Select defaultValue={record.workState}>
-                        <Select.Option value={'在職'} key={0}>在職</Select.Option>
-                        <Select.Option value={'離職'} key={1}>離職</Select.Option>
-                    </Select>
+                    <StatusSelector defaultValue={record.workState} />
                 )
             }
         },

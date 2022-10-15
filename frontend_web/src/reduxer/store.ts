@@ -31,3 +31,4 @@ export const store = createStore(
     composeWithDevTools(applyMiddleware(...[thunk]))
 )
 export const persisStore = persistStore(store)
+export type RootState = ReturnType<typeof store.getState>
