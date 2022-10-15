@@ -14,6 +14,8 @@ export const userReducer = (state = userState, action: action): any => {
             return {
                 token: action.payload
             }
+        case userType.CLEAR_USER_ALL:
+            return userState
         default:
             return state
     }

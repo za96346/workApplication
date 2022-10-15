@@ -15,6 +15,8 @@ export const companyReducer = (state = companyState, action: action): any => {
             return {
                 ...action.payload
             }
+        case companyType.CLEAR_COMPANY_ALL:
+            return companyState
         default:
             return state
     }

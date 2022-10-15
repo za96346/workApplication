@@ -26,5 +26,12 @@ class statusAcion {
             }
         }
     }
+
+    clearStatusAll (): action {
+        return {
+            type: statusType.CLEAR_STATUS_ALL,
+            payload: {}
+        }
+    }
 }
 export default new statusAcion()

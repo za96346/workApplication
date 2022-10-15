@@ -6,6 +6,7 @@ import { store } from '../reduxer/store'
 import { FullMessage } from '../method/notice'
 import companyAction from '../reduxer/action/companyAction'
 import statusAction from '../reduxer/action/statusAction'
+import { clearAll } from '../reduxer/clearAll'
 
 class ApiControl extends api {
     baseUrl: string
@@ -45,12 +46,16 @@ class ApiControl extends api {
                 status: true
             }
         } catch (e) {
+            console.log(e)
+            if (e.response.status >= 510) {
+                clearAll()
+            }
             if (FailShow) {
                 void FullMessage.error(e.response.data.message)
             }
             return {
                 ...e.response.data,
-                status: true
+                status: false
             }
         }
     }
@@ -84,6 +89,9 @@ class ApiControl extends api {
                 status: true
             }
         } catch (e) {
+            if (e.response.status >= 510) {
+                clearAll()
+            }
             if (FailShow) {
                 void FullMessage.error(e.response.data.message)
             }
@@ -117,6 +125,9 @@ class ApiControl extends api {
                 status: true
             }
         } catch (e) {
+            if (e.response.status >= 510) {
+                clearAll()
+            }
             void FullMessage.error(e.response.data.message)
             return {
                 ...e.response.data,

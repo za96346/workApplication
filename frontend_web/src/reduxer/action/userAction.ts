@@ -19,6 +19,13 @@ class userAction {
             payload: ''
         }
     }
+
+    clearUserAll (): action {
+        return {
+            type: userType.CLEAR_USER_ALL,
+            payload: {}
+        }
+    }
 }
 
 export default new userAction()

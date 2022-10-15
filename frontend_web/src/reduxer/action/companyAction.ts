@@ -27,5 +27,12 @@ class companyAction {
             }
         }
     }
+
+    clearCompanyAll (): action {
+        return {
+            type: companyType.CLEAR_COMPANY_ALL,
+            payload: {}
+        }
+    }
 }
 export default new companyAction()

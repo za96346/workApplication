@@ -476,7 +476,7 @@ func simulateData() {
 				EmployeeNumber: "",
 				OnWorkDay: time.Now(),
 				Banch: 1,
-				Permession: 0,
+				Permession: 2,
 				WorkState: "on",
 				MonthSalary: 30000 + i,
 				PartTimeSalary: 130 + i,

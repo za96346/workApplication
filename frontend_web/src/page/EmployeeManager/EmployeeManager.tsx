@@ -1,27 +1,31 @@
 import { Form, Input, Select, Popconfirm, Table, Typography, Button } from 'antd'
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import dateHandle from '../../method/dateHandle'
 import EditableCell from './EditableCell'
-import { EmpManagerCellType } from '../../type'
+import { EmpManagerCellType, UserType } from '../../type'
 import { SearchOutlined } from '@ant-design/icons'
+import api from '../../api/api'
+import { useSelector } from 'react-redux'
 
-const originData: EmpManagerCellType[] = []
-for (let i = 0; i < 100; i++) {
-    originData.push({
-        empIdx: i,
-        key: i.toString(),
-        name: `Edrward ${i}`,
-        onWorkDay: dateHandle.formatDate(new Date()),
-        workState: '在職',
-        banch: '保育組',
-        permession: '一般職員'
+const items = (value: UserType[]): any => {
+    return value?.map((i, index) => {
+        return {
+            empIdx: i.UserId,
+            key: i.UserId.toString(),
+            name: i.UserName,
+            onWorkDay: dateHandle.formatDate(new Date()),
+            workState: i.WorkState,
+            banch: i.Banch,
+            permession: i.Permession
+        }
     })
 }
 
 const EmployeeManager = (): JSX.Element => {
     const [form] = Form.useForm()
-    const [data, setData] = useState(originData)
+    const [data, setData] = useState([])
     const [editingKey, setEditingKey] = useState('')
+    const { employee } = useSelector((state: any) => state.company)
 
     const isEditing = (record: EmpManagerCellType): any => record.key === editingKey
 
@@ -177,6 +181,10 @@ const EmployeeManager = (): JSX.Element => {
         }
     })
 
+    useEffect(() => {
+        void api.getUserAll()
+    }, [])
+
     return (
         <Form form={form} component={false}>
             <div className={styles.empMangerFilter}>
@@ -204,7 +212,7 @@ const EmployeeManager = (): JSX.Element => {
                     sticky
                     showHeader
                     bordered
-                    dataSource={data}
+                    dataSource={items(employee)}
                     columns={mergedColumns}
                     rowClassName="editable-row"
                     pagination={false}

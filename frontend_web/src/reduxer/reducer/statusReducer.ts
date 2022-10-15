@@ -23,6 +23,8 @@ export const statusReducer = (state = statusState, action: action): any => {
             return {
                 ...action.payload
             }
+        case statusType.CLEAR_STATUS_ALL:
+            return statusState
         default:
             return state
     }
