@@ -372,19 +372,33 @@ func(dbObj *DB) InsertLateExcused(data *table.LateExcusedTable) (bool, int64) {
 	return isOk, id
 }
 
-// func(dbObj *DB) InsertBanchStyle(data *table.BanchStyle) (bool, int64) {
-// 	defer panichandler.Recover()
-// 	isOk, id := (*dbObj).Mysql.InsertBanchStyle(data)
-// 	if isOk {
-// 		go func ()  {
-// 			res := (*dbObj).Mysql.SelectBanchStyle(1, id)
-// 			for _, value := range *res {
-// 				(*dbObj).Redis.InsertLateExcused(&value)
-// 			}
-// 		}()
-// 	}
-// 	return isOk, id
-// }
+func(dbObj *DB) InsertBanchStyle(data *table.BanchStyle) (bool, int64) {
+	defer panichandler.Recover()
+	isOk, id := (*dbObj).Mysql.InsertBanchStyle(data)
+	if isOk {
+		go func ()  {
+			res := (*dbObj).Mysql.SelectBanchStyle(1, id)
+			for _, value := range *res {
+				(*dbObj).Redis.InsertBanchStyle(&value)
+			}
+		}()
+	}
+	return isOk, id
+}
+
+func(dbObj *DB) InsertBanchRule(data *table.BanchRule) (bool, int64) {
+	defer panichandler.Recover()
+	isOk, id := (*dbObj).Mysql.InsertBanchRule(data)
+	if isOk {
+		go func ()  {
+			res := (*dbObj).Mysql.SelectBanchRule(1, id)
+			for _, value := range *res {
+				(*dbObj).Redis.InsertBanchRule(&value)
+			}
+		}()
+	}
+	return isOk, id
+}
 
 
 //  ------------------------------update------------------------------
@@ -516,6 +530,33 @@ func(dbObj *DB) UpdateLateExcused(updateKey int, data *table.LateExcusedTable) b
 			res := (*dbObj).Mysql.SelectLateExcused(1, int64((*data).CaseId))
 			for _, v := range *res {
 				(*dbObj).Redis.InsertLateExcused(&v)
+			}
+		}()
+	}
+	return isOk
+}
+func(dbObj *DB) UpdateBanchStyle(updateKey int, data *table.BanchStyle) bool {
+	defer panichandler.Recover()
+	isOk := (*dbObj).Mysql.UpdateBanchStyle(updateKey, data)
+	if isOk {
+		go func ()  {
+			res := (*dbObj).Mysql.SelectBanchStyle(1, int64((*data).StyleId))
+			for _, v := range *res {
+				(*dbObj).Redis.InsertBanchStyle(&v)
+			}
+		}()
+	}
+	return isOk
+}
+
+func(dbObj *DB) UpdateBanchRule(updateKey int, data *table.BanchRule) bool {
+	defer panichandler.Recover()
+	isOk := (*dbObj).Mysql.UpdateBanchRule(updateKey, data)
+	if isOk {
+		go func ()  {
+			res := (*dbObj).Mysql.SelectBanchRule(1, int64((*data).RuleId))
+			for _, v := range *res {
+				(*dbObj).Redis.InsertBanchRule(&v)
 			}
 		}()
 	}
@@ -790,6 +831,7 @@ func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.
 }
 
 // 0 => all, value => nil
+//  1 => styleId, value => int64
 func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.BanchStyle {
 	defer panichandler.Recover()
 	return selectAllHandler(
@@ -804,6 +846,7 @@ func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.B
 }
 
 // 0 => all, value => nil
+//  1 => ruleId, value => int64
 func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.BanchRule {
 	defer panichandler.Recover()
 	return selectAllHandler(

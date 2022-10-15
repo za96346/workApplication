@@ -438,6 +438,7 @@ func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.
 }
 
 // 0 => all, value => nil
+//  1 => styleId, value => int64
 func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.BanchStyle {
 	defer panichandler.Recover()
 	tableKey := (*dbObj).table[10]
@@ -449,12 +450,20 @@ func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.B
 			},
 			func(v table.BanchStyle) bool {return true},
 		)
+	case 1:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).hmGet(tableKey, value...)
+			},
+			func(v table.BanchStyle) bool {return true},
+		)
 	default:
 		return &[]table.BanchStyle{}
 	}
 }
 
 // 0 => all, value => nil
+//  1 => ruleId, value => int64
 func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.BanchRule {
 	defer panichandler.Recover()
 	tableKey := (*dbObj).table[11]
@@ -463,6 +472,13 @@ func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.Ba
 		return forEach(
 			func() ([]string, error) {
 				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.BanchRule) bool {return true},
+		)
+	case 1:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).hmGet(tableKey, value...)
 			},
 			func(v table.BanchRule) bool {return true},
 		)

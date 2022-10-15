@@ -51,6 +51,8 @@ type containers struct {
 	forgetPunch []interface{}
 	dayOff []interface{}
 	lateExcused []interface{}
+	banchStyle []interface{}
+	banchRule []interface{}
 }
 
 func Singleton() *DB {
@@ -553,12 +555,16 @@ func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.
 }
 
 // 0 => all, value => nil
+//  1 => styleId, value => int64
 func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.BanchStyle {
 	defer panichandler.Recover()
 	querys := ""
 	switch selectKey {
 	case 0:
 		querys = (*query.MysqlSingleton()).BanchStyle.SelectAll
+		break
+	case 1:
+		querys = (*query.MysqlSingleton()).BanchStyle.SelectSingleByStyleId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).BanchStyle.SelectAll
@@ -589,12 +595,16 @@ func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.B
 }
 
 // 0 => all, value => nil
+//  1 => ruleId, value => int64
 func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.BanchRule {
 	defer panichandler.Recover()
 	querys := ""
 	switch selectKey {
 	case 0:
 		querys = (*query.MysqlSingleton()).BanchRule.SelectAll
+		break
+	case 1:
+		querys = (*query.MysqlSingleton()).BanchRule.SelectSingleByRuleId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).BanchRule.SelectAll
@@ -808,6 +818,38 @@ func(dbObj *DB) DeleteDayOff(deleteKey int, caseId interface{}) bool {
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
 	_, err = stmt.Exec(caseId)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// style的唯一id
+func(dbObj *DB) DeleteBanchStyle(deleteKey int, styleId interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).banchStyleMux.Lock()
+	defer (*dbObj).banchStyleMux.Unlock()
+	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).BanchStyle.Delete)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(styleId)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// rule的唯一id
+func(dbObj *DB) DeleteBanchRule(deleteKey int, ruleId interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).banchRuleMux.Lock()
+	defer (*dbObj).banchRuleMux.Unlock()
+	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).BanchRule.Delete)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(ruleId)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
@@ -1176,7 +1218,77 @@ func(dbObj *DB) UpdateLateExcused(updateKey int, data *table.LateExcusedTable, v
 	return true
 }
 
+// 0 => all
+func(dbObj *DB) UpdateBanchStyle(updateKey int, data *table.BanchStyle, value ...interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).banchStyleMux.Lock()
+	defer (*dbObj).banchStyleMux.Unlock()
+	defer func ()  {
+		(*dbObj).containers.banchStyle = nil
+	}()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).BanchStyle.UpdateSingle
+		(*dbObj).containers.banchStyle = append(
+			(*dbObj).containers.banchStyle,
+			(*data).Icon,
+			(*data).TimeRangeName,
+			(*data).OnShiftTime,
+			(*data).OffShiftTime,
+			(*data).LastModify,
+			(*data).StyleId,
+		)
+		break;
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec((*dbObj).containers.banchStyle...)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
 
+// 0 => all
+func(dbObj *DB) UpdateBanchRule(updateKey int, data *table.BanchRule, value ...interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).banchRuleMux.Lock()
+	defer (*dbObj).banchRuleMux.Unlock()
+	defer func ()  {
+		(*dbObj).containers.banchRule = nil
+	}()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).BanchRule.UpdateSingle
+		(*dbObj).containers.banchRule= append(
+			(*dbObj).containers.banchRule,
+			(*data).MaxPeople,
+			(*data).MinPeople,
+			(*data).WeekDay,
+			(*data).WeekType,
+			(*data).OnShiftTime,
+			(*data).OffShiftTime,
+			(*data).LastModify,
+			(*data).RuleId,
+		)
+		break;
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec((*dbObj).containers.banchRule...)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
 
 
 //  ---------------------------------insert------------------------------------

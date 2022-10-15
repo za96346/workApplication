@@ -80,9 +80,11 @@ type  dayOffQuery struct {
 }
 type banchStyle struct {
 	queryCommonColumn
+	SelectSingleByStyleId string
 }
 type banchRule struct {
 	queryCommonColumn
+	SelectSingleByRuleId string
 }
 
 func MysqlSingleton() *sqlQuery {
@@ -415,7 +417,19 @@ func addBanchStyleQuery() {
 			?, ?, ?, ?, ?, ?, ?
 		);
 	`
+	sqlQueryInstance.BanchStyle.UpdateSingle = `
+		update banchStyle
+		set
+			icon=?,
+			timeRangeName=?,
+			onShiftTime=?,
+			offShiftTime=?,
+			lastModify=?
+		where styleId=?;
+	`;
+	sqlQueryInstance.BanchStyle.SelectSingleByStyleId = `select * from banchStyle where styleId = ?;`;
 	sqlQueryInstance.BanchStyle.SelectAll = `select * from banchStyle;`;
+	sqlQueryInstance.BanchStyle.Delete = `delete from banchStyle where styleId=?;`;
 }
 func addBanchRuleQuery() {
 	sqlQueryInstance.BanchRule.InsertAll = `
@@ -433,5 +447,19 @@ func addBanchRuleQuery() {
 			?, ?, ?, ?, ?, ?, ?, ?, ?
 		);
 	`
+	sqlQueryInstance.BanchRule.UpdateSingle = `
+		update banchRule
+		set
+			maxPeople=?,
+			minPeople=?,
+			weekDay=?,
+			weekType=?,
+			onShiftTime=?,
+			offShiftTime=?,
+			lastModify=?
+		where ruleId=?
+	`
+	sqlQueryInstance.BanchRule.SelectSingleByRuleId = `select * from banchRule where ruleId = ?;`;
 	sqlQueryInstance.BanchRule.SelectAll = `select * from banchRule;`;
+	sqlQueryInstance.BanchRule.Delete = `delete from banchRule where ruleId=?;`;
 }
