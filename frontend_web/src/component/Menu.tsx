@@ -1,9 +1,10 @@
 import { AppstoreOutlined, ExportOutlined, IdcardOutlined, InsertRowRightOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined } from '@ant-design/icons'
-import { Button, MenuProps, MenuTheme, Menu } from 'antd'
+import { Button, MenuProps, Menu } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import userAction from '../reduxer/action/userAction'
+import { BanchType } from '../type'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -22,46 +23,32 @@ const getItem = (
         type
     } as MenuItem)
 
-const items: MenuItem[] = [
-    getItem('排班', 'shift', <InsertRowRightOutlined />, [
-        getItem('保育組', 2),
-        getItem('社工組', 3),
-        getItem('行政組', 4),
-        getItem('公關組', 5)
-    ]),
+// getItem('保育組', 2)
 
-    getItem('班表設定', 'shiftSetting', <AppstoreOutlined />, [
-        getItem('保育組', 6),
-        getItem('社工組', 7),
-        getItem('行政組', 8),
-        getItem('公關組', 9),
-        getItem('保育組', 11),
-        getItem('社工組', 23),
-        getItem('行政組', 33),
-        getItem('公關組', 94)
-    // getItem('Submenu', 'sub3', null, [getItem('Option 7', '7'), getItem('Option 8', '8')]),
-    ]),
-    getItem('員工管理', 'employeeManager', <IdcardOutlined />),
+const items = (banch: BanchType[]): MenuItem[] => {
+    const a = banch?.map((item) => getItem(item.BanchName, item.Id)) || []
+    return ([
+        getItem('排班', 'shift', <InsertRowRightOutlined />, a),
 
-    getItem('設定', 'setting', <SettingOutlined />, [
-        getItem('個人資料', 1000),
-        getItem('公司資料', 1001)
+        getItem('班表設定', 'shiftSetting', <AppstoreOutlined />, a),
+        getItem('員工管理', 'employeeManager', <IdcardOutlined />),
+
+        getItem('設定', 'setting', <SettingOutlined />, [
+            getItem('個人資料', 1000),
+            getItem('公司資料', 1001)
+        ])
     ])
-]
+}
 const App: React.FC = () => {
-    const [theme, setTheme] = useState<MenuTheme>('light')
     const dispatch = useDispatch()
+    const { banch } = useSelector((state: any) => state.company)
+    const { onFetchBanch } = useSelector((state: any) => state.status)
     const [current, setCurrent] = useState<any>({
         keyPath: 'shift',
         key: ''
     })
     const [collapsed, setCollapsed] = useState(true)
     const navigate = useNavigate()
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const changeTheme = (value: boolean): void => {
-        setTheme(value ? 'dark' : 'light')
-    }
 
     const onClick: MenuProps['onClick'] = e => {
         console.log('click ', e)
@@ -121,24 +108,18 @@ const App: React.FC = () => {
                     }}
                 >
                     <Menu
+                        disabled={onFetchBanch}
                         inlineCollapsed={collapsed}
                         overflowedIndicator
-                        theme={theme}
+                        theme={'light'}
                         onClick={onClick}
                         style={{ width: width() }}
                         defaultOpenKeys={['sub1']}
                         selectedKeys={[current]}
                         mode="inline"
-                        items={items}
+                        items={items(banch)}
                     />
                 </div>
-                {/* <Switch
-                checked={theme === 'dark'}
-                onChange={changeTheme}
-                checkedChildren="Dark"
-                unCheckedChildren="Light"
-                style={{ position: 'absolute', bottom: '10px', left: '50%', transform: 'translateX(-50%)' }}
-            /> */}
                 <div
                     style={{
                         width: width(),

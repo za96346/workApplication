@@ -1,14 +1,19 @@
-import { action, companyType } from "../types"
+import { action, companyType } from '../types'
 
 const companyState = {
-    banch: []
+    banch: [],
+    employee: []
 }
 
 export const companyReducer = (state = companyState, action: action): any => {
     switch (action.type) {
         case companyType.SET_BANCH:
             return {
-                banch: action.payload.banch
+                ...action.payload
+            }
+        case companyType.SET_EMPLOYEE:
+            return {
+                ...action.payload
             }
         default:
             return state

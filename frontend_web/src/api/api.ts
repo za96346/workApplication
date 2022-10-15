@@ -1,10 +1,11 @@
 import api from './apiAbs'
 import axios from 'axios'
-import { BanchType, LoginType, RegisterType, ResMessage, ResType } from '../type'
+import { BanchType, LoginType, RegisterType, ResMessage, ResType, UserType } from '../type'
 import userAction from '../reduxer/action/userAction'
 import { store } from '../reduxer/store'
 import { FullMessage } from '../method/notice'
 import companyAction from '../reduxer/action/companyAction'
+import statusAction from '../reduxer/action/statusAction'
 
 class ApiControl extends api {
     baseUrl: string
@@ -12,7 +13,8 @@ class ApiControl extends api {
         login: 'entry/login',
         getEmailCaptcha: 'entry/email/captcha',
         registe: 'entry/register',
-        getBanchAll: 'company/banch/all'
+        getBanchAll: 'company/banch/all',
+        getUserAll: 'user/all'
     }
 
     constructor () {
@@ -142,21 +144,38 @@ class ApiControl extends api {
         return res.status
     }
 
-    async getEmailCaptcha (email: string): Promise<void> {
+    async getEmailCaptcha (email: string): Promise<ResMessage> {
         const res = await this.POST<ResMessage>({
             url: this.route.getEmailCaptcha,
             body: { Email: email }
         })
-        console.log(res)
+        return res
     }
 
     async getBanch (): Promise<ResType<BanchType[]>> {
+        store.dispatch(statusAction.onFetchBanch(true))
         const res = await this.GET<BanchType[]>({
             url: this.route.getBanchAll,
             successShow: false
         })
-        store.dispatch(companyAction.setBanch(res.data))
-        console.log(res)
+        if (res.status) {
+            store.dispatch(companyAction.setBanch(res.data))
+        }
+        store.dispatch(statusAction.onFetchBanch(false))
+        return res
+    }
+
+    async getUserAll (): Promise<ResType<UserType[]>> {
+        store.dispatch(statusAction.onFetchUserAll(true))
+        const res = await this.GET<UserType[]>({
+            url: this.route.getUserAll,
+            successShow: false
+        })
+        if (res.status) {
+            store.dispatch(companyAction.setEmployee(res.data))
+        }
+        store.dispatch(statusAction.onFetchUserAll(false))
+        // console.log(res)
         return res
     }
 }

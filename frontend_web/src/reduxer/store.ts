@@ -9,10 +9,12 @@ import {
 } from 'redux'
 import { userReducer } from './reducer/userReducer'
 import { companyReducer } from './reducer/companyReducer'
+import { statusReducer } from './reducer/statusReducer'
 
 export const reducer = combineReducers({
     user: userReducer,
-    company: companyReducer
+    company: companyReducer,
+    status: statusReducer
 })
 
 // 持久化根reducers

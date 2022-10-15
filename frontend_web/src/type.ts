@@ -47,6 +47,17 @@ export interface BanchType {
     LastModify: string | Date
 }
 
+export interface UserType {
+    UserId: number // 使用者id
+    CompanyCode: string // 公司碼
+    UserName: string // 員工姓名
+    EmployeeNumber: string // 員工編號
+    OnWorkDay: string | Date // 到職日
+    Banch: number // 部門編號
+    Permession: number // 權限
+    WorkState: string // 工作狀態
+}
+
 export interface ResType<T> extends ResMessage {
     data?: T
     status: boolean
