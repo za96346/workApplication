@@ -79,9 +79,9 @@ func Singleton() *DB {
 	return redisInstance
 }
 
-func(dbObj *DB) Conn() { // 實體化redis.Client 並返回實體的位址
+func(dbObj *DB) Conn(path string) { // 實體化redis.Client 並返回實體的位址
 	defer panichandler.Recover()
-	err := godotenv.Load()
+	err := godotenv.Load(path)
 	if err != nil {
 		log.Fatal("error loading .env file")
 	}

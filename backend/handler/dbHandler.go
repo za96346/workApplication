@@ -12,9 +12,9 @@ import (
 	"backend/panicHandler"
 )
 
-func Init() {
-	(*mysql.Singleton()).Conn() //mysql 連接
-	(*redis.Singleton()).Conn() // redis 連接
+func Init(path string) {
+	(*mysql.Singleton()).Conn(path) //mysql 連接
+	(*redis.Singleton()).Conn(path) // redis 連接
 	(*redis.Singleton()).RedisDb.FlushAll() // redis清空
 	(*Singleton()).TakeAllFromMysql() // 從mysql 抓到 redis
 }

@@ -27,7 +27,7 @@ import (
 	"path/filepath"
 )
 func init() {
-	handler.Init()
+	handler.Init("./.env")
 	runtime.SetMutexProfileFraction(-1)
 	worker.WorkerSingleton().CreateWorker(runtime.NumCPU() * 2)
 	fmt.Println("開啟的worker數量", runtime.NumCPU() * 2)
@@ -41,7 +41,6 @@ func init() {
 
 func main() {
 	SetRouter()
-
 }
 
 func SetRouter() *gin.Engine {

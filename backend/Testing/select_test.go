@@ -2,6 +2,7 @@ package testing
 
 import (
 	"backend/handler"
+	"backend/methods"
 	"backend/mysql"
 	"backend/redis"
 	"backend/table"
@@ -17,7 +18,7 @@ func TestSelectUser(t *testing.T) {
 		}
 		return false
 	}
-	handler.Init()
+	handler.Init("../.env")
 
 	// test 0
 	r := (*redis.Singleton()).SelectUser(0)
@@ -332,26 +333,48 @@ func TestSelectDayOff(t *testing.T) {
 	
 }
 
-
-
-func sorted[T comparable](arr *[]T, compareFunc func(T, T) bool) *[]T {
-	a := *arr
-	for oldStep := len(*arr) - 1;oldStep > 0; oldStep -- {
-		for currentStep := 0; currentStep < oldStep; currentStep++ {
-			if compareFunc(a[currentStep], a[currentStep + 1]) {
-				b := a[currentStep]
-				a[currentStep] = a[currentStep + 1]
-				a[ currentStep + 1] = b
-			}
+func TestSelectBanchStyle(t *testing.T) {
+	compareFunc := func(v table.BanchStyle, vNext table.BanchStyle) bool {
+		if v.StyleId > vNext.StyleId {
+			return true
 		}
+		return false
 	}
+	// handler.Init()
 
-	return &a
+	// test 0
+	r := (*redis.Singleton()).SelectBanchStyle(0)
+	m := (*mysql.Singleton()).SelectBanchStyle(0)
+	res := testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+
+	// test 1
+	r = (*redis.Singleton()).SelectBanchStyle(1, int64(1))
+	m = (*mysql.Singleton()).SelectBanchStyle(1, int64(1))
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+
+	r = (*redis.Singleton()).SelectBanchStyle(1, int64(1))
+	m = (*mysql.Singleton()).SelectBanchStyle(1, int64(2))
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
+
+	// test 2
+	r = (*redis.Singleton()).SelectBanchStyle(2, int64(1))
+	m = (*mysql.Singleton()).SelectBanchStyle(2, int64(1))
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+
+	r = (*redis.Singleton()).SelectBanchStyle(2, int64(1))
+	m = (*mysql.Singleton()).SelectBanchStyle(2, int64(2))
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
+	
 }
 
 func testEq[T comparable](a1 *[]T, b1 *[]T, compareFunc func(T, T) bool) bool {
-	a := sorted(a1, compareFunc)
-	b := sorted(b1, compareFunc)
+	a := methods.BubbleSorted(a1, compareFunc)
+	b := methods.BubbleSorted(b1, compareFunc)
     if len(*a) != len(*b) {
         return false
     }

@@ -80,9 +80,9 @@ func Singleton() *DB {
 	return dbInstance
 }
 
-func(dbObj *DB) Conn() {
+func(dbObj *DB) Conn(path string) {
 	defer panichandler.Recover()
-	err := godotenv.Load()
+	err := godotenv.Load(path)
 	if err != nil {
 		log.Fatal("error loading .env file")
 	}
