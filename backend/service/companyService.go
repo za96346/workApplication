@@ -273,7 +273,7 @@ func InsertBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 
-	// 更新成功
+	// 新增成功
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().InsertSuccess,
 	})
@@ -432,5 +432,85 @@ func UpdateBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
 func InsertBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
+	now := time.Now()
+	banchRule := table.BanchRule{
+		CreateTime: now,
+		LastModify: now,
+	}
+	if (*props).ShouldBindJSON(&banchRule) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+
+	// 檢查是否是 company table type
+	myCompany, exited := (*props).Get("MyCompany")
+	if !exited {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().IsNotHaveCompany,
+		})
+		return
+	}
+	company, a := methods.Assertion[table.CompanyTable](myCompany)
+	if !a {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().AssertionFail,
+		})
+		return
+	}
 	
+	// 檢查是否是 user table type
+	myUserData, exited := (*props).Get("MyUserData")
+	if !exited {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().userDataNotFound,
+		})
+		return
+	}
+	user, a := methods.Assertion[table.UserTable](myUserData)
+	if !a {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().AssertionFail,
+		})
+		return
+	}
+	
+	// 檢查 部門是否在此公司
+	if !BanchIsInCompany(banchRule.BanchId, company.CompanyId) {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().NotHaveBanch,
+		})
+		return
+	}
+
+	// 最高權限 更新
+	if user.Permession == 100 {
+		if v,_ := (*dbHandle).InsertBanchRule(&banchRule); !v {
+			(*props).JSON(http.StatusNotAcceptable, gin.H{
+				"message": StatusText().InsertFail,
+			})
+			return
+		}
+	}
+
+	// 主管權限 更新
+	if user.Permession == 1 {
+		if user.Banch != banchRule.BanchId {
+			(*props).JSON(http.StatusNotAcceptable, gin.H{
+				"message": StatusText().OnlyCanUpDateYourBanch,
+			})
+			return
+		}
+		if v, _ := (*dbHandle).InsertBanchRule(&banchRule); !v {
+			(*props).JSON(http.StatusNotAcceptable, gin.H{
+				"message": StatusText().InsertFail,
+			})
+			return
+		}
+	}
+	// 新增成功
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().InsertSuccess,
+	})
 }
