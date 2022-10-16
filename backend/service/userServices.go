@@ -27,7 +27,7 @@ func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 	res := (*dbHandle).SelectUser(1, intUserId)
-	if IsNotExited(res) {
+	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,
 		})
@@ -73,7 +73,7 @@ func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 	// 尋找資料
 	res := (*dbHandle).SelectUser(1, converUserId)
-	if IsNotExited(res) {
+	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,
 			"data": *res,
