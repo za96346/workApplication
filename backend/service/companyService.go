@@ -13,7 +13,7 @@ func FetchBanchAll(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 
-	company, exited := (*props).Get("MyCompany")
+	myCompany, exited := (*props).Get("MyCompany")
 	if !exited {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().IsNotHaveCompany,
@@ -21,7 +21,7 @@ func FetchBanchAll(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
-	switch v := company.(type) {
+	switch v := myCompany.(type) {
 	case *[]table.CompanyTable:
 		banch := (*dbHandle).SelectCompanyBanch(1, (*v)[0].CompanyId)
 		(*props).JSON(http.StatusOK, gin.H{
@@ -51,7 +51,7 @@ func FetchBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
-	company, exited := (*props).Get("MyCompany")
+	myCompany, exited := (*props).Get("MyCompany")
 	if !exited {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().IsNotHaveCompany,
@@ -59,10 +59,10 @@ func FetchBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
-	switch v := company.(type) {
+	switch types := myCompany.(type) {
 	case *[]table.CompanyTable:
 			// 檢查部門是否是公司本身
-		companyBanch := (*dbHandle).SelectCompanyBanch(1, (*v)[0].CompanyId)
+		companyBanch := (*dbHandle).SelectCompanyBanch(1, (*types)[0].CompanyId)
 		for _, v := range *companyBanch {
 
 			if convertBanchId == v.Id {
@@ -82,20 +82,58 @@ func FetchBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	default:
-		if !exited {
-			(*props).JSON(http.StatusNotFound, gin.H{
-				"message": StatusText().IsNotHaveCompany,
-			})
-			return
-		}
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().IsNotHaveCompany,
+		})
+		return
 	}
 	
 }
 
-// func FetchBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
-// 	defer panicHandle()
-// 	defer (*waitJob).Done()
-// 	userId, existed := (*props).Get("UserId")
-// 	wantBanchId := (*props).Query("banchId")
+func FetchBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+	banchId := (*props).Query("banchId")
+	convertBanchId, err := methods.AnyToInt64(banchId)
+	if err != nil {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().BanchIdIsNotRight,
+		})
+		return
+	}
 
-// }
+	company, exited := (*props).Get("MyCompany")
+	if !exited {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().IsNotHaveCompany,
+		})
+		return
+	}
+
+	switch types := company.(type) {
+	case *[]table.CompanyTable:
+		companyBanch := (*dbHandle).SelectCompanyBanch(1, (*types)[0].CompanyId)
+		for _, v := range *companyBanch {
+			if convertBanchId == v.Id {
+				res := (*dbHandle).SelectBanchRule(2, convertBanchId)
+				(*props).JSON(http.StatusOK, gin.H{
+					"message": StatusText().FindSuccess,
+					"data": res,
+				})
+				return
+			}
+		}
+
+		// 沒有此部門 或 不是此公司的部門
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().BanchIdIsNotRight,
+		})
+		return
+	default:
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().IsNotHaveCompany,
+		})
+		return
+	}
+
+}

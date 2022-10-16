@@ -1,9 +1,10 @@
 package middleWare
 
 import (
+	"backend/handler"
 	"backend/methods"
 	"net/http"
-	"backend/handler"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -38,7 +39,7 @@ func MyCompanyAndBanch(props *gin.Context) {
 
 	// 尋找公司
 	company := (*handler.Singleton()).SelectCompany(2, (*myUserData)[0].CompanyCode)
-	if methods.IsNotExited(myUserData) {
+	if methods.IsNotExited(company) {
 		(*props).AbortWithStatusJSON(http.StatusNotFound, gin.H{
 			"message": "尚未有公司",
 		})

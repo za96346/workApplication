@@ -55,7 +55,7 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		break
 	case 10:
 		// get method of fetch banch rule
-		// routeFunc = service.FetchBanchRule
+		routeFunc = service.FetchBanchRule
 		break
 	default:
 		break;

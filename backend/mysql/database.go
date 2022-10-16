@@ -600,6 +600,7 @@ func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.B
 
 // 0 => all, value => nil
 //  1 => ruleId, value => int64
+//  2=> banchId, value => int64
 func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.BanchRule {
 	defer panichandler.Recover()
 	querys := ""
@@ -609,6 +610,9 @@ func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.Ba
 		break
 	case 1:
 		querys = (*query.MysqlSingleton()).BanchRule.SelectSingleByRuleId
+		break
+	case 2:
+		querys = (*query.MysqlSingleton()).BanchRule.SelectAllByBanchId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).BanchRule.SelectAll

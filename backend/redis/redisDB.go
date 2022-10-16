@@ -479,6 +479,7 @@ func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.B
 
 // 0 => all, value => nil
 //  1 => ruleId, value => int64
+//  2=> banchId, value => int64
 func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.BanchRule {
 	defer panichandler.Recover()
 	tableKey := (*dbObj).table[11]
@@ -496,6 +497,20 @@ func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.Ba
 				return (*dbObj).hmGet(tableKey, value...)
 			},
 			func(v table.BanchRule) bool {return true},
+		)
+	case 2:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.BanchRule) bool {
+				for _, filterItem := range value {
+					if filterItem == v.BanchId {
+						return true
+					}
+				}
+				return false
+			},
 		)
 	default:
 		return &[]table.BanchRule{}

@@ -86,6 +86,7 @@ type banchStyle struct {
 type banchRule struct {
 	queryCommonColumn
 	SelectSingleByRuleId string
+	SelectAllByBanchId string
 }
 
 func MysqlSingleton() *sqlQuery {
@@ -464,4 +465,5 @@ func addBanchRuleQuery() {
 	sqlQueryInstance.BanchRule.SelectSingleByRuleId = `select * from banchRule where ruleId = ?;`;
 	sqlQueryInstance.BanchRule.SelectAll = `select * from banchRule;`;
 	sqlQueryInstance.BanchRule.Delete = `delete from banchRule where ruleId=?;`;
+	sqlQueryInstance.BanchRule.SelectAllByBanchId = `select * from banchRule where banchId = ?;`;
 }
