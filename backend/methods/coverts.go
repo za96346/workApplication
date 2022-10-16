@@ -17,3 +17,12 @@ func AnyToInt64(num any) (int64, any) {
 		return int64(-100), "hoa"
 	}
 }
+
+func Assertion[T comparable](data interface{}) (T, bool) {
+	switch v := data.(type) {
+	case T:
+		return v, true
+	default:
+		return *new(T), false
+	}
+}

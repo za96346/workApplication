@@ -45,7 +45,7 @@ func MyCompanyAndBanch(props *gin.Context) {
 		})
 		return
 	}
-	(*props).Set("MyUserData", myUserData)
-	(*props).Set("MyCompany", company)
+	(*props).Set("MyUserData", (*myUserData)[0])
+	(*props).Set("MyCompany", (*company)[0])
 	(*props).Next()
 }

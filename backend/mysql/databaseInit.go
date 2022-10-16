@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"strconv"
-	"sync"
 	"time"
 )
 func DataBaseInit() {
@@ -504,23 +503,16 @@ func DataBaseInit() {
 
 }
 func simulateData() {
-	wg := new(sync.WaitGroup)
-    (*wg).Add(1)
-	go func ()  {
+	for x := 0; x < 3; x++ {
+		addCompany(x)
+		addUser(x)
+	}
+	addShift(0)
+}
+func addCompany(x int) {
 		//company
 		company := table.CompanyTable{
-			CompanyCode: "",
-			CompanyName: "",
-			CompanyLocation: "",
-			CompanyPhoneNumber: "",
-			TermStart: time.Now(),
-			TermEnd: time.Now(),
-			CreateTime: time.Now(),
-			LastModify: time.Now(),
-		}
-		(*Singleton()).InsertCompany(&company)
-		company = table.CompanyTable{
-			CompanyCode: "fei32fej",
+			CompanyCode: "company" + strconv.Itoa(x),
 			CompanyName: "xx股份有限公司",
 			CompanyLocation: "台中市大甲區ｘｘｘ",
 			CompanyPhoneNumber: "0906930873",
@@ -529,54 +521,52 @@ func simulateData() {
 			CreateTime: time.Now(),
 			LastModify: time.Now(),
 		}
-		resStatus, _ := (*Singleton()).InsertCompany(&company)
-		handleError(resStatus)
+		_, _ = (*Singleton()).InsertCompany(&company)
+		resData := (*Singleton()).SelectCompany(2, "company" + strconv.Itoa(x))
+		for i := 0; i < 5; i++ {
 		// company banch
-		resData := (*Singleton()).SelectCompany(2, "fei32fej")
-		companyBanch := table.CompanyBanchTable{
-			CompanyId :(*resData)[0].CompanyId,
-			BanchName: "公關組",
-			BanchShiftStyle: "{}",
-			CreateTime: time.Now(),
-			LastModify: time.Now(),
+			companyBanch := table.CompanyBanchTable{
+				CompanyId :(*resData)[0].CompanyId,
+				BanchName: "xx組" + strconv.Itoa(i),
+				BanchShiftStyle: "{}",
+				CreateTime: time.Now(),
+				LastModify: time.Now(),
+			}
+			_, id := (*Singleton()).InsertCompanyBanch(&companyBanch)
+			for i := 0; i < 10; i++ {
+				banchStyle := table.BanchStyle{
+					BanchId: id,
+					OnShiftTime: "09:00",
+					OffShiftTime: "18:00",
+					Icon: ">'..'<",
+					TimeRangeName: "平日早班",
+					CreateTime: time.Now(),
+					LastModify: time.Now(),
+				}
+				(*Singleton()).InsertBanchStyle(&banchStyle)
+	
+				banchRule := table.BanchRule{
+					BanchId: id,
+					MaxPeople: 2,
+					MinPeople: 1,
+					WeekDay: 1 + i,
+					WeekType: 2,
+					OnShiftTime: "09:00",
+					OffShiftTime: "18:00",
+					CreateTime: time.Now(),
+					LastModify: time.Now(),
+				}
+				(*Singleton()).InsertBanchRule(&banchRule)
+			}
 		}
-		resStatus, id := (*Singleton()).InsertCompanyBanch(&companyBanch)
-		handleError(resStatus)
+}
 
-		banchStyle := table.BanchStyle{
-			BanchId: id,
-			OnShiftTime: "09:00",
-			OffShiftTime: "18:00",
-			Icon: ">'..'<",
-			TimeRangeName: "平日早班",
-			CreateTime: time.Now(),
-			LastModify: time.Now(),
-		}
-		(*Singleton()).InsertBanchStyle(&banchStyle)
-		banchRule := table.BanchRule{
-			BanchId: id,
-			MaxPeople: 2,
-			MinPeople: 1,
-			WeekDay: 1,
-			WeekType: 2,
-			OnShiftTime: "09:00",
-			OffShiftTime: "18:00",
-			CreateTime: time.Now(),
-			LastModify: time.Now(),
-		}
-		(*Singleton()).InsertBanchRule(&banchRule)
-		(*wg).Done()
-	}()
-	(*wg).Wait()
-	(*wg).Add(11)
-	for i := 0; i <= 10; i++ {
-		i := i
-		go func (i int)  {
+func addUser(x int) {
+	for i := 0; i < 10; i++ {
 			// user
 			user := table.UserTable{
-				UserId : int64(0),
-				CompanyCode: "fei32fej",
-				Account: "account" + strconv.Itoa(i),
+				CompanyCode: "company" + strconv.Itoa(x),
+				Account: "account" + strconv.Itoa(i + x * 10),
 				Password: "aa20010722",
 				UserName: "siou" + strconv.Itoa(i),
 				EmployeeNumber: "a0000" + strconv.Itoa(i),
@@ -589,25 +579,24 @@ func simulateData() {
 				CreateTime: time.Now(),
 				LastModify: time.Now(),
 			}
-			resStatus, _ := (*Singleton()).InsertUser(&user)
+			_, id := (*Singleton()).InsertUser(&user)
 			// userPreference
-			resData := (*Singleton()).SelectUser(2, "account" + strconv.Itoa(i)) //拿使用者資料
+			// resData := (*Singleton()).SelectUser(2, "account" + strconv.Itoa(i)) //拿使用者資料
 			userPreference := table.UserPreferenceTable{
-				UserId: (*resData)[0].UserId,
+				UserId: id,
 				Style: "{style}",
 				FontSize: "12",
 				SelfPhoto: "pic",
 				CreateTime: time.Now(),
 				LastModify: time.Now(),
 			}
-			resStatus, _ = (*Singleton()).InsertUserPreference(&userPreference)
-			handleError(resStatus)
+			_, _ = (*Singleton()).InsertUserPreference(&userPreference)
 			// shift
 			for shiftStep := 0; shiftStep <= 30; shiftStep++ {
 				hours, _ :=  time.ParseDuration("1h")
 				oneDay, _ := time.ParseDuration(fmt.Sprint(strconv.Itoa(shiftStep * 24), "h"))
 				shift := table.ShiftTable{
-					UserId: (*resData)[0].UserId,
+					UserId: id,
 					OnShiftTime: time.Now().Add(-8 * hours).Add(oneDay),
 					OffShiftTime: time.Now().Add(oneDay),
 					SpecifyTag: "nothing",
@@ -618,67 +607,59 @@ func simulateData() {
 				}
 				_, _ = (*Singleton()).InsertShift(&shift)
 			}
-			wg.Done()
-		}(i)
 	}
-	// shift change
-	shiftChange := table.ShiftChangeTable{
-		InitiatorShiftId: int64(1),
-		RequestedShiftId: int64(2),
-		Reason: "我那天有事",
-		CaseProcess: "manager",
-		SpecifyTag: "hi",
-		CreateTime: time.Now(),
-		LastModify: time.Now(),
-	}
-	shiftOverTime := table.ShiftOverTimeTable{
-		ShiftId: int64(1),
-		InitiatorOnOverTime: time.Now(),
-		InitiatorOffOverTime: time.Now(),
-		Reason: "妹有原因",
-		CaseProcess: "manager",
-		SpecifyTag: "hi",
-		CreateTime: time.Now(),
-		LastModify: time.Now(),
-	}
-	forgetPunch := table.ForgetPunchTable{
-		ShiftId: int64(1),
-		TargetPunch: "上班",
-		Reason: "妹有原因",
-		CaseProcess: "manager",
-		SpecifyTag: "hi",
-		CreateTime: time.Now(),
-		LastModify: time.Now(),
-	}
-	dayOff := table.DayOffTable{
-		ShiftId: int64(1),
-		DayOffType: "事假",
-		Reason: "妹有原因",
-		CaseProcess: "manager",
-		SpecifyTag: "hi",
-		CreateTime: time.Now(),
-		LastModify: time.Now(),
-	}
-	lateExcused := table.LateExcusedTable{
-		ShiftId: int64(1),
-		LateExcusedType: "遲到",
-		Reason: "妹有原因",
-		CaseProcess: "manager",
-		SpecifyTag: "hi",
-		CreateTime: time.Now(),
-		LastModify: time.Now(),
-	}
-	(*wg).Wait()
-	(*Singleton()).InsertShiftChange(&shiftChange)
-	(*Singleton()).InsertShiftOverTime(&shiftOverTime)
-	(*Singleton()).InsertForgetPunch(&forgetPunch)
-	(*Singleton()).InsertDayOff(&dayOff)
-	(*Singleton()).InsertLateExcused(&lateExcused)
 }
-func handleError(resStatus bool) {
-	if resStatus {
-		// do success handle
-	} else {
-		//do fail handle
-	}
+func addShift(x int) {
+		// shift change
+		shiftChange := table.ShiftChangeTable{
+			InitiatorShiftId: int64(1),
+			RequestedShiftId: int64(2),
+			Reason: "我那天有事",
+			CaseProcess: "manager",
+			SpecifyTag: "hi",
+			CreateTime: time.Now(),
+			LastModify: time.Now(),
+		}
+		shiftOverTime := table.ShiftOverTimeTable{
+			ShiftId: int64(1),
+			InitiatorOnOverTime: time.Now(),
+			InitiatorOffOverTime: time.Now(),
+			Reason: "妹有原因",
+			CaseProcess: "manager",
+			SpecifyTag: "hi",
+			CreateTime: time.Now(),
+			LastModify: time.Now(),
+		}
+		forgetPunch := table.ForgetPunchTable{
+			ShiftId: int64(1),
+			TargetPunch: "上班",
+			Reason: "妹有原因",
+			CaseProcess: "manager",
+			SpecifyTag: "hi",
+			CreateTime: time.Now(),
+			LastModify: time.Now(),
+		}
+		dayOff := table.DayOffTable{
+			ShiftId: int64(1),
+			DayOffType: "事假",
+			Reason: "妹有原因",
+			CaseProcess: "manager",
+			SpecifyTag: "hi",
+			CreateTime: time.Now(),
+			LastModify: time.Now(),
+		}
+		lateExcused := table.LateExcusedTable{
+			ShiftId: int64(1),
+			LateExcusedType: "遲到",
+			Reason: "妹有原因",
+			CaseProcess: "manager",
+			SpecifyTag: "hi",
+			CreateTime: time.Now(),
+			LastModify: time.Now(),
+		}
+		(*Singleton()).InsertShiftChange(&shiftChange)
+		(*Singleton()).InsertShiftOverTime(&shiftOverTime)
+		(*Singleton()).InsertForgetPunch(&forgetPunch)
+		(*Singleton()).InsertDayOff(&dayOff)
+		(*Singleton()).InsertLateExcused(&lateExcused)
 }

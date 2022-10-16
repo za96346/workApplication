@@ -32,6 +32,9 @@ type statusText struct {
 	GetCompanyCodeFailed string
 	IsNotHaveCompany string
 	BanchIdIsNotRight string
+	StyleIdNotRight string
+	NotHaveBanch string
+	AssertionFail string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -64,11 +67,21 @@ func StatusText() *statusText {
 				GetCompanyCodeFailed: "獲取公司碼失敗",
 				IsNotHaveCompany: "尚未有公司",
 				BanchIdIsNotRight: "部門id不正確",
+				StyleIdNotRight: "樣式id不正確",
+				NotHaveBanch: "尚未有此部門",
+				AssertionFail: "Assert Fail",
 			}
 		}
 	}
 	return statusTextInstance
 }
 
-
-
+func BanchIsInCompany(banchId int64, companyId int64) bool {
+	res := (*dbHandle).SelectCompanyBanch(1, companyId)
+	for _, v := range *res {
+		if v.Id == banchId {
+			return true
+		}
+	}
+	return false
+}
