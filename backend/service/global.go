@@ -36,6 +36,7 @@ type statusText struct {
 	NotHaveBanch string
 	AssertionFail string
 	OnlyCanUpDateYourBanch string
+	RuleIdIsNotRight string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -68,7 +69,8 @@ func StatusText() *statusText {
 				GetCompanyCodeFailed: "獲取公司碼失敗",
 				IsNotHaveCompany: "尚未有公司",
 				BanchIdIsNotRight: "部門id不正確",
-				StyleIdNotRight: "樣式id不正確",
+				StyleIdNotRight: "style id不正確",
+				RuleIdIsNotRight: "rule id不正確",
 				NotHaveBanch: "尚未有此部門",
 				AssertionFail: "Assert Fail",
 				OnlyCanUpDateYourBanch: "只可更新你的部門資料",
