@@ -91,28 +91,42 @@ func FetchBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 func UpdateBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
-	// 驗證style id
-	styleId := (*props).Query("styleId")
-	convertStyleId, err := methods.AnyToInt64(styleId)
-	if err != nil {
+
+	// 綁定json
+	request := new(struct {
+		StyleId int64
+		Icon string  // 時段圖標
+		TimeRangeName string // 時段名稱
+		OnShiftTime string // 開始上班時間
+		OffShiftTime string  //結束上班的時間
+	})
+
+	if (*props).ShouldBindJSON(request) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+
+	// 檢查是否有此style id
+	res := (*dbHandle).SelectBanchStyle(1, (*request).StyleId)
+	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().StyleIdNotRight,
 		})
 		return
 	}
 
-	// 綁定json
 	banchStyle := table.BanchStyle{
+		Icon: (*request).Icon,
+		TimeRangeName: (*request).TimeRangeName,
+		OnShiftTime: (*request).OnShiftTime,
+		OffShiftTime: (*request).OffShiftTime,
+		BanchId: (*res)[0].BanchId,
 		LastModify: time.Now(),
-		StyleId: convertStyleId,
+		StyleId: (*request).StyleId,
 	}
 
-	if (*props).ShouldBindJSON(banchStyle) != nil {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().FormatError,
-		})
-		return
-	}
 	// 檢查是否是 company table type
 	myCompany, exited := (*props).Get("MyCompany")
 	if !exited {
@@ -153,14 +167,38 @@ func UpdateBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
-
+	// 最高權限 更新
 	if user.Permession == 100 {
 		// 都可以更新
-
+		if !(*dbHandle).UpdateBanchStyle(0, &banchStyle) {
+			(*props).JSON(http.StatusNotAcceptable, gin.H{
+				"message": StatusText().UpdateFail,
+			})
+			return
+		}
 	}
-	if user.Permession == 1{
+	// 主管權限 更新
+	if user.Permession == 1 {
 		// 只能更新自己的部門
+		if  user.Banch != banchStyle.BanchId {
+			(*props).JSON(http.StatusNotAcceptable, gin.H{
+				"message": StatusText().OnlyCanUpDateYourBanch,
+			})
+			return
+		}
+		if !(*dbHandle).UpdateBanchStyle(0, &banchStyle) {
+			(*props).JSON(http.StatusNotAcceptable, gin.H{
+				"message": StatusText().UpdateFail,
+			})
+			return
+		}
 	}
+
+	// 更新成功
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().UpdateSuccess,
+	})
+	return
 }
 
 func FetchBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {

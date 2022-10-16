@@ -503,7 +503,7 @@ func DataBaseInit() {
 
 }
 func simulateData() {
-	for x := 0; x < 3; x++ {
+	for x := 0; x < 2; x++ {
 		addCompany(x)
 		addUser(x)
 	}
@@ -523,7 +523,7 @@ func addCompany(x int) {
 		}
 		_, _ = (*Singleton()).InsertCompany(&company)
 		resData := (*Singleton()).SelectCompany(2, "company" + strconv.Itoa(x))
-		for i := 0; i < 5; i++ {
+		for i := 0; i < 2; i++ {
 		// company banch
 			companyBanch := table.CompanyBanchTable{
 				CompanyId :(*resData)[0].CompanyId,
@@ -533,7 +533,7 @@ func addCompany(x int) {
 				LastModify: time.Now(),
 			}
 			_, id := (*Singleton()).InsertCompanyBanch(&companyBanch)
-			for i := 0; i < 10; i++ {
+			for i := 0; i < 2; i++ {
 				banchStyle := table.BanchStyle{
 					BanchId: id,
 					OnShiftTime: "09:00",
