@@ -134,7 +134,7 @@ type CompanyBanchTable struct {
 //部門班表的樣式規則
 type BanchStyle struct {
 	StyleId int64 `json:"StyleId"` // 此樣式的id
-	BanchId int64 `json:"Id"` // 部門id
+	BanchId int64 `json:"BanchId"` // 部門id
 	Icon string `json:"Icon"` // 時段圖標
 	TimeRangeName string `json:"TimeRangeName"` // 時段名稱
 	OnShiftTime string  `json:"OnShiftTime"`// 開始上班時間
@@ -146,7 +146,7 @@ type BanchStyle struct {
 // 個部門的 每天上班規則
 type BanchRule struct {
 	RuleId int64 `json:"RuleId"` // 此規則的id
-	BanchId int64 `json:"Id"` // 部門id
+	BanchId int64 `json:"BanchId"` // 部門id
 	MinPeople int `json:"MinPeople"` // 限制最少員工
 	MaxPeople int `json:"MaxPeople"` // 限制做多的員工
 	WeekDay int `json:"WeekDay"` // 星期幾 (1, 2, 3, 4, 5, 6, 7)

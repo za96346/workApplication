@@ -46,7 +46,12 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		routeFunc = service.GetAllUser
 		break
 	case 8:
+		// get method of getch banch all
 		routeFunc = service.FetchBanchAll
+		break
+	case 9:
+		// get method of fetch banch style
+		routeFunc = service.FetchBanchStyle
 		break
 	default:
 		break;

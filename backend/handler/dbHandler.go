@@ -832,6 +832,7 @@ func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.
 
 // 0 => all, value => nil
 //  1 => styleId, value => int64
+//  2=> banchId, value => int64
 func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.BanchStyle {
 	defer panichandler.Recover()
 	return selectAllHandler(

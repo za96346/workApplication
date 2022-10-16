@@ -556,6 +556,7 @@ func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.
 
 // 0 => all, value => nil
 //  1 => styleId, value => int64
+//  2=> banchId, value => int64
 func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.BanchStyle {
 	defer panichandler.Recover()
 	querys := ""
@@ -565,6 +566,9 @@ func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.B
 		break
 	case 1:
 		querys = (*query.MysqlSingleton()).BanchStyle.SelectSingleByStyleId
+		break
+	case 2:
+		querys = (*query.MysqlSingleton()).BanchStyle.SelectAllByBanchId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).BanchStyle.SelectAll

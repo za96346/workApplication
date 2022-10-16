@@ -81,6 +81,7 @@ type  dayOffQuery struct {
 type banchStyle struct {
 	queryCommonColumn
 	SelectSingleByStyleId string
+	SelectAllByBanchId string
 }
 type banchRule struct {
 	queryCommonColumn
@@ -430,6 +431,7 @@ func addBanchStyleQuery() {
 	sqlQueryInstance.BanchStyle.SelectSingleByStyleId = `select * from banchStyle where styleId = ?;`;
 	sqlQueryInstance.BanchStyle.SelectAll = `select * from banchStyle;`;
 	sqlQueryInstance.BanchStyle.Delete = `delete from banchStyle where styleId=?;`;
+	sqlQueryInstance.BanchStyle.SelectAllByBanchId = `select * from banchStyle where banchId = ?;`;
 }
 func addBanchRuleQuery() {
 	sqlQueryInstance.BanchRule.InsertAll = `

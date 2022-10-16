@@ -31,6 +31,7 @@ type statusText struct {
 	EmailIsNotRight string
 	GetCompanyCodeFailed string
 	IsNotHaveCompany string
+	BanchIdIsNotRight string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -62,6 +63,7 @@ func StatusText() *statusText {
 				EmailIsNotRight: "電子信箱格式錯誤",
 				GetCompanyCodeFailed: "獲取公司碼失敗",
 				IsNotHaveCompany: "尚未有公司",
+				BanchIdIsNotRight: "部門id不正確",
 			}
 		}
 	}
