@@ -37,6 +37,8 @@ type statusText struct {
 	AssertionFail string
 	OnlyCanUpDateYourBanch string
 	RuleIdIsNotRight string
+	InsertSuccess string
+	InsertFail string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -74,6 +76,8 @@ func StatusText() *statusText {
 				NotHaveBanch: "尚未有此部門",
 				AssertionFail: "Assert Fail",
 				OnlyCanUpDateYourBanch: "只可更新你的部門資料",
+				InsertSuccess: "新增成功",
+				InsertFail: "新增失敗",
 			}
 		}
 	}

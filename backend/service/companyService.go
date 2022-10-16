@@ -94,15 +94,11 @@ func UpdateBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer (*waitJob).Done()
 
 	// 檢查body
-	request := new(struct {
-		StyleId int64
-		Icon string  // 時段圖標
-		TimeRangeName string // 時段名稱
-		OnShiftTime string // 開始上班時間
-		OffShiftTime string  //結束上班的時間
-	})
+	banchStyle := table.BanchStyle{
+		LastModify: time.Now(),
+	}
 
-	if (*props).ShouldBindJSON(request) != nil {
+	if (*props).ShouldBindJSON(&banchStyle) != nil {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().FormatError,
 		})
@@ -110,7 +106,7 @@ func UpdateBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	// 檢查是否有此style id
-	res := (*dbHandle).SelectBanchStyle(1, (*request).StyleId)
+	res := (*dbHandle).SelectBanchStyle(1, (*&banchStyle).StyleId)
 	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().StyleIdNotRight,
@@ -118,15 +114,8 @@ func UpdateBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
-	banchStyle := table.BanchStyle{
-		Icon: (*request).Icon,
-		TimeRangeName: (*request).TimeRangeName,
-		OnShiftTime: (*request).OnShiftTime,
-		OffShiftTime: (*request).OffShiftTime,
-		BanchId: (*res)[0].BanchId,
-		LastModify: time.Now(),
-		StyleId: (*request).StyleId,
-	}
+	// 添加 banch id
+	banchStyle.BanchId = (*res)[0].BanchId
 
 	// 檢查是否是 company table type
 	myCompany, exited := (*props).Get("MyCompany")
@@ -201,6 +190,95 @@ func UpdateBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	})
 }
 
+func InsertBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+	now := time.Now()
+	banchStyle := table.BanchStyle{
+		CreateTime: now,
+		LastModify: now,
+	}
+
+	if (*props).ShouldBindJSON(&banchStyle) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+
+	// 檢查是否是 company table type
+	myCompany, exited := (*props).Get("MyCompany")
+	if !exited {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().IsNotHaveCompany,
+		})
+		return
+	}
+	company, a := methods.Assertion[table.CompanyTable](myCompany)
+	if !a {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().AssertionFail,
+		})
+		return
+	}
+	
+	// 檢查是否是 user table type
+	myUserData, exited := (*props).Get("MyUserData")
+	if !exited {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().userDataNotFound,
+		})
+		return
+	}
+	user, a := methods.Assertion[table.UserTable](myUserData)
+	if !a {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().AssertionFail,
+		})
+		return
+	}
+	
+	// 檢查 部門是否在此公司
+	if !BanchIsInCompany(banchStyle.BanchId, company.CompanyId) {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().NotHaveBanch,
+		})
+		return
+	}
+
+	// 最高權限 更新
+	if user.Permession == 100 {
+		if  v, _ := (*dbHandle).InsertBanchStyle(&banchStyle); !v {
+			(*props).JSON(http.StatusNotAcceptable, gin.H{
+				"message": StatusText().InsertFail,
+			})
+			return
+		}
+	}
+
+	// 主管權限 更新
+	if user.Permession == 1 {
+		if user.Banch != banchStyle.BanchId {
+			(*props).JSON(http.StatusNotAcceptable, gin.H{
+				"message": StatusText().OnlyCanUpDateYourBanch,
+			})
+			return
+		}
+		if v, _ := (*dbHandle).InsertBanchStyle(&banchStyle); !v {
+			(*props).JSON(http.StatusNotAcceptable, gin.H{
+				"message": StatusText().InsertFail,
+			})
+			return
+		}
+	}
+
+
+	// 更新成功
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().InsertSuccess,
+	})
+}
+
 
 // banch rule
 func FetchBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
@@ -258,23 +336,17 @@ func UpdateBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer (*waitJob).Done()
 
 	// 檢查body
-	request := new(struct{
-		MinPeople int // 限制最少員工
-        MaxPeople int // 限制做多的員工
-        WeekDay int // 星期幾 (1, 2, 3, 4, 5, 6, 7)
-        WeekType int // 寒暑假 或 平常(1, 2, 3)
-        OnShiftTime string // 開始上班時間
-        OffShiftTime string  //結束上班的時間
-        RuleId int64
-	})
-	if (*props).ShouldBindJSON(request) != nil {
+	banchRule := table.BanchRule{
+		LastModify: time.Now(),
+	}
+	if (*props).ShouldBindJSON(&banchRule) != nil {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().FormatError,
 		})
 		return
 	}
 
-	res := (*dbHandle).SelectBanchRule(1, request.RuleId)
+	res := (*dbHandle).SelectBanchRule(1, banchRule.RuleId)
 	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().RuleIdIsNotRight,
@@ -282,17 +354,8 @@ func UpdateBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
-	banchRule := table.BanchRule{
-		BanchId: (*res)[0].BanchId,
-		RuleId: (*request).RuleId,
-		MinPeople: (*request).MinPeople,
-		MaxPeople: (*request).MaxPeople,
-		WeekDay: (*request).WeekDay,
-		WeekType: (*request).WeekType,
-		OnShiftTime: (*request).OnShiftTime,
-		OffShiftTime: (*request).OffShiftTime,
-		LastModify: time.Now(),
-	}
+	// 添加 banch id
+	banchRule.BanchId = (*res)[0].BanchId
 
 	// 檢查是否是 company table type
 	myCompany, exited := (*props).Get("MyCompany")
@@ -365,4 +428,9 @@ func UpdateBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().UpdateSuccess,
 	})
+}
+func InsertBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+	
 }

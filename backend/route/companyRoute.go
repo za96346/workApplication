@@ -18,7 +18,11 @@ func Company(props *gin.RouterGroup) {
 			middleWare.MyCompanyAndBanch,
 			worker.AssignWorker(11),
 		)
-		props.PUT("/banch/style", middleWare.Permession(100, 1), middleWare.MyCompanyAndBanch)
+		props.PUT("/banch/style",
+			middleWare.Permession(100, 1),
+			middleWare.MyCompanyAndBanch,
+			worker.AssignWorker(13),
+		)
 
 		props.GET("/banch/rule", middleWare.MyCompanyAndBanch, worker.AssignWorker(10))
 		props.POST("/banch/rule",
@@ -26,6 +30,10 @@ func Company(props *gin.RouterGroup) {
 			middleWare.MyCompanyAndBanch,
 			worker.AssignWorker(12),
 		)
-		props.PUT("/banch/rule", middleWare.Permession(100, 1), middleWare.MyCompanyAndBanch)
+		props.PUT("/banch/rule",
+			middleWare.Permession(100, 1),
+			middleWare.MyCompanyAndBanch,
+			worker.AssignWorker(14),
+		)
 	}
 }

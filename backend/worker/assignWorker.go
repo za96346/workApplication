@@ -65,6 +65,14 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		// post method of update banch rule
 		routeFunc = service.UpdateBanchRule
 		break
+	case 13:
+		// put method of insert banch style
+		routeFunc = service.InsertBanchStyle
+		break
+	case 14:
+		// put method of insert banch rule
+		routeFunc = service.InsertBanchRule
+		break
 	default:
 		break;
 	}
