@@ -1,3 +1,5 @@
+import { ReactNode } from "react"
+
 export interface languageType {
     a: string
 }
@@ -91,9 +93,15 @@ export interface BanchRuleType {
     MinPeople: number // 最少上班人數
     MaxPeople: number // 最多上班人數
     WeekDay: number // 星期幾 1, 2, 3, 4, 5, 6, 7
-    weekType: number // 平假日
+    WeekType: number // 平假日
     OnShiftTime: string // "18:00:00"
     OffShiftTime: string// "18:00:00"
     CreateTime?: Date | string // 創建時間
     LastModify?: Date | string // 上次修改時間
+}
+
+export interface ShiftSettingListType {
+    title: string
+    icons: string
+    time: ReactNode
 }

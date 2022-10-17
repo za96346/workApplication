@@ -11,6 +11,8 @@ import PermessionSelector from '../../component/PermessionSelector'
 import statics from '../../statics'
 import { RootState } from '../../reduxer/store'
 import StatusSelector from '../../component/StatusSelector'
+import { companyReducerType } from '../../reduxer/reducer/companyReducer'
+import { statusReducerType } from '../../reduxer/reducer/statusReducer'
 
 const items = (value: UserType[], banch: BanchType[]): any => {
     return value?.map((i, index) => {
@@ -33,8 +35,8 @@ const EmployeeManager = (): JSX.Element => {
     const [form] = Form.useForm()
     const [data, setData] = useState([])
     const [editingKey, setEditingKey] = useState('')
-    const { employee, banch } = useSelector((state: RootState) => state.company)
-    const { onFetchEmployee } = useSelector((state: RootState) => state.status)
+    const company: companyReducerType = useSelector((state: RootState) => state.company)
+    const loading: statusReducerType = useSelector((state: RootState) => state.status)
 
     const isEditing = (record: EmpManagerCellType): any => record.key === editingKey
 
@@ -185,8 +187,8 @@ const EmployeeManager = (): JSX.Element => {
     }, [])
 
     useEffect(() => {
-        setData(items(employee, banch))
-    }, [employee, banch])
+        setData(items(company.employee, company.banch))
+    }, [company.employee, company.banch])
 
     return (
         <Form form={form} component={false}>
@@ -212,7 +214,7 @@ const EmployeeManager = (): JSX.Element => {
                             cell: EditableCell
                         }
                     }}
-                    loading={onFetchEmployee}
+                    loading={loading.onFetchUserAll}
                     sticky
                     showHeader
                     bordered

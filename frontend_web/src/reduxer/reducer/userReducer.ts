@@ -1,3 +1,4 @@
+import { SelfDataType } from '../../type'
 import { action, userType } from '../types'
 
 const userState = {
@@ -5,6 +6,11 @@ const userState = {
     selfData: {
 
     }
+}
+
+export interface userReducerType {
+    token: string
+    selfData: SelfDataType
 }
 
 export const userReducer = (state = userState, action: action): any => {

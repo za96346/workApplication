@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import userAction from '../reduxer/action/userAction'
+import { companyReducerType } from '../reduxer/reducer/companyReducer'
+import { statusReducerType } from '../reduxer/reducer/statusReducer'
 import { RootState } from '../reduxer/store'
 import { BanchType } from '../type'
 
@@ -42,8 +44,8 @@ const items = (banch: BanchType[]): MenuItem[] => {
 }
 const App: React.FC = () => {
     const dispatch = useDispatch()
-    const { banch } = useSelector((state: RootState) => state.company)
-    const { onFetchBanch } = useSelector((state: RootState) => state.status)
+    const company: companyReducerType = useSelector((state: RootState) => state.company)
+    const loading: statusReducerType = useSelector((state: RootState) => state.status)
     const [current, setCurrent] = useState<any>({
         keyPath: 'shift',
         key: ''
@@ -109,7 +111,7 @@ const App: React.FC = () => {
                     }}
                 >
                     <Menu
-                        disabled={onFetchBanch}
+                        disabled={loading.onFetchBanch}
                         inlineCollapsed={collapsed}
                         overflowedIndicator
                         theme={'light'}
@@ -118,7 +120,7 @@ const App: React.FC = () => {
                         defaultOpenKeys={['sub1']}
                         selectedKeys={[current]}
                         mode="inline"
-                        items={items(banch)}
+                        items={items(company.banch)}
                     />
                 </div>
                 <div

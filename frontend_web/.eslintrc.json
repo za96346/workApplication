@@ -30,6 +30,7 @@
         "@typescript-eslint/quotes": "warn",
         "@typescript-eslint/no-misused-promises": "warn",
         "@typescript-eslint/restrict-template-expressions": "off",
-        "@typescript-eslint/consistent-type-assertions": "off"
+        "@typescript-eslint/consistent-type-assertions": "off",
+        "@typescript-eslint/no-floating-promises": "warn"
     }
 }

@@ -1,19 +1,20 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
+import { userReducerType } from '../../reduxer/reducer/userReducer'
 import { RootState } from '../../reduxer/store'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 
 const Entry = (): JSX.Element => {
-    const { token } = useSelector((state: RootState) => state.user)
+    const user: userReducerType = useSelector((state: RootState) => state.user)
     const navigate = useNavigate()
     const { path } = useParams()
     useEffect(() => {
-        if (token) {
+        if (user.token) {
             navigate('/shift')
         }
-    }, [token])
+    }, [user.token])
     return (
         <>
             <div className={styles.entryBlock}>

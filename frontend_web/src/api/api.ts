@@ -203,6 +203,7 @@ class ApiControl extends api {
         store.dispatch(statusAction.onFetchSelfData(false))
     }
 
+    // 部門樣式
     async getBanchStyle (banchId: number): Promise<ResType<BanchStyleType[]>> {
         store.dispatch(statusAction.onFetchBanchStyle(true))
         const res = await this.GET<BanchStyleType[]>({
@@ -218,6 +219,39 @@ class ApiControl extends api {
         return res
     }
 
+    async createBanchStyle (banchStyle: BanchStyleType): Promise<any> {
+        store.dispatch(statusAction.onCreateBanchStyle(true))
+        const res = await this.PUT<null>({
+            url: this.route.banchStyle,
+            body: {
+                Icon: banchStyle.Icon,
+                TimeRangeName: banchStyle.TimeRangeName,
+                OnShiftTime: banchStyle.OnShiftTime,
+                OffShiftTime: banchStyle.OffShiftTime,
+                BanchId: banchStyle.BanchId
+            }
+        })
+        console.log(res)
+        store.dispatch(statusAction.onCreateBanchStyle(false))
+    }
+
+    async updateBanchStyle (banchStyle: BanchStyleType): Promise<any> {
+        store.dispatch(statusAction.onUpdateBanchStyle(true))
+        const res = await this.POST<null>({
+            url: this.route.banchStyle,
+            body: {
+                Icon: banchStyle.Icon,
+                TimeRangeName: banchStyle.TimeRangeName,
+                OnShiftTime: banchStyle.OnShiftTime,
+                OffShiftTime: banchStyle.OffShiftTime,
+                StyleId: banchStyle.StyleId
+            }
+        })
+        console.log(res)
+        store.dispatch(statusAction.onUpdateBanchStyle(false))
+    }
+
+    // 部門規則
     async getBanchRule (banchId: number): Promise<ResType<BanchRuleType[]>> {
         store.dispatch(statusAction.onFetchBanchRule(true))
         const res = await this.GET<BanchRuleType[]>({
@@ -232,6 +266,42 @@ class ApiControl extends api {
 
         store.dispatch(statusAction.onFetchBanchRule(false))
         return res
+    }
+
+    async createBanchRule (banchRule: BanchRuleType): Promise<any> {
+        store.dispatch(statusAction.onCreateBanchRule(true))
+        const res = await this.PUT<null>({
+            url: this.route.banchRule,
+            body: {
+                BanchId: banchRule.BanchId,
+                MinPeople: banchRule.MinPeople,
+                MaxPeople: banchRule.MaxPeople,
+                WeekDay: banchRule.WeekDay,
+                WeekType: banchRule.WeekType,
+                OnShiftTime: banchRule.OnShiftTime,
+                OffShiftTime: banchRule.OffShiftTime
+            }
+        })
+        console.log(res)
+        store.dispatch(statusAction.onCreateBanchRule(false))
+    }
+
+    async updateBanchRule (banchRule: BanchRuleType): Promise<any> {
+        store.dispatch(statusAction.onUpdateBanchRule(true))
+        const res = await this.POST<null>({
+            url: this.route.banchRule,
+            body: {
+                MinPeople: banchRule.MinPeople,
+                MaxPeople: banchRule.MaxPeople,
+                WeekDay: banchRule.WeekDay,
+                WeekType: banchRule.WeekType,
+                OnShiftTime: banchRule.OnShiftTime,
+                OffShiftTime: banchRule.OffShiftTime,
+                RuleId: banchRule.RuleId
+            }
+        })
+        console.log(res)
+        store.dispatch(statusAction.onUpdateBanchRule(false))
     }
 }
 export default new ApiControl()

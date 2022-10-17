@@ -1,59 +1,24 @@
 import { DeleteOutlined, EditOutlined, PictureOutlined } from '@ant-design/icons'
 import { Button, Collapse, Input, List, TimePicker } from 'antd'
 import React from 'react'
+import { useSelector } from 'react-redux'
+import { companyReducerType } from '../../reduxer/reducer/companyReducer'
+import { RootState } from '../../reduxer/store'
+import { BanchStyleType, ShiftSettingListType } from '../../type'
 
-const data = [
-    {
-        title: '平日早班',
-        icons: '*',
+const data = (arr: BanchStyleType[]): ShiftSettingListType[] => arr.map((item) => {
+    return {
+        title: item.TimeRangeName,
+        icons: item.Icon,
         time: <>
-            <span>上班：08:00</span>
-            <span style={{ marginLeft: '10px' }}>下班：17:00</span>
-        </>
-    },
-    {
-        title: '平日中班',
-        icons: '●',
-        time: <>
-            <span>上班：12:00</span>
-            <span style={{ marginLeft: '10px' }}>下班：21:00</span>
-        </>
-    },
-    {
-        title: '平日晚班',
-        icons: '❂',
-        time: <>
-            <span>上班：17:00</span>
-            <span style={{ marginLeft: '10px' }}>下班：08:00</span>
-        </>
-    },
-    {
-        title: '假日早班',
-        icons: '♡',
-        time: <>
-            <span>上班：17:00</span>
-            <span style={{ marginLeft: '10px' }}>下班：08:00</span>
-        </>
-    },
-    {
-        title: '假日中班',
-        icons: '☹',
-        time: <>
-            <span>上班：17:00</span>
-            <span style={{ marginLeft: '10px' }}>下班：08:00</span>
-        </>
-    },
-    {
-        title: '假日晚班',
-        icons: '♚',
-        time: <>
-            <span>上班：17:00</span>
-            <span style={{ marginLeft: '10px' }}>下班：08:00</span>
+            <span>上班： {item.OnShiftTime}</span>
+            <span style={{ marginLeft: '10px' }}>下班： {item.OffShiftTime}</span>
         </>
     }
-]
+})
 
 const ShiftSettingPage = (): JSX.Element => {
+    const company: companyReducerType = useSelector((state: RootState) => state.company)
     return (
         <>
             <div className={styles.ShiftSettingEdit}>
@@ -74,7 +39,7 @@ const ShiftSettingPage = (): JSX.Element => {
             <div className={styles.shiftSettingBlock}>
                 <List
                     itemLayout="horizontal"
-                    dataSource={data}
+                    dataSource={data(company.banchStyle)}
                     renderItem={item => (
                         <List.Item>
                             <List.Item.Meta

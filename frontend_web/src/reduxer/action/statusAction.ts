@@ -47,12 +47,52 @@ class statusAcion {
         }
     }
 
+    onUpdateBanchStyle (s: boolean): action {
+        return {
+            type: s ? statusType.UPDATE_BANCH_STYLE_ON : statusType.UPDATE_BANCH_STYLE_OFF,
+            payload: {
+                ...store.getState().status,
+                onUpdateBanchStyle: s
+            }
+        }
+    }
+
+    onCreateBanchStyle (s: boolean): action {
+        return {
+            type: s ? statusType.CREATE_BANCH_STYLE_ON : statusType.CREATE_BANCH_STYLE_OFF,
+            payload: {
+                ...store.getState().status,
+                onCreateBanchStyle: s
+            }
+        }
+    }
+
     onFetchBanchRule (s: boolean): action {
         return {
             type: s ? statusType.FETCH_BANCH_RULE_ON : statusType.FETCH_BANCH_RULE_OFF,
             payload: {
                 ...store.getState().status,
                 onFetchBanchRule: s
+            }
+        }
+    }
+
+    onUpdateBanchRule (s: boolean): action {
+        return {
+            type: s ? statusType.UPDATE_BANCH_RULE_ON : statusType.UPDATE_BANCH_RULE_OFF,
+            payload: {
+                ...store.getState().status,
+                onUpdateBanchRule: s
+            }
+        }
+    }
+
+    onCreateBanchRule (s: boolean): action {
+        return {
+            type: s ? statusType.CREATE_BANCH_RULE_ON : statusType.CREATE_BANCH_RULE_OFF,
+            payload: {
+                ...store.getState().status,
+                onCreateBanchRule: s
             }
         }
     }
