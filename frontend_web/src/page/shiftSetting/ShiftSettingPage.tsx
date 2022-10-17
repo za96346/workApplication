@@ -1,7 +1,10 @@
 import { DeleteOutlined, EditOutlined, PictureOutlined } from '@ant-design/icons'
-import { Button, Collapse, Input, List, TimePicker } from 'antd'
+import { Button, Collapse, Input, List, TimePicker, Form } from 'antd'
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import api from '../../api/api'
+import dateHandle from '../../method/dateHandle'
 import { companyReducerType } from '../../reduxer/reducer/companyReducer'
 import { RootState } from '../../reduxer/store'
 import { BanchStyleType, ShiftSettingListType } from '../../type'
@@ -18,21 +21,50 @@ const data = (arr: BanchStyleType[]): ShiftSettingListType[] => arr.map((item) =
 })
 
 const ShiftSettingPage = (): JSX.Element => {
+    const { banchId } = useParams()
     const company: companyReducerType = useSelector((state: RootState) => state.company)
+    const onFinish = async (v: any): Promise<void> => {
+        console.log(v)
+        const banchIdNumber = parseInt(banchId)
+        const res = await api.createBanchStyle(
+            {
+                ...v,
+                OnShiftTime: dateHandle.dateFormatToTime(v.OnShiftTime._d),
+                OffShiftTime: dateHandle.dateFormatToTime(v.OffShiftTime._d),
+                BanchId: banchIdNumber
+            }
+        )
+        if (res.status) {
+            await api.getBanchStyle(banchIdNumber)
+        }
+    }
     return (
         <>
             <div className={styles.ShiftSettingEdit}>
                 <Collapse style={{ width: '100%' }} defaultActiveKey={['1']}>
                     <Collapse.Panel header="新增" key="1">
-                        <>
-                            <Input style={{ marginBottom: '20px' }} placeholder='新增班別圖標' prefix={<PictureOutlined />} />
-                            <Input style={{ marginBottom: '20px' }} placeholder='新增班別名稱' prefix={<EditOutlined />} />
-                            <TimePicker style={{ marginBottom: '20px', width: '100%' }} placeholder='新增上班時段' />
-                            <TimePicker style={{ marginBottom: '20px', width: '100%' }} placeholder='新增下班時段' />
-                            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                <Button>新增</Button>
-                            </div>
-                        </>
+
+                        <Form scrollToFirstError onFinish={onFinish}>
+                            <Form.Item initialValue="" label="排班圖標" name="Icon">
+                                <Input style={{ marginBottom: '20px' }} placeholder='新增班別圖標' prefix={<PictureOutlined />} />
+                            </Form.Item>
+                            <Form.Item initialValue="" label="班別名稱" name="TimeRangeName">
+                                <Input style={{ marginBottom: '20px' }} placeholder='新增班別名稱' prefix={<EditOutlined />} />
+                            </Form.Item>
+                            <Form.Item initialValue="" label="上班時段" name="OnShiftTime">
+                                <TimePicker style={{ marginBottom: '20px', width: '100%' }} placeholder='新增上班時段' />
+                            </Form.Item>
+                            <Form.Item initialValue="" label="下班時段" name="OffShiftTime">
+                                <TimePicker style={{ marginBottom: '20px', width: '100%' }} placeholder='新增下班時段' />
+                            </Form.Item>
+                            <Form.Item>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                    <Button htmlType='submit'>新增</Button>
+                                </div>
+                            </Form.Item>
+
+                        </Form>
+
                     </Collapse.Panel>
                 </Collapse>
             </div>

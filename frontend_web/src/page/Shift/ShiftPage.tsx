@@ -7,12 +7,12 @@ import Loading from '../../component/Loading'
 import EditTable from './EditTable'
 import PeopleStatus from './PeopleStatus'
 const ShiftPage = (): JSX.Element => {
-    const { banch } = useParams()
+    const { banchId } = useParams()
     const [status, setStatus] = useState({
         drawerOpen: false,
         currentTabs: 0
     })
-    if (!banch) {
+    if (!banchId) {
         return (
             <Loading />
         )
@@ -47,7 +47,7 @@ const ShiftPage = (): JSX.Element => {
                 }
             </Drawer>
             <div className={styles.shiftProcessBar}>
-                <h3>{banch}</h3>
+                <h3>{banchId}</h3>
                 <Steps current={2}>
                     <Steps.Step title="開放編輯" description="2022-11-01 ~ 2022-11-09" />
                     <Steps.Step title="主管審核" subTitle="2022-11-10" description="部門主管確認班表無誤" />

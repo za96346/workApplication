@@ -219,7 +219,7 @@ class ApiControl extends api {
         return res
     }
 
-    async createBanchStyle (banchStyle: BanchStyleType): Promise<any> {
+    async createBanchStyle (banchStyle: BanchStyleType): Promise<ResType<null>> {
         store.dispatch(statusAction.onCreateBanchStyle(true))
         const res = await this.PUT<null>({
             url: this.route.banchStyle,
@@ -233,6 +233,7 @@ class ApiControl extends api {
         })
         console.log(res)
         store.dispatch(statusAction.onCreateBanchStyle(false))
+        return res
     }
 
     async updateBanchStyle (banchStyle: BanchStyleType): Promise<any> {
@@ -268,7 +269,7 @@ class ApiControl extends api {
         return res
     }
 
-    async createBanchRule (banchRule: BanchRuleType): Promise<any> {
+    async createBanchRule (banchRule: BanchRuleType): Promise<ResType<null>> {
         store.dispatch(statusAction.onCreateBanchRule(true))
         const res = await this.PUT<null>({
             url: this.route.banchRule,
@@ -284,6 +285,7 @@ class ApiControl extends api {
         })
         console.log(res)
         store.dispatch(statusAction.onCreateBanchRule(false))
+        return res
     }
 
     async updateBanchRule (banchRule: BanchRuleType): Promise<any> {

@@ -110,6 +110,22 @@ class DateHandle implements DateHandleInterface {
         return new Date(res).toISOString()
     }
 
+    dateFormatToTime (date: Date): string {
+        let hours: number | string = date.getHours()
+        let min: number | string = date.getMinutes()
+        if (hours <= 9) {
+            hours = `0${hours}`
+        } else {
+            hours = hours.toString()
+        }
+        if (min <= 9) {
+            min = `0${min}`
+        } else {
+            min = min.toString()
+        }
+        return `${hours}:${min}:00`
+    }
+
     transferUtcFormat (date: any, offset?: number): any {
         return moment(date)
             .utcOffset(offset || 8)

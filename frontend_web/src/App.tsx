@@ -33,9 +33,9 @@ const App = (): JSX.Element => {
                     <Route path='employeeManager' element={<EmployeeManager />} />
 
                     <Route path='shift' element={<ShiftPage />} />
-                    <Route path='shift/:banch' element={<ShiftPage />} />
+                    <Route path='shift/:banchId' element={<ShiftPage />} />
 
-                    <Route path='shiftSetting/:banch' element={<ShiftSettingPage />} />
+                    <Route path='shiftSetting/:banchId' element={<ShiftSettingPage />} />
                     <Route path='shiftSearch' element={<ShiftSearchPage />} />
 
                     <Route path='setting/:types' element={<SettingPage />} />
