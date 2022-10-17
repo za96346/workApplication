@@ -1,6 +1,6 @@
 import api from './apiAbs'
 import axios from 'axios'
-import { BanchStyleType, BanchType, LoginType, RegisterType, ResMessage, ResType, SelfDataType, UserType } from '../type'
+import { BanchRuleType, BanchStyleType, BanchType, LoginType, RegisterType, ResMessage, ResType, SelfDataType, UserType } from '../type'
 import userAction from '../reduxer/action/userAction'
 import { store } from '../reduxer/store'
 import { FullMessage } from '../method/notice'
@@ -17,7 +17,8 @@ class ApiControl extends api {
         getBanchAll: 'company/banch/all',
         getUserAll: 'user/all',
         getSelfData: 'user/my',
-        banchStyle: 'company/banch/style'
+        banchStyle: 'company/banch/style',
+        banchRule: 'company/banch/rule'
     }
 
     constructor () {
@@ -213,8 +214,23 @@ class ApiControl extends api {
         if (res.status) {
             store.dispatch(companyAction.setBanchStyle(res.data))
         }
-        console.log(res)
         store.dispatch(statusAction.onFetchBanchStyle(false))
+        return res
+    }
+
+    async getBanchRule (banchId: number): Promise<ResType<BanchRuleType[]>> {
+        store.dispatch(statusAction.onFetchBanchRule(true))
+        const res = await this.GET<BanchRuleType[]>({
+            url: this.route.banchRule,
+            params: {
+                banchId
+            }
+        })
+        if (res.status) {
+            store.dispatch(companyAction.setBanchRule(res.data))
+        }
+
+        store.dispatch(statusAction.onFetchBanchRule(false))
         return res
     }
 }

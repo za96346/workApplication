@@ -1,4 +1,4 @@
-import { BanchStyleType, BanchType, UserType } from '../../type'
+import { BanchRuleType, BanchStyleType, BanchType, UserType } from '../../type'
 import { store } from '../store'
 import { action, companyType } from '../types'
 
@@ -34,6 +34,16 @@ class companyAction {
             payload: {
                 ...store.getState().company,
                 banchStyle
+            }
+        }
+    }
+
+    setBanchRule (banchRule: BanchRuleType[]): action {
+        return {
+            type: companyType.SET_BANCH_RULE,
+            payload: {
+                ...store.getState().company,
+                banchRule
             }
         }
     }

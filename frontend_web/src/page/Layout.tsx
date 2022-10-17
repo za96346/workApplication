@@ -16,6 +16,7 @@ const Layout = (): JSX.Element => {
         } else {
             void api.getBanch()
             void api.getBanchStyle(1)
+            void api.getBanchRule(1)
         }
     }, [token])
 

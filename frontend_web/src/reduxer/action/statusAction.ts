@@ -47,6 +47,16 @@ class statusAcion {
         }
     }
 
+    onFetchBanchRule (s: boolean): action {
+        return {
+            type: s ? statusType.FETCH_BANCH_RULE_ON : statusType.FETCH_BANCH_RULE_OFF,
+            payload: {
+                ...store.getState().status,
+                onFetchBanchRule: s
+            }
+        }
+    }
+
     clearStatusAll (): action {
         return {
             type: statusType.CLEAR_STATUS_ALL,
