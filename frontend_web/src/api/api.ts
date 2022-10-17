@@ -1,6 +1,6 @@
 import api from './apiAbs'
 import axios from 'axios'
-import { BanchType, LoginType, RegisterType, ResMessage, ResType, SelfDataType, UserType } from '../type'
+import { BanchStyleType, BanchType, LoginType, RegisterType, ResMessage, ResType, SelfDataType, UserType } from '../type'
 import userAction from '../reduxer/action/userAction'
 import { store } from '../reduxer/store'
 import { FullMessage } from '../method/notice'
@@ -16,7 +16,8 @@ class ApiControl extends api {
         registe: 'entry/register',
         getBanchAll: 'company/banch/all',
         getUserAll: 'user/all',
-        getSelfData: 'user/my'
+        getSelfData: 'user/my',
+        banchStyle: 'company/banch/style'
     }
 
     constructor () {
@@ -190,16 +191,30 @@ class ApiControl extends api {
         return res
     }
 
-    async getSelfData (): Promise<ResType<SelfDataType>> {
+    async getSelfData (): Promise<void> {
         store.dispatch(statusAction.onFetchSelfData(true))
-        const res = await this.GET<SelfDataType>({
+        const res = await this.GET<SelfDataType[]>({
             url: this.route.getSelfData
         })
-        console.log(res)
         if (res.status) {
             store.dispatch(userAction.setSelfData(res.data[0]))
         }
         store.dispatch(statusAction.onFetchSelfData(false))
+    }
+
+    async getBanchStyle (banchId: number): Promise<ResType<BanchStyleType[]>> {
+        store.dispatch(statusAction.onFetchBanchStyle(true))
+        const res = await this.GET<BanchStyleType[]>({
+            url: this.route.banchStyle,
+            params: {
+                banchId
+            }
+        })
+        if (res.status) {
+            store.dispatch(companyAction.setBanchStyle(res.data))
+        }
+        console.log(res)
+        store.dispatch(statusAction.onFetchBanchStyle(false))
         return res
     }
 }

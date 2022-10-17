@@ -58,6 +58,7 @@
       "last 1 safari version"
     ]
   },
+  "proxy": "https://workhard.app/workApp",
   "devDependencies": {
     "@types/node-sass": "^4.11.3",
     "@types/react": "^18.0.17",

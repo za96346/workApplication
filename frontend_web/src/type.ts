@@ -73,3 +73,14 @@ export interface ResType<T> extends ResMessage {
     data?: T
     status: boolean
 }
+
+export interface BanchStyleType {
+    StyleId?: number // 樣式id
+    BanchId?: number // 部門id
+    Icon: string // 圖標
+    TimeRangeName: string // 時段名稱
+    OnShiftTime: string // 開始上班時段
+    OffShiftTime: string // 結束上班時段
+    CreateTime?: number // 創建時間
+    LastModify?: number // 上次修改時間
+}

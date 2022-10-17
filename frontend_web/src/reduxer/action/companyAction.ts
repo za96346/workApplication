@@ -1,4 +1,4 @@
-import { BanchType, UserType } from '../../type'
+import { BanchStyleType, BanchType, UserType } from '../../type'
 import { store } from '../store'
 import { action, companyType } from '../types'
 
@@ -24,6 +24,16 @@ class companyAction {
             payload: {
                 ...store.getState().company,
                 employee
+            }
+        }
+    }
+
+    setBanchStyle (banchStyle: BanchStyleType[]): action {
+        return {
+            type: companyType.SET_BANCH_STYLE,
+            payload: {
+                ...store.getState().company,
+                banchStyle
             }
         }
     }

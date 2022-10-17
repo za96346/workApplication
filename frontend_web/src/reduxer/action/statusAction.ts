@@ -37,6 +37,16 @@ class statusAcion {
         }
     }
 
+    onFetchBanchStyle (s: boolean): action {
+        return {
+            type: s ? statusType.FETCH_BANCH_STYLE_ON : statusType.FETCH_BANCH_OFF,
+            payload: {
+                ...store.getState().status,
+                onFetchBanchStyle: s
+            }
+        }
+    }
+
     clearStatusAll (): action {
         return {
             type: statusType.CLEAR_STATUS_ALL,

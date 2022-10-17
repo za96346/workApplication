@@ -2,7 +2,8 @@ import { action, companyType } from '../types'
 
 const companyState = {
     banch: [],
-    employee: []
+    employee: [],
+    banchStyle: []
 }
 
 export const companyReducer = (state = companyState, action: action): any => {
@@ -12,6 +13,10 @@ export const companyReducer = (state = companyState, action: action): any => {
                 ...action.payload
             }
         case companyType.SET_EMPLOYEE:
+            return {
+                ...action.payload
+            }
+        case companyType.SET_BANCH_STYLE:
             return {
                 ...action.payload
             }

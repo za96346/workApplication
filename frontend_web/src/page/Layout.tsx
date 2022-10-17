@@ -15,6 +15,7 @@ const Layout = (): JSX.Element => {
             navigate('/entry/login')
         } else {
             void api.getBanch()
+            void api.getBanchStyle(1)
         }
     }, [token])
 
