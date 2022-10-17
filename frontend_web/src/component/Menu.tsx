@@ -35,7 +35,6 @@ const items = (banch: BanchType[]): MenuItem[] => {
 
         getItem('班表設定', 'shiftSetting', <AppstoreOutlined />, a),
         getItem('員工管理', 'employeeManager', <IdcardOutlined />),
-
         getItem('設定', 'setting', <SettingOutlined />, [
             getItem('個人資料', 1000),
             getItem('公司資料', 1001)

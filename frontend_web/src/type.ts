@@ -104,4 +104,5 @@ export interface ShiftSettingListType {
     title: string
     icons: string
     time: ReactNode
+    id: string | number
 }
