@@ -447,14 +447,14 @@ func DataBaseInit() {
 		log.Fatal(err)
 	}
 
-	_, err = (*Singleton()).MysqlDB.Exec(`alter table user add foreign key (companyCode) references company(companyCode) on update cascade on delete set null;`)
+	// _, err = (*Singleton()).MysqlDB.Exec(`alter table user add foreign key (companyCode) references company(companyCode) on update cascade on delete set null;`)
 
-	if err == nil {
-		fmt.Println("user alter foreign key success")
-	} else {
-		fmt.Println("user alter foreign key failed")
-		log.Fatal(err)
-	}
+	// if err == nil {
+	// 	fmt.Println("user alter foreign key success")
+	// } else {
+	// 	fmt.Println("user alter foreign key failed")
+	// 	log.Fatal(err)
+	// }
 
 /// banch style
 	_, err = (*Singleton()).MysqlDB.Exec("alter table banchStyle auto_increment=1;")
