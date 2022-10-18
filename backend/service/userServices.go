@@ -122,31 +122,59 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
-	user := table.UserTable{}
-	// 格式錯誤
-	if (*props).ShouldBindJSON(&user) != nil {
+	now := time.Now()
+
+	// 檢查格式
+	request := response.User{}
+	if (*props).ShouldBindJSON(&request) != nil {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().FormatError,
 		})
 		return
 	}
-	user.LastModify = time.Now()
-	res := (*dbHandle).UpdateUser(0, &user)
-	fmt.Println(user)
 
-	// 更新資料成功
-	if res {
-		(*props).JSON(http.StatusOK, gin.H{
-			"message": StatusText().UpdateSuccess,
+	// 抓曲目標user
+	targetUser, existed := (*props).Get("targetUser")
+	if !existed {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().userDataNotFound,
 		})
 		return
-	// 更新資料失敗
-	} else {
-		(*props).JSON(http.StatusBadRequest, gin.H{
+	}
+	// 斷言
+	convertTargetUser, a := methods.Assertion[table.UserTable](targetUser)
+	if !a {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().AssertionFail,
+		})
+		return
+	}
+
+	user := table.UserTable{
+		CompanyCode: request.CompanyCode,
+		EmployeeNumber: request.EmployeeNumber,
+		Password: convertTargetUser.Password,
+		UserName: convertTargetUser.UserName,
+		OnWorkDay: request.OnWorkDay,
+		Banch: request.Banch,
+		Permession: request.Permession,
+		WorkState: request.WorkState,
+		LastModify: now,
+		MonthSalary: 0,
+		PartTimeSalary: 0,
+		UserId: convertTargetUser.UserId,
+	}
+
+	res := (*dbHandle).UpdateUser(0, &user)
+	if !res {
+		(*props).JSON(http.StatusForbidden, gin.H{
 			"message": StatusText().UpdateFail,
 		})
 		return
 	}
+	(*props).JSON(http.StatusNotAcceptable, gin.H{
+		"message": StatusText().UpdateSuccess,
+	})
 }
 
 func DeleteUser(props *gin.Context, waitJob *sync.WaitGroup) {

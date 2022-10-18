@@ -52,6 +52,6 @@ func SameCompany(props *gin.Context) {
 		})
 		return
 	}
-
+	(*props).Set("targetUser", (*iWantGetPeople)[0])
 	(*props).Next()
 }
