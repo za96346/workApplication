@@ -12,7 +12,7 @@ services:
     build: ./frontend_web/build/
     networks:
       workAppNet:
-        ipv4_address: 172.20.0.10
+        ipv4_address: 172.21.0.10
     # build: 
     #   context: ./frontend/build/Dockerfile #原路徑
     #   dockerfile: ./frontend/build/Dockerfile #備用路徑
@@ -33,7 +33,7 @@ services:
       - work_app_mysql
     networks:
       workAppNet:
-        ipv4_address: 172.20.0.5
+        ipv4_address: 172.21.0.5
 
   work_app_redis:
     image: redis
@@ -48,7 +48,7 @@ services:
     #   bash -c "redis-server --daemonize yes"
     networks:
       workAppNet:
-        ipv4_address: 172.20.0.3
+        ipv4_address: 172.21.0.3
 
   work_app_mysql:
     image: mysql:8
@@ -67,7 +67,7 @@ services:
     #   - "3306:3306"
     networks:
       workAppNet:
-        ipv4_address: 172.20.0.2
+        ipv4_address: 172.21.0.2
 
 
 
@@ -77,4 +77,4 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/24
+        - subnet: 172.21.0.0/24
