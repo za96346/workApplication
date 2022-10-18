@@ -43,5 +43,23 @@ class Rule {
     public captcha (): any[] {
         return [{ required: true, message: '請輸入六碼', len: 6 }, this.rules.onlyNum]
     }
+
+    public timePicker (): any[] {
+        return [{ required: true, message: '請選擇時間' }]
+    }
+
+    public banchStyleIcon (): any[] {
+        return [
+            { required: true, message: '不允許空白!', whitespace: true },
+            { required: true, message: '只可以是一個字元', len: 1 }
+        ]
+    }
+
+    public banchStyleTimeRangeName (): any[] {
+        return [
+            { required: true, message: '不允許空白!', whitespace: true },
+            { required: true, message: '請輸入名稱', min: 1 }
+        ]
+    }
 }
 export default new Rule()

@@ -104,5 +104,11 @@ export interface ShiftSettingListType {
     title: string
     icons: string
     time: ReactNode
-    id: string | number
+    id: string
+}
+
+export interface BanchRuleListType {
+    title: string
+    id: string
+    time: ReactNode
 }

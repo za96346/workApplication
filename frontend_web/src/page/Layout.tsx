@@ -37,8 +37,6 @@ const Layout = (): JSX.Element => {
             navigate('/entry/login')
         } else {
             api.getBanch()
-            api.getBanchStyle(1)
-            api.getBanchRule(1)
             // api.createBanchStyle(banchStyleSimulate)
             // api.updateBanchStyle(banchStyleSimulate)
             // api.createBanchRule(banchRuleSimulate)
