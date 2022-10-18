@@ -11,6 +11,16 @@ func Company(props *gin.RouterGroup) {
 	props.Use(middleWare.TokenPrase)
 	{
 		props.GET("/banch/all", middleWare.MyCompanyAndBanch, worker.AssignWorker(8))
+		props.PUT("/banch/all",
+			middleWare.Permession(100),
+			middleWare.MyCompanyAndBanch,
+			worker.AssignWorker(15),
+		)
+		props.POST("/banch/all",
+			middleWare.Permession(100),
+			middleWare.MyCompanyAndBanch,
+			worker.AssignWorker(16),
+		)
 
 		props.GET("/banch/style", middleWare.MyCompanyAndBanch, worker.AssignWorker(9))
 		props.POST("/banch/style",

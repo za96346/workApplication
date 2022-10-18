@@ -40,9 +40,69 @@ func FetchBanchAll(props *gin.Context, waitJob *sync.WaitGroup) {
 	
 }
 
-func UpdateBanch(props *gin.Context, waitJob *sync.WaitGroup) {
+func InsertBanch(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
+	now := time.Now()
+	banch := table.CompanyBanchTable {}
+	if (*props).ShouldBindJSON(&banch) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	} 
+
+	_, company, err := CheckUserAndCompany(props)
+	if err {return}
+
+	banch.LastModify = now
+	banch.CompanyId = company.CompanyId
+	banch.BanchShiftStyle = ""
+	banch.CreateTime = now
+
+	// 新增
+	res, _ := (*dbHandle).InsertCompanyBanch(&banch)
+	if !res {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().InsertFail,
+		})
+		return
+	}
+
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().InsertSuccess,
+	})
+}
+
+func UpdateBanch (props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+	now := time.Now()
+	banch := table.CompanyBanchTable {}
+	if (*props).ShouldBindJSON(&banch) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+	_, company, err := CheckUserAndCompany(props)
+	if err {return}
+
+	banch.LastModify = now
+	banch.CompanyId = company.CompanyId
+	banch.BanchShiftStyle = ""
+
+	res := (*dbHandle).UpdateCompanyBanch(0, &banch)
+	if !res {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().UpdateFail,
+		})
+		return
+	}
+
+	(*props).JSON(http.StatusNotAcceptable, gin.H{
+		"message": StatusText().UpdateSuccess,
+	})
 }
 
 // banch style
