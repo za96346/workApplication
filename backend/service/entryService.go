@@ -95,6 +95,17 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 		return
 	}
 
+	// 檢查公司碼 是否存在
+	if (*registeForm).CompanyCode != "" {
+		company := (*dbHandle).SelectCompany(2, (*registeForm).CompanyCode)
+		if !methods.IsNotExited(company) {
+			(*props).JSON(http.StatusConflict, gin.H{
+				"message": StatusText().CompanyCodeIsNotRight,
+			})
+			return
+		}
+	}
+
 	// 檢查驗證碼是否正確
 	rightCaptcha := (*dbHandle).Redis.SelectEmailCaptcha((*registeForm).Account)
 	if (*registeForm).Captcha != rightCaptcha || rightCaptcha == -1 {
@@ -111,6 +122,8 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 		})
 		return
 	}
+	
+
 
 	// 新增使用者
 

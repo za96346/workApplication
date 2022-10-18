@@ -2,8 +2,13 @@ package service
 
 import (
 	"backend/handler"
+	"backend/methods"
 	"backend/panicHandler"
+	"backend/table"
+	"net/http"
 	"sync"
+
+	"github.com/gin-gonic/gin"
 )
 
 var dbHandle = handler.Singleton()
@@ -39,6 +44,7 @@ type statusText struct {
 	RuleIdIsNotRight string
 	InsertSuccess string
 	InsertFail string
+	CompanyCodeIsNotRight string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -78,6 +84,7 @@ func StatusText() *statusText {
 				OnlyCanUpDateYourBanch: "只可更新你的部門資料",
 				InsertSuccess: "新增成功",
 				InsertFail: "新增失敗",
+				CompanyCodeIsNotRight: "公司碼不正確",
 			}
 		}
 	}
@@ -92,4 +99,39 @@ func BanchIsInCompany(banchId int64, companyId int64) bool {
 		}
 	}
 	return false
+}
+
+func CheckUserAndCompany(props *gin.Context) (table.UserTable, table.CompanyTable, bool) {
+	// 檢查是否是 company table type
+	myCompany, exited := (*props).Get("MyCompany")
+	if !exited {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().IsNotHaveCompany,
+		})
+		return table.UserTable{}, table.CompanyTable{}, true
+	}
+	company, a := methods.Assertion[table.CompanyTable](myCompany)
+	if !a {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().AssertionFail,
+		})
+		return table.UserTable{}, table.CompanyTable{}, true
+	}
+		
+	// 檢查是否是 user table type
+	myUserData, exited := (*props).Get("MyUserData")
+	if !exited {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().userDataNotFound,
+		})
+		return table.UserTable{}, table.CompanyTable{}, true
+	}
+	user, a := methods.Assertion[table.UserTable](myUserData)
+	if !a {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().AssertionFail,
+		})
+		return table.UserTable{}, table.CompanyTable{}, true
+	}
+	return user, company, false
 }

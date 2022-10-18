@@ -40,37 +40,27 @@ func FetchBanchAll(props *gin.Context, waitJob *sync.WaitGroup) {
 	
 }
 
+func UpdateBanch(props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+}
+
 // banch style
 func FetchBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 	// 檢查 banch id 
 	banchId := (*props).Query("banchId")
-	convertBanchId, err := methods.AnyToInt64(banchId)
-	if err != nil {
+	convertBanchId, err1 := methods.AnyToInt64(banchId)
+	if err1 != nil {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().BanchIdIsNotRight,
 		})
 		return
 	}
 
-	// 檢查 my company 存在
-	myCompany, exited := (*props).Get("MyCompany")
-	if !exited {
-		(*props).JSON(http.StatusNotFound, gin.H{
-			"message": StatusText().IsNotHaveCompany,
-		})
-		return
-	}
-
-	// 轉換 my company
-	company, a := methods.Assertion[table.CompanyTable](myCompany)
-	if !a {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().AssertionFail,
-		})
-		return
-	}
+	_, company, err := CheckUserAndCompany(props)
+	if err {return}
 
 	// 檢查 部門是否在此公司
 	if !BanchIsInCompany(convertBanchId, company.CompanyId) {
@@ -117,37 +107,8 @@ func UpdateBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	// 添加 banch id
 	banchStyle.BanchId = (*res)[0].BanchId
 
-	// 檢查是否是 company table type
-	myCompany, exited := (*props).Get("MyCompany")
-	if !exited {
-		(*props).JSON(http.StatusNotFound, gin.H{
-			"message": StatusText().IsNotHaveCompany,
-		})
-		return
-	}
-	company, a := methods.Assertion[table.CompanyTable](myCompany)
-	if !a {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().AssertionFail,
-		})
-		return
-	}
-
-	// 檢查是否是 user table type
-	myUserData, exited := (*props).Get("MyUserData")
-	if !exited {
-		(*props).JSON(http.StatusNotFound, gin.H{
-			"message": StatusText().userDataNotFound,
-		})
-		return
-	}
-	user, a := methods.Assertion[table.UserTable](myUserData)
-	if !a {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().AssertionFail,
-		})
-		return
-	}
+	user, company, err := CheckUserAndCompany(props)
+	if err {return}
 
 	// 檢查 部門是否在此公司
 	if !BanchIsInCompany(banchStyle.BanchId, company.CompanyId) {
@@ -206,37 +167,8 @@ func InsertBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
-	// 檢查是否是 company table type
-	myCompany, exited := (*props).Get("MyCompany")
-	if !exited {
-		(*props).JSON(http.StatusNotFound, gin.H{
-			"message": StatusText().IsNotHaveCompany,
-		})
-		return
-	}
-	company, a := methods.Assertion[table.CompanyTable](myCompany)
-	if !a {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().AssertionFail,
-		})
-		return
-	}
-	
-	// 檢查是否是 user table type
-	myUserData, exited := (*props).Get("MyUserData")
-	if !exited {
-		(*props).JSON(http.StatusNotFound, gin.H{
-			"message": StatusText().userDataNotFound,
-		})
-		return
-	}
-	user, a := methods.Assertion[table.UserTable](myUserData)
-	if !a {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().AssertionFail,
-		})
-		return
-	}
+	user, company, err := CheckUserAndCompany(props)
+	if err {return}
 	
 	// 檢查 部門是否在此公司
 	if !BanchIsInCompany(banchStyle.BanchId, company.CompanyId) {
@@ -287,31 +219,16 @@ func FetchBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
 
 	// 檢查 banch id 
 	banchId := (*props).Query("banchId")
-	convertBanchId, err := methods.AnyToInt64(banchId)
-	if err != nil {
+	convertBanchId, err1 := methods.AnyToInt64(banchId)
+	if err1 != nil {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().BanchIdIsNotRight,
 		})
 		return
 	}
 
-	// 檢查 my company 存在
-	myCompany, exited := (*props).Get("MyCompany")
-	if !exited {
-		(*props).JSON(http.StatusNotFound, gin.H{
-			"message": StatusText().IsNotHaveCompany,
-		})
-		return
-	}
-
-	// 轉換 mycompany
-	company, a := methods.Assertion[table.CompanyTable](myCompany)
-	if !a {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().AssertionFail,
-		})
-		return
-	}
+	_, company, err := CheckUserAndCompany(props)
+	if err {return}
 
 
 	// 檢查 部門是否在此公司
@@ -357,37 +274,8 @@ func UpdateBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
 	// 添加 banch id
 	banchRule.BanchId = (*res)[0].BanchId
 
-	// 檢查是否是 company table type
-	myCompany, exited := (*props).Get("MyCompany")
-	if !exited {
-		(*props).JSON(http.StatusNotFound, gin.H{
-			"message": StatusText().IsNotHaveCompany,
-		})
-		return
-	}
-	company, a := methods.Assertion[table.CompanyTable](myCompany)
-	if !a {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().AssertionFail,
-		})
-		return
-	}
-	
-	// 檢查是否是 user table type
-	myUserData, exited := (*props).Get("MyUserData")
-	if !exited {
-		(*props).JSON(http.StatusNotFound, gin.H{
-			"message": StatusText().userDataNotFound,
-		})
-		return
-	}
-	user, a := methods.Assertion[table.UserTable](myUserData)
-	if !a {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().AssertionFail,
-		})
-		return
-	}
+	user, company, err := CheckUserAndCompany(props)
+	if err {return}
 
 	// 檢查 部門是否在此公司
 	if !BanchIsInCompany(banchRule.BanchId, company.CompanyId) {
@@ -444,37 +332,8 @@ func InsertBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
-	// 檢查是否是 company table type
-	myCompany, exited := (*props).Get("MyCompany")
-	if !exited {
-		(*props).JSON(http.StatusNotFound, gin.H{
-			"message": StatusText().IsNotHaveCompany,
-		})
-		return
-	}
-	company, a := methods.Assertion[table.CompanyTable](myCompany)
-	if !a {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().AssertionFail,
-		})
-		return
-	}
-	
-	// 檢查是否是 user table type
-	myUserData, exited := (*props).Get("MyUserData")
-	if !exited {
-		(*props).JSON(http.StatusNotFound, gin.H{
-			"message": StatusText().userDataNotFound,
-		})
-		return
-	}
-	user, a := methods.Assertion[table.UserTable](myUserData)
-	if !a {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().AssertionFail,
-		})
-		return
-	}
+	user, company, err := CheckUserAndCompany(props)
+	if err {return}
 	
 	// 檢查 部門是否在此公司
 	if !BanchIsInCompany(banchRule.BanchId, company.CompanyId) {
