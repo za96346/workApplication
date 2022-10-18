@@ -441,3 +441,15 @@ func InsertBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
 		"message": StatusText().InsertSuccess,
 	})
 }
+
+func FetchCompany (props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+	_, company, err := CheckUserAndCompany(props)
+	if err {return}
+
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().FindSuccess,
+		"data": company,
+	})
+}

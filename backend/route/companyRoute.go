@@ -10,6 +10,8 @@ import (
 func Company(props *gin.RouterGroup) {
 	props.Use(middleWare.TokenPrase)
 	{
+		props.GET("/info", middleWare.MyCompanyAndBanch, worker.AssignWorker(17))
+
 		props.GET("/banch/all", middleWare.MyCompanyAndBanch, worker.AssignWorker(8))
 		props.PUT("/banch/all",
 			middleWare.Permession(100),
