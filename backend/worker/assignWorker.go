@@ -84,6 +84,11 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 	case 17:
 		// get method of fetching company info
 		routeFunc = service.FetchCompany
+		break
+	case 18:
+		// post method of update company
+		routeFunc = service.UpdateCompany
+		break
 	default:
 		break;
 	}

@@ -45,6 +45,7 @@ type statusText struct {
 	InsertSuccess string
 	InsertFail string
 	CompanyCodeIsNotRight string
+	CompanyNotEqual string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -85,6 +86,7 @@ func StatusText() *statusText {
 				InsertSuccess: "新增成功",
 				InsertFail: "新增失敗",
 				CompanyCodeIsNotRight: "公司碼不正確",
+				CompanyNotEqual: "公司不同",
 			}
 		}
 	}

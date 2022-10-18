@@ -453,3 +453,45 @@ func FetchCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 		"data": company,
 	})
 }
+
+func InsertCompany (props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+}
+
+func UpdateCompany (props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+	request := table.CompanyTable{}
+	if (*props).ShouldBindJSON(&request) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+	request.LastModify = time.Now()
+
+	_, company, err := CheckUserAndCompany(props)
+	if err {return}
+	// 判斷是不是同一家公司
+	if request.CompanyId != company.CompanyId {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().CompanyNotEqual,
+		})
+		return
+	}
+
+	res := (*dbHandle).UpdateCompany(0, &request)
+	if !res {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().UpdateFail,
+		})
+		return
+	}
+
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().UpdateSuccess,
+	})
+	return
+
+}
