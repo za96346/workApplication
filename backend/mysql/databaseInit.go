@@ -9,18 +9,29 @@ import (
 )
 func DataBaseInit() {
 	defer simulateData();
-	(*Singleton()).MysqlDB.Exec(`drop table user;`)
-	(*Singleton()).MysqlDB.Exec(`drop table userPreference;`)
-	(*Singleton()).MysqlDB.Exec(`drop table shift;`)
-	(*Singleton()).MysqlDB.Exec(`drop table shiftChange;`)
-	(*Singleton()).MysqlDB.Exec(`drop table shiftOverTime;`)
-	(*Singleton()).MysqlDB.Exec(`drop table forgetPunch;`)
-	(*Singleton()).MysqlDB.Exec(`drop table dayOff;`)
-	(*Singleton()).MysqlDB.Exec(`drop table lateExcused;`)
-	(*Singleton()).MysqlDB.Exec(`drop table company;`)
-	(*Singleton()).MysqlDB.Exec(`drop table companyBanch;`)
-	(*Singleton()).MysqlDB.Exec(`drop table banchStyle;`)
-	(*Singleton()).MysqlDB.Exec(`drop table banchRule;`)
+	// (*Singleton()).MysqlDB.Exec(`drop table user;`)
+	// (*Singleton()).MysqlDB.Exec(`drop table userPreference;`)
+	// (*Singleton()).MysqlDB.Exec(`drop table shift;`)
+	// (*Singleton()).MysqlDB.Exec(`drop table shiftChange;`)
+	// (*Singleton()).MysqlDB.Exec(`drop table shiftOverTime;`)
+	// (*Singleton()).MysqlDB.Exec(`drop table forgetPunch;`)
+	// (*Singleton()).MysqlDB.Exec(`drop table dayOff;`)
+	// (*Singleton()).MysqlDB.Exec(`drop table lateExcused;`)
+	// (*Singleton()).MysqlDB.Exec(`drop table company;`)
+	// (*Singleton()).MysqlDB.Exec(`drop table companyBanch;`)
+	// (*Singleton()).MysqlDB.Exec(`drop table banchStyle;`)
+	// (*Singleton()).MysqlDB.Exec(`drop table banchRule;`)
+	(*Singleton()).MysqlDB.Exec(`SET FOREIGN_KEY_CHECKS = 0;`)
+	(*Singleton()).MysqlDB.Exec(`SET GROUP_CONCAT_MAX_LEN=32768;`)
+	(*Singleton()).MysqlDB.Exec(`SET @tables = NULL;`)
+	(*Singleton()).MysqlDB.Exec("SELECT GROUP_CONCAT('`', table_name, '`') INTO @tables FROM information_schema.tables WHERE table_schema = (SELECT DATABASE());")
+	(*Singleton()).MysqlDB.Exec(`SELECT IFNULL(@tables,'dummy') INTO @tables;`)
+	(*Singleton()).MysqlDB.Exec(`SET @tables = CONCAT('DROP TABLE IF EXISTS ', @tables);`)
+	(*Singleton()).MysqlDB.Exec(`PREPARE stmt FROM @tables;`)
+	(*Singleton()).MysqlDB.Exec(`EXECUTE stmt;`)
+	(*Singleton()).MysqlDB.Exec(`DEALLOCATE PREPARE stmt;`)
+	(*Singleton()).MysqlDB.Exec(`SET FOREIGN_KEY_CHECKS = 1;`)
+
 /// user table
 	_, err := (*Singleton()).MysqlDB.Exec(`
 		create table user(
@@ -564,6 +575,10 @@ func addCompany(x int) {
 
 func addUser(x int) {
 	for i := 0; i < 10; i++ {
+			permession := 2
+			if i == 1{
+				permession = 100
+			}
 			// user
 			user := table.UserTable{
 				CompanyCode: "company" + strconv.Itoa(x),
@@ -573,7 +588,7 @@ func addUser(x int) {
 				EmployeeNumber: "a0000" + strconv.Itoa(i),
 				OnWorkDay: time.Now(),
 				Banch: 1,
-				Permession: 2,
+				Permession: permession,
 				WorkState: "on",
 				MonthSalary: 30000 + i,
 				PartTimeSalary: 130 + i,
