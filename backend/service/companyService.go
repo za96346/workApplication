@@ -92,6 +92,14 @@ func UpdateBanch (props *gin.Context, waitJob *sync.WaitGroup) {
 	banch.CompanyId = company.CompanyId
 	banch.BanchShiftStyle = ""
 
+	// 檢查 部門是否在此公司
+	if !BanchIsInCompany(banch.Id, company.CompanyId) {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().NotHaveBanch,
+		})
+		return
+	}
+
 	res := (*dbHandle).UpdateCompanyBanch(0, &banch)
 	if !res {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
