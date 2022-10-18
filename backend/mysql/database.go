@@ -584,6 +584,7 @@ func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.B
 			&banchStyle.StyleId,
 			&banchStyle.BanchId,
 			&banchStyle.Icon,
+			&banchStyle.RestTime,
 			&banchStyle.TimeRangeName,
 			&banchStyle.OnShiftTime,
 			&banchStyle.OffShiftTime,
@@ -1241,6 +1242,7 @@ func(dbObj *DB) UpdateBanchStyle(updateKey int, data *table.BanchStyle, value ..
 		(*dbObj).containers.banchStyle = append(
 			(*dbObj).containers.banchStyle,
 			(*data).Icon,
+			(*data).RestTime,
 			(*data).TimeRangeName,
 			(*data).OnShiftTime,
 			(*data).OffShiftTime,
@@ -1563,6 +1565,7 @@ func(dbObj *DB) InsertBanchStyle(data *table.BanchStyle) (bool, int64) {
 	res, err := stmt.Exec(
 		(*data).BanchId,
 		(*data).Icon,
+		(*data).RestTime,
 		(*data).TimeRangeName,
 		(*data).OnShiftTime,
 		(*data).OffShiftTime,

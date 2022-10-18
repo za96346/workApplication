@@ -410,19 +410,21 @@ func addBanchStyleQuery() {
 		insert into banchStyle(
 			banchId,
 			icon,
+			restTime,
 			timeRangeName,
 			onShiftTime,
 			offShiftTime,
 			createTime,
 			lastModify
 		) values(
-			?, ?, ?, ?, ?, ?, ?
+			?, ?, ?, ?, ?, ?, ?, ?
 		);
 	`
 	sqlQueryInstance.BanchStyle.UpdateSingle = `
 		update banchStyle
 		set
 			icon=?,
+			restTime=?,
 			timeRangeName=?,
 			onShiftTime=?,
 			offShiftTime=?,

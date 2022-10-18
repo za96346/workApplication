@@ -228,6 +228,7 @@ func DataBaseInit() {
 			styleId bigint not null unique auto_increment,
 			banchId bigint,
 			icon varchar(100),
+			restTime time,
 			timeRangeName varchar(20),
 			onShiftTime time,
 			offShiftTime time,
