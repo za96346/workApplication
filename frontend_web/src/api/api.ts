@@ -225,6 +225,7 @@ class ApiControl extends api {
             url: this.route.banchStyle,
             body: {
                 Icon: banchStyle.Icon,
+                RestTime: banchStyle.RestTime,
                 TimeRangeName: banchStyle.TimeRangeName,
                 OnShiftTime: banchStyle.OnShiftTime,
                 OffShiftTime: banchStyle.OffShiftTime,
@@ -242,6 +243,7 @@ class ApiControl extends api {
             url: this.route.banchStyle,
             body: {
                 Icon: banchStyle.Icon,
+                RestTime: banchStyle.RestTime,
                 TimeRangeName: banchStyle.TimeRangeName,
                 OnShiftTime: banchStyle.OnShiftTime,
                 OffShiftTime: banchStyle.OffShiftTime,
@@ -288,7 +290,7 @@ class ApiControl extends api {
         return res
     }
 
-    async updateBanchRule (banchRule: BanchRuleType): Promise<any> {
+    async updateBanchRule (banchRule: BanchRuleType): Promise<ResType<null>> {
         store.dispatch(statusAction.onUpdateBanchRule(true))
         const res = await this.POST<null>({
             url: this.route.banchRule,
@@ -304,6 +306,7 @@ class ApiControl extends api {
         })
         console.log(res)
         store.dispatch(statusAction.onUpdateBanchRule(false))
+        return res
     }
 }
 export default new ApiControl()

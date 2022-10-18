@@ -1,12 +1,14 @@
 import { DeleteOutlined, EditOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons'
-import { Collapse, List, Skeleton } from 'antd'
+import { Button, Collapse, List, Modal, Skeleton } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import api from '../../api/api'
+import dateHandle from '../../method/dateHandle'
 import { companyReducerType } from '../../reduxer/reducer/companyReducer'
 import { statusReducerType } from '../../reduxer/reducer/statusReducer'
 import { RootState } from '../../reduxer/store'
-import { BanchRuleListType, BanchRuleType } from '../../type'
+import statics from '../../statics'
+import { BanchRuleListType, BanchRuleType, ResType } from '../../type'
 import EditForm from './EditForm'
 
 const statusInit = {
@@ -22,8 +24,11 @@ const data = (arr: BanchRuleType[]): BanchRuleListType[] => arr.map((item) => {
         title: `${item.WeekDay}`,
         time: <>
             <span>上班： {item.OnShiftTime}</span><br/>
-            <span>下班： {item.OffShiftTime}</span>
-        </>
+            <span>下班： {item.OffShiftTime}</span><br/>
+            <span>最少員工數：{item.MinPeople}</span><br/>
+            <span>最多員工數：{item.MaxPeople}</span>
+        </>,
+        weekType: item.WeekType
     }
 })
 interface props {
@@ -34,18 +39,65 @@ const BanchRule = ({ banchId }: props): JSX.Element => {
     const [status, setStatus] = useState({ ...statusInit })
     const company: companyReducerType = useSelector((state: RootState) => state.company)
     const loading: statusReducerType = useSelector((state: RootState) => state.status)
-    const onFinish = (v: any, types: number): any => {
-
+    const onFinish = async (v: any, types: number): Promise<void> => {
+        let res: ResType<BanchRuleType>
+        if (types === 0) {
+            res = await api.createBanchRule(
+                {
+                    ...v,
+                    OnShiftTime: dateHandle.dateFormatToTime(v.OnShiftTime._d),
+                    OffShiftTime: dateHandle.dateFormatToTime(v.OffShiftTime._d),
+                    BanchId: banchId
+                }
+            )
+        } else if (types === 1) {
+            res = await api.updateBanchRule({
+                ...v,
+                OnShiftTime: dateHandle.dateFormatToTime(v.OnShiftTime._d),
+                OffShiftTime: dateHandle.dateFormatToTime(v.OffShiftTime._d),
+                RuleId: status.currentListIdx
+            })
+        }
+        if (res.status) {
+            await api.getBanchRule(banchId)
+            setStatus({ ...statusInit })
+        }
+    }
+    const onDelete = (idx: string): any => {
+        setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(idx), openModal: true }))
     }
     const onEdit = (id: string): any => {
-    }
-    const onDelete = (id: string): any => {
+        setStatus((prev) => ({ ...prev, currentListIdx: parseInt(id), openModal: true }))
     }
     useEffect(() => {
         api.getBanchRule(banchId)
     }, [banchId])
     return (
         <>
+            <Modal
+                onOk={() => setStatus({ ...statusInit })}
+                onCancel={() => setStatus({ ...statusInit })}
+                open={status.openModal}
+                footer={null}
+            >
+                {
+                    status.currentDeleteListIdx !== -1 && <><div>
+                        是否刪除此規則，刪除後無法復原
+                    </div>
+                    <Button block style={{ marginTop: '20px' }}>確認</Button>
+                    </>
+                }
+                {
+                    status.currentListIdx !== -1 && (
+                        <EditForm
+                            currentId={status.currentListIdx}
+                            types={1}
+                            btnText='確認修改'
+                            onFinish={async (v) => await onFinish(v, 1)}
+                        />
+                    )
+                }
+            </Modal>
             <div>
                 <Collapse
                     onChange={(e) => setStatus((prev) => ({ ...prev, currentTabIdx: e[e.length - 1] }))}
@@ -54,11 +106,12 @@ const BanchRule = ({ banchId }: props): JSX.Element => {
                     defaultActiveKey={[status.currentTabIdx]}
                 >
                     <Collapse.Panel header="新增" key={'1'}>
-                        <EditForm types={1} onFinish={(v) => onFinish(v, 0)} />
+                        <EditForm types={1} onFinish={async (v) => await onFinish(v, 0)} />
                     </Collapse.Panel>
                 </Collapse>
             </div>
             <List
+                style={{ marginTop: '20px' }}
                 split
                 loading={loading.onFetchBanchRule}
                 itemLayout="horizontal"
@@ -83,8 +136,8 @@ const BanchRule = ({ banchId }: props): JSX.Element => {
                             }
                         >
                             <List.Item.Meta
-                                avatar={<span style={{ fontSize: '2rem' }} >{item.id}</span>}
-                                title={item.title}
+                                avatar={<span style={{ fontSize: '1rem', color: 'blue' }} >{statics.weekType[item.weekType]}</span>}
+                                title={statics.weekDay[item.title]}
                                 description={item.time}
                             />
 

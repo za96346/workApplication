@@ -7,7 +7,7 @@ import dateHandle from '../../method/dateHandle'
 import { companyReducerType } from '../../reduxer/reducer/companyReducer'
 import { statusReducerType } from '../../reduxer/reducer/statusReducer'
 import { RootState } from '../../reduxer/store'
-import { BanchStyleType, ShiftSettingListType } from '../../type'
+import { BanchStyleType, ResType, ShiftSettingListType } from '../../type'
 import EditForm from './EditForm'
 
 const statusInit = {
@@ -23,8 +23,9 @@ const data = (arr: BanchStyleType[]): ShiftSettingListType[] => arr.map((item) =
         title: item.TimeRangeName,
         icons: item.Icon,
         time: <>
-            <span>上班： {item.OnShiftTime}</span>
-            <span style={{ marginLeft: '10px' }}>下班： {item.OffShiftTime}</span>
+            <span>上班： {item.OnShiftTime}</span><br/>
+            <span>下班： {item.OffShiftTime}</span><br/>
+            <span>休息： {item.RestTime}</span>
         </>
     }
 })
@@ -44,13 +45,14 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
     }
     const onFinish = async (v: any, types: 0 | 1): Promise<void> => {
         console.log(v)
-        let res
+        let res: ResType<BanchStyleType>
         if (types === 0) {
             res = await api.createBanchStyle(
                 {
                     ...v,
                     OnShiftTime: dateHandle.dateFormatToTime(v.OnShiftTime._d),
                     OffShiftTime: dateHandle.dateFormatToTime(v.OffShiftTime._d),
+                    RestTime: dateHandle.dateFormatToTime(v.RestTime._d),
                     BanchId: banchId
                 }
             )
@@ -60,6 +62,7 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
                     ...v,
                     OnShiftTime: dateHandle.dateFormatToTime(v.OnShiftTime._d),
                     OffShiftTime: dateHandle.dateFormatToTime(v.OffShiftTime._d),
+                    RestTime: dateHandle.dateFormatToTime(v.RestTime._d),
                     StyleId: status.currentListIdx
                 }
             )
@@ -88,7 +91,7 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
                     </>
                 }
                 {
-                    status.currentListIdx !== -1 && <EditForm types={0} btnText='確認修改' onFinish={async (v) => await onFinish(v, 1)} />
+                    status.currentListIdx !== -1 && <EditForm currentId={status.currentListIdx} types={0} btnText='確認修改' onFinish={async (v) => await onFinish(v, 1)} />
                 }
             </Modal>
             <div>
@@ -103,58 +106,57 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
                     </Collapse.Panel>
                 </Collapse>
             </div>
-            <div style={{ marginTop: '20px' }}>
-                <List
-                    split
-                    loading={loading.onFetchBanchStyle}
-                    itemLayout="horizontal"
-                    dataSource={data(company.banchStyle)}
-                    renderItem={(item: ShiftSettingListType) => (
-                        loading.onFetchBanchStyle
-                            ? <Skeleton active />
-                            : <List.Item
-                                style={
-                                    (status.currentDeleteListIdx === -1 ||
+            <List
+                style={{ marginTop: '20px' }}
+                split
+                loading={loading.onFetchBanchStyle}
+                itemLayout="horizontal"
+                dataSource={data(company.banchStyle)}
+                renderItem={(item: ShiftSettingListType) => (
+                    loading.onFetchBanchStyle
+                        ? <Skeleton active />
+                        : <List.Item
+                            style={
+                                (status.currentDeleteListIdx === -1 ||
                                     status.currentDeleteListIdx === parseInt(item.id)
-                                    ) && (
-                                        status.currentListIdx === -1 ||
+                                ) && (
+                                    status.currentListIdx === -1 ||
                                     status.currentListIdx === parseInt(item.id)
-                                    )
-                                        ? {
-                                            opacity: 1
-                                        }
-                                        : {
-                                            opacity: 0.1
-                                        }
-                                }
+                                )
+                                    ? {
+                                        opacity: 1
+                                    }
+                                    : {
+                                        opacity: 0.1
+                                    }
+                            }
+                        >
+                            <List.Item.Meta
+                                avatar={<span style={{ fontSize: '2rem' }} >{item.icons}</span>}
+                                title={item.title}
+                                description={item.time}
+                            />
+
+                            <div
+                                onClick={() => onEdit(item.id)}
+                                className={styles.editLabel}
+                                style={{ color: 'blue' }}
                             >
-                                <List.Item.Meta
-                                    avatar={<span style={{ fontSize: '2rem' }} >{item.icons}</span>}
-                                    title={item.title}
-                                    description={item.time}
-                                />
-
-                                <div
-                                    onClick={() => onEdit(item.id)}
-                                    className={styles.editLabel}
-                                    style={{ color: 'blue' }}
-                                >
-                                    <EditOutlined style={{ marginRight: '10px' }} />
+                                <EditOutlined style={{ marginRight: '10px' }} />
                                     編輯
-                                </div>
+                            </div>
 
-                                <div
-                                    onClick={() => onDelete(item.id)}
-                                    className={styles.editLabel}
-                                    style={{ marginLeft: '20px', color: 'red' }}
-                                >
-                                    <DeleteOutlined style={{ marginRight: '10px' }} />
+                            <div
+                                onClick={() => onDelete(item.id)}
+                                className={styles.editLabel}
+                                style={{ marginLeft: '20px', color: 'red' }}
+                            >
+                                <DeleteOutlined style={{ marginRight: '10px' }} />
                                         刪除
-                                </div>
-                            </List.Item>
-                    )}
-                />
-            </div>
+                            </div>
+                        </List.Item>
+                )}
+            />
         </>
     )
 }

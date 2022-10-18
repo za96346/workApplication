@@ -73,7 +73,7 @@ const Register = (): JSX.Element => {
                 <Form.Item name="PasswordConfirm" rules={rule.passwordConfirm()}>
                     <Input.Password visibilityToggle size="large" placeholder="確認密碼" prefix={<KeyOutlined />} />
                 </Form.Item>
-                <Form.Item name="CompanyCode" >
+                <Form.Item initialValue="" name="CompanyCode" >
                     <Input size="large" placeholder="公司編號(選填)" prefix={<NumberOutlined />} />
                 </Form.Item>
                 <Button onClick={() => {}} text="註冊" />

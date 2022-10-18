@@ -80,6 +80,7 @@ export interface BanchStyleType {
     StyleId?: number // 樣式id
     BanchId?: number // 部門id
     Icon: string // 圖標
+    RestTime: string // 休息時間
     TimeRangeName: string // 時段名稱
     OnShiftTime: string // 開始上班時段
     OffShiftTime: string // 結束上班時段
@@ -111,4 +112,5 @@ export interface BanchRuleListType {
     title: string
     id: string
     time: ReactNode
+    weekType: number
 }
