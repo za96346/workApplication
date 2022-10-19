@@ -1,35 +1,59 @@
-import { PlusOutlined } from '@ant-design/icons'
+import { EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { Card, Input, List, Form, Button } from 'antd'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import api from '../../api/api'
 import { companyReducerType } from '../../reduxer/reducer/companyReducer'
 import { RootState } from '../../reduxer/store'
-import { BanchType } from '../../type'
+import { BanchType, ResType } from '../../type'
 
 interface people {
     title: string
     peopleAmount: number
+    id: number
 }
 
 const data = (arr: BanchType[]): people[] => arr.map((item) => {
     return (
         {
             title: item.BanchName,
-            peopleAmount: 0
+            peopleAmount: 0,
+            id: item.Id
         }
     )
 })
 
+const BanchEdit = ({ onFinish }: { onFinish: (v: any) => void }): JSX.Element => {
+    return (
+        <>
+            <Form onFinish={onFinish}>
+                <Form.Item name="BanchName" label="新增部門" initialValue="">
+                    <Input style={{ minWidth: '100px' }} placeholder='請輸入部門名稱' />
+                </Form.Item>
+                <Form.Item>
+                    <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', width: '100%' }}>
+                        <Button htmlType='submit'>新增</Button>
+                    </div>
+                </Form.Item>
+            </Form>
+        </>
+    )
+}
+
 const BanchManager: React.FC = () => {
     const company: companyReducerType = useSelector((state: RootState) => state.company)
     const [status, setStatus] = useState({
-        plusOnclick: false
+        plusOnclick: false,
+        currentEditIdx: -1
     })
     const onFinish = async (v: any, types: 1 | 2): Promise<void> => {
-        console.log(v)
+        let res: ResType<null>
         const { BanchName } = v
-        const res = await api.createBanch(BanchName)
+        if (types === 1) {
+            res = await api.createBanch(BanchName)
+        } else if (types === 2) {
+            res = await api.UpdateBanch(BanchName, status.currentEditIdx)
+        }
         if (res.status) {
             await api.getBanch()
         }
@@ -49,22 +73,22 @@ const BanchManager: React.FC = () => {
                 dataSource={data(company.banch)}
                 renderItem={item => (
                     <List.Item>
-                        <Card title={item.title}>人數：{item.peopleAmount}</Card>
+                        <Card title={
+                            status.currentEditIdx === item.id
+                                ? <BanchEdit onFinish={async (v) => await onFinish(v, 2)}/>
+                                : <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    {item.title}
+                                    <EditOutlined style={{ color: 'blue' }} onClick={() => setStatus((prev) => ({ ...prev, currentEditIdx: item.id }))} />
+                                </div>
+                        }>
+                            人數：{item.peopleAmount}
+                        </Card>
                     </List.Item>
                 )}
             />
             {
                 status.plusOnclick
-                    ? <Form onFinish={async (v) => await onFinish(v, 1)}>
-                        <Form.Item name="BanchName" label="新增部門" initialValue="">
-                            <Input placeholder='請輸入部門名稱' />
-                        </Form.Item>
-                        <Form.Item>
-                            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', width: '100%' }}>
-                                <Button htmlType='submit'>新增</Button>
-                            </div>
-                        </Form.Item>
-                    </Form>
+                    ? <BanchEdit onFinish={async (v) => await onFinish(v, 1)}/>
                     : <PlusOutlined onClick={() => setStatus((prev) => ({ ...prev, plusOnclick: true }))} style={{ fontSize: '2rem' }} />
             }
         </div>
