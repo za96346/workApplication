@@ -122,6 +122,13 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 		})
 		return
 	}
+
+	if len((*registeForm).Password) < 8 {
+		(*props).JSON(http.StatusUnprocessableEntity, gin.H{
+			"message": StatusText().PasswordNotSafe,
+		})
+		return
+	}
 	
 
 

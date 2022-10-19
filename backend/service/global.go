@@ -46,6 +46,7 @@ type statusText struct {
 	InsertFail string
 	CompanyCodeIsNotRight string
 	CompanyNotEqual string
+	PasswordNotSafe string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -87,6 +88,7 @@ func StatusText() *statusText {
 				InsertFail: "新增失敗",
 				CompanyCodeIsNotRight: "公司碼不正確",
 				CompanyNotEqual: "公司不同",
+				PasswordNotSafe: "密碼小於8碼",
 			}
 		}
 	}
