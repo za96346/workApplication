@@ -1,6 +1,6 @@
 import api from './apiAbs'
 import axios from 'axios'
-import { BanchRuleType, BanchStyleType, BanchType, LoginType, RegisterType, ResMessage, ResType, SelfDataType, UserType } from '../type'
+import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, RegisterType, ResMessage, ResType, SelfDataType, UserType } from '../type'
 import userAction from '../reduxer/action/userAction'
 import { store } from '../reduxer/store'
 import { FullMessage } from '../method/notice'
@@ -18,7 +18,8 @@ class ApiControl extends api {
         getUserAll: 'user/all',
         getSelfData: 'user/my',
         banchStyle: 'company/banch/style',
-        banchRule: 'company/banch/rule'
+        banchRule: 'company/banch/rule',
+        companyInfo: 'company/info'
     }
 
     constructor () {
@@ -334,6 +335,36 @@ class ApiControl extends api {
         })
         console.log(res)
         store.dispatch(statusAction.onUpdateBanchRule(false))
+        return res
+    }
+
+    // 公司資料
+    async getCompanyInfo (): Promise<ResType<CompanyType>> {
+        store.dispatch(statusAction.onFetchCompany(true))
+        const res = await this.GET<CompanyType>({
+            url: this.route.companyInfo
+        })
+        if (res.status && res?.data) {
+            store.dispatch(companyAction.setCompany(res.data))
+        }
+        store.dispatch(statusAction.onFetchCompany(false))
+        return res
+    }
+
+    async updateCompanyInfo (company: CompanyType): Promise<ResType<null>> {
+        store.dispatch(statusAction.onUpdateCompany(true))
+        const res = await this.POST<null>({
+            url: this.route.companyInfo,
+            body: {
+                CompanyId: company.CompanyId,
+                CompanyName: company.CompanyName,
+                CompanyLocation: company.CompanyLocation,
+                CompanyPhoneNumber: company.CompanyPhoneNumber,
+                TermStart: new Date().toISOString(),
+                TermEnd: new Date().toISOString()
+            }
+        })
+        store.dispatch(statusAction.onUpdateCompany(false))
         return res
     }
 }

@@ -1,18 +1,19 @@
-import { Select } from 'antd'
+import { Select, SelectProps } from 'antd'
 import React from 'react'
 import useReduceing from '../Hook/useReducing'
 import { BanchType } from '../type'
 
-interface BanchSelectorProps {
+interface BanchSelectorProps extends SelectProps {
     defaultValue: number
 }
 
-const BanchSelector = ({ defaultValue }: BanchSelectorProps): JSX.Element => {
+const BanchSelector = ({ ...rest }: BanchSelectorProps): JSX.Element => {
+    const { defaultValue, ...other } = rest
     const { company } = useReduceing()
     const df = company.banch?.find((item: BanchType) => item.Id === defaultValue)
     console.log(df, defaultValue)
     return (
-        <Select defaultValue={df?.Id}>
+        <Select {...other} defaultValue={df?.Id}>
             {
                 company.banch.map((item) => (
                     <Select.Option

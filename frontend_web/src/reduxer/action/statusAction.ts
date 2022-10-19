@@ -117,6 +117,26 @@ class statusAcion {
         }
     }
 
+    onFetchCompany (s: boolean): action {
+        return {
+            type: s ? statusType.FETCH_COMPANY_ON : statusType.FETCH_COMPANY_OFF,
+            payload: {
+                ...store.getState().status,
+                onFetchCompany: s
+            }
+        }
+    }
+
+    onUpdateCompany (s: boolean): action {
+        return {
+            type: s ? statusType.UPDATE_COMPANY_ON : statusType.UPDATE_COMPANY_OFF,
+            payload: {
+                ...store.getState().status,
+                onUpdateCompany: s
+            }
+        }
+    }
+
     clearStatusAll (): action {
         return {
             type: statusType.CLEAR_STATUS_ALL,

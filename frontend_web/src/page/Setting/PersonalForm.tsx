@@ -9,6 +9,10 @@ import useReduceing from '../../Hook/useReducing'
 
 const personalForm = (): JSX.Element => {
     const { loading, user } = useReduceing()
+
+    const onFinish = (): any => {
+        // const res = await api.upda
+    }
     if (loading.onFetchSelfData) {
         return <Spin size='large' />
     }
@@ -17,7 +21,7 @@ const personalForm = (): JSX.Element => {
             <Form
                 name="basic"
                 initialValues={{ remember: true }}
-                // onFinish={onFinish}
+                onFinish={onFinish}
                 // onFinishFailed={onFinishFailed}
                 autoComplete="off"
             >
@@ -40,7 +44,7 @@ const personalForm = (): JSX.Element => {
                     name="Account"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                    <Input defaultValue={user.selfData?.Account || ''} />
+                    <Input disabled defaultValue={user.selfData?.Account || ''} />
                 </Form.Item>
                 <Form.Item
                     label="密碼"
@@ -61,21 +65,21 @@ const personalForm = (): JSX.Element => {
                     name="Banch"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                    <BanchSelector defaultValue={user.selfData?.Banch || 0} />
+                    <BanchSelector disabled defaultValue={user.selfData?.Banch || 0} />
                 </Form.Item>
                 <Form.Item
                     label="權限"
                     name="Permession"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                    <PermessionSelector defaultValue={user.selfData?.Permession} />
+                    <PermessionSelector disabled defaultValue={user.selfData?.Permession} />
                 </Form.Item>
                 <Form.Item
                     label="狀態"
                     name="WorkState"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                    <StatusSelector defaultValue={user.selfData?.WorkState} />
+                    <StatusSelector disabled defaultValue={user.selfData?.WorkState} />
                 </Form.Item>
                 <Form.Item
                     style={{ marginTop: '130px' }}

@@ -1,11 +1,12 @@
-import { BanchRuleType, BanchStyleType, BanchType, UserType } from '../../type'
+import { BanchRuleType, BanchStyleType, BanchType, CompanyType, UserType } from '../../type'
 import { action, companyType } from '../types'
 
-const companyState = {
+export const companyState = {
     banch: [],
     employee: [],
     banchStyle: [],
-    banchRule: []
+    banchRule: [],
+    info: {}
 }
 
 export interface companyReducerType {
@@ -13,6 +14,7 @@ export interface companyReducerType {
     employee: UserType[]
     banchStyle: BanchStyleType[]
     banchRule: BanchRuleType[]
+    info: CompanyType
 }
 
 export const companyReducer = (state = companyState, action: action): any => {

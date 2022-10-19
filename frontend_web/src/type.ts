@@ -101,6 +101,18 @@ export interface BanchRuleType {
     LastModify?: Date | string // 上次修改時間
 }
 
+export interface CompanyType {
+    CompanyId?: number
+    CompanyCode?: string
+    CompanyName: string
+    CompanyLocation: string
+    CompanyPhoneNumber: string
+    TermStart: string | Date
+    TermEnd: string | Date
+    CreateTime?: string | Date
+    LastModify?: string | Date
+}
+
 export interface ShiftSettingListType {
     title: string
     icons: string

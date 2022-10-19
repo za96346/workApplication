@@ -1,16 +1,17 @@
-import { Select } from "antd"
+import { Select, SelectProps } from "antd"
 import React from "react"
 import statics from "../statics"
 
-interface props {
+interface props extends SelectProps {
     defaultValue: number
 }
 
-const PermessionSelector = ({ defaultValue }: props): JSX.Element => {
+const PermessionSelector = ({ ...rest }: props): JSX.Element => {
+    const { defaultValue, ...other } = rest
     const df = statics.permession[defaultValue || 2]
     return (
         <>
-            <Select defaultValue={df}>
+            <Select {...other} defaultValue={df}>
                 {
                     Object.values(statics.permession).map((item, index) =>
                         <Select.Option value={item} key={index}>{item}</Select.Option>
