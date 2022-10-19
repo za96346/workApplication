@@ -1,8 +1,6 @@
 import { Select } from 'antd'
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { companyReducerType } from '../reduxer/reducer/companyReducer'
-import { RootState } from '../reduxer/store'
+import useReduceing from '../Hook/useReducing'
 import { BanchType } from '../type'
 
 interface BanchSelectorProps {
@@ -10,7 +8,7 @@ interface BanchSelectorProps {
 }
 
 const BanchSelector = ({ defaultValue }: BanchSelectorProps): JSX.Element => {
-    const company: companyReducerType = useSelector((state: RootState) => state.company)
+    const { company } = useReduceing()
     const df = company.banch?.find((item: BanchType) => item.Id === defaultValue)
     console.log(df, defaultValue)
     return (

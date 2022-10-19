@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import api from '../../api/api'
-import { userReducerType } from '../../reduxer/reducer/userReducer'
-import { RootState } from '../../reduxer/store'
+import useReduceing from '../../Hook/useReducing'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 
 const Entry = (): JSX.Element => {
-    const user: userReducerType = useSelector((state: RootState) => state.user)
+    const { user } = useReduceing()
     const navigate = useNavigate()
     const { path } = useParams()
     const nav = async (): Promise<void> => {

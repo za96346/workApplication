@@ -1,12 +1,10 @@
 import { AppstoreOutlined, ExportOutlined, GoldOutlined, IdcardOutlined, InsertRowRightOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined } from '@ant-design/icons'
 import { Button, MenuProps, Menu } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import useReduceing from '../Hook/useReducing'
 import userAction from '../reduxer/action/userAction'
-import { companyReducerType } from '../reduxer/reducer/companyReducer'
-import { statusReducerType } from '../reduxer/reducer/statusReducer'
-import { RootState } from '../reduxer/store'
 import { BanchType } from '../type'
 
 type MenuItem = Required<MenuProps>['items'][number]
@@ -44,8 +42,7 @@ const items = (banch: BanchType[]): MenuItem[] => {
 }
 const App: React.FC = () => {
     const dispatch = useDispatch()
-    const company: companyReducerType = useSelector((state: RootState) => state.company)
-    const loading: statusReducerType = useSelector((state: RootState) => state.status)
+    const { loading, company } = useReduceing()
     const [current, setCurrent] = useState<any>({
         keyPath: 'shift',
         key: ''

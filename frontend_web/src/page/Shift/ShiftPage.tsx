@@ -2,15 +2,13 @@
 import { HolderOutlined } from '@ant-design/icons'
 import { Drawer, Spin, Steps, Tabs } from 'antd'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { companyReducerType } from '../../reduxer/reducer/companyReducer'
-import { RootState } from '../../reduxer/store'
+import useReduceing from '../../Hook/useReducing'
 import EditTable from './EditTable'
 import PeopleStatus from './PeopleStatus'
 const ShiftPage = (): JSX.Element => {
     const { banchId } = useParams()
-    const company: companyReducerType = useSelector((state: RootState) => state.company)
+    const { company } = useReduceing()
     const convertBanchId = parseInt(banchId)
     const [status, setStatus] = useState({
         drawerOpen: false,

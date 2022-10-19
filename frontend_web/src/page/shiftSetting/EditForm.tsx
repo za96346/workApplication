@@ -2,12 +2,10 @@ import { EditOutlined, PictureOutlined } from '@ant-design/icons'
 import { Button, Form, Input, InputNumber, TimePicker } from 'antd'
 import moment from 'moment'
 import React from 'react'
-import { useSelector } from 'react-redux'
 import WeekDaySelector from '../../component/WeekDaySelector'
 import WeekTypeSelector from '../../component/WeekTypeSelector'
+import useReduceing from '../../Hook/useReducing'
 import rule from '../../method/rule'
-import { companyReducerType } from '../../reduxer/reducer/companyReducer'
-import { RootState } from '../../reduxer/store'
 
 interface props {
     onFinish: (v: any) => Promise<void>
@@ -18,7 +16,7 @@ interface props {
 const defaultTimer = '00:00:00'
 
 const EditForm = ({ onFinish, types, currentId = -10000, btnText = '新增' }: props): JSX.Element => {
-    const company: companyReducerType = useSelector((state: RootState) => state.company)
+    const { company } = useReduceing()
     const banchStyle = company.banchStyle?.find((item) => item.StyleId === currentId)
     const banchRule = company.banchRule.find((item) => item.RuleId === currentId)
     return (

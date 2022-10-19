@@ -1,9 +1,7 @@
 import Menu from '../component/Menu'
 import React, { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { RootState } from '../reduxer/store'
-import { userReducerType } from '../reduxer/reducer/userReducer'
+import useReduceing from '../Hook/useReducing'
 // import { BanchRuleType, BanchStyleType } from '../type'
 
 // const banchStyleSimulate: BanchStyleType = {
@@ -29,7 +27,7 @@ import { userReducerType } from '../reduxer/reducer/userReducer'
 const Layout = (): JSX.Element => {
     const { pathname } = useLocation()
     const navigate = useNavigate()
-    const user: userReducerType = useSelector((state: RootState) => state.user)
+    const { user } = useReduceing()
 
     useEffect(() => {
         if (!user.token) {

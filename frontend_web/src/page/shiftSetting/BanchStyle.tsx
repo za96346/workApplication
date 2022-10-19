@@ -1,12 +1,9 @@
 import { DeleteOutlined, EditOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Collapse, List, Modal, Skeleton } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import api from '../../api/api'
+import useReduceing from '../../Hook/useReducing'
 import dateHandle from '../../method/dateHandle'
-import { companyReducerType } from '../../reduxer/reducer/companyReducer'
-import { statusReducerType } from '../../reduxer/reducer/statusReducer'
-import { RootState } from '../../reduxer/store'
 import { BanchStyleType, ResType, ShiftSettingListType } from '../../type'
 import EditForm from './EditForm'
 
@@ -35,8 +32,7 @@ interface props {
 }
 const BanchStyle = ({ banchId }: props): JSX.Element => {
     const [status, setStatus] = useState({ ...statusInit })
-    const company: companyReducerType = useSelector((state: RootState) => state.company)
-    const loading: statusReducerType = useSelector((state: RootState) => state.status)
+    const { loading, company } = useReduceing()
     const onDelete = (idx: string): any => {
         setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(idx) }))
     }

@@ -1,10 +1,8 @@
 import { Result, Skeleton, Spin } from 'antd'
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
 import api from '../../api/api'
+import useReduceing from '../../Hook/useReducing'
 import { companyReducerType } from '../../reduxer/reducer/companyReducer'
-import { statusReducerType } from '../../reduxer/reducer/statusReducer'
-import { RootState } from '../../reduxer/store'
 import useTableCache from './TableCache'
 
 interface EditTableProps {
@@ -13,7 +11,7 @@ interface EditTableProps {
     company: companyReducerType
 }
 const EditTable = ({ banchId, company, currentTabs }: EditTableProps): JSX.Element => {
-    const loading: statusReducerType = useSelector((state: RootState) => state.status)
+    const { loading } = useReduceing()
     const { tb } = useTableCache(company)
     useEffect(() => {
         api.getBanchStyle(banchId)

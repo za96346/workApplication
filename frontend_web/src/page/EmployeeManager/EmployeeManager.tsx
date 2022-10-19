@@ -5,14 +5,11 @@ import EditableCell from './EditableCell'
 import { BanchType, EmpManagerCellType, UserType } from '../../type'
 import { SearchOutlined } from '@ant-design/icons'
 import api from '../../api/api'
-import { useSelector } from 'react-redux'
 import BanchSelector from '../../component/BanchSelector'
 import PermessionSelector from '../../component/PermessionSelector'
 import statics from '../../statics'
-import { RootState } from '../../reduxer/store'
 import StatusSelector from '../../component/StatusSelector'
-import { companyReducerType } from '../../reduxer/reducer/companyReducer'
-import { statusReducerType } from '../../reduxer/reducer/statusReducer'
+import useReduceing from '../../Hook/useReducing'
 
 const items = (value: UserType[], banch: BanchType[]): any => {
     return value?.map((i, index) => {
@@ -35,8 +32,7 @@ const EmployeeManager = (): JSX.Element => {
     const [form] = Form.useForm()
     const [data, setData] = useState([])
     const [editingKey, setEditingKey] = useState('')
-    const company: companyReducerType = useSelector((state: RootState) => state.company)
-    const loading: statusReducerType = useSelector((state: RootState) => state.status)
+    const { company, loading } = useReduceing()
 
     const isEditing = (record: EmpManagerCellType): any => record.key === editingKey
 

@@ -1,10 +1,8 @@
 import { EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { Card, Input, List, Form, Button } from 'antd'
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
 import api from '../../api/api'
-import { companyReducerType } from '../../reduxer/reducer/companyReducer'
-import { RootState } from '../../reduxer/store'
+import useReduceing from '../../Hook/useReducing'
 import { BanchType, ResType } from '../../type'
 
 interface people {
@@ -41,7 +39,7 @@ const BanchEdit = ({ onFinish }: { onFinish: (v: any) => void }): JSX.Element =>
 }
 
 const BanchManager: React.FC = () => {
-    const company: companyReducerType = useSelector((state: RootState) => state.company)
+    const { company } = useReduceing()
     const [status, setStatus] = useState({
         plusOnclick: false,
         currentEditIdx: -1

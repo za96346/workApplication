@@ -1,18 +1,14 @@
 import React from 'react'
 import { Button, DatePicker, Form, Input, Spin } from 'antd'
 import { FullMessage } from '../../method/notice'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../reduxer/store'
 import moment from 'moment'
 import BanchSelector from '../../component/BanchSelector'
 import PermessionSelector from '../../component/PermessionSelector'
 import StatusSelector from '../../component/StatusSelector'
-import { statusReducerType } from '../../reduxer/reducer/statusReducer'
-import { userReducerType } from '../../reduxer/reducer/userReducer'
+import useReduceing from '../../Hook/useReducing'
 
 const personalForm = (): JSX.Element => {
-    const loading: statusReducerType = useSelector((state: RootState) => state.status)
-    const user: userReducerType = useSelector((state: RootState) => state.user)
+    const { loading, user } = useReduceing()
     if (loading.onFetchSelfData) {
         return <Spin size='large' />
     }
