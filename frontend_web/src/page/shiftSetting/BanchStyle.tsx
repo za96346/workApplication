@@ -151,7 +151,7 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
                                 style={{ color: 'blue' }}
                             >
                                 <EditOutlined style={{ marginRight: '10px' }} />
-                                    編輯{item.id}
+                                    編輯
                             </div>
 
                             <div

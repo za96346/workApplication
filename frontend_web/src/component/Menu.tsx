@@ -1,4 +1,4 @@
-import { AppstoreOutlined, ExportOutlined, IdcardOutlined, InsertRowRightOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined } from '@ant-design/icons'
+import { AppstoreOutlined, ExportOutlined, GoldOutlined, IdcardOutlined, InsertRowRightOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined } from '@ant-design/icons'
 import { Button, MenuProps, Menu } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -35,6 +35,7 @@ const items = (banch: BanchType[]): MenuItem[] => {
 
         getItem('班表設定', 'shiftSetting', <AppstoreOutlined />, a),
         getItem('員工管理', 'employeeManager', <IdcardOutlined />),
+        getItem('部門管理', 'banchManager', <GoldOutlined />),
         getItem('設定', 'setting', <SettingOutlined />, [
             getItem('個人資料', 1000),
             getItem('公司資料', 1001)
@@ -77,6 +78,9 @@ const App: React.FC = () => {
         }
         if (path1 === 'shiftSetting' || path2 === 'shiftSetting') {
             navigate(`shiftSetting/${current.key}`)
+        }
+        if (path1 === 'banchManager') {
+            navigate('banchManager')
         }
     }, [current])
 

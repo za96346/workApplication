@@ -1,20 +1,24 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { HolderOutlined } from '@ant-design/icons'
-import { Drawer, Steps, Tabs } from 'antd'
+import { Drawer, Spin, Steps, Tabs } from 'antd'
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import Loading from '../../component/Loading'
+import { companyReducerType } from '../../reduxer/reducer/companyReducer'
+import { RootState } from '../../reduxer/store'
 import EditTable from './EditTable'
 import PeopleStatus from './PeopleStatus'
 const ShiftPage = (): JSX.Element => {
     const { banchId } = useParams()
+    const company: companyReducerType = useSelector((state: RootState) => state.company)
+    const convertBanchId = parseInt(banchId)
     const [status, setStatus] = useState({
         drawerOpen: false,
         currentTabs: 0
     })
     if (!banchId) {
         return (
-            <Loading />
+            <Spin />
         )
     }
     return (
@@ -47,7 +51,7 @@ const ShiftPage = (): JSX.Element => {
                 }
             </Drawer>
             <div className={styles.shiftProcessBar}>
-                <h3>{banchId}</h3>
+                <h3>{company.banch.find((item) => item.Id === convertBanchId)?.BanchName || ''}</h3>
                 <Steps current={2}>
                     <Steps.Step title="開放編輯" description="2022-11-01 ~ 2022-11-09" />
                     <Steps.Step title="主管審核" subTitle="2022-11-10" description="部門主管確認班表無誤" />
@@ -57,10 +61,10 @@ const ShiftPage = (): JSX.Element => {
             <div className={styles.shiftEdit}>
                 <Tabs onChange={(key) => setStatus((prev) => ({ ...prev, currentTabs: parseInt(key, 10) }))}>
                     <Tabs.TabPane tab={'當前編輯'} key={0}>
-                        <EditTable currentTabs={status.currentTabs} />
+                        <EditTable company={company} banchId={convertBanchId} currentTabs={status.currentTabs} />
                     </Tabs.TabPane>
                     <Tabs.TabPane tab={'歷史班表'} key={1}>
-                        <EditTable currentTabs={status.currentTabs} />
+                        <EditTable company={company} banchId={convertBanchId} currentTabs={status.currentTabs} />
                     </Tabs.TabPane>
                 </Tabs>
             </div>

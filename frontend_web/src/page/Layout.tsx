@@ -2,7 +2,6 @@ import Menu from '../component/Menu'
 import React, { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import api from '../api/api'
 import { RootState } from '../reduxer/store'
 import { userReducerType } from '../reduxer/reducer/userReducer'
 // import { BanchRuleType, BanchStyleType } from '../type'
@@ -35,12 +34,6 @@ const Layout = (): JSX.Element => {
     useEffect(() => {
         if (!user.token) {
             navigate('/entry/login')
-        } else {
-            api.getBanch()
-            // api.createBanchStyle(banchStyleSimulate)
-            // api.updateBanchStyle(banchStyleSimulate)
-            // api.createBanchRule(banchRuleSimulate)
-            // api.updateBanchRule(banchRuleSimulate)
         }
     }, [user.token])
 

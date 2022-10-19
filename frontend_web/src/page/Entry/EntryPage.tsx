@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
+import api from '../../api/api'
 import { userReducerType } from '../../reduxer/reducer/userReducer'
 import { RootState } from '../../reduxer/store'
 import LoginForm from './LoginForm'
@@ -10,9 +11,13 @@ const Entry = (): JSX.Element => {
     const user: userReducerType = useSelector((state: RootState) => state.user)
     const navigate = useNavigate()
     const { path } = useParams()
+    const nav = async (): Promise<void> => {
+        await api.getBanch()
+        navigate('/home')
+    }
     useEffect(() => {
         if (user.token) {
-            navigate('/shift')
+            nav()
         }
     }, [user.token])
     return (

@@ -1,8 +1,9 @@
 import { Select } from 'antd'
 import { v4 as uuid } from 'uuid'
 import React, { useMemo } from 'react'
+import { companyReducerType } from '../../reduxer/reducer/companyReducer'
 
-const useTableCache = (): any => {
+const useTableCache = (company: companyReducerType): any => {
     const tb = useMemo(() => {
         return (
             <>
@@ -12,17 +13,12 @@ const useTableCache = (): any => {
                             {
                                 new Array(31).fill('').map((item, index) => {
                                     return (
-                                        <>
-                                            {
-                                                index === 0
-                                                    ? <td style={{ left: '1px' }} className={styles.stickyTd}>員工</td>
-                                                    : <td>
-                                                        {index}<br/>
-                                                        {'一'}
-                                                    </td>
-
-                                            }
-                                        </>
+                                        index === 0
+                                            ? <td style={{ left: '1px' }} className={styles.stickyTd}>員工</td>
+                                            : <td>
+                                                {index}<br/>
+                                                {'一'}
+                                            </td>
                                     )
                                 })
                             }
@@ -34,24 +30,23 @@ const useTableCache = (): any => {
                                         {
                                             new Array(31).fill('').map((item, index) => {
                                                 return (
-                                                    <>
-                                                        {
-                                                            index === 0
-                                                                ? <td style={{ left: '1px' }} className={styles.stickyTd}>
+                                                    index === 0
+                                                        ? <td style={{ left: '1px' }} className={styles.stickyTd}>
                                                                         jack
-                                                                </td>
-                                                                : <td style={{ height: '10px', width: '10px' }}>
+                                                        </td>
+                                                        : <td style={{ height: '10px', width: '10px' }}>
 
-                                                                    <Select suffixIcon={null}>
-                                                                        <Select.Option value={'*'} key={0}>*</Select.Option>
-                                                                        <Select.Option value={'%'} key={1}>%</Select.Option>
-                                                                        <Select.Option value={'#'} key={2}>#</Select.Option>
-                                                                    </Select>
+                                                            <Select suffixIcon={null}>
+                                                                {
+                                                                    company.banchStyle.map((item) => {
+                                                                        return (
+                                                                            <Select.Option value={item.Icon} key={item.StyleId}>{item.Icon}</Select.Option>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </Select>
 
-                                                                </td>
-                                                        }
-
-                                                    </>
+                                                        </td>
                                                 )
                                             })
                                         }
@@ -63,7 +58,7 @@ const useTableCache = (): any => {
                 </div>
             </>
         )
-    }, [])
+    }, [company])
     return {
         tb
     }
