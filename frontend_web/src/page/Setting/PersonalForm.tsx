@@ -47,13 +47,6 @@ const personalForm = (): JSX.Element => {
                     <Input disabled defaultValue={user.selfData?.Account || ''} />
                 </Form.Item>
                 <Form.Item
-                    label="密碼"
-                    name="Password"
-                    rules={[{ required: true, message: 'Please input your username!' }]}
-                >
-                    <Input.Password defaultValue={user.selfData?.Password || ''} visibilityToggle />
-                </Form.Item>
-                <Form.Item
                     label="到職日"
                     name="OnWorkDay"
                     rules={[{ required: true, message: 'Please input your username!' }]}
@@ -88,7 +81,10 @@ const personalForm = (): JSX.Element => {
                     <Button
                         style={{ width: '100%' }}
                         htmlType="submit"
-                        onClick={() => FullMessage.success('修改成功 ')}>修改</Button>
+                        onClick={() => FullMessage.success('修改成功 ')}
+                    >
+                        修改
+                    </Button>
                 </Form.Item>
             </Form>
         </>

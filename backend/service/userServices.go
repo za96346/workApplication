@@ -57,6 +57,7 @@ func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 	userId, existed := (*props).Get("UserId")
+
 	// user id 尋找
 	if !existed {
 		(*props).JSON(http.StatusInternalServerError, gin.H{
@@ -64,6 +65,7 @@ func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
+
 	converUserId, err := methods.AnyToInt64(userId)
 	if err != nil {
 		(*props).JSON(http.StatusNotFound, gin.H{
@@ -71,6 +73,7 @@ func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
+
 	// 尋找資料
 	res := (*dbHandle).SelectUser(1, converUserId)
 	if methods.IsNotExited(res) {
@@ -80,6 +83,8 @@ func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
+
+	(*res)[0].Password = ""
 
 	// 找到資料
 	(*props).JSON(http.StatusOK, gin.H{

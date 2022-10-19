@@ -32,14 +32,14 @@ export interface RegisterType {
 
 export interface EmpManagerCellType {
     key: string
-    empIdx: string | number
-    name: string
-    onWorkDay: string
-    workState: 'on' | 'off'
-    banch: string
-    permession: string
-    permessionId: number
-    banchId: number
+    EmployeeNumber: string | number
+    UserName: string
+    OnWorkDay: string
+    WorkState: 'on' | 'off'
+    Banch: string
+    Permession: string
+    PermessionId: number
+    BanchId: number
 }
 
 export interface BanchType {

@@ -15,15 +15,15 @@ const items = (value: UserType[], banch: BanchType[]): any => {
     return value?.map((i, index) => {
         const b = banch?.find((item) => item.Id === i.Banch)
         return {
-            empIdx: i.EmployeeNumber,
+            EmployeeNumber: i.EmployeeNumber,
             key: i.UserId.toString(),
-            name: i.UserName,
-            onWorkDay: dateHandle.formatDate(new Date(i.OnWorkDay)),
-            workState: i.WorkState === 'on' ? '在職' : '離職',
-            banch: b.BanchName,
-            banchId: i.Banch,
-            permession: statics.permession[i.Permession],
-            permessionId: i.Permession
+            UserName: i.UserName,
+            OnWorkDay: dateHandle.formatDate(new Date(i.OnWorkDay)),
+            WorkState: i.WorkState === 'on' ? '在職' : '離職',
+            Banch: b.BanchName,
+            BanchId: i.Banch,
+            Permession: statics.permession[i.Permession],
+            PermessionId: i.Permession
         }
     })
 }
@@ -48,7 +48,7 @@ const EmployeeManager = (): JSX.Element => {
     const save = async (key: React.Key): Promise<void> => {
         try {
             const row = (await form.validateFields()) as EmpManagerCellType
-
+            console.log(row)
             const newData = [...data]
             const index = newData.findIndex(item => key === item.key)
             if (index > -1) {
@@ -72,39 +72,39 @@ const EmployeeManager = (): JSX.Element => {
     const columns = [
         {
             title: '員工編號',
-            dataIndex: 'empIdx',
+            dataIndex: 'EmployeeNumber',
             editable: true,
             width: '10%',
             inputCop: (record: EmpManagerCellType): ReactNode => {
                 return (
-                    <Input disabled placeholder={`${record.empIdx}`} />
+                    <Input disabled placeholder={`${record.EmployeeNumber}`} />
                 )
             }
         },
         {
             title: '組別',
-            dataIndex: 'banch',
+            dataIndex: 'Banch',
             editable: true,
             inputCop: (record: EmpManagerCellType): ReactNode => {
                 return (
-                    <BanchSelector defaultValue={record.banchId} />
+                    <BanchSelector defaultValue={record.BanchId} />
                 )
             }
         },
         {
             title: '姓名',
-            dataIndex: 'name',
+            dataIndex: 'UserName',
             width: '10%',
             editable: true,
             inputCop: (record: EmpManagerCellType): ReactNode => {
                 return (
-                    <Input disabled placeholder={`${record.empIdx}`} />
+                    <Input disabled placeholder={`${record.UserName}`} />
                 )
             }
         },
         {
             title: '入職日',
-            dataIndex: 'onWorkDay',
+            dataIndex: 'OnWorkDay',
             editable: true,
             inputCop: (record: EmpManagerCellType): ReactNode => {
                 return (
@@ -114,21 +114,21 @@ const EmployeeManager = (): JSX.Element => {
         },
         {
             title: '權限',
-            dataIndex: 'permession',
+            dataIndex: 'Permession',
             editable: true,
             inputCop: (record: EmpManagerCellType): ReactNode => {
                 return (
-                    <PermessionSelector defaultValue={record.permessionId} />
+                    <PermessionSelector defaultValue={record.PermessionId} />
                 )
             }
         },
         {
             title: '狀態',
-            dataIndex: 'workState',
+            dataIndex: 'WorkState',
             editable: true,
             inputCop: (record: EmpManagerCellType): ReactNode => {
                 return (
-                    <StatusSelector defaultValue={record.workState} />
+                    <StatusSelector defaultValue={record.WorkState} />
                 )
             }
         },
@@ -156,7 +156,7 @@ const EmployeeManager = (): JSX.Element => {
             },
             inputCop: (record: EmpManagerCellType): ReactNode => {
                 return (
-                    <Input disabled placeholder={`${record.empIdx}`} />
+                    <Input disabled placeholder={`${record.EmployeeNumber}`} />
                 )
             }
         }

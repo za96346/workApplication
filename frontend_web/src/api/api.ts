@@ -19,7 +19,8 @@ class ApiControl extends api {
         getSelfData: 'user/my',
         banchStyle: 'company/banch/style',
         banchRule: 'company/banch/rule',
-        companyInfo: 'company/info'
+        companyInfo: 'company/info',
+        userSingle: 'user/single'
     }
 
     constructor () {
@@ -365,6 +366,26 @@ class ApiControl extends api {
             }
         })
         store.dispatch(statusAction.onUpdateCompany(false))
+        return res
+    }
+
+    // 使用者資料
+    async updateUser (user: UserType): Promise<ResType<null>> {
+        const res = await this.POST<null>({
+            url: this.route.userSingle,
+            body: {
+                ...user,
+                CompanyCode: user.CompanyCode,
+                EmployeeNumber: user.EmployeeNumber,
+                OnWorkDay: user.OnWorkDay,
+                Banch: user.Banch,
+                Permession: user.Permession,
+                WorkState: user.WorkState
+            },
+            params: {
+                userId: user.UserId
+            }
+        })
         return res
     }
 }

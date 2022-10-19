@@ -26,18 +26,23 @@ const EditableCell: React.FC<EditableCellProps> = ({
         <td {...restProps}>
             {editing
                 ? (
-                    <Form.Item
-                        name={dataIndex}
-                        style={{ margin: 0 }}
-                        rules={[
-                            {
-                                required: true,
-                                message: `請輸入${title}!`
-                            }
-                        ]}
-                    >
-                        {inputType}
-                    </Form.Item>
+                    <>
+                        <Form.Item
+                            name={dataIndex}
+                            style={{ margin: 0 }}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: `請輸入${title}!`
+                                }
+                            ]}
+                        >
+                            {inputType}
+                        </Form.Item>
+                        <Form.Item initialValue="" name="BanchId" />
+                        <Form.Item initialValue="" name="CompanyCode" />
+                        <Form.Item initialValue="" name="PermessionId"/>
+                    </>
                 )
                 : (
                     children

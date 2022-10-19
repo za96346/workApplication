@@ -32,13 +32,13 @@ const EditForm = ({ onFinish, types, currentId = -10000, btnText = '新增' }: p
                             <Input placeholder='新增班別名稱' prefix={<EditOutlined />} />
                         </Form.Item>
                         <Form.Item rules={rule.timePicker()} initialValue={moment(banchStyle?.OnShiftTime || defaultTimer, 'HH:mm:ss')} label="上班時段" name="OnShiftTime">
-                            <TimePicker style={{ width: '100%' }} placeholder='新增上班時段' />
+                            <TimePicker minuteStep={5} secondStep={60} style={{ width: '100%' }} placeholder='新增上班時段' />
                         </Form.Item>
                         <Form.Item rules={rule.timePicker()} initialValue={moment(banchStyle?.OffShiftTime || defaultTimer, 'HH:mm:ss')} label="下班時段" name="OffShiftTime">
-                            <TimePicker style={{ width: '100%' }} placeholder='新增下班時段' />
+                            <TimePicker minuteStep={5} secondStep={60} style={{ width: '100%' }} placeholder='新增下班時段' />
                         </Form.Item>
                         <Form.Item rules={rule.timePicker()} initialValue={moment(banchStyle?.RestTime || defaultTimer, 'HH:mm:ss')} label="休息時間" name="RestTime">
-                            <TimePicker style={{ width: '100%' }} placeholder="新增休息時間" />
+                            <TimePicker minuteStep={5} secondStep={60} style={{ width: '100%' }} placeholder="新增休息時間" />
                         </Form.Item>
                         <Form.Item>
                             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -69,10 +69,10 @@ const EditForm = ({ onFinish, types, currentId = -10000, btnText = '新增' }: p
                                 </Form.Item>
                             </div>
                             <Form.Item rules={rule.timePicker()} initialValue={moment(banchRule?.OnShiftTime || defaultTimer, 'HH:mm:ss')} label="上班時段" name="OnShiftTime">
-                                <TimePicker style={{ width: '100%' }} placeholder='新增上班時段' />
+                                <TimePicker minuteStep={5} secondStep={60} style={{ width: '100%' }} placeholder='新增上班時段' />
                             </Form.Item>
                             <Form.Item rules={rule.timePicker()} initialValue={moment(banchRule?.OffShiftTime || defaultTimer, 'HH:mm:ss')} label="下班時段" name="OffShiftTime">
-                                <TimePicker style={{ width: '100%' }} placeholder='新增下班時段' />
+                                <TimePicker minuteStep={5} secondStep={60} style={{ width: '100%' }} placeholder='新增下班時段' />
                             </Form.Item>
                             <Form.Item>
                                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
