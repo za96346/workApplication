@@ -56,11 +56,11 @@ const EditForm = ({ onFinish, types, currentId = -10000, btnText = '新增' }: p
                 types === 1 && (
                     <>
                         <Form style={{ marginTop: '20px' }} onFinish={onFinish}>
-                            <Form.Item label="平假日" initialValue={banchRule?.WeekType || ''} name="WeekType">
-                                <WeekTypeSelector/>
+                            <Form.Item label="平假日" initialValue={banchRule?.WeekType || 1} name="WeekType">
+                                <WeekTypeSelector defaultValue={(banchRule?.WeekType || 1) as 1 | 2} />
                             </Form.Item>
-                            <Form.Item label="星期" initialValue={banchRule?.WeekDay || ''} name='WeekDay'>
-                                <WeekDaySelector />
+                            <Form.Item label="星期" initialValue={banchRule?.WeekDay || 1} name='WeekDay'>
+                                <WeekDaySelector defaultValue={(banchRule?.WeekDay || 1)} />
                             </Form.Item>
                             <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                                 <Form.Item label="最少員工數" initialValue={banchRule?.MinPeople || 1} name="MinPeople">

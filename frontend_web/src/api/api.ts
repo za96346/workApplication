@@ -237,7 +237,7 @@ class ApiControl extends api {
         return res
     }
 
-    async updateBanchStyle (banchStyle: BanchStyleType): Promise<any> {
+    async updateBanchStyle (banchStyle: BanchStyleType): Promise<ResType<null>> {
         store.dispatch(statusAction.onUpdateBanchStyle(true))
         const res = await this.POST<null>({
             url: this.route.banchStyle,
@@ -252,6 +252,7 @@ class ApiControl extends api {
         })
         console.log(res)
         store.dispatch(statusAction.onUpdateBanchStyle(false))
+        return res
     }
 
     // 部門規則

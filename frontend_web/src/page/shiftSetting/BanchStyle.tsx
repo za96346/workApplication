@@ -38,13 +38,13 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
     const company: companyReducerType = useSelector((state: RootState) => state.company)
     const loading: statusReducerType = useSelector((state: RootState) => state.status)
     const onDelete = (idx: string): any => {
-        setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(idx), openModal: true }))
+        setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(idx) }))
     }
     const onEdit = (id: string): any => {
-        setStatus((prev) => ({ ...prev, currentListIdx: parseInt(id), openModal: true }))
+        setStatus((prev) => ({ ...prev, currentListIdx: parseInt(id) }))
     }
     const onFinish = async (v: any, types: 0 | 1): Promise<void> => {
-        console.log(v)
+        console.log(v, status.currentListIdx)
         let res: ResType<BanchStyleType>
         if (types === 0) {
             res = await api.createBanchStyle(
@@ -75,9 +75,17 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
     useEffect(() => {
         api.getBanchStyle(banchId)
     }, [banchId])
+
+    useEffect(() => {
+        console.log(status.currentListIdx)
+        if (status.currentDeleteListIdx !== -1 || status.currentListIdx !== -1) {
+            setStatus((prev) => ({ ...prev, openModal: true }))
+        }
+    }, [status.currentDeleteListIdx, status.currentListIdx])
     return (
         <>
             <Modal
+                forceRender
                 onOk={() => setStatus({ ...statusInit })}
                 onCancel={() => setStatus({ ...statusInit })}
                 open={status.openModal}
@@ -143,7 +151,7 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
                                 style={{ color: 'blue' }}
                             >
                                 <EditOutlined style={{ marginRight: '10px' }} />
-                                    編輯
+                                    編輯{item.id}
                             </div>
 
                             <div

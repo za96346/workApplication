@@ -1,14 +1,19 @@
-import { Select } from "antd"
+import { Select, SelectProps } from "antd"
 import React from "react"
 import statics from "../statics"
 
-const WeekDaySelector = (): JSX.Element => {
+interface props extends SelectProps {
+    defaultValue: number
+}
+const WeekDaySelector = ({ ...rest }: props): JSX.Element => {
+    const { defaultValue, ...other } = rest
+    const df = statics?.weekDay[defaultValue] || statics.weekDay[1]
     return (
         <>
-            <Select>
+            <Select {...other} defaultValue={df}>
                 {
                     Object.values(statics.weekDay).map((item, index) => {
-                        const keys = Object.keys(statics.weekDay)[index]
+                        const keys = parseInt(Object.keys(statics.weekDay)[index])
                         return (
                             <Select.Option value={keys} key={keys}>{item}</Select.Option>
                         )

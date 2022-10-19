@@ -40,6 +40,7 @@ const BanchRule = ({ banchId }: props): JSX.Element => {
     const company: companyReducerType = useSelector((state: RootState) => state.company)
     const loading: statusReducerType = useSelector((state: RootState) => state.status)
     const onFinish = async (v: any, types: number): Promise<void> => {
+        console.log(v)
         let res: ResType<BanchRuleType>
         if (types === 0) {
             res = await api.createBanchRule(
@@ -64,17 +65,24 @@ const BanchRule = ({ banchId }: props): JSX.Element => {
         }
     }
     const onDelete = (idx: string): any => {
-        setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(idx), openModal: true }))
+        setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(idx) }))
     }
     const onEdit = (id: string): any => {
-        setStatus((prev) => ({ ...prev, currentListIdx: parseInt(id), openModal: true }))
+        setStatus((prev) => ({ ...prev, currentListIdx: parseInt(id) }))
     }
     useEffect(() => {
         api.getBanchRule(banchId)
     }, [banchId])
+
+    useEffect(() => {
+        if (status.currentDeleteListIdx !== -1 || status.currentListIdx !== -1) {
+            setStatus((prev) => ({ ...prev, openModal: true }))
+        }
+    }, [status.currentDeleteListIdx, status.currentListIdx])
     return (
         <>
             <Modal
+                forceRender
                 onOk={() => setStatus({ ...statusInit })}
                 onCancel={() => setStatus({ ...statusInit })}
                 open={status.openModal}
