@@ -44,7 +44,6 @@ func DataBaseInit() {
 			onWorkDay timestamp,
 			banch bigint,
 			permession int,
-			workState varchar(50),
 			createTime timestamp,
 			lastModify timestamp,
 			monthSalary int,
@@ -266,6 +265,24 @@ func DataBaseInit() {
 			weekType int,
 			onShiftTime time,
 			offShiftTime time,
+			createTime timestamp,
+			lastModify timestamp
+		);
+	`)
+
+/// quit work user table
+
+	_, err = (*Singleton()).MysqlDB.Exec(`
+		create table quitWorkUser(
+			userId bigint not null unique,
+			userName varchar(20),
+			employeeNumber varchar(30),
+			account varchar(50) primary key,
+			onWorkDay timestamp,
+			banch bigint,
+			permession int,
+			monthSalary int,
+			partTimeSalary int,
 			createTime timestamp,
 			lastModify timestamp
 		);
@@ -589,7 +606,6 @@ func addUser(x int) {
 				OnWorkDay: time.Now(),
 				Banch: 1,
 				Permession: permession,
-				WorkState: "on",
 				MonthSalary: 30000 + i,
 				PartTimeSalary: 130 + i,
 				CreateTime: time.Now(),

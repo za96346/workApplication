@@ -15,7 +15,6 @@ type UserTable struct {
 	OnWorkDay time.Time `json:"OnWorkDay"` // 到職日
 	Banch int64 `json:"Banch"` // 部門
 	Permession int `json:"Permession"` // 權限  (100 admin , 1 manager, 2 personal)
-	WorkState string `json:"WorkState"` // 工作狀態 (到職on or 離職off)
 	MonthSalary int `json:"MonthSalary"` // 月薪
 	PartTimeSalary int `json:"PartTimeSalary"` // 時薪
 	CreateTime time.Time `json:"CreateTime"`//創建的時間
@@ -154,6 +153,22 @@ type BanchRule struct {
 	WeekType int `json:"WeekType"` // 寒暑假 或 平常(1, 2, 3)
 	OnShiftTime string  `json:"OnShiftTime"`// 開始上班時間
 	OffShiftTime string `json:"OffShiftTime"` //結束上班的時間
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
+}
+
+// 離職員工表
+type QuitWorkUser struct {
+	UserId int64 `json:"UserId"`// 使用者的編號
+	CompanyCode string `json:"CompanyCode"` //公司碼
+	Account string `json:"Account"`// 帳號
+	UserName string `json:"UserName"` // 名字
+	EmployeeNumber string `json:"EmployeeNumber"` // 員工編號
+	OnWorkDay time.Time `json:"OnWorkDay"` // 到職日
+	Banch int64 `json:"Banch"` // 部門
+	Permession int `json:"Permession"` // 權限  (100 admin , 1 manager, 2 personal)
+	MonthSalary int `json:"MonthSalary"` // 月薪
+	PartTimeSalary int `json:"PartTimeSalary"` // 時薪
 	CreateTime time.Time `json:"CreateTime"`//創建的時間
 	LastModify time.Time `json:"LastModify"`// 上次修改的時間
 }

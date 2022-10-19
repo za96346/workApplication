@@ -37,7 +37,7 @@ const personalForm = (): JSX.Element => {
                     name="CompanyCode"
                     rules={[{ required: true, message: 'Please input your username!' }]}
                 >
-                    <Input defaultValue={user.selfData?.CompanyCode || ''} />
+                    <Input disabled defaultValue={user.selfData?.CompanyCode || ''} />
                 </Form.Item>
                 <Form.Item
                     label="帳號"

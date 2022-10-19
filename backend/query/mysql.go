@@ -126,13 +126,12 @@ func addUserQuery() {
 		onWorkDay,
 		banch,
 		permession,
-		workState,
 		createTime,
 		lastModify,
 		monthSalary,
 		partTimeSalary
 		) values(
-		?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+		?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 	);`;
 	sqlQueryInstance.User.UpdateSingle = `
 		update user
@@ -145,7 +144,6 @@ func addUserQuery() {
 			onWorkDay=?,
 			banch=?,
 			permession=?,
-			workState=?,
 			lastModify=?,
 			monthSalary=?,
 			partTimeSalary=?

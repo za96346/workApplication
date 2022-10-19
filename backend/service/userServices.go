@@ -43,7 +43,7 @@ func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		UserName: (*res)[0].UserName,
 		Banch: (*res)[0].Banch,
 		Permession: (*res)[0].Permession,
-		WorkState: (*res)[0].WorkState,
+		WorkState: "on",// 者個要去離職表找
 	})
 	// 尋找資料
 	(*props).JSON(http.StatusOK, gin.H{
@@ -115,7 +115,7 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 			EmployeeNumber: v.EmployeeNumber,
 			Banch: v.Banch,
 			Permession: v.Permession,
-			WorkState: v.WorkState,
+			WorkState: "on", // 這個要去離職表找
 		})
 	}
 	(*props).JSON(http.StatusOK, gin.H{
@@ -163,7 +163,6 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		OnWorkDay: request.OnWorkDay,
 		Banch: request.Banch,
 		Permession: request.Permession,
-		WorkState: request.WorkState,
 		LastModify: now,
 		MonthSalary: 0,
 		PartTimeSalary: 0,
