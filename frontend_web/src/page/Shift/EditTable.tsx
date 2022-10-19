@@ -49,7 +49,7 @@ const EditTable = ({ banchId, company, currentTabs }: EditTableProps): JSX.Eleme
                     <>
                         <div className={styles.shiftSignBlock}>
                             {
-                                company.banchStyle.map((item) => {
+                                company.banchStyle?.map((item) => {
                                     return (
                                         <div key={item.StyleId}>
                                             <div>{item.TimeRangeName}</div>

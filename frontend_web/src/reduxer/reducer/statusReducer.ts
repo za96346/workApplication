@@ -2,6 +2,9 @@ import { action, statusType } from '../types'
 
 const statusState = {
     onFetchBanch: false,
+    onCreateBanch: false,
+    onUpdateBanch: false,
+
     onFetchUserAll: false,
     onFetchSelfData: false,
 
@@ -16,6 +19,9 @@ const statusState = {
 
 export interface statusReducerType {
     onFetchBanch: boolean
+    onCreateBanch: boolean
+    onUpdateBanch: boolean
+
     onFetchUserAll: boolean
     onFetchSelfData: boolean
 

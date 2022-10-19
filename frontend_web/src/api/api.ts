@@ -14,7 +14,7 @@ class ApiControl extends api {
         login: 'entry/login',
         getEmailCaptcha: 'entry/email/captcha',
         registe: 'entry/register',
-        getBanchAll: 'company/banch/all',
+        BanchAll: 'company/banch/all',
         getUserAll: 'user/all',
         getSelfData: 'user/my',
         banchStyle: 'company/banch/style',
@@ -165,10 +165,11 @@ class ApiControl extends api {
         return res
     }
 
+    // 部門
     async getBanch (): Promise<ResType<BanchType[]>> {
         store.dispatch(statusAction.onFetchBanch(true))
         const res = await this.GET<BanchType[]>({
-            url: this.route.getBanchAll,
+            url: this.route.BanchAll,
             successShow: false
         })
         if (res.status) {
@@ -178,6 +179,32 @@ class ApiControl extends api {
         return res
     }
 
+    async UpdateBanch (BanchName: BanchType['BanchName'], Id: BanchType['Id']): Promise<ResType<null>> {
+        store.dispatch(statusAction.onUpdateBanch(true))
+        const res = await this.POST<null>({
+            url: this.route.BanchAll,
+            body: {
+                BanchName,
+                Id
+            }
+        })
+        store.dispatch(statusAction.onUpdateBanch(false))
+        return res
+    }
+
+    async createBanch (BanchName: BanchType['BanchName']): Promise<ResType<null>> {
+        store.dispatch(statusAction.onCreateBanch(true))
+        const res = await this.PUT<null>({
+            url: this.route.BanchAll,
+            body: {
+                BanchName
+            }
+        })
+        store.dispatch(statusAction.onCreateBanch(false))
+        return res
+    }
+
+    // 所有員工
     async getUserAll (): Promise<ResType<UserType[]>> {
         store.dispatch(statusAction.onFetchUserAll(true))
         const res = await this.GET<UserType[]>({

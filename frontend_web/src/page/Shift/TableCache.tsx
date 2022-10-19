@@ -38,7 +38,7 @@ const useTableCache = (company: companyReducerType): any => {
 
                                                             <Select suffixIcon={null}>
                                                                 {
-                                                                    company.banchStyle.map((item) => {
+                                                                    company.banchStyle?.map((item) => {
                                                                         return (
                                                                             <Select.Option value={item.Icon} key={item.StyleId}>{item.Icon}</Select.Option>
                                                                         )

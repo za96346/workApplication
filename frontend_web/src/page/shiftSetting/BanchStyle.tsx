@@ -17,7 +17,7 @@ const statusInit = {
     openModal: false
 }
 
-const data = (arr: BanchStyleType[]): ShiftSettingListType[] => arr.map((item) => {
+const data = (arr: BanchStyleType[]): ShiftSettingListType[] => arr?.map((item) => {
     return {
         id: `${item.StyleId}`,
         title: item.TimeRangeName,

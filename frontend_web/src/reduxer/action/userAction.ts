@@ -13,7 +13,7 @@ class userAction {
             type: userType.SET_TOKEN,
             payload: {
                 ...store.getState().user,
-                token
+                token: token || ''
             }
         }
     }
@@ -23,7 +23,7 @@ class userAction {
             type: userType.SET_SELF_DATA,
             payload: {
                 ...store.getState().user,
-                selfData
+                selfData: selfData || {}
             }
         }
     }

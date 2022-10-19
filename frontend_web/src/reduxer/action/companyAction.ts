@@ -13,7 +13,7 @@ class companyAction {
             type: companyType.SET_BANCH,
             payload: {
                 ...store.getState().company,
-                banch
+                banch: banch || []
             }
         }
     }
@@ -23,7 +23,7 @@ class companyAction {
             type: companyType.SET_EMPLOYEE,
             payload: {
                 ...store.getState().company,
-                employee
+                employee: employee || []
             }
         }
     }
@@ -33,7 +33,7 @@ class companyAction {
             type: companyType.SET_BANCH_STYLE,
             payload: {
                 ...store.getState().company,
-                banchStyle
+                banchStyle: banchStyle || []
             }
         }
     }
@@ -43,7 +43,7 @@ class companyAction {
             type: companyType.SET_BANCH_RULE,
             payload: {
                 ...store.getState().company,
-                banchRule
+                banchRule: banchRule || []
             }
         }
     }

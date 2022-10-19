@@ -2,6 +2,7 @@ import { PlusOutlined } from '@ant-design/icons'
 import { Card, Input, List, Form, Button } from 'antd'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
+import api from '../../api/api'
 import { companyReducerType } from '../../reduxer/reducer/companyReducer'
 import { RootState } from '../../reduxer/store'
 import { BanchType } from '../../type'
@@ -25,6 +26,14 @@ const BanchManager: React.FC = () => {
     const [status, setStatus] = useState({
         plusOnclick: false
     })
+    const onFinish = async (v: any, types: 1 | 2): Promise<void> => {
+        console.log(v)
+        const { BanchName } = v
+        const res = await api.createBanch(BanchName)
+        if (res.status) {
+            await api.getBanch()
+        }
+    }
     return (
         <div className={styles.banchManagerBlock}>
             <List
@@ -46,8 +55,8 @@ const BanchManager: React.FC = () => {
             />
             {
                 status.plusOnclick
-                    ? <Form>
-                        <Form.Item label="新增部門" initialValue="">
+                    ? <Form onFinish={async (v) => await onFinish(v, 1)}>
+                        <Form.Item name="BanchName" label="新增部門" initialValue="">
                             <Input placeholder='請輸入部門名稱' />
                         </Form.Item>
                         <Form.Item>

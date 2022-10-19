@@ -19,7 +19,7 @@ const defaultTimer = '00:00:00'
 
 const EditForm = ({ onFinish, types, currentId = -10000, btnText = '新增' }: props): JSX.Element => {
     const company: companyReducerType = useSelector((state: RootState) => state.company)
-    const banchStyle = company.banchStyle.find((item) => item.StyleId === currentId)
+    const banchStyle = company.banchStyle?.find((item) => item.StyleId === currentId)
     const banchRule = company.banchRule.find((item) => item.RuleId === currentId)
     return (
         <>

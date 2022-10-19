@@ -17,6 +17,26 @@ class statusAcion {
         }
     }
 
+    onUpdateBanch (s: boolean): action {
+        return {
+            type: s ? statusType.UPDATE_BANCH_ON : statusType.UPDATE_BANCH_OFF,
+            payload: {
+                ...store.getState().status,
+                onUpdateBanch: s
+            }
+        }
+    }
+
+    onCreateBanch (s: boolean): action {
+        return {
+            type: s ? statusType.CREATE_BANCH_ON : statusType.CREATE_BANCH_OFF,
+            payload: {
+                ...store.getState().status,
+                onCreateBanch: s
+            }
+        }
+    }
+
     onFetchUserAll (s: boolean): action {
         return {
             type: s ? statusType.FETCH_USER_ALL_ON : statusType.FETCH_USER_ALL_OFF,
