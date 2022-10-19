@@ -50,13 +50,14 @@ func TestSelectUser(t *testing.T) {
 	assert.NotEqual(t, res, true)
 
 	// test 3
-	r = (*redis.Singleton()).SelectUser(3, "fei32fej")
-	m = (*mysql.Singleton()).SelectUser(3, "fei32fej")
+	r = (*redis.Singleton()).SelectUser(3, "company1")
+	m = (*mysql.Singleton()).SelectUser(3, "company1")
 	res = testEq(r, m, compareFunc)
 	assert.Equal(t, res, true)
 
-	r = (*redis.Singleton()).SelectUser(3, "fei32fej")
-	m = (*mysql.Singleton()).SelectUser(3, "fmm")
+	r = (*redis.Singleton()).SelectUser(3, "company0")
+	m = (*mysql.Singleton()).SelectUser(3, "company100")
+	// fmt.Println(r, m)
 	res = testEq(r, m, compareFunc)
 	assert.NotEqual(t, res, true)
 }
@@ -68,7 +69,6 @@ func TestSelectUserPreference(t *testing.T) {
 		}
 		return false
 	}
-	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectUserPreference(0)
@@ -96,7 +96,6 @@ func TestSelectCompany (t *testing.T) {
 		}
 		return false
 	}
-	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectCompany(0)
@@ -116,13 +115,13 @@ func TestSelectCompany (t *testing.T) {
 	assert.NotEqual(t, res, true)
 
 	// test 2
-	r = (*redis.Singleton()).SelectCompany(2, "fei32fej")
-	m = (*mysql.Singleton()).SelectCompany(2, "fei32fej")
+	r = (*redis.Singleton()).SelectCompany(2, "company0")
+	m = (*mysql.Singleton()).SelectCompany(2, "company0")
 	res = testEq(r, m, compareFunc)
 	assert.Equal(t, res, true)
 
-	r = (*redis.Singleton()).SelectCompany(2, "fei32fej")
-	m = (*mysql.Singleton()).SelectCompany(2, "fee")
+	r = (*redis.Singleton()).SelectCompany(2, "company0")
+	m = (*mysql.Singleton()).SelectCompany(2, "company100")
 	res = testEq(r, m, compareFunc)
 	assert.NotEqual(t, res, true)
 
@@ -135,7 +134,6 @@ func TestSelectCompanyBanch(t *testing.T) {
 		}
 		return false
 	}
-	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectCompanyBanch(0)
@@ -173,7 +171,6 @@ func TestSelectShift(t *testing.T) {
 		}
 		return false
 	}
-	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectShift(0)
@@ -200,7 +197,6 @@ func TestSelectShiftChange(t *testing.T) {
 		}
 		return false
 	}
-	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectShiftChange(0)
@@ -228,7 +224,6 @@ func TestSelectShiftOverTime(t *testing.T) {
 		}
 		return false
 	}
-	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectShiftOverTime(0)
@@ -256,7 +251,6 @@ func TestSelectForgetPunch(t *testing.T) {
 		}
 		return false
 	}
-	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectForgetPunch(0)
@@ -284,7 +278,6 @@ func TestSelectLateExcused(t *testing.T) {
 		}
 		return false
 	}
-	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectLateExcused(0)
@@ -312,7 +305,6 @@ func TestSelectDayOff(t *testing.T) {
 		}
 		return false
 	}
-	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectDayOff(0)
@@ -340,7 +332,6 @@ func TestSelectBanchStyle(t *testing.T) {
 		}
 		return false
 	}
-	// handler.Init()
 
 	// test 0
 	r := (*redis.Singleton()).SelectBanchStyle(0)
@@ -379,7 +370,6 @@ func TestSelectBanchRule(t *testing.T) {
 		}
 		return false
 	}
-	// handler.Init("../.env")
 
 	// test 0
 	r := (*redis.Singleton()).SelectBanchRule(0)
