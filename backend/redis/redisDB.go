@@ -36,6 +36,7 @@ type DB struct {
 	forgetPunchMux *sync.RWMutex
 	banchStyleMux *sync.RWMutex
 	banchRuleMux *sync.RWMutex
+	quitWorkUserMux *sync.RWMutex
 }
 var redisInstance *DB
 
@@ -61,6 +62,7 @@ func Singleton() *DB {
 				forgetPunchMux: new(sync.RWMutex),
 				banchStyleMux: new(sync.RWMutex),
 				banchRuleMux: new(sync.RWMutex),
+				quitWorkUserMux: new(sync.RWMutex),
 			}
 			(*redisInstance).table[0] = "user"
 			(*redisInstance).table[1] = "userPreference"
@@ -74,6 +76,7 @@ func Singleton() *DB {
 			(*redisInstance).table[9] = "lateExcused"
 			(*redisInstance).table[10] = "banchStyle"
 			(*redisInstance).table[11] = "banchRule"
+			(*redisInstance).table[12] = "quitWorkUser"
 		}
 	}
 	return redisInstance
@@ -517,6 +520,61 @@ func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.Ba
 	}
 }
 
+// 0 => all, value => nil
+//  1 => quitId, value => int64
+//   2 => userId, value => int64
+//   3 => companyId, value => string 
+func(dbObj *DB) SelectQuitWorkUser(selectKey int, value... interface{}) *[]table.QuitWorkUser {
+	defer panichandler.Recover()
+	tableKey := (*dbObj).table[12]
+	switch selectKey {
+	case 0:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.QuitWorkUser) bool {return true},
+		)
+	case 1:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).hmGet(tableKey, value...)
+			},
+			func(v table.QuitWorkUser) bool {return true},
+		)
+	case 2:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.QuitWorkUser) bool {
+				for _, filterItem := range value {
+					if filterItem == v.UserId {
+						return true
+					}
+				}
+				return false
+			},
+		)
+	case 3:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.QuitWorkUser) bool {
+				for _, filterItem := range value {
+					if filterItem == v.CompanyCode {
+						return true
+					}
+				}
+				return false
+			},
+		)
+	default:
+		return &[]table.QuitWorkUser{}
+	}
+}
+
 //  ------------------------------delete------------------------------
 
 //使用者的唯一id
@@ -624,6 +682,15 @@ func(dbObj *DB) DeleteBanchRule(deleteKey int, caseId int64) bool {
 	(*dbObj).banchRuleMux.Lock()
 	defer (*dbObj).banchRuleMux.Unlock()
 	(*dbObj).RedisDb.HDel((*dbObj).table[11], strconv.FormatInt(caseId, 10))
+	return true
+}
+
+// quit work suer 的唯一id
+func(dbObj *DB) DeleteQuitWorkUser(deleteKey int, quitId int64) bool {
+	defer panichandler.Recover()
+	(*dbObj).quitWorkUserMux.Lock()
+	defer (*dbObj).quitWorkUserMux.Unlock()
+	(*dbObj).RedisDb.HDel((*dbObj).table[12], strconv.FormatInt(quitId, 10))
 	return true
 }
 
@@ -775,6 +842,18 @@ func(dbObj *DB) InsertBanchRule(data *table.BanchRule) bool {
 	return true
 }
 
+func(dbObj *DB) InsertQuitWorkUser(data *table.QuitWorkUser) bool {
+	defer panichandler.Recover()
+	(*dbObj).quitWorkUserMux.Lock()
+	defer (*dbObj).quitWorkUserMux.Unlock()
+	key := strconv.FormatInt((*data).QuitId, 10)
+	jsonData, _ := json.Marshal(*data)
+	_, err := (*dbObj).RedisDb.HSet((*dbObj).table[12], key, jsonData).Result()
+	
+	(*dbObj).checkErr(err)
+	return true
+}
+
 
 
 //  ------------------------------delete key------------------------------
@@ -826,6 +905,10 @@ func(dbObj *DB) DeleteKeyBanchStyle(){
 func(dbObj *DB) DeleteKeyBanchRule(){
 	defer panichandler.Recover()
 	(*dbObj).RedisDb.Del((*dbObj).table[11])
+}
+func(dbObj *DB) DeleteKeyQuitWorkUser(){
+	defer panichandler.Recover()
+	(*dbObj).RedisDb.Del((*dbObj).table[12])
 }
 
 
