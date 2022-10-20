@@ -401,6 +401,55 @@ func TestSelectBanchRule(t *testing.T) {
 	
 }
 
+func TestSelectQuitWorkUser(t *testing.T) {
+	compareFunc := func(v table.QuitWorkUser, vNext table.QuitWorkUser) bool {
+		if v.QuitId > vNext.QuitId {
+			return true
+		}
+		return false
+	}
+	// handler.Init("../.env")
+
+	// test 0
+	r := (*redis.Singleton()).SelectQuitWorkUser(0)
+	m := (*mysql.Singleton()).SelectQuitWorkUser(0)
+	res := testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+
+	// test 1
+	r = (*redis.Singleton()).SelectQuitWorkUser(1, int64(1))
+	m = (*mysql.Singleton()).SelectQuitWorkUser(1, int64(1))
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+
+	r = (*redis.Singleton()).SelectQuitWorkUser(1, int64(1))
+	m = (*mysql.Singleton()).SelectQuitWorkUser(1, int64(2))
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
+
+	// test 2
+	r = (*redis.Singleton()).SelectQuitWorkUser(2, int64(1))
+	m = (*mysql.Singleton()).SelectQuitWorkUser(2, int64(1))
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+
+	r = (*redis.Singleton()).SelectQuitWorkUser(2, int64(1))
+	m = (*mysql.Singleton()).SelectQuitWorkUser(2, int64(2))
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
+
+	// test 3
+	r = (*redis.Singleton()).SelectQuitWorkUser(3, "company0")
+	m = (*mysql.Singleton()).SelectQuitWorkUser(3, "company0")
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+
+	r = (*redis.Singleton()).SelectQuitWorkUser(3, "company1")
+	m = (*mysql.Singleton()).SelectQuitWorkUser(3, "company0")
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
+}
+
 func testEq[T comparable](a1 *[]T, b1 *[]T, compareFunc func(T, T) bool) bool {
 	a := methods.BubbleSorted(a1, compareFunc)
 	b := methods.BubbleSorted(b1, compareFunc)
