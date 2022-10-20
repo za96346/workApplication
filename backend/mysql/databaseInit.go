@@ -271,6 +271,12 @@ func DataBaseInit() {
 		);
 	`)
 
+	if err == nil {
+		fmt.Println("banchRule table is created success")
+	} else {
+		fmt.Println("banchRule table is created failed")
+	}
+
 /// quit work user table
 
 	_, err = (*Singleton()).MysqlDB.Exec(`
@@ -280,7 +286,7 @@ func DataBaseInit() {
 			companyCode varchar(20),
 			userName varchar(20),
 			employeeNumber varchar(30),
-			account varchar(50) primary key,
+			account varchar(50),
 			onWorkDay timestamp,
 			banch bigint,
 			permession int,
@@ -290,6 +296,11 @@ func DataBaseInit() {
 			lastModify timestamp
 		);
 	`)
+	if err == nil {
+		fmt.Println("quitWorkUser table is created success")
+	} else {
+		fmt.Println("quitWorkUser table is created failed")
+	}
 
 /// userPreference alter
 	_, err = (*Singleton()).MysqlDB.Exec("alter table userPreference add foreign key(userId) references user(userId) on update cascade on delete cascade;")
@@ -533,19 +544,20 @@ func DataBaseInit() {
 		log.Fatal(err)
 	}
 // quit work user
-	_, err = (*Singleton()).MysqlDB.Exec("alter table quitWorkUser add primary key (userId, companyCode);")
-	if err == nil {
-		fmt.Println("quit work user add primary key success")
-	} else {
-		fmt.Println("quit work user add primary key fail")
-	}
-
 	_, err =(*Singleton()).MysqlDB.Exec("alter table quitWorkUser auto_increment=1;")
 	if err == nil {
 		fmt.Println("quit work user auto increment success")
 	} else {
 		fmt.Println("quit work user auto increment fail")
 	}
+
+	_, err = (*Singleton()).MysqlDB.Exec("alter table quitWorkUser add primary key (userId, companyCode);")
+	if err == nil {
+		fmt.Println("quit work user add primary key success")
+	} else {
+		fmt.Println("quit work user add primary key fail", err)
+	}
+	
 }
 func simulateData() {
 	for x := 0; x < 2; x++ {
@@ -614,6 +626,22 @@ func addCompany(x int) {
 }
 
 func addUser(x int) {
+	if (x == 0) {
+		userQuit := table.QuitWorkUser{
+			CompanyCode: "company0",
+			Account: "account2",
+			UserName: "siou2",
+			EmployeeNumber: "a00002",
+			OnWorkDay: time.Now(),
+			Banch: 1,
+			Permession: 2,
+			MonthSalary: 30000,
+			PartTimeSalary: 130,
+			CreateTime: time.Now(),
+			LastModify: time.Now(),
+		}
+		(*Singleton()).InsertQuitWorkUser(&userQuit)
+	}
 	for i := 0; i < 10; i++ {
 			permession := 2
 			if i == 1 {

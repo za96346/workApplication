@@ -433,7 +433,7 @@ func TestSelectQuitWorkUser(t *testing.T) {
 	res = testEq(r, m, compareFunc)
 	assert.Equal(t, res, true)
 
-	r = (*redis.Singleton()).SelectQuitWorkUser(2, int64(1))
+	r = (*redis.Singleton()).SelectQuitWorkUser(2, int64(0))
 	m = (*mysql.Singleton()).SelectQuitWorkUser(2, int64(2))
 	res = testEq(r, m, compareFunc)
 	assert.NotEqual(t, res, true)

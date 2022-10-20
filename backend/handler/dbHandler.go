@@ -636,26 +636,26 @@ func(dbObj *DB) DeleteCompany(deleteKey int, companyId int64) bool {
 	}
 	return res
 }
-func(dbObj *DB) DeleteCompanyBanch(deleteKey int, id int64) bool {
-	defer panichandler.Recover()
-	res := (*dbObj).Mysql.DeleteCompanyBanch(deleteKey, id)
-	if res {
-		go func ()  {
-			(*dbObj).Redis.DeleteCompanyBanch(deleteKey, id)
-		}()	
-	}
-	return res
-}
-func(dbObj *DB) DeleteShift(deleteKey int, shiftId int64) bool {
-	defer panichandler.Recover()
-	res := (*dbObj).Mysql.DeleteShift(deleteKey, shiftId)
-	if res {
-		go func ()  {
-			(*dbObj).TakeAllFromMysql()
-		}()	
-	}
-	return res
-}
+// func(dbObj *DB) DeleteCompanyBanch(deleteKey int, id int64) bool {
+// 	defer panichandler.Recover()
+// 	res := (*dbObj).Mysql.DeleteCompanyBanch(deleteKey, id)
+// 	if res {
+// 		go func ()  {
+// 			(*dbObj).Redis.DeleteCompanyBanch(deleteKey, id)
+// 		}()	
+// 	}
+// 	return res
+// }
+// func(dbObj *DB) DeleteShift(deleteKey int, shiftId int64) bool {
+// 	defer panichandler.Recover()
+// 	res := (*dbObj).Mysql.DeleteShift(deleteKey, shiftId)
+// 	if res {
+// 		go func ()  {
+// 			(*dbObj).TakeAllFromMysql()
+// 		}()	
+// 	}
+// 	return res
+// }
 func(dbObj *DB) DeleteShiftChange(deleteKey int, caseId int64) bool {
 	defer panichandler.Recover()
 	res := (*dbObj).Mysql.DeleteShiftChange(deleteKey, caseId)
@@ -705,6 +705,42 @@ func(dbObj *DB) DeleteLateExcused(deleteKey int, caseId int64) bool {
 	if res {
 		go func ()  {
 			(*dbObj).Redis.DeleteLateExcused(deleteKey, caseId)
+		}()	
+	}
+	
+	return res
+}
+
+func(dbObj *DB) DeleteBanchStyle(deleteKey int, styleId int64) bool {
+	defer panichandler.Recover()
+	res := (*dbObj).Mysql.DeleteBanchStyle(deleteKey, styleId)
+	if res {
+		go func ()  {
+			(*dbObj).Redis.DeleteBanchStyle(deleteKey, styleId)
+		}()	
+	}
+	
+	return res
+}
+
+func(dbObj *DB) DeleteBanchRule(deleteKey int, ruleId int64) bool {
+	defer panichandler.Recover()
+	res := (*dbObj).Mysql.DeleteBanchRule(deleteKey, ruleId)
+	if res {
+		go func ()  {
+			(*dbObj).Redis.DeleteBanchRule(deleteKey, ruleId)
+		}()	
+	}
+	
+	return res
+}
+
+func(dbObj *DB) DeleteQuitWorkUser(deleteKey int, quitId int64) bool {
+	defer panichandler.Recover()
+	res := (*dbObj).Mysql.DeleteQuitWorkUser(deleteKey, quitId)
+	if res {
+		go func ()  {
+			(*dbObj).Redis.DeleteQuitWorkUser(deleteKey, quitId)
 		}()	
 	}
 	

@@ -48,6 +48,9 @@ type statusText struct {
 	CompanyNotEqual string
 	PasswordNotSafe string
 	CanNotUpdateBoss string
+	DeleteFail string
+	DeleteSuccess string
+	OnlyCanDeleteYourBanch string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -91,6 +94,9 @@ func StatusText() *statusText {
 				CompanyNotEqual: "公司不同",
 				PasswordNotSafe: "密碼小於8碼",
 				CanNotUpdateBoss: "無法更新公司負責人的資料",
+				DeleteFail: "刪除失敗",
+				DeleteSuccess: "刪除成功",
+				OnlyCanDeleteYourBanch: "只可刪除你的部門資料",
 			}
 		}
 	}

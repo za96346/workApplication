@@ -31,8 +31,6 @@ type UserPreferenceTable struct {
 	LastModify time.Time `json:"LastModify"`// 上次修改的時間
 }
 
-
-
 //班表
 type ShiftTable struct {
 	ShiftId int64 `json:"ShiftId"` // 班表的編號

@@ -279,6 +279,72 @@ func InsertBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	})
 }
 
+func DeleteBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+
+	request := table.BanchStyle{}
+	if (*props).ShouldBindJSON(&request) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+
+	// 拿取該部門資料
+	banchStyle := (*dbHandle).SelectBanchStyle(1, request.StyleId)
+	if methods.IsNotExited(banchStyle) {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().DeleteFail + "," + StatusText().NotHaveBanch,
+		})
+		return
+	}
+
+	user, company, err := CheckUserAndCompany(props)
+	if err {return}
+
+	// 檢查 部門是否在此公司
+	if !BanchIsInCompany((*banchStyle)[0].BanchId, company.CompanyId) {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().NotHaveBanch,
+		})
+		return
+	}
+
+
+	//最高權限刪除
+	if user.Permession == 100 {
+		if v := (*dbHandle).DeleteBanchStyle(0, request.StyleId); !v {
+			(*props).JSON(http.StatusNotAcceptable, gin.H{
+				"message": StatusText().DeleteFail,
+			})
+			return
+		} 
+	}
+
+	// 主管權限刪除
+	if user.Permession == 1 {
+		if user.Banch != (*banchStyle)[0].BanchId {
+			(*props).JSON(http.StatusNotAcceptable, gin.H{
+				"message": StatusText().OnlyCanDeleteYourBanch,
+			})
+			return
+		}
+		if v := (*dbHandle).DeleteBanchStyle(0, request.StyleId); !v {
+			(*props).JSON(http.StatusNotAcceptable, gin.H{
+				"message": StatusText().DeleteFail,
+			})
+			return
+		}
+	}
+
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().DeleteSuccess,
+	})
+	return
+
+}
+
 
 // banch rule
 func FetchBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
@@ -440,6 +506,11 @@ func InsertBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().InsertSuccess,
 	})
+}
+
+func DeleteBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
 }
 
 func FetchCompany (props *gin.Context, waitJob *sync.WaitGroup) {
