@@ -56,26 +56,11 @@ func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
 func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
-	userId, existed := (*props).Get("UserId")
-
-	// user id 尋找
-	if !existed {
-		(*props).JSON(http.StatusInternalServerError, gin.H{
-			"message": StatusText().UserIdNotFound,
-		})
-		return
-	}
-
-	converUserId, err := methods.AnyToInt64(userId)
-	if err != nil {
-		(*props).JSON(http.StatusNotFound, gin.H{
-			"message": "轉換格式失敗",
-		})
-		return
-	}
+	userId, status := checkMineUserId(props)
+	if !status {return}
 
 	// 尋找資料
-	res := (*dbHandle).SelectUser(1, converUserId)
+	res := (*dbHandle).SelectUser(1, userId)
 	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,
@@ -97,6 +82,39 @@ func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 func UpdateMine (props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
+
+	mineId, status := checkMineUserId(props)
+	if !status {return}
+
+	user := table.UserTable{}
+	if (*props).ShouldBindJSON(&user) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+
+	mineUserData := (*dbHandle).SelectUser(1, mineId)
+	if methods.IsNotExited(mineUserData) {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().userDataNotFound,
+		})
+		return
+	}
+	
+	(*mineUserData)[0].UserName = user.UserName
+	(*mineUserData)[0].OnWorkDay = user.OnWorkDay
+
+	if !(*dbHandle).UpdateUser(0, &(*mineUserData)[0]) {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().UpdateFail,
+		})
+		return
+	}
+
+	(*props).JSON(http.StatusNotFound, gin.H{
+		"message": StatusText().UpdateSuccess,
+	})
 }
 
 func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {

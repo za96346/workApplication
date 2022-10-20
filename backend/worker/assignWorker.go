@@ -101,6 +101,10 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		// delete method of delete banch rule
 		routeFunc = service.DeleteBanchRule
 		break
+	case 22:
+		// post method of update myself user data
+		routeFunc = service.UpdateMine
+		break
 	default:
 		break;
 	}

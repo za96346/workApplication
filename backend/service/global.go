@@ -149,3 +149,24 @@ func CheckUserAndCompany(props *gin.Context) (table.UserTable, table.CompanyTabl
 	}
 	return user, company, false
 }
+
+func checkMineUserId (props *gin.Context) (int64, bool) {
+	userId, existed := (*props).Get("UserId")
+
+	// user id 尋找
+	if !existed {
+		(*props).JSON(http.StatusInternalServerError, gin.H{
+			"message": StatusText().UserIdNotFound,
+		})
+		return -1, false
+	}
+
+	converUserId, err := methods.AnyToInt64(userId)
+	if err != nil {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": "轉換格式失敗",
+		})
+		return -1, false
+	}
+	return converUserId, true
+}
