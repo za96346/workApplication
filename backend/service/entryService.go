@@ -157,6 +157,9 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 		return
 	}
 
+	// 註冊成功 把captcha 刪掉
+	(*dbHandle).Redis.DeleteCaptcha((*registeForm).Account)
+
 	// 註冊成功
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().RegisterSuccess,
