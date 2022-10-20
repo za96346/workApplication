@@ -36,6 +36,7 @@ type DB struct {
 	banchStyleMux *sync.RWMutex
 	banchRuleMux *sync.RWMutex
 	forgetPunchMux *sync.RWMutex
+	quitWorkUserMux *sync.RWMutex
 	MysqlDB *sql.DB // 要先使用連線方法後才能使用這個
 	containers
 }
@@ -53,6 +54,7 @@ type containers struct {
 	lateExcused []interface{}
 	banchStyle []interface{}
 	banchRule []interface{}
+	quitWorkUser []interface{}
 }
 
 func Singleton() *DB {
@@ -74,6 +76,7 @@ func Singleton() *DB {
 				forgetPunchMux: new(sync.RWMutex),
 				banchStyleMux: new(sync.RWMutex),
 				banchRuleMux: new(sync.RWMutex),
+				quitWorkUserMux: new(sync.RWMutex),
 			}
 		}
 	}
@@ -645,6 +648,59 @@ func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.Ba
 	return &carry
 }
 
+// 0 => all, value => nil
+//  1 => quitId, value => int64
+//   2 => userId, value => int64
+//   3 => companyId, value => string 
+func(dbObj *DB) SelectQuitWorkUser(selectKey int, value... interface{}) *[]table.QuitWorkUser {
+	defer panichandler.Recover()
+	querys := ""
+	switch selectKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).QuitWorkUser.SelectAll
+		break
+	case 1:
+		querys = (*query.MysqlSingleton()).QuitWorkUser.SelectSingleByQuitId
+		break
+	case 2:
+		 querys = (*query.MysqlSingleton()).QuitWorkUser.SelectSingleByUserId
+		 break
+	case 3:
+		querys = (*query.MysqlSingleton()).QuitWorkUser.SelectAllByCompanyCode
+		break
+	default:
+		querys = (*query.MysqlSingleton()).QuitWorkUser.SelectAll
+		break
+	}
+	quitWorkUser := new(table.QuitWorkUser)
+	carry := []table.QuitWorkUser{}
+	res, err := (*dbObj).MysqlDB.Query(querys, value...)
+	defer res.Close()
+	(*dbObj).checkErr(err)
+	for res.Next() {
+		err = res.Scan(
+			&quitWorkUser.QuitId,
+			&quitWorkUser.UserId,
+			&quitWorkUser.CompanyCode,
+			&quitWorkUser.UserName,
+			&quitWorkUser.EmployeeNumber,
+			&quitWorkUser.Account,
+			&quitWorkUser.OnWorkDay,
+			&quitWorkUser.Banch,
+			&quitWorkUser.Permession,
+			&quitWorkUser.MonthSalary,
+			&quitWorkUser.PartTimeSalary,
+			&quitWorkUser.CreateTime,
+			&quitWorkUser.LastModify,
+		)
+		(*dbObj).checkErr(err)
+		if err == nil {
+			carry = append(carry, *quitWorkUser)
+		}
+	}
+	return &carry
+}
+
 // ---------------------------------delete------------------------------------
 
 //使用者的唯一id (關聯資料表userpreference 也上鎖)
@@ -859,6 +915,22 @@ func(dbObj *DB) DeleteBanchRule(deleteKey int, ruleId interface{}) bool {
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
 	_, err = stmt.Exec(ruleId)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// quit work suer 的唯一id
+func(dbObj *DB) DeleteQuitWorkUser(deleteKey int, quitId interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).quitWorkUserMux.Lock()
+	defer (*dbObj).quitWorkUserMux.Unlock()
+	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).QuitWorkUser.Delete)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(quitId)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
@@ -1299,7 +1371,47 @@ func(dbObj *DB) UpdateBanchRule(updateKey int, data *table.BanchRule, value ...i
 	}
 	return true
 }
-
+// 0 => all
+func(dbObj *DB) UpdateQuitWorkUser(updateKey int, data *table.QuitWorkUser, value ...interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).quitWorkUserMux.Lock()
+	defer (*dbObj).quitWorkUserMux.Unlock()
+	defer func ()  {
+		(*dbObj).containers.quitWorkUser = nil
+	}()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).QuitWorkUser.UpdateSingle
+		(*dbObj).containers.quitWorkUser= append(
+			(*dbObj).containers.quitWorkUser,
+			(*data).UserId,
+			(*data).CompanyCode,
+			(*data).UserName,
+			(*data).EmployeeNumber,
+			(*data).Account,
+			(*data).OnWorkDay,
+			(*data).Banch,
+			(*data).Permession,
+			(*data).MonthSalary,
+			(*data).PartTimeSalary,
+			(*data).CreateTime,
+			(*data).LastModify,
+			(*data).QuitId,
+		)
+		break;
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec((*dbObj).containers.quitWorkUser...)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
 
 //  ---------------------------------insert------------------------------------
 func(dbObj *DB) InsertUser(data *table.UserTable) (bool, int64) {
@@ -1596,6 +1708,35 @@ func(dbObj *DB) InsertBanchRule(data *table.BanchRule) (bool, int64) {
 		(*data).WeekType,
 		(*data).OnShiftTime,
 		(*data).OffShiftTime,
+		(*data).CreateTime,
+		(*data).LastModify,
+	)
+	(*dbObj).checkErr(err)
+	id, _:= res.LastInsertId()
+	if err != nil {
+		return false, id
+	}
+	return true, id
+}
+func(dbObj *DB) InsertQuitWorkUser(data *table.QuitWorkUser) (bool, int64) {
+
+	defer panichandler.Recover()
+	(*dbObj).quitWorkUserMux.Lock()
+	defer (*dbObj).quitWorkUserMux.Unlock()
+	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).QuitWorkUser.InsertAll)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	res, err := stmt.Exec(
+		(*data).UserId,
+		(*data).CompanyCode,
+		(*data).UserName,
+		(*data).EmployeeNumber,
+		(*data).Account,
+		(*data).OnWorkDay,
+		(*data).Banch,
+		(*data).Permession,
+		(*data).MonthSalary,
+		(*data).PartTimeSalary,
 		(*data).CreateTime,
 		(*data).LastModify,
 	)

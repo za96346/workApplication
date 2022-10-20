@@ -275,7 +275,9 @@ func DataBaseInit() {
 
 	_, err = (*Singleton()).MysqlDB.Exec(`
 		create table quitWorkUser(
-			userId bigint not null unique,
+			quitId bigint not null unique auto_increment,
+			userId bigint,
+			companyCode varchar(20),
 			userName varchar(20),
 			employeeNumber varchar(30),
 			account varchar(50) primary key,
@@ -530,7 +532,20 @@ func DataBaseInit() {
 		fmt.Println("banchRule alter foreign key failed")
 		log.Fatal(err)
 	}
+// quit work user
+	_, err = (*Singleton()).MysqlDB.Exec("alter table quitWorkUser add primary key (userId, companyCode);")
+	if err == nil {
+		fmt.Println("quit work user add primary key success")
+	} else {
+		fmt.Println("quit work user add primary key fail")
+	}
 
+	_, err =(*Singleton()).MysqlDB.Exec("alter table quitWorkUser auto_increment=1;")
+	if err == nil {
+		fmt.Println("quit work user auto increment success")
+	} else {
+		fmt.Println("quit work user auto increment fail")
+	}
 }
 func simulateData() {
 	for x := 0; x < 2; x++ {

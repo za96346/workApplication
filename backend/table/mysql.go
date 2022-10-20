@@ -160,6 +160,7 @@ type BanchRule struct {
 
 // 離職員工表
 type QuitWorkUser struct {
+	QuitId int64 `json:"QuitId"` //離職的唯一id
 	UserId int64 `json:"UserId"`// 使用者的編號
 	CompanyCode string `json:"CompanyCode"` //公司碼
 	Account string `json:"Account"`// 帳號

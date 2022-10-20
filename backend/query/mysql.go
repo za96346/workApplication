@@ -22,6 +22,7 @@ type sqlQuery struct {
 	DayOff dayOffQuery
 	BanchStyle banchStyle
 	BanchRule banchRule
+	QuitWorkUser quitWorkUser
 }
 type queryCommonColumn struct {
 	InsertAll string
@@ -88,6 +89,12 @@ type banchRule struct {
 	SelectSingleByRuleId string
 	SelectAllByBanchId string
 }
+type quitWorkUser struct {
+	queryCommonColumn
+	SelectSingleByUserId string
+	SelectAllByCompanyCode string
+	SelectSingleByQuitId string
+}
 
 func MysqlSingleton() *sqlQuery {
 	queryMux = new(sync.Mutex)
@@ -108,6 +115,7 @@ func MysqlSingleton() *sqlQuery {
 			addDayOffQuery()
 			addBanchStyleQuery()
 			addBanchRuleQuery()
+			addQuitWorkUserQuery()
 			return sqlQueryInstance
 		}
 	}
@@ -462,10 +470,53 @@ func addBanchRuleQuery() {
 			onShiftTime=?,
 			offShiftTime=?,
 			lastModify=?
-		where ruleId=?
+		where ruleId=?;
 	`
 	sqlQueryInstance.BanchRule.SelectSingleByRuleId = `select * from banchRule where ruleId = ?;`;
 	sqlQueryInstance.BanchRule.SelectAll = `select * from banchRule;`;
 	sqlQueryInstance.BanchRule.Delete = `delete from banchRule where ruleId=?;`;
 	sqlQueryInstance.BanchRule.SelectAllByBanchId = `select * from banchRule where banchId = ?;`;
+}
+
+func addQuitWorkUserQuery() {
+	sqlQueryInstance.QuitWorkUser.InsertAll = `
+		insert into quitWorkUser(
+			userId,
+			companyCode,
+			userName,
+			employeeNumber,
+			account,
+			onWorkDay,
+			banch,
+			permession,
+			monthSalary,
+			partTimeSalary,
+			createTime,
+			lastModify
+		) values(
+			?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+		)
+	`;
+	sqlQueryInstance.QuitWorkUser.UpdateSingle = `
+		update quitWorkUser
+		set
+			userId=?,
+			companyCode=?,
+			userName=?,
+			employeeNumber=?,
+			account=?,
+			onWorkDay=?,
+			banch=?,
+			permession=?,
+			monthSalary=?,
+			partTimeSalary=?,
+			createTime=?,
+			lastModify=?
+		where quitId=?;
+	`
+	sqlQueryInstance.QuitWorkUser.SelectAll = `select * from quitWorkUser;`
+	sqlQueryInstance.QuitWorkUser.SelectAllByCompanyCode = `select * from quitWorkUser where companyCode=?;`
+	sqlQueryInstance.QuitWorkUser.SelectSingleByUserId = `select * from quitWorkUser where userId=?;`
+	sqlQueryInstance.QuitWorkUser.SelectSingleByQuitId = `select * from quitWorkUser where quitId=?;`
+	sqlQueryInstance.QuitWorkUser.Delete = `delete from quitWorkUser where quitId=?;`;
 }
