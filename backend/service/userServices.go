@@ -104,9 +104,18 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
+
 	userList := (*dbHandle).SelectUser(3, companyCode.(string))
+	quitWorkUser := (*dbHandle).SelectQuitWorkUser(3, companyCode.(string))
 	data := []response.User{}
 	for _, v := range *userList {
+		workState := "on"
+		for _, j := range *quitWorkUser {
+			if v.UserId == j.UserId && v.CompanyCode == j.CompanyCode {
+				workState = "off"
+				break
+			}
+		}
 		data = append(data, response.User{
 			UserId: v.UserId,
 			CompanyCode: v.CompanyCode,
@@ -115,7 +124,7 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 			EmployeeNumber: v.EmployeeNumber,
 			Banch: v.Banch,
 			Permession: v.Permession,
-			WorkState: "on", // 這個要去離職表找
+			WorkState: workState, // 這個要去離職表找
 		})
 	}
 	(*props).JSON(http.StatusOK, gin.H{
@@ -184,7 +193,7 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	// 要去判斷 工作狀態並把它丟到quit work user table
 
 
-	
+
 
 	user := table.UserTable{
 		CompanyCode: companyCode,
@@ -210,12 +219,6 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	(*props).JSON(http.StatusNotAcceptable, gin.H{
 		"message": StatusText().UpdateSuccess,
 	})
-}
-
-func DeleteUser(props *gin.Context, waitJob *sync.WaitGroup) {
-	defer panicHandle()
-	defer waitJob.Done()
-	// deleteUser := []pojo.User{}
 }
 
 func ForgetPassword (props *gin.Context, waitJob *sync.WaitGroup) {

@@ -523,7 +523,7 @@ func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.Ba
 // 0 => all, value => nil
 //  1 => quitId, value => int64
 //   2 => userId, value => int64
-//   3 => companyId, value => string 
+//   3 => companyCode, value => string 
 func(dbObj *DB) SelectQuitWorkUser(selectKey int, value... interface{}) *[]table.QuitWorkUser {
 	defer panichandler.Recover()
 	tableKey := (*dbObj).table[12]
