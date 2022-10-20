@@ -89,6 +89,10 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		// post method of update company
 		routeFunc = service.UpdateCompany
 		break
+	case 19:
+		// post method of update password
+		routeFunc = service.ForgetPassword
+		break
 	default:
 		break;
 	}

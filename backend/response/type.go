@@ -39,3 +39,11 @@ type Register struct {
 	CompanyCode string `json:"CompanyCode"`
 	UserName string `json:"UserName"`
 }
+
+type ForgetPassword struct {
+	Captcha int `json:"Captcha"`
+	OldPassword string `json:"OldPassword"`
+	NewPassword string `json:"NewPassword"`
+	NewPasswordConfirm string `json:"NewPasswordConfirm"`
+	Email string `json:"Email"`
+}

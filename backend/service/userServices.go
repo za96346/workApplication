@@ -186,3 +186,73 @@ func DeleteUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer waitJob.Done()
 	// deleteUser := []pojo.User{}
 }
+
+func ForgetPassword (props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer waitJob.Done()
+
+	// 確認格式
+	forgetPwd := response.ForgetPassword{}
+	if (*props).ShouldBindJSON(&forgetPwd) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+	// get user
+	res := (*dbHandle).SelectUser(2, forgetPwd.Email)
+	if methods.IsNotExited(res) {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().userDataNotFound,
+		})
+		return
+	}
+
+	// 驗證碼驗證
+	rightCaptcha := (*dbHandle).Redis.SelectEmailCaptcha((*res)[0].Account)
+	if rightCaptcha != forgetPwd.Captcha || rightCaptcha == -1 {
+		(*props).JSON(http.StatusBadRequest, gin.H{
+			"message": StatusText().EmailCaptchaIsNotRight,
+		})
+		return
+	}
+
+	// 驗證就密碼
+	if forgetPwd.OldPassword != (*res)[0].Password {
+		(*props).JSON(http.StatusBadRequest, gin.H{
+			"message": "舊密碼不正確",
+		})
+		return
+	}
+
+	// 密碼驗證
+	if forgetPwd.NewPassword != forgetPwd.NewPasswordConfirm {
+		(*props).JSON(http.StatusUnprocessableEntity, gin.H{
+			"message": StatusText().PasswordIsNotSame,
+		})
+		return
+	}
+
+	// 密碼長度驗證
+	if len(forgetPwd.NewPassword) < 8 {
+		(*props).JSON(http.StatusUnprocessableEntity, gin.H{
+			"message": StatusText().PasswordNotSafe,
+		})
+		return
+	}
+
+	(*res)[0].Password = forgetPwd.NewPassword
+	status := (*dbHandle).UpdateUser(0, &(*res)[0])
+	if !status {
+		(*props).JSON(http.StatusUnprocessableEntity, gin.H{
+			"message": StatusText().UpdateFail,
+		})
+		return
+	}
+
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().UpdateSuccess,
+	})
+	return
+	
+}
