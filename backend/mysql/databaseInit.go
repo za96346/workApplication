@@ -200,6 +200,7 @@ func DataBaseInit() {
 			companyName varchar(200),
 			companyLocation varchar(200),
 			companyPhoneNumber varchar(20),
+			bossId bigint not null,
 			termStart timestamp,
 			termEnd timestamp,
 			createTime timestamp,
@@ -539,12 +540,19 @@ func simulateData() {
 	addShift(0)
 }
 func addCompany(x int) {
+	boss :=0
+	if x == 0 {
+		boss = 2
+	} else {
+		boss = 11
+	}
 		//company
 		company := table.CompanyTable{
 			CompanyCode: "company" + strconv.Itoa(x),
 			CompanyName: "xx股份有限公司",
 			CompanyLocation: "台中市大甲區ｘｘｘ",
 			CompanyPhoneNumber: "0906930873",
+			BossId: int64(boss),
 			TermStart: time.Now(),
 			TermEnd: time.Now(),
 			CreateTime: time.Now(),
@@ -593,7 +601,7 @@ func addCompany(x int) {
 func addUser(x int) {
 	for i := 0; i < 10; i++ {
 			permession := 2
-			if i == 1{
+			if i == 1 {
 				permession = 100
 			}
 			// user

@@ -47,6 +47,7 @@ type statusText struct {
 	CompanyCodeIsNotRight string
 	CompanyNotEqual string
 	PasswordNotSafe string
+	CanNotUpdateBoss string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -89,6 +90,7 @@ func StatusText() *statusText {
 				CompanyCodeIsNotRight: "公司碼不正確",
 				CompanyNotEqual: "公司不同",
 				PasswordNotSafe: "密碼小於8碼",
+				CanNotUpdateBoss: "無法更新公司負責人的資料",
 			}
 		}
 	}

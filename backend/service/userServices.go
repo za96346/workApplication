@@ -146,6 +146,7 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
+
 	// 斷言
 	convertTargetUser, a := methods.Assertion[table.UserTable](targetUser)
 	if !a {
@@ -155,14 +156,44 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
+	permession := request.Permession
+	companyCode := request.CompanyCode
+	banch := request.Banch
+
+	// 當要被更改的人是公司負責人時
+	//就要去判斷是不是自己更改自己
+	//如果不是 則 回傳不能修改
+	//如果是 永遠把負責人的權限設為管理者
+	// 以及把公司碼射為自己的公司
+	myUserData, myCompany, err := CheckUserAndCompany(props)
+	if err {return}
+
+	if convertTargetUser.UserId == myCompany.BossId {
+		permession = 100
+		companyCode = myCompany.CompanyCode
+		banch = -1
+		if myUserData.UserId != convertTargetUser.UserId {
+			(*props).JSON(http.StatusForbidden, gin.H{
+				"message": StatusText().CanNotUpdateBoss,
+			})
+			return
+		}
+	}
+
+	
+	// 要去判斷 工作狀態並把它丟到quit work user table
+
+
+	
+
 	user := table.UserTable{
-		CompanyCode: request.CompanyCode,
+		CompanyCode: companyCode,
 		EmployeeNumber: request.EmployeeNumber,
 		Password: convertTargetUser.Password,
 		UserName: convertTargetUser.UserName,
 		OnWorkDay: request.OnWorkDay,
-		Banch: request.Banch,
-		Permession: request.Permession,
+		Banch: banch,
+		Permession: permession,
 		LastModify: now,
 		MonthSalary: 0,
 		PartTimeSalary: 0,

@@ -102,6 +102,7 @@ export interface CompanyType {
     CompanyName: string
     CompanyLocation: string
     CompanyPhoneNumber: string
+    BossId: string
     TermStart: string | Date
     TermEnd: string | Date
     CreateTime?: string | Date
