@@ -249,6 +249,7 @@ func ForgetPassword (props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
+	(*dbHandle).Redis.DeleteCaptcha((*res)[0].Account)
 
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().UpdateSuccess,
