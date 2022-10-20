@@ -187,13 +187,23 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 			})
 			return
 		}
+	} else if (request.WorkState == "off") {
+		// 要去判斷 工作狀態並把它丟到quit work user table
+		quitWorkUser := table.QuitWorkUser{
+			CompanyCode: companyCode,
+			EmployeeNumber: request.EmployeeNumber,
+			UserName: convertTargetUser.UserName,
+			OnWorkDay: request.OnWorkDay,
+			Banch: banch,
+			Permession: permession,
+			CreateTime: convertTargetUser.CreateTime,
+			LastModify: now,
+			MonthSalary: 0,
+			PartTimeSalary: 0,
+			UserId: convertTargetUser.UserId,
+		}
+		(*dbHandle).InsertQuitWorkUser(&quitWorkUser)
 	}
-
-	
-	// 要去判斷 工作狀態並把它丟到quit work user table
-
-
-
 
 	user := table.UserTable{
 		CompanyCode: companyCode,
