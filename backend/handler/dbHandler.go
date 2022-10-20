@@ -37,6 +37,7 @@ type DB struct {
 	lateExcusedLock *bool
 	banchStyleLock *bool
 	banchRuleLock *bool
+	quitWorkUserLock *bool
 }
 
 func newBool(b bool) *bool {
@@ -64,6 +65,7 @@ func Singleton() *DB {
 				lateExcusedLock: newBool(false),
 				banchStyleLock: newBool(false),
 				banchRuleLock: newBool(false),
+				quitWorkUserLock: newBool(false),
 			}
 		}
 	}
@@ -84,6 +86,7 @@ func(dbObj *DB) TakeAllFromMysql() {
 	(*dbObj).restoreLateExcusedAll()
 	(*dbObj).restoreBanchStyleAll()
 	(*dbObj).restoreBanchRuleAll()
+	(*dbObj).restoreQuitWorkUserAll()
 
 }
 
@@ -228,6 +231,15 @@ func(dbObj *DB) restoreBanchRuleAll() {
 	arr := (*dbObj.Mysql).SelectBanchRule(0)
 	forEach(arr, (*dbObj.Redis).InsertBanchRule)
 	(*(*dbObj).banchRuleLock) = false
+}
+
+func(dbObj *DB) restoreQuitWorkUserAll() {
+	defer panichandler.Recover()
+	(*(*dbObj).quitWorkUserLock) = true
+	(*dbObj).Redis.DeleteKeyQuitWorkUser()
+	arr := (*dbObj.Mysql).SelectQuitWorkUser(0)
+	forEach(arr, (*dbObj.Redis).InsertQuitWorkUser)
+	(*(*dbObj).quitWorkUserLock) = false
 }
 
 
@@ -400,6 +412,20 @@ func(dbObj *DB) InsertBanchRule(data *table.BanchRule) (bool, int64) {
 	return isOk, id
 }
 
+func(dbObj *DB) InsertQuitWorkUser(data *table.QuitWorkUser) (bool, int64) {
+	defer panichandler.Recover()
+	isOk, id := (*dbObj).Mysql.InsertQuitWorkUser(data)
+	if isOk {
+		go func ()  {
+			res := (*dbObj).Mysql.SelectQuitWorkUser(1, id)
+			for _, value := range *res {
+				(*dbObj).Redis.InsertQuitWorkUser(&value)
+			}
+		}()
+	}
+	return isOk, id
+}
+
 
 //  ------------------------------update------------------------------
 
@@ -557,6 +583,20 @@ func(dbObj *DB) UpdateBanchRule(updateKey int, data *table.BanchRule) bool {
 			res := (*dbObj).Mysql.SelectBanchRule(1, int64((*data).RuleId))
 			for _, v := range *res {
 				(*dbObj).Redis.InsertBanchRule(&v)
+			}
+		}()
+	}
+	return isOk
+}
+
+func(dbObj *DB) UpdateQuitWorkUser(updateKey int, data *table.QuitWorkUser) bool {
+	defer panichandler.Recover()
+	isOk := (*dbObj).Mysql.UpdateQuitWorkUser(updateKey, data)
+	if isOk {
+		go func ()  {
+			res := (*dbObj).Mysql.SelectQuitWorkUser(1, int64((*data).QuitId))
+			for _, v := range *res {
+				(*dbObj).Redis.InsertQuitWorkUser(&v)
 			}
 		}()
 	}
@@ -859,5 +899,22 @@ func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.Ba
 			return (*dbObj.Mysql).SelectBanchRule(selectKey, value...)
 		},
 		(*dbObj).banchRuleLock,
+	)
+}
+
+// 0 => all, value => nil
+//  1 => quitId, value => int64
+//   2 => userId, value => int64
+//   3 => companyId, value => string 
+func(dbObj *DB) SelectQuitWorkUser(selectKey int, value... interface{}) *[]table.QuitWorkUser {
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.QuitWorkUser {
+			return (*dbObj.Redis).SelectQuitWorkUser(selectKey, value...)
+		},
+		func() *[]table.QuitWorkUser {
+			return (*dbObj.Mysql).SelectQuitWorkUser(selectKey, value...)
+		},
+		(*dbObj).quitWorkUserLock,
 	)
 }
