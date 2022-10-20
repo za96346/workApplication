@@ -8,7 +8,7 @@ import (
 
 func(dbObj *DB) InsertToken(token string) {
 	defer panichandler.Recover()
-	(*dbObj).RedisOfToken.SetNX(token, token,time.Minute * 30)
+	(*dbObj).RedisOfToken.SetNX(token, token, time.Minute * 30)
 }
 
 func(dbObj *DB) ClearToken(token string) {
@@ -25,4 +25,8 @@ func(dbObj *DB) IsTokenExited(token string) bool {
 		fmt.Println("token過期")
 		return false
 	}
+}
+func(dbObj *DB) ResetExpireTime(token string) {
+	defer panichandler.Recover()
+	(*dbObj).RedisOfToken.Expire(token, time.Minute * 30)
 }

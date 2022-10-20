@@ -40,6 +40,8 @@ func TokenPrase(props *gin.Context) {
 		})
 		return
 	}
+
+	(*handler.Singleton()).Redis.ResetExpireTime(tokenParams)
 	
 	(*props).Set("Account", userInfo["Account"].(string))
 	(*props).Set("UserId", int64(userInfo["UserId"].(float64)))
