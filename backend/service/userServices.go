@@ -94,6 +94,11 @@ func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 
 }
 
+func UpdateMine (props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+}
+
 func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
@@ -105,16 +110,15 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
+	user, _, err := CheckUserAndCompany(props)
+	if err {return}
+
+	// 拿在職的員工資料
 	userList := (*dbHandle).SelectUser(3, companyCode.(string))
-	quitWorkUser := (*dbHandle).SelectQuitWorkUser(3, companyCode.(string))
 	data := []response.User{}
 	for _, v := range *userList {
-		workState := "on"
-		for _, j := range *quitWorkUser {
-			if v.UserId == j.UserId && v.CompanyCode == j.CompanyCode {
-				workState = "off"
-				break
-			}
+		if user.Permession == 1 && v.Banch != user.Banch{
+			continue
 		}
 		data = append(data, response.User{
 			UserId: v.UserId,
@@ -124,9 +128,30 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 			EmployeeNumber: v.EmployeeNumber,
 			Banch: v.Banch,
 			Permession: v.Permession,
-			WorkState: workState, // 這個要去離職表找
+			WorkState: "on",
 		})
 	}
+
+
+	// 拿離職的員工資料
+	quitWorkUser := (*dbHandle).SelectQuitWorkUser(3, companyCode.(string))
+	for _, v := range *quitWorkUser {
+		if user.Permession == 1 && v.Banch != user.Banch{
+			continue
+		}
+		data = append(data, response.User{
+			UserId: v.UserId,
+			CompanyCode: v.CompanyCode,
+			OnWorkDay: v.OnWorkDay,
+			UserName: v.UserName,
+			EmployeeNumber: v.EmployeeNumber,
+			Banch: v.Banch,
+			Permession: v.Permession,
+			WorkState: "off", // 這個要去離職表找
+		})
+	}
+
+
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().FindSuccess,
 		"data": data,
@@ -187,11 +212,12 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 			})
 			return
 		}
-	} else if (request.WorkState == "off") {
+	} else if request.WorkState == "off" {
 		// 要去判斷 工作狀態並把它丟到quit work user table
 		quitWorkUser := table.QuitWorkUser{
 			CompanyCode: companyCode,
 			EmployeeNumber: request.EmployeeNumber,
+			Account: convertTargetUser.Account,
 			UserName: convertTargetUser.UserName,
 			OnWorkDay: request.OnWorkDay,
 			Banch: banch,
@@ -202,7 +228,18 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 			PartTimeSalary: 0,
 			UserId: convertTargetUser.UserId,
 		}
-		(*dbHandle).InsertQuitWorkUser(&quitWorkUser)
+		if a, _ := (*dbHandle).InsertQuitWorkUser(&quitWorkUser); !a {
+			(*props).JSON(http.StatusForbidden, gin.H{
+				"message": StatusText().QuitWorkUserInsertFail,
+			})
+			return
+		}
+		companyCode = ""
+	} else if request.WorkState == "on" {
+		res := (*dbHandle).SelectQuitWorkUser(4, companyCode, convertTargetUser.UserId)
+		if !methods.IsNotExited(res) {
+			(*dbHandle).DeleteQuitWorkUser(0, (*res)[0].QuitId)
+		}
 	}
 
 	user := table.UserTable{

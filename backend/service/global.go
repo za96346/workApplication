@@ -51,6 +51,7 @@ type statusText struct {
 	DeleteFail string
 	DeleteSuccess string
 	OnlyCanDeleteYourBanch string
+	QuitWorkUserInsertFail string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -97,6 +98,7 @@ func StatusText() *statusText {
 				DeleteFail: "刪除失敗",
 				DeleteSuccess: "刪除成功",
 				OnlyCanDeleteYourBanch: "只可刪除你的部門資料",
+				QuitWorkUserInsertFail: "離職員工新增失敗",
 			}
 		}
 	}

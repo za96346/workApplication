@@ -46,7 +46,7 @@ func SameCompany(props *gin.Context) {
 	}
 
 	// 比對公司
-	if (*me)[0].CompanyCode != (*iWantGetPeople)[0].CompanyCode {
+	if (*me)[0].CompanyCode != (*iWantGetPeople)[0].CompanyCode && (*iWantGetPeople)[0].CompanyCode != "" {
 		(*props).AbortWithStatusJSON(http.StatusUnprocessableEntity, gin.H{
 			"message": "公司不同",
 		})

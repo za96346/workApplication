@@ -524,6 +524,7 @@ func(dbObj *DB) SelectBanchRule(selectKey int, value... interface{}) *[]table.Ba
 //  1 => quitId, value => int64
 //   2 => userId, value => int64
 //   3 => companyCode, value => string 
+//   4=> companyCode && userId ,  value string && int64
 func(dbObj *DB) SelectQuitWorkUser(selectKey int, value... interface{}) *[]table.QuitWorkUser {
 	defer panichandler.Recover()
 	tableKey := (*dbObj).table[12]
@@ -566,6 +567,18 @@ func(dbObj *DB) SelectQuitWorkUser(selectKey int, value... interface{}) *[]table
 					if filterItem == v.CompanyCode {
 						return true
 					}
+				}
+				return false
+			},
+		)
+	case 4:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.QuitWorkUser) bool {
+				if v.CompanyCode == value[0] && v.UserId == value[1] {
+					return true
 				}
 				return false
 			},
