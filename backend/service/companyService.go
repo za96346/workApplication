@@ -582,14 +582,10 @@ func FetchCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 	})
 }
 
-func InsertCompany (props *gin.Context, waitJob *sync.WaitGroup) {
-	defer panicHandle()
-	defer (*waitJob).Done()
-}
-
 func UpdateCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
+
 	request := table.CompanyTable{}
 	if (*props).ShouldBindJSON(&request) != nil {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
@@ -599,8 +595,17 @@ func UpdateCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 	request.LastModify = time.Now()
 
-	_, company, err := CheckUserAndCompany(props)
+	user, company, err := CheckUserAndCompany(props)
 	if err {return}
+
+	// 判斷是不是公司負責人
+	if company.BossId != user.UserId {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().YouAreNotBoss,
+		})
+		return
+	}
+
 	// 判斷是不是同一家公司
 	if request.CompanyId != company.CompanyId {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
@@ -622,4 +627,68 @@ func UpdateCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 	})
 	return
 
+}
+
+func InsertCompany (props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+
+	userId, status := checkMineUserId(props)
+	if !status {return}
+
+	company := table.CompanyTable{}
+	if (*props).ShouldBindJSON(&company) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+
+	// 公司碼的長度
+	if len(company.CompanyCode) < 10 {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().CompanyCodeIsNotTenLength,
+		})
+		return
+	}
+
+	// 更改company 的欄位
+
+	now := time.Now()
+	company.BossId = userId
+	company.CreateTime = now
+	company.LastModify = now
+	
+	if v, _ := (*dbHandle).InsertCompany(&company); !v {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().InsertFail,
+		})
+		return
+	}
+
+	// 更改負責人的資料
+
+	user := (*dbHandle).SelectUser(1, userId)
+	if methods.IsNotExited(user) {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().userDataNotFound,
+		})
+		return
+	}
+	(*user)[0].Banch = -1
+	(*user)[0].Permession = 100
+	(*user)[0].CompanyCode = company.CompanyCode
+	(*user)[0].LastModify = now
+
+
+	if !(*dbHandle).UpdateUser(0, &(*user)[0]) {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": "更新負責人資料失敗",
+		})
+		return
+	}
+
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().InsertSuccess,
+	})
 }

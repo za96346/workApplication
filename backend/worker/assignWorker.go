@@ -105,6 +105,10 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		// post method of update myself user data
 		routeFunc = service.UpdateMine
 		break
+	case 23:
+		// put method of insert company
+		routeFunc = service.InsertCompany
+		break
 	default:
 		break;
 	}

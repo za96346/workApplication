@@ -17,6 +17,9 @@ func Company(props *gin.RouterGroup) {
 			middleWare.MyCompanyAndBanch,
 			worker.AssignWorker(18),
 		)
+		props.PUT("/info",
+			worker.AssignWorker(23),
+		)
 
 		// banch all
 		props.GET("/banch/all", middleWare.MyCompanyAndBanch, worker.AssignWorker(8))

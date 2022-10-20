@@ -52,6 +52,8 @@ type statusText struct {
 	DeleteSuccess string
 	OnlyCanDeleteYourBanch string
 	QuitWorkUserInsertFail string
+	YouAreNotBoss string
+	CompanyCodeIsNotTenLength string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -99,6 +101,8 @@ func StatusText() *statusText {
 				DeleteSuccess: "刪除成功",
 				OnlyCanDeleteYourBanch: "只可刪除你的部門資料",
 				QuitWorkUserInsertFail: "離職員工新增失敗",
+				YouAreNotBoss: "非公司負責人，無法更新",
+				CompanyCodeIsNotTenLength: "公司碼小於十碼",
 			}
 		}
 	}

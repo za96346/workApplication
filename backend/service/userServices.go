@@ -56,6 +56,7 @@ func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
 func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
+
 	userId, status := checkMineUserId(props)
 	if !status {return}
 
@@ -104,6 +105,7 @@ func UpdateMine (props *gin.Context, waitJob *sync.WaitGroup) {
 	
 	(*mineUserData)[0].UserName = user.UserName
 	(*mineUserData)[0].OnWorkDay = user.OnWorkDay
+	(*mineUserData)[0].LastModify = time.Now()
 
 	if !(*dbHandle).UpdateUser(0, &(*mineUserData)[0]) {
 		(*props).JSON(http.StatusNotFound, gin.H{
