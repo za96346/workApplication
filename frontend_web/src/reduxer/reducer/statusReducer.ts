@@ -7,17 +7,23 @@ const statusState = {
     onFetchBanch: false,
     onCreateBanch: false,
     onUpdateBanch: false,
+    onDeleteBanch: false,
 
     onFetchUserAll: false,
+    onUpdateUser: false,
+
     onFetchSelfData: false,
+    onUpdateSelfData: false,
 
     onFetchBanchStyle: false,
     onCreateBanchStyle: false,
     onUpdateBanchStyle: false,
+    onDeleteBanchStyle: false,
 
     onFetchBanchRule: false,
     onCreateBanchRule: false,
-    onUpdateBanchRule: false
+    onUpdateBanchRule: false,
+    onDeleteBanchRule: false
 }
 
 export interface statusReducerType {
@@ -27,17 +33,23 @@ export interface statusReducerType {
     onFetchBanch: boolean
     onCreateBanch: boolean
     onUpdateBanch: boolean
+    onDeleteBanch: boolean
 
     onFetchUserAll: boolean
+    onUpdateUser: boolean
+
     onFetchSelfData: boolean
+    onUpdateSelfData: boolean
 
     onFetchBanchStyle: boolean
     onCreateBanchStyle: boolean
     onUpdateBanchStyle: boolean
+    onDeleteBanchStyle: boolean
 
     onFetchBanchRule: boolean
     onCreateBanchRule: boolean
     onUpdateBanchRule: boolean
+    onDeleteBanchRule: boolean
 }
 
 export const statusReducer = (state = statusState, action: action): any => {

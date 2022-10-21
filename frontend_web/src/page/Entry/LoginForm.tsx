@@ -1,10 +1,9 @@
 import React from 'react'
-import { Button, Form, Input } from 'antd'
-import { KeyOutlined, UserOutlined } from '@ant-design/icons'
+import { Button, Form } from 'antd'
 // import { useNavigate } from 'react-router-dom'
-import rule from '../../method/rule'
 import { LoginType } from '../../type'
 import api from '../../api/api'
+import Insert from '../../component/Insert'
 
 const Login = (): JSX.Element => {
     // const navigate = useNavigate()
@@ -16,12 +15,8 @@ const Login = (): JSX.Element => {
         <>
 
             <Form onFinish={onFinish}>
-                <Form.Item name="Account" rules={rule.email()}>
-                    <Input size="large" placeholder="請輸入電子信箱" prefix={<UserOutlined />} />
-                </Form.Item>
-                <Form.Item name="Password" rules={rule.password()}>
-                    <Input.Password visibilityToggle size="large" placeholder="請輸入密碼" prefix={<KeyOutlined />} />
-                </Form.Item>
+                <Insert.Email />
+                <Insert.Pwd textNum={1} />
                 <Form.Item>
                     <Button
                         block

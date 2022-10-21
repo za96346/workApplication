@@ -6,6 +6,8 @@ abstract class api {
     protected async POST (url: any, body: any, callBack: any, params?: any): Promise<any> {}
 
     protected async PUT (url: any, body: any, callBack: any, params?: any): Promise<any> {}
+
+    protected async DELETE (url: any, body: any, callBack: any, Params?: any): Promise<any> {}
 }
 
 export default api

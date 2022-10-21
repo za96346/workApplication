@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import api from '../../api/api'
 import useReduceing from '../../Hook/useReducing'
-import ForgetPwd from './ForgetPwd'
+import ForgetPwdForm from './ForgetPwdForm'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 
@@ -48,7 +48,7 @@ const Entry = (): JSX.Element => {
                 {
                     path === 'forgetPwd' && (
                         <>
-                            <ForgetPwd />
+                            <ForgetPwdForm />
                             <div onClick={() => navigate('/entry/login')} className={styles.forgetPwd}>返回登入畫面</div>
                         </>
                     )

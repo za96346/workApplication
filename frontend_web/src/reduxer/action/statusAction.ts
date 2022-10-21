@@ -7,6 +7,7 @@ class statusAcion {
         this.onFetchUserAll = this.onFetchUserAll.bind(this)
     }
 
+    // 部門
     onFetchBanch (s: boolean): action {
         return {
             type: s ? statusType.FETCH_BANCH_ON : statusType.FETCH_BANCH_OFF,
@@ -37,6 +38,7 @@ class statusAcion {
         }
     }
 
+    // 所有員工
     onFetchUserAll (s: boolean): action {
         return {
             type: s ? statusType.FETCH_USER_ALL_ON : statusType.FETCH_USER_ALL_OFF,
@@ -47,6 +49,17 @@ class statusAcion {
         }
     }
 
+    onUpdateUser (s: boolean): action {
+        return {
+            type: s ? statusType.UPDATE_USER_ON : statusType.UPDATE_USER_OFF,
+            payload: {
+                ...store.getState().status,
+                onUpdateUser: s
+            }
+        }
+    }
+
+    // 自己資料
     onFetchSelfData (s: boolean): action {
         return {
             type: s ? statusType.FETCH_SELF_DATA_ON : statusType.FETCH_SELF_DATA_OFF,
@@ -57,6 +70,17 @@ class statusAcion {
         }
     }
 
+    onUpdateSelfData (s: boolean): action {
+        return {
+            type: s ? statusType.UPDATE_SELF_DATA_ON : statusType.UPDATE_SELF_DATA_OFF,
+            payload: {
+                ...store.getState().status,
+                onUpdateSelfData: s
+            }
+        }
+    }
+
+    // 部門樣式
     onFetchBanchStyle (s: boolean): action {
         return {
             type: s ? statusType.FETCH_BANCH_STYLE_ON : statusType.FETCH_BANCH_OFF,
@@ -87,6 +111,17 @@ class statusAcion {
         }
     }
 
+    onDeleteBanchStyle (s: boolean): action {
+        return {
+            type: s ? statusType.DELETE_BANCH_STYLE_ON : statusType.DELETE_BANCH_STYLE_OFF,
+            payload: {
+                ...store.getState().status,
+                onDeleteBanchStyle: s
+            }
+        }
+    }
+
+    // 部門規則
     onFetchBanchRule (s: boolean): action {
         return {
             type: s ? statusType.FETCH_BANCH_RULE_ON : statusType.FETCH_BANCH_RULE_OFF,
@@ -117,6 +152,17 @@ class statusAcion {
         }
     }
 
+    onDeleteBanchRule (s: boolean): action {
+        return {
+            type: s ? statusType.DELETE_BANCH_RULE_ON : statusType.DELETE_BANCH_RULE_OFF,
+            payload: {
+                ...store.getState().status,
+                onDeleteBanchRule: s
+            }
+        }
+    }
+
+    // 公司
     onFetchCompany (s: boolean): action {
         return {
             type: s ? statusType.FETCH_COMPANY_ON : statusType.FETCH_COMPANY_OFF,
@@ -137,6 +183,7 @@ class statusAcion {
         }
     }
 
+    // 清除
     clearStatusAll (): action {
         return {
             type: statusType.CLEAR_STATUS_ALL,

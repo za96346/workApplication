@@ -33,12 +33,19 @@ interface props {
 const BanchStyle = ({ banchId }: props): JSX.Element => {
     const [status, setStatus] = useState({ ...statusInit })
     const { loading, company } = useReduceing()
-    const onDelete = (idx: string): any => {
-        setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(idx) }))
+
+    const onDelete = async (): Promise<any> => {
+        const res = await api.deleteBanchStyle(status.currentDeleteListIdx)
+        if (res.status) {
+            await api.getBanchStyle(banchId)
+        }
+        setStatus(statusInit)
     }
+
     const onEdit = (id: string): any => {
         setStatus((prev) => ({ ...prev, currentListIdx: parseInt(id) }))
     }
+
     const onFinish = async (v: any, types: 0 | 1): Promise<void> => {
         console.log(v, status.currentListIdx)
         let res: ResType<BanchStyleType>
@@ -91,7 +98,7 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
                     status.currentDeleteListIdx !== -1 && <><div>
                         是否刪除此圖標，刪除後無法復原
                     </div>
-                    <Button block style={{ marginTop: '20px' }}>確認</Button>
+                    <Button onClick={onDelete} block style={{ marginTop: '20px' }}>確認</Button>
                     </>
                 }
                 {
@@ -151,7 +158,7 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
                             </div>
 
                             <div
-                                onClick={() => onDelete(item.id)}
+                                onClick={() => setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(item.id) }))}
                                 className={styles.editLabel}
                                 style={{ marginLeft: '20px', color: 'red' }}
                             >

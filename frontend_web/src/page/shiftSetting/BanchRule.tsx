@@ -60,8 +60,12 @@ const BanchRule = ({ banchId }: props): JSX.Element => {
             setStatus({ ...statusInit })
         }
     }
-    const onDelete = (idx: string): any => {
-        setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(idx) }))
+    const onDelete = async (): Promise<any> => {
+        const res = await api.deleteBanchRule(status.currentDeleteListIdx)
+        if (res.status) {
+            await api.getBanchRule(banchId)
+        }
+        setStatus(statusInit)
     }
     const onEdit = (id: string): any => {
         setStatus((prev) => ({ ...prev, currentListIdx: parseInt(id) }))
@@ -88,7 +92,7 @@ const BanchRule = ({ banchId }: props): JSX.Element => {
                     status.currentDeleteListIdx !== -1 && <><div>
                         是否刪除此規則，刪除後無法復原
                     </div>
-                    <Button block style={{ marginTop: '20px' }}>確認</Button>
+                    <Button onClick={onDelete} block style={{ marginTop: '20px' }}>確認</Button>
                     </>
                 }
                 {
@@ -155,12 +159,12 @@ const BanchRule = ({ banchId }: props): JSX.Element => {
                             </div>
 
                             <div
-                                onClick={() => onDelete(item.id)}
+                                onClick={async () => setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(item.id) }))}
                                 className={styles.editLabel}
                                 style={{ marginLeft: '20px', color: 'red' }}
                             >
                                 <DeleteOutlined style={{ marginRight: '10px' }} />
-                                        刪除
+                                    刪除
                             </div>
                         </List.Item>
                 )}

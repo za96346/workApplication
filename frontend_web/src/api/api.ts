@@ -16,11 +16,13 @@ class ApiControl extends api {
         registe: 'entry/register',
         BanchAll: 'company/banch/all',
         getUserAll: 'user/all',
-        getSelfData: 'user/my',
+        selfData: 'user/my',
         banchStyle: 'company/banch/style',
         banchRule: 'company/banch/rule',
         companyInfo: 'company/info',
-        userSingle: 'user/single'
+        userSingle: 'user/single',
+        changePassword: 'user/changePassword',
+        forgetPassword: 'user/forgetPassword'
     }
 
     constructor () {
@@ -83,7 +85,7 @@ class ApiControl extends api {
                 headers: {
                     token
                 },
-                ...params
+                params: { ...params }
             })
             if (successShow) {
                 void FullMessage.success(res.data.message)
@@ -109,11 +111,15 @@ class ApiControl extends api {
     protected async PUT<T> ({
         url,
         body,
-        params = {}
+        params = {},
+        successShow = true,
+        FailShow = true
     }: {
         url: any
         body: any
         params?: any
+        successShow?: boolean
+        FailShow?: boolean
     }): Promise<ResType<T>> {
         const { token } = store.getState().user
         try {
@@ -121,9 +127,11 @@ class ApiControl extends api {
                 headers: {
                     token
                 },
-                ...params
+                params: { ...params }
             })
-            void FullMessage.success(res.data.message)
+            if (successShow) {
+                void FullMessage.success(res.data.message)
+            }
             return {
                 ...res.data,
                 status: true
@@ -132,7 +140,49 @@ class ApiControl extends api {
             if (e.response.status >= 510) {
                 clearAll()
             }
-            void FullMessage.error(e.response.data.message)
+            if (FailShow) {
+                void FullMessage.error(e.response.data.message)
+            }
+            return {
+                ...e.response.data,
+                status: false
+            }
+        }
+    }
+
+    protected async DELETE<T> ({
+        url,
+        params = {},
+        successShow = true,
+        FailShow = true
+    }: {
+        url: any
+        params?: any
+        successShow?: boolean
+        FailShow?: boolean
+    }): Promise<ResType<T>> {
+        const { token } = store.getState().user
+        try {
+            const res = await axios.delete(`${this.baseUrl}/${url}`, {
+                headers: {
+                    token
+                },
+                params: { ...params }
+            })
+            if (successShow) {
+                void FullMessage.success(res.data.message)
+            }
+            return {
+                ...res.data,
+                status: true
+            }
+        } catch (e) {
+            if (e.response.status >= 510) {
+                clearAll()
+            }
+            if (FailShow) {
+                void FullMessage.error(e.response.data.message)
+            }
             return {
                 ...e.response.data,
                 status: false
@@ -206,30 +256,30 @@ class ApiControl extends api {
         return res
     }
 
-    // 所有員工
-    async getUserAll (): Promise<ResType<UserType[]>> {
-        store.dispatch(statusAction.onFetchUserAll(true))
-        const res = await this.GET<UserType[]>({
-            url: this.route.getUserAll,
-            successShow: false
-        })
-        if (res.status) {
-            store.dispatch(companyAction.setEmployee(res.data))
-        }
-        store.dispatch(statusAction.onFetchUserAll(false))
-        // console.log(res)
-        return res
-    }
-
+    // 自己的個人資料
     async getSelfData (): Promise<void> {
         store.dispatch(statusAction.onFetchSelfData(true))
         const res = await this.GET<SelfDataType[]>({
-            url: this.route.getSelfData
+            url: this.route.selfData,
+            successShow: false
         })
         if (res.status) {
             store.dispatch(userAction.setSelfData(res.data[0]))
         }
         store.dispatch(statusAction.onFetchSelfData(false))
+    }
+
+    async UpdateSelfData (UserName: string, OnWorkDay: string): Promise<ResType<null>> {
+        store.dispatch(statusAction.onUpdateSelfData(true))
+        const res = await this.POST<null>({
+            url: this.route.selfData,
+            body: {
+                UserName,
+                OnWorkDay
+            }
+        })
+        store.dispatch(statusAction.onUpdateSelfData(false))
+        return res
     }
 
     // 部門樣式
@@ -239,7 +289,8 @@ class ApiControl extends api {
             url: this.route.banchStyle,
             params: {
                 banchId
-            }
+            },
+            successShow: false
         })
         if (res.status) {
             store.dispatch(companyAction.setBanchStyle(res.data))
@@ -284,6 +335,18 @@ class ApiControl extends api {
         return res
     }
 
+    async deleteBanchStyle (StyleId: BanchStyleType['StyleId']): Promise<ResType<null>> {
+        store.dispatch(statusAction.onUpdateBanchStyle(true))
+        const res = await this.DELETE<null>({
+            url: this.route.banchStyle,
+            params: {
+                StyleId
+            }
+        })
+        store.dispatch(statusAction.onUpdateBanchStyle(false))
+        return res
+    }
+
     // 部門規則
     async getBanchRule (banchId: number): Promise<ResType<BanchRuleType[]>> {
         store.dispatch(statusAction.onFetchBanchRule(true))
@@ -291,7 +354,8 @@ class ApiControl extends api {
             url: this.route.banchRule,
             params: {
                 banchId
-            }
+            },
+            successShow: false
         })
         if (res.status) {
             store.dispatch(companyAction.setBanchRule(res.data))
@@ -339,11 +403,24 @@ class ApiControl extends api {
         return res
     }
 
+    async deleteBanchRule (RuleId: number): Promise<ResType<null>> {
+        store.dispatch(statusAction.onDeleteBanchRule(true))
+        const res = await this.DELETE<null>({
+            url: this.route.banchRule,
+            params: {
+                RuleId
+            }
+        })
+        store.dispatch(statusAction.onDeleteBanchRule(false))
+        return res
+    }
+
     // 公司資料
     async getCompanyInfo (): Promise<ResType<CompanyType>> {
         store.dispatch(statusAction.onFetchCompany(true))
         const res = await this.GET<CompanyType>({
-            url: this.route.companyInfo
+            url: this.route.companyInfo,
+            successShow: false
         })
         if (res.status && res?.data) {
             store.dispatch(companyAction.setCompany(res.data))
@@ -369,8 +446,23 @@ class ApiControl extends api {
         return res
     }
 
-    // 使用者資料
+    // 員工 資料
+    async getUserAll (): Promise<ResType<UserType[]>> {
+        store.dispatch(statusAction.onFetchUserAll(true))
+        const res = await this.GET<UserType[]>({
+            url: this.route.getUserAll,
+            successShow: false
+        })
+        if (res.status) {
+            store.dispatch(companyAction.setEmployee(res.data))
+        }
+        store.dispatch(statusAction.onFetchUserAll(false))
+        // console.log(res)
+        return res
+    }
+
     async updateUser (user: UserType): Promise<ResType<null>> {
+        store.dispatch(statusAction.onUpdateUser(true))
         const res = await this.POST<null>({
             url: this.route.userSingle,
             body: {
@@ -384,6 +476,39 @@ class ApiControl extends api {
             },
             params: {
                 userId: user.UserId
+            }
+        })
+        store.dispatch(statusAction.onUpdateUser(false))
+        return res
+    }
+
+    // 忘記密碼
+    async forgetPassword ({
+        Captcha, Password, PasswordConfirm, Account
+    }): Promise<ResType<null>> {
+        const res = await this.POST<null>({
+            url: this.route.forgetPassword,
+            body: {
+                Captcha,
+                NewPassword: Password,
+                NewPasswordConfirm: PasswordConfirm,
+                Email: Account
+            }
+        })
+        return res
+    }
+
+    // 更換密碼
+    async changePassword ({
+        Captcha, Password, PasswordConfirm, OldPassword
+    }): Promise<ResType<null>> {
+        const res = await this.POST<null>({
+            url: this.route.changePassword,
+            body: {
+                Captcha,
+                NewPassword: Password,
+                NewPasswordConfirm: PasswordConfirm,
+                OldPassword
             }
         })
         return res
