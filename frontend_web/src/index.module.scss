@@ -140,7 +140,6 @@ div {
 	flex-wrap: wrap;
 	.settingBody {
 		@extend %whiteBoard;
-		min-width: 500px;
 		flex-grow: 1;
 		>div {
 			width: 90%;
@@ -298,6 +297,9 @@ div {
 	@extend %whiteBoard;
 }
 .HomeBlock {
+	@extend %whiteBoard;
+}
+.signBlock {
 	@extend %whiteBoard;
 }
 
