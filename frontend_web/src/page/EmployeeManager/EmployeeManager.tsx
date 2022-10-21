@@ -20,7 +20,7 @@ const items = (value: UserType[], banch: BanchType[]): any => {
             UserName: i.UserName,
             OnWorkDay: dateHandle.formatDate(new Date(i.OnWorkDay)),
             WorkState: i.WorkState === 'on' ? '在職' : '離職',
-            Banch: b.BanchName,
+            Banch: b?.BanchName,
             BanchId: i.Banch,
             Permession: statics.permession[i.Permession],
             PermessionId: i.Permession
