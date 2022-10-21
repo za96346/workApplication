@@ -41,6 +41,7 @@ const App = (): JSX.Element => {
 
                     <Route path='banchManager' element={<BanchManager />} />
                     <Route path='sign' element={<SignPage/>}/>
+                    <Route path='weekendSetting' element/>
 
                     <Route path='shiftSetting/:banchId' element={<ShiftSettingPage />} />
                     <Route path='shiftSearch' element={<ShiftSearchPage />} />

@@ -1,4 +1,4 @@
-import { AppstoreOutlined, EditFilled, ExportOutlined, GoldOutlined, HomeOutlined, IdcardOutlined, InsertRowRightOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined } from '@ant-design/icons'
+import { AppstoreOutlined, CalendarOutlined, EditFilled, ExportOutlined, GoldOutlined, HomeOutlined, IdcardOutlined, InsertRowRightOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined } from '@ant-design/icons'
 import { Button, MenuProps, Menu } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -43,6 +43,7 @@ const items = (banch: BanchType[], companyCode: string): MenuItem[] => {
         getItem('班表設定', 'shiftSetting', <AppstoreOutlined />, a),
         getItem('員工管理', 'employeeManager', <IdcardOutlined />),
         getItem('部門管理', 'banchManager', <GoldOutlined />),
+        getItem('平假日設定', 'weekendSetting', <CalendarOutlined/>),
         getItem('申請中', 'sign', <EditFilled />),
         getItem('設定', 'setting', <SettingOutlined />, [
             getItem('個人資料', 1000),
@@ -93,6 +94,9 @@ const App: React.FC = () => {
         }
         if (path1 === 'sign') {
             navigate('sign')
+        }
+        if (path1 === 'weekendSetting') {
+            navigate('weekendSetting')
         }
     }, [current])
 
