@@ -3,6 +3,7 @@ import { Card, Input, List, Form, Button } from 'antd'
 import React, { useState } from 'react'
 import api from '../../api/api'
 import useReduceing from '../../Hook/useReducing'
+import rule from '../../method/rule'
 import { BanchType, ResType } from '../../type'
 
 interface people {
@@ -25,7 +26,7 @@ const BanchEdit = ({ onFinish }: { onFinish: (v: any) => void }): JSX.Element =>
     return (
         <>
             <Form onFinish={onFinish}>
-                <Form.Item name="BanchName" label="新增部門" initialValue="">
+                <Form.Item rules={rule.banch()} name="BanchName" label="新增部門" initialValue="">
                     <Input style={{ minWidth: '100px' }} placeholder='請輸入部門名稱' />
                 </Form.Item>
                 <Form.Item>

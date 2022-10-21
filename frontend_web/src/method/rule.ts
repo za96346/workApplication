@@ -28,6 +28,12 @@ class Rule {
         ]
     }
 
+    public banch (): any[] {
+        return [
+            { required: true, message: '不允許空白!', whitespace: true }
+        ]
+    }
+
     public password (): any[] {
         return [
             { required: true, message: '非法字元!', pattern: /^[a-zA-Z0-9 ]+$/ },

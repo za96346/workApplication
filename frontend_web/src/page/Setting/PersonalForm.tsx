@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Button, DatePicker, Form, Input, Modal, Spin } from 'antd'
-import { FullMessage } from '../../method/notice'
 import moment from 'moment'
 import BanchSelector from '../../component/BanchSelector'
 import PermessionSelector from '../../component/PermessionSelector'
@@ -24,7 +23,7 @@ const personalForm = (): JSX.Element => {
     const onFinish = async (v: any, types: 1 | 2): Promise<void> => {
         console.log(v)
         if (types === 1) {
-            const res = await api.UpdateSelfData(v.UserName, v.OnWorkDay)
+            const res = await api.UpdateSelfData(v.UserName)
             console.log(res)
         } else if (types === 2) {
             const res = await api.changePassword({ ...v, Captcha: parseInt(v.Captcha) })
@@ -84,7 +83,7 @@ const personalForm = (): JSX.Element => {
                     name="OnWorkDay"
                     initialValue={moment(user.selfData?.OnWorkDay || '2001-07-01')}
                 >
-                    <DatePicker />
+                    <DatePicker disabled />
                 </Form.Item>
                 <Form.Item
                     label="部門"
@@ -105,7 +104,6 @@ const personalForm = (): JSX.Element => {
                     <Button
                         style={{ width: '100%', height: '50px' }}
                         htmlType="submit"
-                        onClick={() => FullMessage.success('修改成功 ')}
                     >
                         修改
                     </Button>

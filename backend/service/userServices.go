@@ -104,7 +104,6 @@ func UpdateMine (props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 	
 	(*mineUserData)[0].UserName = user.UserName
-	(*mineUserData)[0].OnWorkDay = user.OnWorkDay
 	(*mineUserData)[0].LastModify = time.Now()
 
 	if !(*dbHandle).UpdateUser(0, &(*mineUserData)[0]) {

@@ -1,10 +1,9 @@
-import { AppstoreOutlined, ExportOutlined, GoldOutlined, IdcardOutlined, InsertRowRightOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined } from '@ant-design/icons'
+import { AppstoreOutlined, ExportOutlined, GoldOutlined, HomeOutlined, IdcardOutlined, InsertRowRightOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined } from '@ant-design/icons'
 import { Button, MenuProps, Menu } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import useReduceing from '../Hook/useReducing'
-import userAction from '../reduxer/action/userAction'
+import { clearAll } from '../reduxer/clearAll'
 import { BanchType } from '../type'
 
 type MenuItem = Required<MenuProps>['items'][number]
@@ -26,8 +25,18 @@ const getItem = (
 
 // getItem('保育組', 2)
 
-const items = (banch: BanchType[]): MenuItem[] => {
+const items = (banch: BanchType[], companyCode: string): MenuItem[] => {
     const a = banch?.map((item) => getItem(item.BanchName, item.Id)) || []
+    if (companyCode === '') {
+        return (
+            [
+                getItem('首頁', 'home', <HomeOutlined />),
+                getItem('設定', 'setting', <SettingOutlined />, [
+                    getItem('個人資料', 1000)
+                ])
+            ]
+        )
+    }
     return ([
         getItem('排班', 'shift', <InsertRowRightOutlined />, a),
 
@@ -41,8 +50,7 @@ const items = (banch: BanchType[]): MenuItem[] => {
     ])
 }
 const App: React.FC = () => {
-    const dispatch = useDispatch()
-    const { loading, company } = useReduceing()
+    const { loading, company, user } = useReduceing()
     const [current, setCurrent] = useState<any>({
         keyPath: 'shift',
         key: ''
@@ -78,6 +86,9 @@ const App: React.FC = () => {
         }
         if (path1 === 'banchManager') {
             navigate('banchManager')
+        }
+        if (path1 === 'home') {
+            navigate('home')
         }
     }, [current])
 
@@ -120,7 +131,7 @@ const App: React.FC = () => {
                         defaultOpenKeys={['sub1']}
                         selectedKeys={[current]}
                         mode="inline"
-                        items={items(company.banch)}
+                        items={items(company.banch, user.selfData?.CompanyCode)}
                     />
                 </div>
                 <div
@@ -130,8 +141,8 @@ const App: React.FC = () => {
                     }}
                     className={styles.logout}
                     onClick={() => {
+                        clearAll()
                         navigate('/entry/login', { replace: true })
-                        dispatch(userAction.clearToken())
                     }}
                 >
                     {

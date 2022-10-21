@@ -269,13 +269,12 @@ class ApiControl extends api {
         store.dispatch(statusAction.onFetchSelfData(false))
     }
 
-    async UpdateSelfData (UserName: string, OnWorkDay: string): Promise<ResType<null>> {
+    async UpdateSelfData (UserName: string): Promise<ResType<null>> {
         store.dispatch(statusAction.onUpdateSelfData(true))
         const res = await this.POST<null>({
             url: this.route.selfData,
             body: {
-                UserName,
-                OnWorkDay
+                UserName
             }
         })
         store.dispatch(statusAction.onUpdateSelfData(false))
