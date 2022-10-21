@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import api from '../../api/api'
 import useReduceing from '../../Hook/useReducing'
+import ForgetPwd from './ForgetPwd'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 
@@ -21,10 +22,14 @@ const Entry = (): JSX.Element => {
     return (
         <>
             <div className={styles.entryBlock}>
-                <div>
-                    <div className={path === 'login' ? styles.tabActive : ''} onClick={() => navigate('/entry/login')}>登入</div>
-                    <div className={path === 'register' ? styles.tabActive : ''} onClick={() => navigate('/entry/register')}>註冊</div>
-                </div>
+                {
+                    path !== 'forgetPwd' && (
+                        <div>
+                            <div className={path === 'login' ? styles.tabActive : ''} onClick={() => navigate('/entry/login')}>登入</div>
+                            <div className={path === 'register' ? styles.tabActive : ''} onClick={() => navigate('/entry/register')}>註冊</div>
+                        </div>
+                    )
+                }
                 {
                     path === 'login' && (
                         <LoginForm />
@@ -35,6 +40,20 @@ const Entry = (): JSX.Element => {
                         <RegisterForm />
                     )
                 }
+                {
+                    path !== 'forgetPwd' && (
+                        <div onClick={() => navigate('/entry/forgetPwd')} className={styles.forgetPwd}>忘記密碼?</div>
+                    )
+                }
+                {
+                    path === 'forgetPwd' && (
+                        <>
+                            <ForgetPwd />
+                            <div onClick={() => navigate('/entry/login')} className={styles.forgetPwd}>返回登入畫面</div>
+                        </>
+                    )
+                }
+
             </div>
         </>
     )

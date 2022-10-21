@@ -297,3 +297,12 @@ div {
 .banchManagerBlock {
 	@extend %whiteBoard;
 }
+
+.forgetPwd {
+	color: white;
+	margin-top: 20px;
+	&:hover {
+		cursor: pointer;
+		opacity: 0.6;
+	}
+}

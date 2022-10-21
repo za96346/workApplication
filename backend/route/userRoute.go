@@ -9,10 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 func User(props *gin.RouterGroup) {
-	props.POST("/forgetPassword", worker.AssignWorker(19))
-
+	props.POST("/forgetPassword", worker.AssignWorker(24))
 	props.Use(middleWare.TokenPrase)
 	{
+		props.POST("/changePassword", worker.AssignWorker(19))
 		props.GET("/my", worker.AssignWorker(1))
 		props.POST("/my", worker.AssignWorker(22))
 		props.GET("/single", middleWare.SameCompany, worker.AssignWorker(0))

@@ -295,7 +295,6 @@ func TestSelectLateExcused(t *testing.T) {
 	m = (*mysql.Singleton()).SelectLateExcused(1, int64(2))
 	res = testEq(r, m, compareFunc)
 	assert.NotEqual(t, res, true)
-	
 }
 
 func TestSelectDayOff(t *testing.T) {

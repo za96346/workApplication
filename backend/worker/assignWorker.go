@@ -91,7 +91,7 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		break
 	case 19:
 		// post method of update password
-		routeFunc = service.ForgetPassword
+		routeFunc = service.ChangePassword
 		break
 	case 20:
 		// delete method of delete banch style
@@ -108,6 +108,10 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 	case 23:
 		// put method of insert company
 		routeFunc = service.InsertCompany
+		break
+	case 24:
+		// post method of update password
+		routeFunc = service.ForgetPassword
 		break
 	default:
 		break;
