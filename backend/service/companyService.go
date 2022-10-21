@@ -283,8 +283,9 @@ func DeleteBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 
-	request := table.BanchStyle{}
-	if (*props).ShouldBindJSON(&request) != nil {
+	RequestStyleId := (*props).Query("StyleId")
+	StyleId, convErr := methods.AnyToInt64(RequestStyleId)
+	if convErr != nil {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().FormatError,
 		})
@@ -292,7 +293,7 @@ func DeleteBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	// 拿取該部門資料
-	banchStyle := (*dbHandle).SelectBanchStyle(1, request.StyleId)
+	banchStyle := (*dbHandle).SelectBanchStyle(1, StyleId)
 	if methods.IsNotExited(banchStyle) {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().DeleteFail + "," + StatusText().NotHaveBanch,
@@ -314,7 +315,7 @@ func DeleteBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 
 	//最高權限刪除
 	if user.Permession == 100 {
-		if !(*dbHandle).DeleteBanchStyle(0, request.StyleId) {
+		if !(*dbHandle).DeleteBanchStyle(0, StyleId) {
 			(*props).JSON(http.StatusNotAcceptable, gin.H{
 				"message": StatusText().DeleteFail,
 			})
@@ -330,7 +331,7 @@ func DeleteBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 			})
 			return
 		}
-		if !(*dbHandle).DeleteBanchStyle(0, request.StyleId) {
+		if !(*dbHandle).DeleteBanchStyle(0, StyleId) {
 			(*props).JSON(http.StatusNotAcceptable, gin.H{
 				"message": StatusText().DeleteFail,
 			})
@@ -511,16 +512,16 @@ func InsertBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
 func DeleteBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
-
-	request := table.BanchRule{}
-	if (*props).ShouldBindJSON(&request) != nil {
+	RequestRuleId := (*props).Query("RuleId")
+	RuleId, convErr := methods.AnyToInt64(RequestRuleId)
+	if convErr != nil {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().FormatError,
 		})
 		return
 	}
 
-	banchRule := (*dbHandle).SelectBanchRule(1, request.RuleId)
+	banchRule := (*dbHandle).SelectBanchRule(1, RuleId)
 	if methods.IsNotExited(banchRule) {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().DeleteFail + "," + StatusText().NotHaveBanch,
@@ -541,7 +542,7 @@ func DeleteBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
 
 	// 最高權限 刪除
 	if user.Permession == 100 {
-		if !(*dbHandle).DeleteBanchRule(0, request.RuleId) {
+		if !(*dbHandle).DeleteBanchRule(0, RuleId) {
 			(*props).JSON(http.StatusNotAcceptable, gin.H{
 				"message": StatusText().DeleteFail,
 			})
@@ -557,7 +558,7 @@ func DeleteBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
 			})
 			return
 		}
-		if !(*dbHandle).DeleteBanchRule(0, request.RuleId) {
+		if !(*dbHandle).DeleteBanchRule(0, RuleId) {
 			(*props).JSON(http.StatusNotAcceptable, gin.H{
 				"message": StatusText().DeleteFail,
 			})
