@@ -58,20 +58,6 @@ const personalForm = (): JSX.Element => {
                 autoComplete="off"
             >
                 <Form.Item
-                    label="姓名"
-                    name="UserName"
-                    initialValue={user.selfData?.UserName || ''}
-                >
-                    <Input />
-                </Form.Item>
-                <Form.Item
-                    label="公司編號"
-                    name="CompanyCode"
-                    initialValue={user.selfData?.CompanyCode || ''}
-                >
-                    <Input disabled />
-                </Form.Item>
-                <Form.Item
                     label="帳號"
                     name="Account"
                     initialValue={user.selfData?.Account || ''}
@@ -79,24 +65,39 @@ const personalForm = (): JSX.Element => {
                     <Input disabled />
                 </Form.Item>
                 <Form.Item
-                    label="到職日"
-                    name="OnWorkDay"
-                    initialValue={moment(user.selfData?.OnWorkDay || '2001-07-01')}
+                    label="姓名"
+                    name="UserName"
+                    initialValue={user.selfData?.UserName || ''}
                 >
-                    <DatePicker disabled />
+                    <Input />
                 </Form.Item>
-                <Form.Item
-                    label="部門"
-                    name="Banch"
-                >
-                    <BanchSelector disabled defaultValue={user.selfData?.Banch || 0} />
-                </Form.Item>
-                <Form.Item
-                    label="權限"
-                    name="Permession"
-                >
-                    <PermessionSelector disabled defaultValue={user.selfData?.Permession} />
-                </Form.Item>
+                {
+                    user.selfData?.CompanyCode !== '' && (
+                        <><Form.Item
+                            label="公司編號"
+                            name="CompanyCode"
+                            initialValue={user.selfData?.CompanyCode || ''}
+                        >
+                            <Input disabled />
+                        </Form.Item><Form.Item
+                            label="到職日"
+                            name="OnWorkDay"
+                            initialValue={moment(user.selfData?.OnWorkDay || '2001-07-01')}
+                        >
+                            <DatePicker disabled />
+                        </Form.Item><Form.Item
+                            label="部門"
+                            name="Banch"
+                        >
+                            <BanchSelector disabled defaultValue={user.selfData?.Banch || 0} />
+                        </Form.Item><Form.Item
+                            label="權限"
+                            name="Permession"
+                        >
+                            <PermessionSelector disabled defaultValue={user.selfData?.Permession} />
+                        </Form.Item></>
+                    )
+                }
                 <Form.Item
                     style={{ marginTop: '130px' }}
                     name="username"
