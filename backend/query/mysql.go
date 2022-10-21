@@ -94,6 +94,7 @@ type quitWorkUser struct {
 	SelectSingleByUserId string
 	SelectAllByCompanyCode string
 	SelectSingleByQuitId string
+	SelectSingleByCompanyCodeAndUserId string
 }
 
 func MysqlSingleton() *sqlQuery {
@@ -518,5 +519,6 @@ func addQuitWorkUserQuery() {
 	sqlQueryInstance.QuitWorkUser.SelectAllByCompanyCode = `select * from quitWorkUser where companyCode=?;`
 	sqlQueryInstance.QuitWorkUser.SelectSingleByUserId = `select * from quitWorkUser where userId=?;`
 	sqlQueryInstance.QuitWorkUser.SelectSingleByQuitId = `select * from quitWorkUser where quitId=?;`
+	sqlQueryInstance.QuitWorkUser.SelectSingleByCompanyCodeAndUserId = `select * from quitWorkUser where companyCode = ? and userId = ?;`
 	sqlQueryInstance.QuitWorkUser.Delete = `delete from quitWorkUser where quitId=?;`;
 }

@@ -669,6 +669,9 @@ func(dbObj *DB) SelectQuitWorkUser(selectKey int, value... interface{}) *[]table
 	case 3:
 		querys = (*query.MysqlSingleton()).QuitWorkUser.SelectAllByCompanyCode
 		break
+	case 4:
+		querys = (*query.MysqlSingleton()).QuitWorkUser.SelectSingleByCompanyCodeAndUserId
+		break
 	default:
 		querys = (*query.MysqlSingleton()).QuitWorkUser.SelectAll
 		break

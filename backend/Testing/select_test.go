@@ -448,6 +448,17 @@ func TestSelectQuitWorkUser(t *testing.T) {
 	m = (*mysql.Singleton()).SelectQuitWorkUser(3, "company0")
 	res = testEq(r, m, compareFunc)
 	assert.NotEqual(t, res, true)
+
+	// test 4
+	r = (*redis.Singleton()).SelectQuitWorkUser(4, "company0", 1)
+	m = (*mysql.Singleton()).SelectQuitWorkUser(4, "company0", 1)
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+	
+	r = (*redis.Singleton()).SelectQuitWorkUser(4, "company0", int64(0))
+	m = (*mysql.Singleton()).SelectQuitWorkUser(4, "company0", int64(100))
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
 }
 
 func testEq[T comparable](a1 *[]T, b1 *[]T, compareFunc func(T, T) bool) bool {
