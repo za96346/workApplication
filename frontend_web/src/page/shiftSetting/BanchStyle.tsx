@@ -135,10 +135,14 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
                                     status.currentListIdx === parseInt(item.id)
                                 )
                                     ? {
-                                        opacity: 1
+                                        opacity: 1,
+                                        flexWrap: 'wrap',
+                                        position: 'relative'
                                     }
                                     : {
-                                        opacity: 0.1
+                                        opacity: 0.1,
+                                        flexWrap: 'wrap',
+                                        position: 'relative'
                                     }
                             }
                         >
@@ -146,25 +150,32 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
                                 avatar={<span style={{ fontSize: '2rem' }} >{item.icons}</span>}
                                 title={item.title}
                                 description={item.time}
+                                style={{ minWidth: '200px', marginBottom: '30px' }}
                             />
 
-                            <div
-                                onClick={() => onEdit(item.id)}
-                                className={styles.editLabel}
-                                style={{ color: 'blue' }}
-                            >
-                                <EditOutlined style={{ marginRight: '10px' }} />
+                            <div style={{
+                                position: 'absolute',
+                                right: '0px',
+                                bottom: '5px'
+                            }}>
+                                <Button
+                                    style={{ color: 'blue' }}
+                                    onClick={() => onEdit(item.id)}
+                                    className={styles.editLabel}
+                                    icon={<EditOutlined style={{ marginRight: '10px' }} />}
+                                >
                                     編輯
+                                </Button>
+                                <Button
+                                    onClick={() => setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(item.id) }))}
+                                    className={styles.editLabel}
+                                    style={{ color: 'red' }}
+                                    icon={<DeleteOutlined style={{ marginRight: '10px' }} />}
+                                >
+                                    刪除
+                                </Button>
                             </div>
 
-                            <div
-                                onClick={() => setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(item.id) }))}
-                                className={styles.editLabel}
-                                style={{ marginLeft: '20px', color: 'red' }}
-                            >
-                                <DeleteOutlined style={{ marginRight: '10px' }} />
-                                        刪除
-                            </div>
                         </List.Item>
                 )}
             />
