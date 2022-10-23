@@ -464,15 +464,7 @@ class ApiControl extends api {
         store.dispatch(statusAction.onUpdateUser(true))
         const res = await this.POST<null>({
             url: this.route.userSingle,
-            body: {
-                ...user,
-                CompanyCode: user.CompanyCode,
-                EmployeeNumber: user.EmployeeNumber,
-                OnWorkDay: user.OnWorkDay,
-                Banch: user.Banch,
-                Permession: user.Permession,
-                WorkState: user.WorkState
-            },
+            body: { ...user },
             params: {
                 userId: user.UserId
             }

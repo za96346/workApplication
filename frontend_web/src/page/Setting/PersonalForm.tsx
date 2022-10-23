@@ -84,7 +84,7 @@ const personalForm = (): JSX.Element => {
                             name="OnWorkDay"
                             initialValue={moment(user.selfData?.OnWorkDay || '2001-07-01')}
                         >
-                            <DatePicker disabled />
+                            <DatePicker allowClear={false} disabled />
                         </Form.Item><Form.Item
                             label="部門"
                             name="Banch"

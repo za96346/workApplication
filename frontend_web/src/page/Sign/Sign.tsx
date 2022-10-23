@@ -3,16 +3,16 @@ import React from 'react'
 
 const data = [
     {
-        title: 'Ant Design Title 1'
+        title: 'siou'
     },
     {
-        title: 'Ant Design Title 2'
+        title: 'siou'
     },
     {
-        title: 'Ant Design Title 3'
+        title: 'so'
     },
     {
-        title: 'Ant Design Title 4'
+        title: 'Ant'
     }
 ]
 const SignPage = (): JSX.Element => {
@@ -30,7 +30,7 @@ const SignPage = (): JSX.Element => {
                             description=""
                         />
                         <div style={{ position: 'absolute', right: '0px', bottom: '5px' }}>
-                            <Button>確認</Button>
+                            <Button style={{ backgroundColor: 'skyblue', color: 'white' }}>確認</Button>
                             <Button>拒絕</Button>
                         </div>
                     </List.Item>

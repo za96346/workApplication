@@ -1,7 +1,8 @@
-import { DeleteOutlined, EditOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons'
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Collapse, List, Modal, Skeleton } from 'antd'
 import React, { useEffect, useState } from 'react'
 import api from '../../api/api'
+import Btn from '../../component/Btn'
 import useReduceing from '../../Hook/useReducing'
 import dateHandle from '../../method/dateHandle'
 import { BanchStyleType, ResType, ShiftSettingListType } from '../../type'
@@ -117,7 +118,6 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
                     </Collapse.Panel>
                 </Collapse>
             </div>
-            <a href='https://tw.piliapp.com/symbol/' target={'_blank'} rel="noreferrer" >參考連結</a>
             <List
                 style={{ marginTop: '20px' }}
                 split
@@ -159,22 +159,8 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
                                 right: '0px',
                                 bottom: '5px'
                             }}>
-                                <Button
-                                    style={{ color: 'blue' }}
-                                    onClick={() => onEdit(item.id)}
-                                    className={styles.editLabel}
-                                    icon={<EditOutlined style={{ marginRight: '10px' }} />}
-                                >
-                                    編輯
-                                </Button>
-                                <Button
-                                    onClick={() => setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(item.id) }))}
-                                    className={styles.editLabel}
-                                    style={{ color: 'red' }}
-                                    icon={<DeleteOutlined style={{ marginRight: '10px' }} />}
-                                >
-                                    刪除
-                                </Button>
+                                <Btn.Edit onClick={() => onEdit(item.id)}/>
+                                <Btn.Delete onClick={() => setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(item.id) }))} />
                             </div>
 
                         </List.Item>

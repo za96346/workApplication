@@ -160,23 +160,48 @@ div {
 	}
 }
 
-.empMangerFilter {
+.empManagerTable {
 	width: 100%;
-	min-height: 100px;
 	height: fit-content;
-	background-color: #fff;
-	border-radius: 20px;
-	margin-bottom: 20px;
-	padding: 20px;
-	>div:last-child {
-		margin-top: 20px;
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-		>div {
-			margin-right: 0.4rem;
+	position: relative;
+	max-height: 80vh!important;
+	overflow-y: scroll;
+	table {
+		width: 100%;
+		height: fit-content;
+		background-color: #fff;
+		table-layout: auto;
+	}
+	tr {
+		height: 40px;
+		&:hover {
+			cursor: pointer;
+			background-color: rgba(0, 0, 0, 0.2);
+
+			color: #fff;
 		}
 	}
+	td {
+		border: 1px solid rgba(0, 0, 0, 0.2);
+		min-width: 100px;
+		max-width: 100px;
+		padding: 10px;
+		text-align: center;
+	}
+	thead{
+		background-color: rgba(214, 214, 214, 0.8);
+		position: sticky;
+		top: -2px;
+		z-index: 20;
+	}
+}
+.empManagerFilter {
+	@extend %whiteBoard;
+	margin-bottom: 30px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
 }
 
 .peopleList {

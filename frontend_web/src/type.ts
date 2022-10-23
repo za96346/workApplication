@@ -33,8 +33,6 @@ export interface EmpManagerCellType {
     WorkState: 'on' | 'off'
     Banch: string
     Permession: string
-    PermessionId: number
-    BanchId: number
 }
 
 export interface BanchType {

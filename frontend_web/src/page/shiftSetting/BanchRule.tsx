@@ -1,7 +1,8 @@
-import { DeleteOutlined, EditOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons'
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Collapse, List, Modal, Skeleton } from 'antd'
 import React, { useEffect, useState } from 'react'
 import api from '../../api/api'
+import Btn from '../../component/Btn'
 import useReduceing from '../../Hook/useReducing'
 import dateHandle from '../../method/dateHandle'
 import statics from '../../statics'
@@ -136,10 +137,12 @@ const BanchRule = ({ banchId }: props): JSX.Element => {
                                     status.currentListIdx === parseInt(item.id)
                                 )
                                     ? {
-                                        opacity: 1
+                                        opacity: 1,
+                                        position: 'relative'
                                     }
                                     : {
-                                        opacity: 0.1
+                                        opacity: 0.1,
+                                        position: 'relative'
                                     }
                             }
                         >
@@ -147,24 +150,17 @@ const BanchRule = ({ banchId }: props): JSX.Element => {
                                 avatar={<span style={{ fontSize: '1rem', color: 'blue' }} >{statics.weekType[item.weekType]}</span>}
                                 title={statics.weekDay[item.title]}
                                 description={item.time}
+                                style={{
+                                    marginBottom: '30px'
+                                }}
                             />
-
-                            <div
-                                onClick={() => onEdit(item.id)}
-                                className={styles.editLabel}
-                                style={{ color: 'blue' }}
-                            >
-                                <EditOutlined style={{ marginRight: '10px' }} />
-                                    編輯
-                            </div>
-
-                            <div
-                                onClick={async () => setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(item.id) }))}
-                                className={styles.editLabel}
-                                style={{ marginLeft: '20px', color: 'red' }}
-                            >
-                                <DeleteOutlined style={{ marginRight: '10px' }} />
-                                    刪除
+                            <div style={{
+                                position: 'absolute',
+                                right: '0px',
+                                bottom: '5px'
+                            }}>
+                                <Btn.Edit onClick={() => onEdit(item.id)} />
+                                <Btn.Delete onClick={async () => setStatus((prev) => ({ ...prev, currentDeleteListIdx: parseInt(item.id) }))} />
                             </div>
                         </List.Item>
                 )}

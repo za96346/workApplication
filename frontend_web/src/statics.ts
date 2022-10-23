@@ -32,6 +32,11 @@ class statics {
             1: '平日',
             2: '假日'
         }
+
+    workState = {
+        off: '離職',
+        on: '在職'
+    }
 }
 
 export default new statics()

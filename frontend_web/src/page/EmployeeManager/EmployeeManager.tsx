@@ -1,227 +1,124 @@
-import { Form, Input, Select, Popconfirm, Table, Typography, Button } from 'antd'
-import React, { ReactNode, useEffect, useState } from 'react'
-import dateHandle from '../../method/dateHandle'
-import EditableCell from './EditableCell'
-import { BanchType, EmpManagerCellType, UserType } from '../../type'
 import { SearchOutlined } from '@ant-design/icons'
+import { DatePicker, Input } from 'antd'
+import moment from 'moment'
+import React, { useEffect, useRef, useState } from 'react'
 import api from '../../api/api'
 import BanchSelector from '../../component/BanchSelector'
+import Btn from '../../component/Btn'
 import PermessionSelector from '../../component/PermessionSelector'
-import statics from '../../statics'
 import StatusSelector from '../../component/StatusSelector'
 import useReduceing from '../../Hook/useReducing'
+import statics from '../../statics'
+import { UserType } from '../../type'
 
-const items = (value: UserType[], banch: BanchType[]): any => {
-    return value?.map((i, index) => {
-        const b = banch?.find((item) => item.Id === i.Banch)
-        return {
-            EmployeeNumber: i.EmployeeNumber,
-            key: i.UserId.toString(),
-            UserName: i.UserName,
-            OnWorkDay: dateHandle.formatDate(new Date(i.OnWorkDay)),
-            WorkState: i.WorkState === 'on' ? '在職' : '離職',
-            Banch: b?.BanchName,
-            BanchId: i.Banch,
-            Permession: statics.permession[i.Permession],
-            PermessionId: i.Permession
-        }
-    })
+const editInit = {
+    currentIdx: -1
 }
-
 const EmployeeManager = (): JSX.Element => {
-    const [form] = Form.useForm()
-    const [data, setData] = useState([])
-    const [editingKey, setEditingKey] = useState('')
-    const { company, loading } = useReduceing()
-
-    const isEditing = (record: EmpManagerCellType): any => record.key === editingKey
-
-    const edit = (record: Partial<EmpManagerCellType> & { key: React.Key }): void => {
-        form.setFieldsValue({ name: '', ...record })
-        setEditingKey(record.key)
-    }
-
-    const cancel = (): void => {
-        setEditingKey('')
-    }
-
-    const save = async (key: React.Key): Promise<void> => {
-        try {
-            const row = (await form.validateFields()) as EmpManagerCellType
-            console.log(row)
-            const newData = [...data]
-            const index = newData.findIndex(item => key === item.key)
-            if (index > -1) {
-                const item = newData[index]
-                newData.splice(index, 1, {
-                    ...item,
-                    ...row
-                })
-                setData(newData)
-                setEditingKey('')
-            } else {
-                newData.push(row)
-                setData(newData)
-                setEditingKey('')
-            }
-        } catch (errInfo) {
-            console.log('Validate Failed:', errInfo)
-        }
-    }
-
-    const columns = [
-        {
-            title: '員工編號',
-            dataIndex: 'EmployeeNumber',
-            editable: true,
-            width: '10%',
-            inputCop: (record: EmpManagerCellType): ReactNode => {
-                return (
-                    <Input disabled placeholder={`${record.EmployeeNumber}`} />
-                )
-            }
-        },
-        {
-            title: '組別',
-            dataIndex: 'Banch',
-            editable: true,
-            inputCop: (record: EmpManagerCellType): ReactNode => {
-                return (
-                    <BanchSelector defaultValue={record.BanchId} />
-                )
-            }
-        },
-        {
-            title: '姓名',
-            dataIndex: 'UserName',
-            width: '10%',
-            editable: true,
-            inputCop: (record: EmpManagerCellType): ReactNode => {
-                return (
-                    <Input disabled placeholder={`${record.UserName}`} />
-                )
-            }
-        },
-        {
-            title: '入職日',
-            dataIndex: 'OnWorkDay',
-            editable: true,
-            inputCop: (record: EmpManagerCellType): ReactNode => {
-                return (
-                    <input type='date'/>
-                )
-            }
-        },
-        {
-            title: '權限',
-            dataIndex: 'Permession',
-            editable: true,
-            inputCop: (record: EmpManagerCellType): ReactNode => {
-                return (
-                    <PermessionSelector defaultValue={record.PermessionId} />
-                )
-            }
-        },
-        {
-            title: '狀態',
-            dataIndex: 'WorkState',
-            editable: true,
-            inputCop: (record: EmpManagerCellType): ReactNode => {
-                return (
-                    <StatusSelector defaultValue={record.WorkState} />
-                )
-            }
-        },
-        {
-            title: '',
-            dataIndex: 'operation',
-            render: (_: any, record: EmpManagerCellType) => {
-                const editable = isEditing(record)
-                return editable
-                    ? (
-                        <span>
-                            <Typography.Link onClick={async () => await save(record.key)} style={{ marginRight: 8 }}>
-                            儲存
-                            </Typography.Link>
-                            <Popconfirm title="確定取消嗎？" onConfirm={cancel}>
-                                <a>取消</a>
-                            </Popconfirm>
-                        </span>
-                    )
-                    : (
-                        <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-                            編輯
-                        </Typography.Link>
-                    )
-            },
-            inputCop: (record: EmpManagerCellType): ReactNode => {
-                return (
-                    <Input disabled placeholder={`${record.EmployeeNumber}`} />
-                )
-            }
-        }
-    ]
-
-    const mergedColumns = columns.map(col => {
-        if (!col.editable) {
-            return col
-        }
-        return {
-            ...col,
-            onCell: (record: EmpManagerCellType) => ({
-                record,
-                inputType: col.inputCop(record),
-                dataIndex: col.dataIndex,
-                title: col.title,
-                editing: isEditing(record)
-            })
-        }
+    const { company } = useReduceing()
+    const form = useRef<UserType>({
+        UserId: -1,
+        UserName: '',
+        CompanyCode: '',
+        EmployeeNumber: '',
+        OnWorkDay: '',
+        Banch: -1,
+        Permession: 2,
+        WorkState: 'on'
     })
-
+    const [edit, setEdit] = useState(editInit)
+    const onSave = async (): Promise<void> => {
+        setEdit((prev) => ({ ...prev, currentIdx: -1 }))
+        console.log(form.current)
+        const res = await api.updateUser(form.current)
+        if (res.status) {
+            await api.getUserAll()
+        }
+    }
     useEffect(() => {
-        void api.getUserAll()
+        api.getUserAll()
     }, [])
-
     useEffect(() => {
-        setData(items(company.employee, company.banch))
-    }, [company.employee, company.banch])
-
+        const user = company.employee?.find((item) => item?.UserId === edit.currentIdx)
+        form.current = {
+            ...user
+        }
+    }, [edit.currentIdx])
     return (
-        <Form form={form} component={false}>
-            <div className={styles.empMangerFilter}>
-                <div>xx組</div>
-                <div>
-                    <Input style={{ width: '150px', marginRight: '0.4rem' }} prefix={<SearchOutlined />} placeholder={'請輸入姓名'} />
-                    <Select defaultValue={'保育組'} >
-                        <Select.Option value={'保育組'} key={0}>保育組</Select.Option>
-                        <Select.Option value={'公關組'} key={1}>公關組</Select.Option>
-                    </Select>
-                    <Select defaultValue={'在職'}>
-                        <Select.Option value={'在職'} key={0}>在職</Select.Option>
-                        <Select.Option value={'離職'} key={1}>離職</Select.Option>
-                    </Select>
-                    <Button>搜尋</Button>
-                </div>
+        <>
+            <div className={styles.empManagerFilter}>
+                <Input style={{ width: '150px' }} prefix={<SearchOutlined/>} placeholder='姓名' />
             </div>
-            <div style={{ maxHeight: '80%', overflow: 'scroll' }}>
-                <Table
-                    components={{
-                        body: {
-                            cell: EditableCell
+            <div className={styles.empManagerTable}>
+                <table>
+                    <thead>
+                        <tr>
+                            <td>員工編號</td>
+                            <td>姓名</td>
+                            <td>權限</td>
+                            <td>部門</td>
+                            <td>到職日</td>
+                            <td>工作狀態</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            company.employee?.map((item) => {
+                                if (edit.currentIdx > -1 && edit.currentIdx === item.UserId) {
+                                    return (
+                                        <tr key={item.UserId}>
+                                            <td>
+                                                <Input onChange={(v) => { form.current.EmployeeNumber = v.target.value }} placeholder='請輸入員工編號' defaultValue={item.EmployeeNumber}/>
+                                            </td>
+                                            <td>{item.UserName}</td>
+                                            <td>
+                                                <PermessionSelector onChange={(v) => { form.current.Permession = v }} defaultValue={item.Permession}/>
+                                            </td>
+                                            <td>
+                                                <BanchSelector onChange={(v) => { form.current.Banch = v }} defaultValue={item.Banch}/>
+                                            </td>
+                                            <td>
+                                                <DatePicker
+                                                    allowClear={false}
+                                                    inputReadOnly
+                                                    onChange={(v: any) => { form.current.OnWorkDay = v._i }}
+                                                    defaultValue={moment(item.OnWorkDay)}
+                                                />
+                                            </td>
+                                            <td>
+                                                <StatusSelector onChange={(v) => { form.current.WorkState = v }} defaultValue={item.WorkState}/>
+                                            </td>
+                                            <td>
+                                                <Btn.Save onClick={onSave} />
+                                                <Btn.Cancel onClick={() => setEdit((prev) => ({ ...prev, currentIdx: -1 }))} />
+                                            </td>
+                                        </tr>
+                                    )
+                                }
+                                return (
+                                    <tr key={item.UserId}>
+                                        <td>{item.EmployeeNumber}</td>
+                                        <td>{item.UserName}</td>
+                                        <td>{statics.permession[item.Permession]}</td>
+                                        <td>{company.banch?.find((items) => items?.Id === item?.Banch)?.BanchName || ''}</td>
+                                        <td>{new Date(item?.OnWorkDay)?.toLocaleDateString()}</td>
+                                        <td>{statics.workState[item.WorkState]}</td>
+                                        <td>
+                                            {
+                                                edit.currentIdx === -1 && (
+                                                    <Btn.Edit onClick={() => setEdit((prev) => ({ ...prev, currentIdx: item.UserId }))} />
+                                                )
+                                            }
+                                        </td>
+                                    </tr>
+                                )
+                            })
                         }
-                    }}
-                    loading={loading.onFetchUserAll}
-                    sticky
-                    showHeader
-                    bordered
-                    dataSource={data}
-                    columns={mergedColumns}
-                    rowClassName="editable-row"
-                    pagination={false}
-                />
+                    </tbody>
+                </table>
             </div>
-        </Form>
+        </>
     )
 }
-
 export default EmployeeManager

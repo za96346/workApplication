@@ -172,3 +172,17 @@ type QuitWorkUser struct {
 	CreateTime time.Time `json:"CreateTime"`//創建的時間
 	LastModify time.Time `json:"LastModify"`// 上次修改的時間
 }
+
+// 等待配對公司
+type WaitCompanyReply struct {
+	UserId int64 `json:"UserId"` // 使用者的編號
+	CompanyCode string `json:"CompanyCode"` // 公司碼
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
+}
+
+// 公司每天平假日的設定
+type WeekendSetting struct {
+	Date string // 每天 ex: 2022-02-22
+	weekType string
+}

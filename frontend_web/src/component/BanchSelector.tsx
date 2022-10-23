@@ -11,7 +11,6 @@ const BanchSelector = ({ ...rest }: BanchSelectorProps): JSX.Element => {
     const { defaultValue, ...other } = rest
     const { company } = useReduceing()
     const df = company.banch?.find((item: BanchType) => item.Id === defaultValue)
-    console.log(df, defaultValue)
     return (
         <Select {...other} defaultValue={df?.Id}>
             {
