@@ -1,5 +1,5 @@
 import { SearchOutlined } from '@ant-design/icons'
-import { DatePicker, Input } from 'antd'
+import { DatePicker, Input, Spin } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useRef, useState } from 'react'
 import api from '../../api/api'
@@ -15,7 +15,7 @@ const editInit = {
     currentIdx: -1
 }
 const EmployeeManager = (): JSX.Element => {
-    const { company } = useReduceing()
+    const { company, loading } = useReduceing()
     const form = useRef<UserType>({
         UserId: -1,
         UserName: '',
@@ -28,12 +28,12 @@ const EmployeeManager = (): JSX.Element => {
     })
     const [edit, setEdit] = useState(editInit)
     const onSave = async (): Promise<void> => {
-        setEdit((prev) => ({ ...prev, currentIdx: -1 }))
         console.log(form.current)
         const res = await api.updateUser(form.current)
         if (res.status) {
             await api.getUserAll()
         }
+        setEdit((prev) => ({ ...prev, currentIdx: -1 }))
     }
     useEffect(() => {
         api.getUserAll()
@@ -82,7 +82,7 @@ const EmployeeManager = (): JSX.Element => {
                                                 <DatePicker
                                                     allowClear={false}
                                                     inputReadOnly
-                                                    onChange={(v: any) => { form.current.OnWorkDay = v._i }}
+                                                    onChange={(v: any) => { form.current.OnWorkDay = v._d.toISOString() }}
                                                     defaultValue={moment(item.OnWorkDay)}
                                                 />
                                             </td>
@@ -95,6 +95,12 @@ const EmployeeManager = (): JSX.Element => {
                                             </td>
                                         </tr>
                                     )
+                                }
+                                if (
+                                    loading.onUpdateUser) {
+                                    <tr>
+                                        <Spin/>
+                                    </tr>
                                 }
                                 return (
                                     <tr key={item.UserId}>
