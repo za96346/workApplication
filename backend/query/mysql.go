@@ -144,10 +144,9 @@ func addUserQuery() {
 	);`;
 	sqlQueryInstance.User.UpdateSingle = `
 		update user
-		set 
-			companyCode=(
-				select ifNull(companyCode, "") from company where companyCode=?
-			),
+		set
+			employeeNumber=?,
+			companyCode=?,
 			password=?,
 			userName=?,
 			onWorkDay=?,

@@ -959,6 +959,7 @@ func(dbObj *DB) UpdateUser(updateKey int, data *table.UserTable, value... interf
 			querys = (*query.MysqlSingleton()).User.UpdateSingle
 			(*dbObj).containers.user = append(
 				(*dbObj).containers.user,
+				(*data).EmployeeNumber,
 				(*data).CompanyCode,
 				(*data).Password,
 				(*data).UserName,
