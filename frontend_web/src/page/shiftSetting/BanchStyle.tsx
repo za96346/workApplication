@@ -117,6 +117,7 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
                     </Collapse.Panel>
                 </Collapse>
             </div>
+            <a href='https://tw.piliapp.com/symbol/' target={'_blank'} rel="noreferrer" >參考連結</a>
             <List
                 style={{ marginTop: '20px' }}
                 split
