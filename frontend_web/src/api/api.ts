@@ -466,7 +466,7 @@ class ApiControl extends api {
             url: this.route.userSingle,
             body: { ...user },
             params: {
-                userId: user.UserId
+                UserId: user.UserId
             }
         })
         store.dispatch(statusAction.onUpdateUser(false))
