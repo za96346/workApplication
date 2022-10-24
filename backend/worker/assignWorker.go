@@ -113,6 +113,9 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		// post method of update password
 		routeFunc = service.ForgetPassword
 		break
+	case 25:
+		routeFunc = service.DeleteBanch
+		break
 	default:
 		break;
 	}

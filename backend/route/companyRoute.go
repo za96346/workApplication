@@ -33,6 +33,11 @@ func Company(props *gin.RouterGroup) {
 			middleWare.MyCompanyAndBanch,
 			worker.AssignWorker(16),
 		)
+		props.DELETE("/banch/all",
+			middleWare.Permession(100),
+			middleWare.MyCompanyAndBanch,
+			worker.AssignWorker(25),
+		)
 
 		// banch style
 		props.GET("/banch/style", middleWare.MyCompanyAndBanch, worker.AssignWorker(9))

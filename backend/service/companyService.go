@@ -113,6 +113,42 @@ func UpdateBanch (props *gin.Context, waitJob *sync.WaitGroup) {
 	})
 }
 
+func DeleteBanch(props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+
+	banchId := (*props).Query("banchId")
+	convertBanchId, err1 := methods.AnyToInt64(banchId)
+	if err1 != nil {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().BanchIdIsNotRight,
+		})
+		return
+	}
+
+	_, company, err := CheckUserAndCompany(props)
+	if err {return}
+
+	// 檢查 部門是否在此公司
+	if !BanchIsInCompany(convertBanchId, company.CompanyId) {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().NotHaveBanch,
+		})
+		return
+	}
+
+	if !(*dbHandle).DeleteCompanyBanch(0, convertBanchId) {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().DeleteFail,
+		})
+		return
+	}
+
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().DeleteSuccess,
+	})
+}
+
 // banch style
 func FetchBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
