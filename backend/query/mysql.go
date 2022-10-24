@@ -62,22 +62,28 @@ type shiftQuery struct {
 type shiftChangeQuery struct {
 	queryCommonColumn
 	SelectSingleByCaseId string
+	SelectAllByInitiatorShiftId string
+	SelectAllByRequestedShiftId string
 }
 type shiftOverTimeQuery struct {
 	queryCommonColumn
 	SelectSingleByCaseId string
+	SelectAllByShiftId string
 }
 type forgetPunchQuery struct {
 	queryCommonColumn
 	SelectSingleByCaseId string
+	SelectAllByShiftId string
 }
 type lateExcusedQuery struct {
 	queryCommonColumn
 	SelectSingleByCaseId string
+	SelectAllByShiftId string
 }
 type  dayOffQuery struct {
 	queryCommonColumn
 	SelectSingleByCaseId string
+	SelectAllByShiftId string
 }
 type banchStyle struct {
 	queryCommonColumn
@@ -302,6 +308,8 @@ func addShiftChangeQuery() {
 	sqlQueryInstance.ShiftChange.SelectAll = `select * from shiftChange;`;
 	sqlQueryInstance.ShiftChange.Delete = `delete from shiftChange where caseId = ?;`;
 	sqlQueryInstance.ShiftChange.SelectSingleByCaseId = `select * from shiftChange where caseId = ?;`;
+	sqlQueryInstance.ShiftChange.SelectAllByInitiatorShiftId = `select * from shiftChange where initiatorShiftId = ?;`
+	sqlQueryInstance.ShiftChange.SelectAllByRequestedShiftId = `select * from shiftChange where requestedShiftId = ?;`
 }
 func  addShiftOverTimeQuery() {
 	sqlQueryInstance.ShiftOverTime.InsertAll = `
@@ -331,6 +339,7 @@ func  addShiftOverTimeQuery() {
 	sqlQueryInstance.ShiftOverTime.SelectAll = `select * from shiftOverTime;`;
 	sqlQueryInstance.ShiftOverTime.Delete = `delete from shiftOverTime where caseId = ?;`;
 	sqlQueryInstance.ShiftOverTime.SelectSingleByCaseId = `select * from shiftOverTime where caseId = ?;`;
+	sqlQueryInstance.ShiftOverTime.SelectAllByShiftId = `select * from shiftOverTime where shiftId = ?;`;
 }
 func addForgetPunchQuery() {
 	sqlQueryInstance.ForgetPunch.InsertAll = `
@@ -358,6 +367,7 @@ func addForgetPunchQuery() {
 	sqlQueryInstance.ForgetPunch.SelectAll = `select * from forgetPunch;`;
 	sqlQueryInstance.ForgetPunch.Delete = `delete from forgetPunch where caseId = ?;`;
 	sqlQueryInstance.ForgetPunch.SelectSingleByCaseId = `select * from forgetPunch where caseId = ?;`;
+	sqlQueryInstance.ForgetPunch.SelectAllByShiftId = `select * from forgetPunch where shiftId = ?;`
 }
 func addLateExcusedQuery() {
 	sqlQueryInstance.LateExcused.InsertAll = `
@@ -385,6 +395,7 @@ func addLateExcusedQuery() {
 	sqlQueryInstance.LateExcused.SelectAll = `select * from lateExcused;`;
 	sqlQueryInstance.LateExcused.Delete = `delete from lateExcused where caseId = ?;`;
 	sqlQueryInstance.LateExcused.SelectSingleByCaseId = `select * from lateExcused where caseId = ?;`;
+	sqlQueryInstance.LateExcused.SelectAllByShiftId = `select * from lateExcused where shiftId = ?;`;
 }
 func addDayOffQuery() {
 	sqlQueryInstance.DayOff.InsertAll = `
@@ -412,6 +423,7 @@ func addDayOffQuery() {
 	sqlQueryInstance.DayOff.SelectAll = `select * from dayOff;`;
 	sqlQueryInstance.DayOff.Delete = `delete from dayOff where caseId = ?;`;
 	sqlQueryInstance.DayOff.SelectSingleByCaseId = `select * from dayOff where caseId = ?;`;
+	sqlQueryInstance.DayOff.SelectAllByShiftId = `select * from dayOff where shiftId = ?;`;
 }
 func addBanchStyleQuery() {
 	sqlQueryInstance.BanchStyle.InsertAll = `

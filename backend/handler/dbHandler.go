@@ -18,7 +18,7 @@ func Init(path string) {
 	(*redis.Singleton()).RedisDb.FlushAll() // redis清空
 	(*Singleton()).TakeAllFromMysql() // 從mysql 抓到 redis
 	// (*Singleton()).DeleteCompanyBanch(0, int64(1))
-	(*Singleton()).DeleteShift(0, 2)
+	// (*Singleton()).DeleteShift(0, 2)
 }
 
 var dbHandlerInstance *DB
@@ -835,6 +835,8 @@ func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftT
 
 // 0 => all, value => nil
 //  1 => caseId, value => int64
+//  2 => initiatorShiftId, value => int64
+//  3 => requestedShiftId, value => int64
 func(dbObj *DB) SelectShiftChange(selectKey int, value... interface{}) *[]table.ShiftChangeTable {
 	defer panichandler.Recover()
 	return selectAllHandler(
@@ -850,6 +852,7 @@ func(dbObj *DB) SelectShiftChange(selectKey int, value... interface{}) *[]table.
 
 // 0 => all, value => nil
 //  1 => caseId, value => int64
+//  2 => shiftId, value => int64
 func(dbObj *DB) SelectShiftOverTime(selectKey int, value... interface{}) *[]table.ShiftOverTimeTable {
 	defer panichandler.Recover()
 	return selectAllHandler(
@@ -865,6 +868,7 @@ func(dbObj *DB) SelectShiftOverTime(selectKey int, value... interface{}) *[]tabl
 
 // 0 => all, value => nil
 //  1 => caseId, value => int64
+//  2 => shiftId, value => int64
 func(dbObj *DB) SelectDayOff(selectKey int, value... interface{}) *[]table.DayOffTable {
 	defer panichandler.Recover()
 	return selectAllHandler(
@@ -880,6 +884,7 @@ func(dbObj *DB) SelectDayOff(selectKey int, value... interface{}) *[]table.DayOf
 
 // 0 => all, value => nil
 //  1 => caseId, value => int64
+//  2 => shiftId, value => int64
 func(dbObj *DB) SelectForgetPunch(selectKey int, value... interface{}) *[]table.ForgetPunchTable {
 	defer panichandler.Recover()
 	return selectAllHandler(
@@ -895,6 +900,7 @@ func(dbObj *DB) SelectForgetPunch(selectKey int, value... interface{}) *[]table.
 
 // 0 => all, value => nil
 //  1 => caseId, value => int64
+//  2 => shiftId, value => int64
 func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.LateExcusedTable {
 	defer panichandler.Recover()
 	return selectAllHandler(

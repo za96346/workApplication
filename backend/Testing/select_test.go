@@ -197,7 +197,7 @@ func TestSelectShiftChange(t *testing.T) {
 		}
 		return false
 	}
-
+	// handler.Init("../.env")
 	// test 0
 	r := (*redis.Singleton()).SelectShiftChange(0)
 	m := (*mysql.Singleton()).SelectShiftChange(0)
@@ -214,6 +214,28 @@ func TestSelectShiftChange(t *testing.T) {
 	m = (*mysql.Singleton()).SelectShiftChange(1, int64(2))
 	res = testEq(r, m, compareFunc)
 	assert.NotEqual(t, res, true)
+
+	// test 2
+	r = (*redis.Singleton()).SelectShiftChange(2, int64(1))
+	m = (*mysql.Singleton()).SelectShiftChange(2, int64(1))
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+
+	r = (*redis.Singleton()).SelectShiftChange(2, int64(1))
+	m = (*mysql.Singleton()).SelectShiftChange(2, int64(2))
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
+
+	// test 3
+	r = (*redis.Singleton()).SelectShiftChange(3, int64(1))
+	m = (*mysql.Singleton()).SelectShiftChange(3, int64(1))
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+
+	r = (*redis.Singleton()).SelectShiftChange(3, int64(1))
+	m = (*mysql.Singleton()).SelectShiftChange(3, int64(2))
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
 	
 }
 
@@ -224,7 +246,7 @@ func TestSelectShiftOverTime(t *testing.T) {
 		}
 		return false
 	}
-
+	// handler.Init("../.env")
 	// test 0
 	r := (*redis.Singleton()).SelectShiftOverTime(0)
 	m := (*mysql.Singleton()).SelectShiftOverTime(0)
@@ -241,6 +263,17 @@ func TestSelectShiftOverTime(t *testing.T) {
 	m = (*mysql.Singleton()).SelectShiftOverTime(1, int64(2))
 	res = testEq(r, m, compareFunc)
 	assert.NotEqual(t, res, true)
+
+	// test 2
+	r = (*redis.Singleton()).SelectShiftOverTime(2, int64(1))
+	m = (*mysql.Singleton()).SelectShiftOverTime(2, int64(1))
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+	
+	r = (*redis.Singleton()).SelectShiftOverTime(2, int64(1))
+	m = (*mysql.Singleton()).SelectShiftOverTime(2, int64(2))
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
 	
 }
 
@@ -251,7 +284,7 @@ func TestSelectForgetPunch(t *testing.T) {
 		}
 		return false
 	}
-
+	// handler.Init("../.env")
 	// test 0
 	r := (*redis.Singleton()).SelectForgetPunch(0)
 	m := (*mysql.Singleton()).SelectForgetPunch(0)
@@ -268,6 +301,17 @@ func TestSelectForgetPunch(t *testing.T) {
 	m = (*mysql.Singleton()).SelectForgetPunch(1, int64(2))
 	res = testEq(r, m, compareFunc)
 	assert.NotEqual(t, res, true)
+
+	// test 2
+	r = (*redis.Singleton()).SelectForgetPunch(2, int64(1))
+	m = (*mysql.Singleton()).SelectForgetPunch(2, int64(1))
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+	
+	r = (*redis.Singleton()).SelectForgetPunch(2, int64(1))
+	m = (*mysql.Singleton()).SelectForgetPunch(2, int64(2))
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
 	
 }
 
@@ -278,6 +322,7 @@ func TestSelectLateExcused(t *testing.T) {
 		}
 		return false
 	}
+	// handler.Init("../.env")
 
 	// test 0
 	r := (*redis.Singleton()).SelectLateExcused(0)
@@ -295,6 +340,17 @@ func TestSelectLateExcused(t *testing.T) {
 	m = (*mysql.Singleton()).SelectLateExcused(1, int64(2))
 	res = testEq(r, m, compareFunc)
 	assert.NotEqual(t, res, true)
+
+	// test 2
+	r = (*redis.Singleton()).SelectLateExcused(2, int64(1))
+	m = (*mysql.Singleton()).SelectLateExcused(2, int64(1))
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+	
+	r = (*redis.Singleton()).SelectLateExcused(2, int64(1))
+	m = (*mysql.Singleton()).SelectLateExcused(2, int64(2))
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
 }
 
 func TestSelectDayOff(t *testing.T) {
@@ -304,7 +360,7 @@ func TestSelectDayOff(t *testing.T) {
 		}
 		return false
 	}
-
+	// handler.Init("../.env")
 	// test 0
 	r := (*redis.Singleton()).SelectDayOff(0)
 	m := (*mysql.Singleton()).SelectDayOff(0)
@@ -319,6 +375,17 @@ func TestSelectDayOff(t *testing.T) {
 
 	r = (*redis.Singleton()).SelectDayOff(1, int64(1))
 	m = (*mysql.Singleton()).SelectDayOff(1, int64(2))
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
+
+	// test 2
+	r = (*redis.Singleton()).SelectDayOff(2, int64(1))
+	m = (*mysql.Singleton()).SelectDayOff(2, int64(1))
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+	
+	r = (*redis.Singleton()).SelectDayOff(2, int64(1))
+	m = (*mysql.Singleton()).SelectDayOff(2, int64(2))
 	res = testEq(r, m, compareFunc)
 	assert.NotEqual(t, res, true)
 	

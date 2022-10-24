@@ -353,6 +353,8 @@ func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftT
 
 // 0 => all, value => nil
 //  1 => caseId, value => int64
+//  2 => initiatorShiftId, value => int64
+//  3 => requestedShiftId, value => int64
 func(dbObj *DB) SelectShiftChange(selectKey int, value... interface{}) *[]table.ShiftChangeTable {
 	defer panichandler.Recover()
 	querys := ""
@@ -363,6 +365,12 @@ func(dbObj *DB) SelectShiftChange(selectKey int, value... interface{}) *[]table.
 	case 1:
 		// value need int
 		querys = (*query.MysqlSingleton()).ShiftChange.SelectSingleByCaseId
+		break
+	case 2:
+		querys = (*query.MysqlSingleton()).ShiftChange.SelectAllByInitiatorShiftId
+		break
+	case 3:
+		querys = (*query.MysqlSingleton()).ShiftChange.SelectAllByRequestedShiftId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).ShiftChange.SelectAll
@@ -394,6 +402,7 @@ func(dbObj *DB) SelectShiftChange(selectKey int, value... interface{}) *[]table.
 
 // 0 => all, value => nil
 //  1 => caseId, value => int64
+//  2 => shiftId, value => int64
 func(dbObj *DB) SelectShiftOverTime(selectKey int, value... interface{}) *[]table.ShiftOverTimeTable {
 	defer panichandler.Recover()
 	querys := ""
@@ -404,6 +413,9 @@ func(dbObj *DB) SelectShiftOverTime(selectKey int, value... interface{}) *[]tabl
 	case 1:
 		// value need int
 		querys = (*query.MysqlSingleton()).ShiftOverTime.SelectSingleByCaseId
+		break
+	case 2:
+		querys = (*query.MysqlSingleton()).ShiftOverTime.SelectAllByShiftId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).ShiftOverTime.SelectAll
@@ -436,6 +448,7 @@ func(dbObj *DB) SelectShiftOverTime(selectKey int, value... interface{}) *[]tabl
 
 // 0 => all, value => nil
 //  1 => caseId, value => int64
+//  2 => shiftId, value => int64
 func(dbObj *DB) SelectForgetPunch(selectKey int, value... interface{}) *[]table.ForgetPunchTable {
 	defer panichandler.Recover()
 	querys := ""
@@ -446,6 +459,9 @@ func(dbObj *DB) SelectForgetPunch(selectKey int, value... interface{}) *[]table.
 	case 1:
 		// value need int
 		querys = (*query.MysqlSingleton()).ForgetPunch.SelectSingleByCaseId
+		break
+	case 2:
+		querys = (*query.MysqlSingleton()).ForgetPunch.SelectAllByShiftId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).ForgetPunch.SelectAll
@@ -477,6 +493,7 @@ func(dbObj *DB) SelectForgetPunch(selectKey int, value... interface{}) *[]table.
 
 // 0 => all, value => nil
 //  1 => caseId, value => int64
+//  2 => shiftId, value => int64
 func(dbObj *DB) SelectDayOff(selectKey int, value... interface{}) *[]table.DayOffTable {
 	defer panichandler.Recover()
 	querys := ""
@@ -487,6 +504,9 @@ func(dbObj *DB) SelectDayOff(selectKey int, value... interface{}) *[]table.DayOf
 	case 1:
 		// value need int
 		querys = (*query.MysqlSingleton()).DayOff.SelectSingleByCaseId
+		break
+	case 2:
+		querys = (*query.MysqlSingleton()).DayOff.SelectAllByShiftId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).DayOff.SelectAll
@@ -518,6 +538,7 @@ func(dbObj *DB) SelectDayOff(selectKey int, value... interface{}) *[]table.DayOf
 
 // 0 => all, value => nil
 //  1 => caseId, value => int64
+//  2 => shiftId, value => int64
 func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.LateExcusedTable {
 	defer panichandler.Recover()
 	querys := ""
@@ -528,6 +549,9 @@ func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.
 	case 1:
 		// value need int
 		querys = (*query.MysqlSingleton()).LateExcused.SelectSingleByCaseId
+		break
+	case 2:
+		querys = (*query.MysqlSingleton()).LateExcused.SelectAllByShiftId
 		break
 	default:
 		querys = (*query.MysqlSingleton()).LateExcused.SelectAll
