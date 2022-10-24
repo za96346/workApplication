@@ -36,6 +36,7 @@ const personalForm = (): JSX.Element => {
     return (
         <>
             <Modal
+                forceRender
                 closeIcon={<></>}
                 footer={null}
                 open={status.changePwdBtn}
