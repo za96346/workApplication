@@ -1,7 +1,8 @@
+/* eslint-disable array-callback-return */
 import { SearchOutlined } from '@ant-design/icons'
-import { DatePicker, Input, Spin } from 'antd'
+import { Button, DatePicker, Input, Spin } from 'antd'
 import moment from 'moment'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import api from '../../api/api'
 import BanchSelector from '../../component/BanchSelector'
 import Btn from '../../component/Btn'
@@ -14,8 +15,31 @@ import { UserType } from '../../type'
 const editInit = {
     currentIdx: -1
 }
+const filtInit = {
+    userName: '',
+    workState: 'on',
+    banch: -1
+}
 const EmployeeManager = (): JSX.Element => {
     const { company, loading } = useReduceing()
+    const [filt, setFilt] = useState(filtInit)
+    const companyFilter = useMemo(() => {
+        // eslint-disable-next-line array-callback-return
+        const res1 = company.employee.filter((item) => {
+            if (filt === filtInit) return item
+            if (item.UserName !== filt.userName && filt.userName !== '') {
+                return
+            }
+            if (item.WorkState !== filt.workState) {
+                return
+            }
+            if (item.Banch !== filt.banch && filt.banch !== -1) {
+                return
+            }
+            return item
+        })
+        return res1
+    }, [filt])
     const form = useRef<UserType>({
         UserId: -1,
         UserName: '',
@@ -44,10 +68,21 @@ const EmployeeManager = (): JSX.Element => {
             ...user
         }
     }, [edit.currentIdx])
+    useEffect(() => {
+        console.log(filt, companyFilter)
+    }, [filt])
     return (
         <>
             <div className={styles.empManagerFilter}>
-                <Input style={{ width: '150px' }} prefix={<SearchOutlined/>} placeholder='姓名' />
+                <Button onClick={() => setFilt(filtInit)} style={{ marginRight: '20px' }}>重設</Button>
+                <Input
+                    onChange={(e) => setFilt((prev) => ({ ...prev, userName: e.target?.value || '' }))}
+                    style={{ width: '150px' }}
+                    prefix={<SearchOutlined/>}
+                    placeholder='姓名'
+                />
+                <BanchSelector onChange={(e) => setFilt((prev) => ({ ...prev, banch: e }))} defaultValue={0}/>
+                <StatusSelector onChange={(e) => setFilt((prev) => ({ ...prev, workState: e }))} defaultValue={'on'}/>
             </div>
             <div className={styles.empManagerTable}>
                 <table>
@@ -64,7 +99,7 @@ const EmployeeManager = (): JSX.Element => {
                     </thead>
                     <tbody>
                         {
-                            company.employee?.map((item) => {
+                            companyFilter?.map((item) => {
                                 if (edit.currentIdx > -1 && edit.currentIdx === item.UserId) {
                                     return (
                                         <tr key={item.UserId}>
