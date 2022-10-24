@@ -17,6 +17,8 @@ func Init(path string) {
 	(*redis.Singleton()).Conn(path) // redis 連接
 	(*redis.Singleton()).RedisDb.FlushAll() // redis清空
 	(*Singleton()).TakeAllFromMysql() // 從mysql 抓到 redis
+	// (*Singleton()).DeleteCompanyBanch(0, int64(1))
+	(*Singleton()).DeleteShift(0, 2)
 }
 
 var dbHandlerInstance *DB
@@ -606,16 +608,16 @@ func(dbObj *DB) UpdateQuitWorkUser(updateKey int, data *table.QuitWorkUser) bool
 //  ------------------------------delete------------------------------
 
 
-func(dbObj *DB) DeleteUser(deleteKey int, userId int64) bool {
-	defer panichandler.Recover()
-	res := (*dbObj).Mysql.DeleteUser(deleteKey, userId)
-	if res {
-		go func ()  {
-			(*dbObj).TakeAllFromMysql()
-		}()
-	}
-	return res
-}
+// func(dbObj *DB) DeleteUser(deleteKey int, userId int64) bool {
+// 	defer panichandler.Recover()
+// 	res := (*dbObj).Mysql.DeleteUser(deleteKey, userId)
+// 	if res {
+// 		go func ()  {
+// 			(*dbObj).TakeAllFromMysql()
+// 		}()
+// 	}
+// 	return res
+// }
 func(dbObj *DB) DeleteUserPreference(deleteKey int, userId int64) bool {
 	defer panichandler.Recover()
 	res := (*dbObj).Mysql.DeleteUserPreference(deleteKey, userId)
@@ -626,29 +628,9 @@ func(dbObj *DB) DeleteUserPreference(deleteKey int, userId int64) bool {
 	}
 	return res
 }
-func(dbObj *DB) DeleteCompany(deleteKey int, companyId int64) bool {
-	defer panichandler.Recover()
-	res := (*dbObj).Mysql.DeleteCompany(deleteKey, companyId)
-	if res {
-		go func ()  {
-			(*dbObj).TakeAllFromMysql()
-		}()	
-	}
-	return res
-}
-// func(dbObj *DB) DeleteCompanyBanch(deleteKey int, id int64) bool {
+// func(dbObj *DB) DeleteCompany(deleteKey int, companyId int64) bool {
 // 	defer panichandler.Recover()
-// 	res := (*dbObj).Mysql.DeleteCompanyBanch(deleteKey, id)
-// 	if res {
-// 		go func ()  {
-// 			(*dbObj).Redis.DeleteCompanyBanch(deleteKey, id)
-// 		}()	
-// 	}
-// 	return res
-// }
-// func(dbObj *DB) DeleteShift(deleteKey int, shiftId int64) bool {
-// 	defer panichandler.Recover()
-// 	res := (*dbObj).Mysql.DeleteShift(deleteKey, shiftId)
+// 	res := (*dbObj).Mysql.DeleteCompany(deleteKey, companyId)
 // 	if res {
 // 		go func ()  {
 // 			(*dbObj).TakeAllFromMysql()
@@ -656,6 +638,26 @@ func(dbObj *DB) DeleteCompany(deleteKey int, companyId int64) bool {
 // 	}
 // 	return res
 // }
+func(dbObj *DB) DeleteCompanyBanch(deleteKey int, id int64) bool {
+	defer panichandler.Recover()
+	res := (*dbObj).Mysql.DeleteCompanyBanch(deleteKey, id)
+	if res {
+		go func ()  {
+			(*dbObj).Redis.DeleteCompanyBanch(deleteKey, id)
+		}()	
+	}
+	return res
+}
+func(dbObj *DB) DeleteShift(deleteKey int, shiftId int64) bool {
+	defer panichandler.Recover()
+	res := (*dbObj).Mysql.DeleteShift(deleteKey, shiftId)
+	if res {
+		go func ()  {
+			(*dbObj).Redis.DeleteShift(deleteKey, shiftId)
+		}()	
+	}
+	return res
+}
 func(dbObj *DB) DeleteShiftChange(deleteKey int, caseId int64) bool {
 	defer panichandler.Recover()
 	res := (*dbObj).Mysql.DeleteShiftChange(deleteKey, caseId)

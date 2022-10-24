@@ -317,6 +317,8 @@ func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftT
 
 // 0 => all, value => nil
 //  1 => caseId, value => int64
+//  2 => initiatorShiftId, value => int64
+//  3 => requestedShiftId, value => int64
 func(dbObj *DB) SelectShiftChange(selectKey int, value... interface{}) *[]table.ShiftChangeTable {
 	defer panichandler.Recover()
 	tableKey := (*dbObj).table[5]
@@ -335,6 +337,34 @@ func(dbObj *DB) SelectShiftChange(selectKey int, value... interface{}) *[]table.
 			},
 			func(v table.ShiftChangeTable) bool {return true},
 		)
+	case 2:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.ShiftChangeTable) bool {
+				for _, filterItem := range value {
+					if filterItem == v.InitiatorShiftId {
+						return true
+					}
+				}
+				return false
+			},
+		)
+	case 3:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.ShiftChangeTable) bool {
+				for _, filterItem := range value {
+					if filterItem == v.RequestedShiftId {
+						return true
+					}
+				}
+				return false
+			},
+		)
 	default:
 		return &[]table.ShiftChangeTable{}
 	}
@@ -342,6 +372,7 @@ func(dbObj *DB) SelectShiftChange(selectKey int, value... interface{}) *[]table.
 
 // 0 => all, value => nil
 //  1 => caseId, value => int64
+//  2 => shiftId, value => int64
 func(dbObj *DB) SelectShiftOverTime(selectKey int, value... interface{}) *[]table.ShiftOverTimeTable {
 	defer panichandler.Recover()
 	tableKey := (*dbObj).table[6]
@@ -360,6 +391,20 @@ func(dbObj *DB) SelectShiftOverTime(selectKey int, value... interface{}) *[]tabl
 			},
 			func(v table.ShiftOverTimeTable) bool {return true},
 		)
+	case 2:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.ShiftOverTimeTable) bool {
+				for _, filterItem := range value {
+					if filterItem == v.ShiftId {
+						return true
+					}
+				}
+				return false
+			},
+		)
 	default:
 		return &[]table.ShiftOverTimeTable{}
 	}
@@ -367,6 +412,7 @@ func(dbObj *DB) SelectShiftOverTime(selectKey int, value... interface{}) *[]tabl
 
 // 0 => all, value => nil
 //  1 => caseId, value => int64
+//  2 => shiftId, value => int64
 func(dbObj *DB) SelectDayOff(selectKey int, value... interface{}) *[]table.DayOffTable {
 	defer panichandler.Recover()
 	tableKey := (*dbObj).table[7]
@@ -385,6 +431,20 @@ func(dbObj *DB) SelectDayOff(selectKey int, value... interface{}) *[]table.DayOf
 			},
 			func(v table.DayOffTable) bool {return true},
 		)
+	case 2:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.DayOffTable) bool {
+				for _, filterItem := range value {
+					if filterItem == v.ShiftId {
+						return true
+					}
+				}
+				return false
+			},
+		)
 	default:
 		return &[]table.DayOffTable{}
 	}
@@ -392,6 +452,7 @@ func(dbObj *DB) SelectDayOff(selectKey int, value... interface{}) *[]table.DayOf
 
 // 0 => all, value => nil
 //  1 => caseId, value => int64
+//  2 => shiftId, value => int64
 func(dbObj *DB) SelectForgetPunch(selectKey int, value... interface{}) *[]table.ForgetPunchTable {
 	defer panichandler.Recover()
 	tableKey := (*dbObj).table[8]
@@ -410,6 +471,20 @@ func(dbObj *DB) SelectForgetPunch(selectKey int, value... interface{}) *[]table.
 			},
 			func(v table.ForgetPunchTable) bool {return true},
 		)
+	case 2:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.ForgetPunchTable) bool {
+				for _, filterItem := range value {
+					if filterItem == v.ShiftId {
+						return true
+					}
+				}
+				return false
+			},
+		)
 	default:
 		return &[]table.ForgetPunchTable{}
 	}
@@ -417,6 +492,7 @@ func(dbObj *DB) SelectForgetPunch(selectKey int, value... interface{}) *[]table.
 
 // 0 => all, value => nil
 //  1 => caseId, value => int64
+//  2 => shiftId, value => int64
 func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.LateExcusedTable {
 	defer panichandler.Recover()
 	tableKey := (*dbObj).table[9]
@@ -434,6 +510,20 @@ func(dbObj *DB) SelectLateExcused(selectKey int, value... interface{}) *[]table.
 				return (*dbObj).hmGet(tableKey, value...)
 			},
 			func(v table.LateExcusedTable) bool {return true},
+		)
+	case 2:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.LateExcusedTable) bool {
+				for _, filterItem := range value {
+					if filterItem == v.ShiftId {
+						return true
+					}
+				}
+				return false
+			},
 		)
 	default:
 		return &[]table.LateExcusedTable{}
@@ -622,7 +712,31 @@ func(dbObj *DB) DeleteCompanyBanch(deleteKey int, id int64) bool {
 	defer panichandler.Recover()
 	(*dbObj).companyBanchMux.Lock()
 	defer (*dbObj).companyBanchMux.Unlock()
+
+	res := (*dbObj).SelectCompanyBanch(2, id)
 	(*dbObj).RedisDb.HDel((*dbObj).table[3], strconv.FormatInt(id, 10))
+	if len(*res) <= 0 {
+		return true
+	}
+
+	wg := new(sync.WaitGroup)
+	wg.Add(2)
+	go func ()  {
+		defer wg.Done()
+		banchStyle := (*dbObj).SelectBanchStyle(2, (*res)[0].Id)
+		for _, v := range *banchStyle {
+			(*dbObj).DeleteBanchStyle(0, v.StyleId)
+		}
+		
+	}()
+	go func ()  {
+		defer wg.Done()
+		banchRule := (*dbObj).SelectBanchRule(2, (*res)[0].Id)
+		for _, v:= range *banchRule {
+			(*dbObj).DeleteBanchRule(0, v.RuleId)
+		}
+	}()
+	wg.Wait()
 	return true
 }
 
@@ -631,7 +745,55 @@ func(dbObj *DB) DeleteShift(deleteKey int, shiftId int64) bool {
 	defer panichandler.Recover()
 	(*dbObj).shiftMux.Lock()
 	defer (*dbObj).shiftMux.Unlock()
+
 	(*dbObj).RedisDb.HDel((*dbObj).table[4], strconv.FormatInt(shiftId, 10))
+
+	wg := new(sync.WaitGroup)
+	wg.Add(6)
+	// (*dbObj).SelectShiftChange(1)
+	go func ()  {
+		defer wg.Done()
+		res := (*dbObj).SelectShiftOverTime(2, shiftId)
+		for _, v := range *res {
+			(*dbObj).DeleteShiftOverTime(0, v.CaseId)
+		}
+	}()
+	go func ()  {
+		defer wg.Done()
+		res := (*dbObj).SelectDayOff(2, shiftId)
+		for _, v := range *res {
+			(*dbObj).DeleteDayOff(0, v.CaseId)
+		}
+	}()
+	go func ()  {
+		defer wg.Done()
+		res := (*dbObj).SelectLateExcused(2, shiftId)
+		for _, v := range *res {
+			(*dbObj).DeleteLateExcused(0, v.CaseId)
+		}
+	}()
+	go func ()  {
+		defer wg.Done()
+		res := (*dbObj).SelectForgetPunch(2, shiftId)
+		for _, v := range *res {
+			(*dbObj).DeleteForgetPunch(0, v.CaseId)
+		}
+	}()
+	go func ()  {
+		defer wg.Done()
+		res1 := (*dbObj).SelectShiftChange(2, shiftId)
+		for _, v := range *res1 {
+			(*dbObj).DeleteShiftChange(0, v.CaseId)
+		}
+	}()
+	go func ()  {
+		defer wg.Done()
+		res1 := (*dbObj).SelectShiftChange(3, shiftId)
+		for _, v := range *res1 {
+			(*dbObj).DeleteShiftChange(0, v.CaseId)
+		}
+	}()
+	wg.Wait()
 	return true
 }
 
@@ -681,20 +843,20 @@ func(dbObj *DB) DeleteLateExcused(deleteKey int, caseId int64) bool {
 }
 
 // style的唯一id
-func(dbObj *DB) DeleteBanchStyle(deleteKey int, caseId int64) bool {
+func(dbObj *DB) DeleteBanchStyle(deleteKey int, styleId int64) bool {
 	defer panichandler.Recover()
 	(*dbObj).banchStyleMux.Lock()
 	defer (*dbObj).banchStyleMux.Unlock()
-	(*dbObj).RedisDb.HDel((*dbObj).table[10], strconv.FormatInt(caseId, 10))
+	(*dbObj).RedisDb.HDel((*dbObj).table[10], strconv.FormatInt(styleId, 10))
 	return true
 }
 
 // style的唯一id
-func(dbObj *DB) DeleteBanchRule(deleteKey int, caseId int64) bool {
+func(dbObj *DB) DeleteBanchRule(deleteKey int, ruleId int64) bool {
 	defer panichandler.Recover()
 	(*dbObj).banchRuleMux.Lock()
 	defer (*dbObj).banchRuleMux.Unlock()
-	(*dbObj).RedisDb.HDel((*dbObj).table[11], strconv.FormatInt(caseId, 10))
+	(*dbObj).RedisDb.HDel((*dbObj).table[11], strconv.FormatInt(ruleId, 10))
 	return true
 }
 
