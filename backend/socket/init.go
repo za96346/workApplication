@@ -59,7 +59,7 @@ func (mg *Manager) Worker() {
 
 func (mg *Manager) enterRoom () {
 	for v := range (*mg).Conn {
-		fmt.Printf("\n使用者編號 %d 進入部門房間 %d", v.Value.UserId, v.BanchId)
+		fmt.Printf("\n使用者編號 %d 進入部門房間 %d\n", v.Value.UserId, v.BanchId)
 		(*redis.Singleton()).EnterShiftRoom(v.BanchId, v.Value)
 	}
 }
@@ -68,7 +68,7 @@ func (mg *Manager) sendMsg () {
 	for v := range (*mg).SendMsg {
 		userAll := (redis.Singleton().GetShiftRoomUser(v.BanchId))
 		for _, user := range *userAll {
-			(*mg).ConnLine[user.UserId].WriteJSON(v)
+			go (*mg).ConnLine[user.UserId].WriteJSON(v)
 		}
 	}
 }

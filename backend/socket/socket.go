@@ -5,6 +5,7 @@ import (
 	panichandler "backend/panicHandler"
 	"backend/redis"
 	"backend/response"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -63,24 +64,30 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		(*redis.Singleton()).ResetExpireTime(token)
 
 		// 接收訊息
-        _, _, err := conn.ReadMessage()
+        _, msg, err := conn.ReadMessage()
         if err != nil {
             log.Println("Error during message reading:", err)
             break
         }
 
+		// 插入 資料
+		shift := response.Shift{}
+		json.Unmarshal(msg, &shift)
+		(*redis.Singleton()).InsertShiftData(conBanchId, shift)
+
 
 		// 發送訊息
 		users := (*redis.Singleton()).GetShiftRoomUser(conBanchId)
+		data := (*redis.Singleton()).GetShiftData(conBanchId)
 		(*Singleton()).SendMsg <- Msg{
 			BanchId: conBanchId,
 			User: *users,
-			Data: []response.Shift{},
+			Data: *data,
 		}
     }
 
 	// 離開房間
-	fmt.Printf("使用者 %d 離開房間 %d", user.UserId, conBanchId)
+	fmt.Printf("\n使用者 %d 離開房間 %d\n", user.UserId, conBanchId)
 	(*redis.Singleton()).LeaveShiftRoom(conBanchId, user.UserId)
 }
  

@@ -37,3 +37,22 @@ func (dbObj *DB) GetShiftRoomUser (banchId int64) *[]response.Member {
 		func(v response.Member) bool {return true},
 	)
 }
+
+func (dbObj *DB) InsertShiftData(banchId int64, value response.Shift) {
+	defer panichandler.Recover()
+
+	jsonData, _ := json.Marshal(value)
+	conBanchId := strconv.FormatInt(banchId, 10)
+	positionIdx := strconv.FormatInt(int64(value.Position), 10)
+	(*dbObj).RedisOfShiftData.HSet(conBanchId, positionIdx, jsonData)
+}
+
+func (dbObj *DB) GetShiftData (banchId int64) *[]response.Shift {
+	defer panichandler.Recover()
+	return forEach(
+		func() ([]string, error) {
+			return (*dbObj).RedisOfShiftData.HVals(strconv.FormatInt(banchId, 10)).Result()
+		},
+		func(v response.Shift) bool {return true},
+	)
+}

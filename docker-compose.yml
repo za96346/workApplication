@@ -41,11 +41,11 @@ services:
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     volumes:
+      - ./redis.conf:/redis.conf
       - ./volume/redis:/data
     expose:
       - 6379
-    # command: >
-    #   bash -c "redis-server --daemonize yes"
+    command: redis-server /usr/local/etc/redis/redis.conf # command 表示啟動容器後預備執行的動作
     networks:
       workAppNet:
         ipv4_address: 172.21.0.3

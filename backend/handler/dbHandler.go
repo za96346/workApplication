@@ -15,7 +15,7 @@ import (
 func Init(path string) {
 	(*mysql.Singleton()).Conn(path) //mysql 連接
 	(*redis.Singleton()).Conn(path) // redis 連接
-	(*redis.Singleton()).RedisDb.FlushAll() // redis清空
+	(*redis.Singleton()).RedisDb.FlushDB() // redis清空
 	(*Singleton()).TakeAllFromMysql() // 從mysql 抓到 redis
 	// (*Singleton()).DeleteCompanyBanch(0, int64(1))
 	// (*Singleton()).DeleteShift(0, 2)

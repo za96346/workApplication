@@ -24,6 +24,7 @@ type DB struct {
 	RedisOfToken *redis.Client // token
 	RedisOfCaptcha *redis.Client // captcha
 	RedisOfShiftSocket *redis.Client // shift socket
+	RedisOfShiftData *redis.Client // shift data
 	table map[int]string
 	companyMux *sync.Mutex
 	userPreferenceMux *sync.RWMutex
@@ -120,6 +121,13 @@ func(dbObj *DB) Conn(path string) { // 實體化redis.Client 並返回實體的�
 		Addr: redisIp + ":" + redisPort,
 		Password: redisPassword, // no password set
 		DB: 3,  // use default DB
+		PoolSize:    64,
+        MinIdleConns: 16,
+	})
+	(*dbObj).RedisOfShiftData = redis.NewClient(&redis.Options{
+		Addr: redisIp + ":" + redisPort,
+		Password: redisPassword, // no password set
+		DB: 4,  // use default DB
 		PoolSize:    64,
         MinIdleConns: 16,
 	})
