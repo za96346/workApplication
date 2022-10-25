@@ -25,6 +25,7 @@ import (
 	"backend/route"
 	"backend/worker"
 	"path/filepath"
+	"backend/socket"
 )
 func init() {
 	handler.Init("./.env")
@@ -56,6 +57,8 @@ func SetRouter() *gin.Engine {
 	route.User(userApi)
 	route.EntryRoute(entryApi)
 	route.Company(companyApi)
+
+	go socket.Conn()
 
 	// start
 	apiServer.Run(":" + port)

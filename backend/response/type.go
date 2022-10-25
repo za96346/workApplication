@@ -51,3 +51,18 @@ type ForgetPassword struct {
 	ChangePassword
 	Email string `json:"Email"`
 }
+
+type Member struct {
+	UserName string // 用戶名
+	UserId int64 // 使用者編號
+	Pic string // 用戶的照片
+	Color string // 用戶的編輯顏色
+	Online int // 上線狀態
+	Position int // 當前編輯的位置
+}
+
+type Shift struct {
+	UserId int64 `json:"UserId"` // 使用者的編號
+	OnShiftTime time.Time  `json:"OnShiftTime"`// 開始上班時間
+	OffShiftTime time.Time `json:"OffShiftTime"` //結束上班的時間
+}
