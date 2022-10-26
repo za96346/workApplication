@@ -23,6 +23,7 @@ services:
     #   - "4000:4000"
     expose:
       - 4000
+      - 4001
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     build: ./backend/
@@ -41,7 +42,7 @@ services:
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     volumes:
-      - ./redis.conf:/redis.conf
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
       - ./volume/redis:/data
     expose:
       - 6379
