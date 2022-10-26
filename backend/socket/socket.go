@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	// "time"
 
@@ -93,6 +94,8 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
  
 func Conn() {
 	// rabbitMQ.Conn()
-    http.HandleFunc("/workAppSocket/so", socketHandler)
-    log.Fatal(http.ListenAndServe("localhost:4001", nil))
+	ip := os.Getenv("SOCKET_IP")
+	port := os.Getenv("SOCKET_PORT")
+    http.HandleFunc("/workAppSocket/shift", socketHandler)
+    log.Fatal(http.ListenAndServe(ip + ":" + port, nil))
 }
