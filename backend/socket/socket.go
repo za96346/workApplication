@@ -36,12 +36,15 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
     defer conn.Close()
 
 	// header
-	token := r.Header.Get("token")
-	banchId := r.Header.Get("banchId")
-	conBanchId , perr := methods.AnyToInt64(banchId)
+	token := r.URL.Query()["token"]
+	banchId := r.URL.Query()["banchId"]
+	if len(token) <= 0 || len(banchId) <= 0 {
+		return
+	}
+	conBanchId , perr := methods.AnyToInt64(banchId[0])
 
 	// 解析token
-	user, sts := Singleton().TokenPrase(token)
+	user, sts := Singleton().TokenPrase(token[0])
 	if !sts || perr != nil {
 		return
 	}
@@ -69,7 +72,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
     // The event loop
     for {
 		// 重設 token 過期時間
-		(*redis.Singleton()).ResetExpireTime(token)
+		(*redis.Singleton()).ResetExpireTime(token[0])
 
 		// 接收訊息
         _, msg, err := conn.ReadMessage()

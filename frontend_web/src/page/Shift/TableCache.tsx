@@ -11,9 +11,9 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
             onClose: (event: any) => {
                 console.log(event)
             },
-            Headers: {
+            headers: {
                 banchId,
-                token: user?.token || ''
+                token: user?.token
             }
         }
     })
@@ -28,7 +28,7 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
     const onMouseLeave = (): void => {
         // setStatus(() => ())
     }
-    console.log(lastJsonMessage)
+    console.log(lastJsonMessage, connectionStatus)
     const tb = useMemo(() => {
         if (connectionStatus !== 'Connecting') {
             return <Spin tip={'進入編輯室中...'} />
