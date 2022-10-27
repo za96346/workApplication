@@ -66,4 +66,5 @@ type Shift struct {
 	Position int `json:"Position"` // 位置
 	OnShiftTime time.Time  `json:"OnShiftTime"`// 開始上班時間
 	OffShiftTime time.Time `json:"OffShiftTime"` //結束上班的時間
+	
 }

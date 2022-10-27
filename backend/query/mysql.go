@@ -37,6 +37,7 @@ type userQuery struct {
 	SelectSingleByUserId string
 	SelectSingleByAccount string
 	SelectAllByCompanyCode string
+	SelectAllByBanchId string
 }
 type userPreferenceQuery struct {
 	queryCommonColumn
@@ -168,6 +169,7 @@ func addUserQuery() {
 	sqlQueryInstance.User.SelectSingleByUserId = `select * from user where userId=?;`;
 	sqlQueryInstance.User.SelectSingleByAccount = `select * from user where account=?;`;
 	sqlQueryInstance.User.Delete = `delete from user where userId=?;`;
+	sqlQueryInstance.User.SelectAllByBanchId = `select * from user where banch = ?;`;
 }
 func addUserPreferenceQuery() {
 	sqlQueryInstance.UserPreference.InsertAll = `

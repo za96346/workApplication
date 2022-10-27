@@ -81,20 +81,25 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
             break
         }
 
+		member := struct {
+			MyPosition int `json:MyPosition`
+		}{
+			MyPosition: v.Position,
+		}
+		if json.Unmarshal(msg, &member) == nil {
+			v.Position = member.MyPosition
+			(*redis.Singleton()).EnterShiftRoom(conBanchId, v)
+		}
+		
 		// 插入 資料
 		shift := response.Shift{}
-		json.Unmarshal(msg, &shift)
-		(*redis.Singleton()).InsertShiftData(conBanchId, shift)
-
-
-		// 發送訊息
-		users := (*redis.Singleton()).GetShiftRoomUser(conBanchId)
-		data := (*redis.Singleton()).GetShiftData(conBanchId)
-		(*Singleton()).SendMsg <- Msg{
-			BanchId: conBanchId,
-			User: *users,
-			Data: *data,
+		if json.Unmarshal(msg, &shift) == nil {
+			(*redis.Singleton()).InsertShiftData(conBanchId, shift)
 		}
+
+		// send
+		Singleton().send(conBanchId)
+
     }
 
 	// 離開房間

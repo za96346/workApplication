@@ -758,6 +758,7 @@ func(dbObj *DB) DeleteQuitWorkUser(deleteKey int, quitId int64) bool {
 //  1 =>  userId, value => int64
 //  2 => account, value => string
 // 3 => companyCode, value => string
+//  4 => banch, value = > int64
 func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTable {
 	defer panichandler.Recover()
 	return selectAllHandler(

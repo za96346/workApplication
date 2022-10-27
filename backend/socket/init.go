@@ -26,8 +26,9 @@ type Manager struct {
 }
 type Msg struct {
 	BanchId int64
-	User []response.Member
-	Data []response.Shift
+	OnlineUser []response.Member
+	EditUser []response.User
+	ShiftData []response.Shift
 }
 
 func Singleton () *Manager {
@@ -50,7 +51,36 @@ func Singleton () *Manager {
 	return instance
 }
 
+func (mg *Manager) send (banchId int64) {
+	defer panichandler.Recover()
+	// 發送訊息
+	onlineUsers := (*redis.Singleton()).GetShiftRoomUser(banchId)
+	EditUsers := (*redis.Singleton()).SelectUser(4, banchId)
+	ShiftData := (*redis.Singleton()).GetShiftData(banchId)
+
+	editUserData := []response.User{}
+	for _, v := range *EditUsers {
+		editUserData = append(editUserData, response.User{
+			UserName: v.UserName,
+			UserId: v.UserId,
+			CompanyCode: v.CompanyCode,
+			EmployeeNumber: v.EmployeeNumber,
+			OnWorkDay: v.OnWorkDay,
+			Banch: v.Banch,
+			Permession: v.Permession,
+			WorkState: "on",
+		})
+	}
+	(*mg).SendMsg <- Msg{
+		BanchId: banchId,
+		EditUser: editUserData,
+		OnlineUser: *onlineUsers,
+		ShiftData: *ShiftData,
+	}
+}
+
 func (mg *Manager) Worker() {
+	defer panichandler.Recover()
 	for i := 0; i < 5; i++ {
 		go (*mg).enterRoom()
 		go (*mg).sendMsg()
@@ -58,22 +88,28 @@ func (mg *Manager) Worker() {
 }
 
 func (mg *Manager) enterRoom () {
+	defer panichandler.Recover()
 	for v := range (*mg).Conn {
 		fmt.Printf("\n使用者編號 %d 進入部門房間 %d\n", v.Value.UserId, v.BanchId)
 		(*redis.Singleton()).EnterShiftRoom(v.BanchId, v.Value)
+		(*mg).send(v.BanchId)
 	}
 }
 
 func (mg *Manager) sendMsg () {
+	defer panichandler.Recover()
 	for v := range (*mg).SendMsg {
 		userAll := (redis.Singleton().GetShiftRoomUser(v.BanchId))
 		for _, user := range *userAll {
-			go (*mg).ConnLine[user.UserId].WriteJSON(v)
+			if (*mg).ConnLine[user.UserId] != nil {
+				go (*mg).ConnLine[user.UserId].WriteJSON(v)
+			}
 		}
 	}
 }
 
 func (mg *Manager) TokenPrase (tokenParams string) (table.UserTable, bool) {
+	defer panichandler.Recover()
 	// 判斷 token 是否過期
 	if !handler.Singleton().Redis.IsTokenExited(tokenParams) {
 		return table.UserTable{}, false
