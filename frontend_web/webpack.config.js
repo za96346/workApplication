@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require("webpack")
+// const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = {
   entry: './src/index.js',
@@ -50,5 +51,5 @@ module.exports = {
       'typeof window': JSON.stringify('object'),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
-  ]
+  ],
 };

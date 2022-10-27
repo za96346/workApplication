@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { HolderOutlined } from '@ant-design/icons'
 import { Drawer, Spin, Steps, Tabs } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import api from '../../api/api'
 import useReduceing from '../../Hook/useReducing'
 import EditTable from './EditTable'
 import PeopleStatus from './PeopleStatus'
@@ -14,6 +15,10 @@ const ShiftPage = (): JSX.Element => {
         drawerOpen: false,
         currentTabs: 0
     })
+
+    useEffect(() => {
+        api.getUserAll()
+    }, [])
     if (!banchId) {
         return (
             <Spin />
@@ -59,10 +64,16 @@ const ShiftPage = (): JSX.Element => {
             <div className={styles.shiftEdit}>
                 <Tabs onChange={(key) => setStatus((prev) => ({ ...prev, currentTabs: parseInt(key, 10) }))}>
                     <Tabs.TabPane tab={'當前編輯'} key={0}>
-                        <EditTable company={company} banchId={convertBanchId} currentTabs={status.currentTabs} />
+                        <EditTable
+                            banchId={convertBanchId}
+                            currentTabs={status.currentTabs}
+                        />
                     </Tabs.TabPane>
                     <Tabs.TabPane tab={'歷史班表'} key={1}>
-                        <EditTable company={company} banchId={convertBanchId} currentTabs={status.currentTabs} />
+                        <EditTable
+                            banchId={convertBanchId}
+                            currentTabs={status.currentTabs}
+                        />
                     </Tabs.TabPane>
                 </Tabs>
             </div>

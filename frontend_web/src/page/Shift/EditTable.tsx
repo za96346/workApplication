@@ -2,17 +2,15 @@ import { Result, Skeleton, Spin } from 'antd'
 import React, { useEffect } from 'react'
 import api from '../../api/api'
 import useReduceing from '../../Hook/useReducing'
-import { companyReducerType } from '../../reduxer/reducer/companyReducer'
 import useTableCache from './TableCache'
 
 interface EditTableProps {
     currentTabs: number
     banchId: number
-    company: companyReducerType
 }
-const EditTable = ({ banchId, company, currentTabs }: EditTableProps): JSX.Element => {
-    const { loading } = useReduceing()
-    const { tb } = useTableCache(company)
+const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
+    const { loading, user, company } = useReduceing()
+    const { tb } = useTableCache(company, banchId, user)
     useEffect(() => {
         api.getBanchStyle(banchId)
         api.getUserAll()

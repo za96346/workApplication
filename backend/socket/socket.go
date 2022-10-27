@@ -16,7 +16,14 @@ import (
 	"github.com/gorilla/websocket"
 )
  
-var upgrader = websocket.Upgrader{} // use default options
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	// 解决跨域问题
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+} // use default options
  
 func socketHandler(w http.ResponseWriter, r *http.Request) {
 	defer panichandler.Recover()
