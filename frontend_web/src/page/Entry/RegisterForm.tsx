@@ -7,6 +7,7 @@ import { Modal } from '../../component/Modal'
 import api from '../../api/api'
 import { useNavigate } from 'react-router-dom'
 import Insert from '../../component/Insert'
+import FullSpin from './FullSpin'
 
 const Register = (): JSX.Element => {
     const navigate = useNavigate()
@@ -37,6 +38,7 @@ const Register = (): JSX.Element => {
             >
                 {status.modalText}
             </Modal>
+            <FullSpin />
             <Form
                 onFieldsChange={(e) => {
                     if (e[0].name[0] === 'Account') {

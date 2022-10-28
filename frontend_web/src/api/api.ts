@@ -191,6 +191,7 @@ class ApiControl extends api {
     }
 
     async login (data: LoginType): Promise<void> {
+        store.dispatch(statusAction.onEntry(true))
         const res = await this.POST<string>({
             url: this.route.login,
             body: data
@@ -199,13 +200,16 @@ class ApiControl extends api {
         if (res.status) {
             store.dispatch(userAction.setToken(res.data))
         }
+        store.dispatch(statusAction.onEntry(false))
     }
 
     async register (data: RegisterType): Promise<boolean> {
+        store.dispatch(statusAction.onEntry(true))
         const res = await this.PUT<ResMessage>({
             url: this.route.registe,
             body: data
         })
+        store.dispatch(statusAction.onEntry(false))
         return res.status
     }
 

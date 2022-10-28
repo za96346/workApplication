@@ -7,6 +7,17 @@ class statusAcion {
         this.onFetchUserAll = this.onFetchUserAll.bind(this)
     }
 
+    // 登入 註冊
+    onEntry (s: boolean): action {
+        return {
+            type: s ? statusType.ENTRY_ON : statusType.ENTRY_OFF,
+            payload: {
+                ...store.getState().status,
+                onEntry: s
+            }
+        }
+    }
+
     // 部門
     onFetchBanch (s: boolean): action {
         return {

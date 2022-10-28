@@ -1,6 +1,8 @@
 import { action, statusType } from '../types'
 
 const statusState = {
+    onEntry: false,
+
     onFetchCompany: false,
     onUpdateCompany: false,
 
@@ -27,6 +29,8 @@ const statusState = {
 }
 
 export interface statusReducerType {
+    onEntry: boolean
+
     onFetchCompany: boolean
     onUpdateCompany: boolean
 

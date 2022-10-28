@@ -4,16 +4,16 @@ import { Button, Form } from 'antd'
 import { LoginType } from '../../type'
 import api from '../../api/api'
 import Insert from '../../component/Insert'
+import FullSpin from './FullSpin'
 
 const Login = (): JSX.Element => {
     // const navigate = useNavigate()
     const onFinish = async (v: LoginType): Promise<void> => {
         await api.login(v)
-        console.log(v)
     }
     return (
         <>
-
+            <FullSpin />
             <Form onFinish={onFinish}>
                 <Insert.Email />
                 <Insert.Pwd textNum={1} />

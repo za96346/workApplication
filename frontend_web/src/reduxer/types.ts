@@ -18,6 +18,9 @@ export const companyType = {
 }
 
 export const statusType = {
+    ENTRY_ON: 'ENTRY_ON',
+    ENTRY_OFF: 'ENTRY_OFF',
+
     FETCH_COMPANY_ON: 'FETCH_COMPANY_ON',
     FETCH_COMPANY_OFF: 'FETCH_COMPANY_OFF',
 
