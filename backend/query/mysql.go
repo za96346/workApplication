@@ -258,19 +258,21 @@ func addShiftQuery() {
 		userId,
 		onShiftTime,
 		offShiftTime,
+		restTime,
 		punchIn,
 		punchOut,
 		specifyTag,
 		createTime,
 		lastModify
 		) values(
-			?, ?, ?, ?, ?, ?, ?, ?
+			?, ?, ?, ?, ?, ?, ?, ?, ?
 	);`;
 	sqlQueryInstance.Shift.UpdateSingle = `
 	update shift
 	set
 		onShiftTime=?,
 		offShiftTime=?,
+		restTime=?,
 		punchIn=?,
 		punchOut=?,
 		specifyTag=?,

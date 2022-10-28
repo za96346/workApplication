@@ -37,6 +37,7 @@ type ShiftTable struct {
 	UserId int64 `json:"UserId"` // 使用者的編號
 	OnShiftTime time.Time  `json:"OnShiftTime"`// 開始上班時間
 	OffShiftTime time.Time `json:"OffShiftTime"` //結束上班的時間
+	RestTime string `json:"RestTime"` // 休息時間
 	PunchIn time.Time `json:"PunchIn"` // 上班卡
 	PunchOut time.Time `json:"PunchOut"`// 下班卡
 	CreateTime time.Time `json:"CreateTime"`//創建的時間

@@ -80,6 +80,7 @@ func DataBaseInit() {
 			userId bigint,
 			onShiftTime timestamp,
 			offShiftTime timestamp,
+			restTime time,
 			punchIn timestamp,
 			punchOut timestamp,
 			specifyTag varchar(50),
@@ -313,7 +314,7 @@ func DataBaseInit() {
 	}
 /// shift alter
 	_, err = (*Singleton()).MysqlDB.Exec(`
-		alter table shift add primary key (onShiftTime, offShiftTime, shiftId, userId);`)
+		alter table shift add primary key (onShiftTime, offShiftTime, userId, restTime);`)
 
 	if err == nil {
 		fmt.Println("shift alter primary key success")
@@ -587,7 +588,7 @@ func addCompany(x int) {
 		}
 		_, _ = (*Singleton()).InsertCompany(&company)
 		resData := (*Singleton()).SelectCompany(2, "company" + strconv.Itoa(x))
-		for i := 0; i < 2; i++ {
+		for i := 0; i < 1; i++ {
 		// company banch
 			companyBanch := table.CompanyBanchTable{
 				CompanyId :(*resData)[0].CompanyId,
@@ -655,7 +656,7 @@ func addUser(x int) {
 				UserName: "siou" + strconv.Itoa(i),
 				EmployeeNumber: "a0000" + strconv.Itoa(i),
 				OnWorkDay: time.Now(),
-				Banch: 1,
+				Banch: int64(x),
 				Permession: permession,
 				MonthSalary: 30000 + i,
 				PartTimeSalary: 130 + i,
@@ -682,6 +683,7 @@ func addUser(x int) {
 					UserId: id,
 					OnShiftTime: time.Now().Add(-8 * hours).Add(oneDay),
 					OffShiftTime: time.Now().Add(oneDay),
+					RestTime: "01:00:00",
 					SpecifyTag: "nothing",
 					PunchIn: time.Now(),
 					PunchOut: time.Now(),
