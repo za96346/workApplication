@@ -13,7 +13,6 @@ const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
     const { tb } = useTableCache(company, banchId, user)
     useEffect(() => {
         api.getBanchStyle(banchId)
-        api.getUserAll()
     }, [banchId])
     if (loading.onFetchBanchStyle || loading.onFetchUserAll) {
         return (

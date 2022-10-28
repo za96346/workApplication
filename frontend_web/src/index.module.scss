@@ -219,7 +219,6 @@ div {
 		}
 		>div:last-child {
 			font-size: 0.6rem;
-			opacity: 0.4;
 		}
 	}
 }
@@ -271,6 +270,34 @@ div {
 	td, tr, thead {
 		border: 1px solid rgba(0, 0, 0, 0.2);
 		border-collapse: collapse;
+	}
+	.td {
+		max-height: 10px;
+		max-width: 10px;
+		min-width: 10px;
+		min-height: 10px;
+		position: relative;
+		&:hover {
+			cursor: pointer;
+		}
+	}
+	.downList {
+		height: fit-content;
+		width: 100%;
+		position: absolute;
+		top: 100%;
+		background-color: #fff;
+		font-size: 0.4rem;
+		z-index: 10;
+		@extend %shadowNormal;
+		>div {
+			padding: 5px 0px;
+			border-bottom: 0.5px solid gray;
+			border-top: 0.5px solid gray;
+			&:hover {
+				cursor: pointer;
+			}
+		}
 	}
 }
 .stickyTd {

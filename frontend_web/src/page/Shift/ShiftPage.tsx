@@ -1,24 +1,19 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { HolderOutlined } from '@ant-design/icons'
 import { Drawer, Spin, Steps, Tabs } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import api from '../../api/api'
 import useReduceing from '../../Hook/useReducing'
 import EditTable from './EditTable'
 import PeopleStatus from './PeopleStatus'
 const ShiftPage = (): JSX.Element => {
     const { banchId } = useParams()
-    const { company } = useReduceing()
+    const { company, shiftEdit } = useReduceing()
     const convertBanchId = parseInt(banchId)
     const [status, setStatus] = useState({
         drawerOpen: false,
         currentTabs: 0
     })
-
-    useEffect(() => {
-        api.getUserAll()
-    }, [])
     if (!banchId) {
         return (
             <Spin />
@@ -46,9 +41,9 @@ const ShiftPage = (): JSX.Element => {
                 open={status.drawerOpen}
             >
                 {
-                    new Array(20).fill('').map((item, index) => {
+                    shiftEdit?.onlineUser?.map((item, index) => {
                         return (
-                            <PeopleStatus key={index} currentStatus='online'/>
+                            <PeopleStatus name={item.UserName} color={item.Color} key={index} currentStatus='online'/>
                         )
                     })
                 }

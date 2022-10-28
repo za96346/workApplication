@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { ReactNode } from 'react'
 
 export interface languageType {
     a: string
@@ -119,4 +119,28 @@ export interface BanchRuleListType {
     id: string
     time: ReactNode
     weekType: number
+}
+
+export interface OnlineUserType {
+    Color: string
+    Online: number
+    Pic: string
+    Position: number
+    UserId: number
+    UserName: string
+}
+
+export interface ShiftEditType {
+    // OffShiftTime: string | Date
+    // OnShiftTime: string | Date
+    BanchStyleId: number
+    Position: number
+    UserId: number
+}
+
+export interface ShiftSocketType {
+    BanchId: number
+    EditUser: UserType[]
+    OnlineUser: OnlineUserType[]
+    ShiftData: ShiftEditType[]
 }

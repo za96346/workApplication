@@ -1,6 +1,10 @@
 import { Tabs } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
+import api from '../../api/api'
 const HomePage = (): JSX.Element => {
+    useEffect(() => {
+        api.getSelfData()
+    }, [])
     return (
         <div className={styles.HomeBlock}>
             <Tabs>

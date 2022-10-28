@@ -4,9 +4,11 @@ import { Badge, Avatar } from 'antd'
 
 interface PeopleStatusProps {
     currentStatus: 'online'
+    name: string
+    color: string
 }
 
-const PeopleStatus = ({ currentStatus }: PeopleStatusProps): JSX.Element => {
+const PeopleStatus = ({ currentStatus, name, color }: PeopleStatusProps): JSX.Element => {
     return (
         <>
             <div className={styles.peopleList}>
@@ -14,8 +16,8 @@ const PeopleStatus = ({ currentStatus }: PeopleStatusProps): JSX.Element => {
                     icon={<UserOutlined />}
                 />
                 <div className={styles.peopleText}>
-                    <div>user 1</div>
-                    <div>編輯顏色: {<Badge status="error" />}</div>
+                    <div>{name}</div>
+                    <div>編輯顏色: {<Badge color={color} status="error" />}</div>
                 </div>
                 <Badge text={'上線中'} status="success" />
             </div>

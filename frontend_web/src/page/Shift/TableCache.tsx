@@ -1,36 +1,43 @@
-import { Select, Spin } from 'antd'
 import { v4 as uuid } from 'uuid'
 import React, { useMemo, useState } from 'react'
 import { companyReducerType } from '../../reduxer/reducer/companyReducer'
-import { useWebsocket } from '../../Hook/useWebsocket'
 import { userReducerType } from '../../reduxer/reducer/userReducer'
+import { BanchStyleType } from '../../type'
+import { Spin } from 'antd'
+import useShiftEditSocket from '../../Hook/useShiftEdit'
 
 const useTableCache = (company: companyReducerType, banchId: number, user: userReducerType): any => {
-    const { connectionStatus, sendMessage, lastJsonMessage } = useWebsocket({
-        options: {
-            onClose: (event: any) => {
-                console.log(event)
-            },
-            headers: {
-                banchId,
-                token: user?.token
-            }
-        }
-    })
+    const { connectionStatus, sendMessage, lastJsonMessage } = useShiftEditSocket(banchId, user?.token || '')
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [status, setStatus] = useState({
-        hoveredPos: -1 // date
+        clickPos: -1 // date
     })
-    const onMouseEnter = (pos: number): void => {
-        setStatus((prev) => ({ ...prev, hoveredPos: pos }))
-        sendMessage("fwef")
+    const onClickSendPosition = (pos: number): void => {
+        setStatus((prev) => ({ ...prev, clickPos: pos }))
+        sendMessage(JSON.stringify({
+            Types: 1,
+            Data: {
+                MyPosition: pos
+            }
+        }))
     }
-    const onMouseLeave = (): void => {
-        // setStatus(() => ())
+    const onClickSendShift = (userId: number, pos: number, it: BanchStyleType): void => {
+        // console.log(new Date(it.OnShiftTime))
+        setStatus((prev) => ({ ...prev, clickPos: -1 }))
+        sendMessage(JSON.stringify({
+            Types: 2,
+            Data: {
+                UserId: userId,
+                Position: pos,
+                BanchStyleId: it.StyleId
+                // OnShiftTime: dateHandle.transferToUtc('2022-02-02', it.OnShiftTime),
+                // OffShiftTime: dateHandle.transferToUtc('2022-02-02', it.OffShiftTime)
+            }
+        }))
     }
-    console.log(lastJsonMessage, connectionStatus)
     const tb = useMemo(() => {
-        if (connectionStatus !== 'Connecting') {
+        if (connectionStatus !== 'Connecting' &&
+            connectionStatus !== 'Open') {
             return <Spin tip={'進入編輯室中...'} />
         }
         return (
@@ -52,35 +59,64 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
                             }
                         </thead>
                         {
-                            company.employee.filter((item) => item.Banch === banchId).map((i, idx) => {
+                            lastJsonMessage?.EditUser?.map((i, idx) => {
                                 return (
                                     <tr key={uuid()}>
                                         {
                                             new Array(31).fill('').map((item, index) => {
+                                                const position = parseInt(`${idx * 31 + index}`)
+                                                const bg = lastJsonMessage?.OnlineUser?.find((user) => user.Position === position)
+                                                const findIcon = lastJsonMessage?.ShiftData?.find((shift) => shift.Position === position)
+                                                const icon = company?.banchStyle?.find((icon) => {
+                                                    // const on = dateHandle.dateFormatToTime(new Date(findIcon?.OnShiftTime))
+                                                    // const off = dateHandle.dateFormatToTime(new Date(findIcon?.OffShiftTime))
+                                                    // if (findIcon?.OnShiftTime && findIcon?.OffShiftTime) {
+                                                    //     console.log(on, findIcon.OnShiftTime)
+                                                    // }
+                                                    // return (
+                                                    //     icon?.OnShiftTime === on &&
+                                                    //     icon?.OffShiftTime === off
+                                                    // )
+                                                    return icon.StyleId === findIcon?.BanchStyleId
+                                                })
                                                 return (
                                                     index === 0
-                                                        ? <td style={{ left: '1px' }} className={styles.stickyTd}>
+                                                        ? <td key={uuid()} style={{ left: '1px' }} className={styles.stickyTd}>
                                                             {
                                                                 i.UserName
                                                             }
                                                         </td>
                                                         : <td
-                                                            onMouseLeave={onMouseLeave}
-                                                            onMouseEnter={() => onMouseEnter(parseInt(`${idx}${index}`))}
-                                                            style={{ height: '10px', width: '10px' }}
+                                                            className={styles.td}
+                                                            key={uuid()}
+                                                            onClickCapture={() => onClickSendPosition(position)}
+                                                            style={{
+                                                                backgroundColor: bg ? bg.Color : 'white'
+                                                            }}
                                                         >
-                                                            <Select suffixIcon={null}>
-                                                                {
-                                                                    company.banchStyle?.map((item) => {
-                                                                        return (
-                                                                            <Select.Option value={item.Icon} key={item.StyleId}>
-                                                                                {item.Icon}
-                                                                            </Select.Option>
-                                                                        )
-                                                                    })
-                                                                }
-                                                            </Select>
+                                                            {
+                                                                status.clickPos === position
+                                                                    ? (
+                                                                        <div className={styles.downList}>
 
+                                                                            {
+                                                                                company.banchStyle.map((it) => (
+                                                                                    <div
+                                                                                        onClick={(e) => {
+                                                                                            e.stopPropagation()
+                                                                                            onClickSendShift(i.UserId, position, it)
+                                                                                        }}
+                                                                                        key={uuid()}
+                                                                                    >
+                                                                                        {it.Icon}
+                                                                                    </div>
+                                                                                ))
+                                                                            }
+
+                                                                        </div>
+                                                                    )
+                                                                    : <>{icon?.Icon || ''}</>
+                                                            }
                                                         </td>
                                                 )
                                             })
@@ -93,7 +129,7 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
                 </div>
             </>
         )
-    }, [company, connectionStatus])
+    }, [company, lastJsonMessage, status.clickPos, connectionStatus])
     return {
         tb
     }

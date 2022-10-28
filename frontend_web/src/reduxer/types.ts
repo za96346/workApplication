@@ -61,3 +61,7 @@ export const statusType = {
 
     CLEAR_STATUS_ALL: 'CLEAR_STATUS_ALL'
 }
+
+export const shiftEditType = {
+    SET_SHIFT_ONLINE_USER: 'SET_SHIFT_ONLINE_USER'
+}
