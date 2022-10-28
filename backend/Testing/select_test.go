@@ -57,7 +57,17 @@ func TestSelectUser(t *testing.T) {
 
 	r = (*redis.Singleton()).SelectUser(3, "company0")
 	m = (*mysql.Singleton()).SelectUser(3, "company100")
-	// fmt.Println(r, m)
+	res = testEq(r, m, compareFunc)
+	assert.NotEqual(t, res, true)
+
+	// test 4
+	r = (*redis.Singleton()).SelectUser(4, int64(1))
+	m = (*mysql.Singleton()).SelectUser(4, int64(1))
+	res = testEq(r, m, compareFunc)
+	assert.Equal(t, res, true)
+	
+	r = (*redis.Singleton()).SelectUser(4, int64(1))
+	m = (*mysql.Singleton()).SelectUser(4, int64(2))
 	res = testEq(r, m, compareFunc)
 	assert.NotEqual(t, res, true)
 }

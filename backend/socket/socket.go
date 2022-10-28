@@ -90,6 +90,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}{}
 		if json.Unmarshal(msg, &data) != nil {
+			fmt.Println(json.Unmarshal(msg, &data))
 			continue
 		}
 
