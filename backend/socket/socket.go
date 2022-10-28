@@ -106,8 +106,9 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 			shift := response.Shift {
 				UserId: data.Data.UserId,
 				Position: data.Data.Position,
-				OnShiftTime: data.Data.OnShiftTime,
-				OffShiftTime: data.Data.OffShiftTime,
+				BanchStyleId: data.Data.BanchStyleId,
+				// OnShiftTime: data.Data.OnShiftTime,
+				// OffShiftTime: data.Data.OffShiftTime,
 			}
 			(*redis.Singleton()).InsertShiftData(conBanchId, shift)
 			fmt.Println("收到 shift =>", shift)
