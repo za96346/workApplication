@@ -511,6 +511,14 @@ func DataBaseInit() {
 		log.Fatal(err)
 	}
 
+	_, err = (*Singleton()).MysqlDB.Exec("alter table banchStyle add primary key(banchId, restTime, onShiftTime, offShiftTime, icon);")
+	if err == nil {
+		fmt.Println("banchStyle alter primary key success")
+	} else {
+		fmt.Println("banchStyle alter primary key failed")
+		log.Fatal(err)
+	}
+
 	_, err = (*Singleton()).MysqlDB.Exec("alter table banchStyle add foreign key (banchId) references companyBanch(id) on update cascade on delete cascade;")
 	if err == nil {
 		fmt.Println("banchStyle alter foreign key success")
@@ -598,32 +606,32 @@ func addCompany(x int) {
 				CreateTime: time.Now(),
 				LastModify: time.Now(),
 			}
-			_, id := (*Singleton()).InsertCompanyBanch(&companyBanch)
-			for i := 0; i < 2; i++ {
-				banchStyle := table.BanchStyle{
-					BanchId: id,
-					OnShiftTime: "09:00",
-					OffShiftTime: "18:00",
-					Icon: ">'..'<",
-					TimeRangeName: "平日早班",
-					CreateTime: time.Now(),
-					LastModify: time.Now(),
-				}
-				(*Singleton()).InsertBanchStyle(&banchStyle)
+			(*Singleton()).InsertCompanyBanch(&companyBanch)
+			// for i := 0; i < 2; i++ {
+			// 	banchStyle := table.BanchStyle{
+			// 		BanchId: id,
+			// 		OnShiftTime: "09:00",
+			// 		OffShiftTime: "18:00",
+			// 		Icon: ">'..'<",
+			// 		TimeRangeName: "平日早班",
+			// 		CreateTime: time.Now(),
+			// 		LastModify: time.Now(),
+			// 	}
+			// 	(*Singleton()).InsertBanchStyle(&banchStyle)
 	
-				banchRule := table.BanchRule{
-					BanchId: id,
-					MaxPeople: 2,
-					MinPeople: 1,
-					WeekDay: 1 + i,
-					WeekType: 2,
-					OnShiftTime: "09:00",
-					OffShiftTime: "18:00",
-					CreateTime: time.Now(),
-					LastModify: time.Now(),
-				}
-				(*Singleton()).InsertBanchRule(&banchRule)
-			}
+			// 	banchRule := table.BanchRule{
+			// 		BanchId: id,
+			// 		MaxPeople: 2,
+			// 		MinPeople: 1,
+			// 		WeekDay: 1 + i,
+			// 		WeekType: 2,
+			// 		OnShiftTime: "09:00",
+			// 		OffShiftTime: "18:00",
+			// 		CreateTime: time.Now(),
+			// 		LastModify: time.Now(),
+			// 	}
+			// 	(*Singleton()).InsertBanchRule(&banchRule)
+			// }
 		}
 }
 
