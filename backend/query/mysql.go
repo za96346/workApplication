@@ -256,6 +256,7 @@ func addShiftQuery() {
 	sqlQueryInstance.Shift.InsertAll = `
 	insert into shift(
 		userId,
+		banchStyleId,
 		onShiftTime,
 		offShiftTime,
 		restTime,
@@ -265,11 +266,12 @@ func addShiftQuery() {
 		createTime,
 		lastModify
 		) values(
-			?, ?, ?, ?, ?, ?, ?, ?, ?
+			?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 	);`;
 	sqlQueryInstance.Shift.UpdateSingle = `
 	update shift
 	set
+		banchStyleId=?,
 		onShiftTime=?,
 		offShiftTime=?,
 		restTime=?,

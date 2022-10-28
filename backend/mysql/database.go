@@ -340,6 +340,7 @@ func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftT
 		err = res.Scan(
 			&shift.ShiftId,
 			&shift.UserId,
+			&shift.BanchStyleId,
 			&shift.OnShiftTime,
 			&shift.OffShiftTime,
 			&shift.RestTime,
@@ -1135,6 +1136,7 @@ func(dbObj *DB) UpdateShift(updateKey int, data *table.ShiftTable, value ...inte
 		querys = (*query.MysqlSingleton()).Shift.UpdateSingle
 		(*dbObj).containers.shift = append(
 			(*dbObj).containers.shift,
+			(*data).BanchStyleId,
 			(*data).OnShiftTime,
 			(*data).OffShiftTime,
 			(*data).RestTime,
@@ -1563,6 +1565,7 @@ func(dbObj *DB) InsertShift(data *table.ShiftTable) (bool, int64) {
 		(*dbObj).checkErr(err)
 		res, err := stmt.Exec(
 			(*data).UserId,
+			(*data).BanchStyleId,
 			(*data).OnShiftTime,
 			(*data).OffShiftTime,
 			(*data).RestTime,

@@ -35,6 +35,7 @@ type UserPreferenceTable struct {
 type ShiftTable struct {
 	ShiftId int64 `json:"ShiftId"` // 班表的編號
 	UserId int64 `json:"UserId"` // 使用者的編號
+	BanchStyleId int64 `json:"BanchStyleId"` // 班表樣式id
 	OnShiftTime time.Time  `json:"OnShiftTime"`// 開始上班時間
 	OffShiftTime time.Time `json:"OffShiftTime"` //結束上班的時間
 	RestTime string `json:"RestTime"` // 休息時間

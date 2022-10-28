@@ -78,6 +78,7 @@ func DataBaseInit() {
 		create table shift(
 			shiftId bigint not null AUTO_INCREMENT unique,
 			userId bigint,
+			banchStyleId bigint,
 			onShiftTime timestamp,
 			offShiftTime timestamp,
 			restTime time,
@@ -681,6 +682,7 @@ func addUser(x int) {
 				oneDay, _ := time.ParseDuration(fmt.Sprint(strconv.Itoa(shiftStep * 24), "h"))
 				shift := table.ShiftTable{
 					UserId: id,
+					BanchStyleId: int64(1),
 					OnShiftTime: time.Now().Add(-8 * hours).Add(oneDay),
 					OffShiftTime: time.Now().Add(oneDay),
 					RestTime: "01:00:00",
