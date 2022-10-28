@@ -124,6 +124,9 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	// 離開房間
 	fmt.Printf("\n使用者 %d 離開房間 %d\n", user.UserId, conBanchId)
 	(*redis.Singleton()).LeaveShiftRoom(conBanchId, user.UserId)
+
+	// send
+	Singleton().send(conBanchId)
 }
  
 func Conn() {
