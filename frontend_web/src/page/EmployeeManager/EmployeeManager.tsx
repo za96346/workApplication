@@ -22,10 +22,11 @@ const filtInit = {
 }
 const EmployeeManager = (): JSX.Element => {
     const { company, loading } = useReduceing()
+    const [data, setData] = useState<UserType[]>(company.employee)
     const [filt, setFilt] = useState(filtInit)
     const companyFilter = useMemo(() => {
         // eslint-disable-next-line array-callback-return
-        const res1 = company.employee.filter((item) => {
+        const res1 = data.filter((item) => {
             if (filt === filtInit) return item
             if (item.UserName !== filt.userName && filt.userName !== '') {
                 return
@@ -39,7 +40,7 @@ const EmployeeManager = (): JSX.Element => {
             return item
         })
         return res1
-    }, [filt])
+    }, [filt, data])
     const form = useRef<UserType>({
         UserId: -1,
         UserName: '',
@@ -55,7 +56,8 @@ const EmployeeManager = (): JSX.Element => {
         console.log(form.current)
         const res = await api.updateUser(form.current)
         if (res.status) {
-            await api.getUserAll()
+            const idx = data.filter((item) => item.UserId !== form.current.UserId)
+            setData([...idx, form.current])
         }
         setEdit((prev) => ({ ...prev, currentIdx: -1 }))
     }
@@ -63,14 +65,11 @@ const EmployeeManager = (): JSX.Element => {
         api.getUserAll()
     }, [])
     useEffect(() => {
-        const user = company.employee?.find((item) => item?.UserId === edit.currentIdx)
+        const user = data?.find((item) => item?.UserId === edit.currentIdx)
         form.current = {
             ...user
         }
     }, [edit.currentIdx])
-    useEffect(() => {
-        console.log(filt, companyFilter)
-    }, [filt])
     return (
         <>
             <div className={styles.empManagerFilter}>
@@ -131,8 +130,7 @@ const EmployeeManager = (): JSX.Element => {
                                         </tr>
                                     )
                                 }
-                                if (
-                                    loading.onUpdateUser) {
+                                if (loading.onUpdateUser) {
                                     <tr>
                                         <Spin/>
                                     </tr>
