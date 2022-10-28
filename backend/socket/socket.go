@@ -1,6 +1,7 @@
 package socket
 
 import (
+	"backend/handler"
 	"backend/methods"
 	panichandler "backend/panicHandler"
 	"backend/redis"
@@ -54,7 +55,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		UserName: user.UserName,
 		UserId: user.UserId,
 		Pic: "",
-		Color: "#rgb(222,222,222)",
+		Color: fmt.Sprintf("rgb(%d,%d,%d)", handler.Rand(0, 255), handler.Rand(0, 255), handler.Rand(0, 255)),
 		Online: 1,
 		Position: -1,
 	}
@@ -81,20 +82,37 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
             break
         }
 
-		member := struct {
-			MyPosition int `json:MyPosition`
-		}{
-			MyPosition: v.Position,
+		data := struct {
+			Types int
+			Data struct {
+				response.Shift
+				MyPosition int
+			}
+		}{}
+		if json.Unmarshal(msg, &data) != nil {
+			continue
 		}
-		if json.Unmarshal(msg, &member) == nil {
-			v.Position = member.MyPosition
+
+		switch data.Types {
+		case 1:
+			// 我的位置
+			v.Position = data.Data.MyPosition
 			(*redis.Singleton()).EnterShiftRoom(conBanchId, v)
-		}
-		
-		// 插入 資料
-		shift := response.Shift{}
-		if json.Unmarshal(msg, &shift) == nil {
+			fmt.Println("收到 position =>",  v.Position)
+			break
+		case 2:
+			// 插入 班表資料
+			shift := response.Shift {
+				UserId: data.Data.UserId,
+				Position: data.Data.Position,
+				OnShiftTime: data.Data.OnShiftTime,
+				OffShiftTime: data.Data.OffShiftTime,
+			}
 			(*redis.Singleton()).InsertShiftData(conBanchId, shift)
+			fmt.Println("收到 shift =>", shift)
+			break
+		default:
+			continue
 		}
 
 		// send

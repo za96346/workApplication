@@ -3,7 +3,6 @@ package handler
 import (
 	panichandler "backend/panicHandler"
 	"fmt"
-	"math/rand"
 	"net/smtp"
 	"os"
 	"regexp"
@@ -46,8 +45,7 @@ func SendEmail(emailAdd string) bool {
 	// title of email
 	em.Subject = "work App 電子信箱驗證"
 	 
-	rand.Seed(time.Now().UnixNano())
-	v := randomInt(100000, 999999)
+	v := Rand(100000, 999999)
 	(*Singleton()).Redis.InsertEmailCaptcha(emailAdd, v)
 	
 	em.HTML = []byte(htmlBoard(v))
@@ -65,11 +63,6 @@ func htmlBoard(number int) string {
 	return fmt.Sprintf(`
 		<div>驗證碼為<span style="color: blue;">%d</span>  時效為三分鐘 請儘速完成註冊</div>
 			<a href='#'>前往登入註冊頁面</a>`, number)
-}
-
-// Returns an int >= min, < max
-func randomInt(min, max int) int {
-	return min + rand.Intn(max-min)
 }
 
 func VerifyEmailFormat(email string) bool {
