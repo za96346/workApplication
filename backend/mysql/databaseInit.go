@@ -665,7 +665,7 @@ func addUser(x int) {
 				UserName: "siou" + strconv.Itoa(i),
 				EmployeeNumber: "a0000" + strconv.Itoa(i),
 				OnWorkDay: time.Now(),
-				Banch: int64(x),
+				Banch: int64(x + 1),
 				Permession: permession,
 				MonthSalary: 30000 + i,
 				PartTimeSalary: 130 + i,
