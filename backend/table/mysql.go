@@ -177,14 +177,19 @@ type QuitWorkUser struct {
 
 // 等待配對公司
 type WaitCompanyReply struct {
+	WaitId int64 `json:"WaitId"` // 等待的唯一id
 	UserId int64 `json:"UserId"` // 使用者的編號
-	CompanyCode string `json:"CompanyCode"` // 公司碼
+	CompanyId int64 `json:"CompanyId"` // 公司碼
+	SpecifyTag string `json:"SpecifyTag"` // 備註
+	IsAccept int `json:"IsAccept"` // 是否接受 (1 等待確認, 2 拒絕)
 	CreateTime time.Time `json:"CreateTime"`//創建的時間
 	LastModify time.Time `json:"LastModify"`// 上次修改的時間
 }
 
-// 公司每天平假日的設定
+// 公司假日的設定
 type WeekendSetting struct {
-	Date string // 每天 ex: 2022-02-22
-	weekType string
+	WeekendId int64 `json:"WeekendId"` // 假日的 唯一id
+	Date string `json:"Date"` // 每天 ex: 2022-02-22
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
 }

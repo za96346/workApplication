@@ -9,18 +9,6 @@ import (
 )
 func DataBaseInit() {
 	defer simulateData();
-	// (*Singleton()).MysqlDB.Exec(`drop table user;`)
-	// (*Singleton()).MysqlDB.Exec(`drop table userPreference;`)
-	// (*Singleton()).MysqlDB.Exec(`drop table shift;`)
-	// (*Singleton()).MysqlDB.Exec(`drop table shiftChange;`)
-	// (*Singleton()).MysqlDB.Exec(`drop table shiftOverTime;`)
-	// (*Singleton()).MysqlDB.Exec(`drop table forgetPunch;`)
-	// (*Singleton()).MysqlDB.Exec(`drop table dayOff;`)
-	// (*Singleton()).MysqlDB.Exec(`drop table lateExcused;`)
-	// (*Singleton()).MysqlDB.Exec(`drop table company;`)
-	// (*Singleton()).MysqlDB.Exec(`drop table companyBanch;`)
-	// (*Singleton()).MysqlDB.Exec(`drop table banchStyle;`)
-	// (*Singleton()).MysqlDB.Exec(`drop table banchRule;`)
 	(*Singleton()).MysqlDB.Exec(`SET FOREIGN_KEY_CHECKS = 0;`)
 	(*Singleton()).MysqlDB.Exec(`SET GROUP_CONCAT_MAX_LEN=32768;`)
 	(*Singleton()).MysqlDB.Exec(`SET @tables = NULL;`)
@@ -304,6 +292,42 @@ func DataBaseInit() {
 		fmt.Println("quitWorkUser table is created failed")
 	}
 
+/// Wait Company Reply
+
+	_, err = (*Singleton()).MysqlDB.Exec(`
+		create table waitCompanyReply(
+			waitId bigint not null unique auto_increment,
+			userId bigint,
+			companyId bigint,
+			specifyTag varchar(50),
+			isAccept int,
+			createTime timestamp,
+			lastModify timestamp
+		);
+	`)
+	if err == nil {
+		fmt.Println("waitCompanyReply table is created success")
+	} else {
+		fmt.Println("waitCompanyReply table is created failed")
+	}
+
+/// Weekend Setting
+
+	_, err = (*Singleton()).MysqlDB.Exec(`
+		create table weekendSetting(
+			weekendId bigint not null unique auto_increment,
+			companyId bigint,
+			date date,
+			createTime timestamp,
+			lastModify timestamp
+		);
+	`)
+	if err == nil {
+		fmt.Println("weekendSetting table is created success")
+	} else {
+		fmt.Println("weekendSetting table is created failed")
+	}
+
 /// userPreference alter
 	_, err = (*Singleton()).MysqlDB.Exec("alter table userPreference add foreign key(userId) references user(userId) on update cascade on delete cascade;")
 
@@ -567,6 +591,84 @@ func DataBaseInit() {
 	} else {
 		fmt.Println("quit work user add primary key fail", err)
 	}
+
+	_, err = (*Singleton()).MysqlDB.Exec("alter table quitWorkUser add foreign key (userId) references user(userId) on update cascade on delete cascade;")
+	if err == nil {
+		fmt.Println("quitWorkUser alter foreign key success")
+	} else {
+		fmt.Println("quitWorkUser alter foreign key failed")
+		log.Fatal(err)
+	}
+
+	_, err = (*Singleton()).MysqlDB.Exec("alter table quitWorkUser add foreign key (companyCode) references company(companyCode) on update cascade on delete cascade;")
+	if err == nil {
+		fmt.Println("quitWorkUser alter foreign key success")
+	} else {
+		fmt.Println("quitWorkUser alter foreign key failed")
+		log.Fatal(err)
+	}
+
+// wait company reply
+	_, err = (*Singleton()).MysqlDB.Exec("alter table waitCompanyReply auto_increment=1;")
+
+	if err == nil {
+		fmt.Println("waitCompanyReply alter set auto increment success")
+	} else {
+		fmt.Println("waitCompanyReply alter set auto increment failed")
+		log.Fatal(err)
+	}
+
+	_, err = (*Singleton()).MysqlDB.Exec("alter table waitCompanyReply add primary key (userId, companyId);")
+
+	if err == nil {
+		fmt.Println("waitCompanyReply alter set primary key success")
+	} else {
+		fmt.Println("waitCompanyReply alter set primary key failed")
+		log.Fatal(err)
+	}
+
+	_, err = (*Singleton()).MysqlDB.Exec("alter table waitCompanyReply add foreign key (userId) references user(userId) on update cascade on delete cascade;")
+	if err == nil {
+		fmt.Println("waitCompanyReply alter foreign key success")
+	} else {
+		fmt.Println("waitCompanyReply alter foreign key failed")
+		log.Fatal(err)
+	}
+
+	_, err = (*Singleton()).MysqlDB.Exec("alter table waitCompanyReply add foreign key (companyId) references company(companyId) on update cascade on delete cascade;")
+	if err == nil {
+		fmt.Println("waitCompanyReply alter foreign key success")
+	} else {
+		fmt.Println("waitCompanyReply alter foreign key failed")
+		log.Fatal(err)
+	}
+	
+// weekend setting
+	_, err = (*Singleton()).MysqlDB.Exec("alter table weekendSetting auto_increment=1;")
+
+	if err == nil {
+		fmt.Println("weekendsetting alter set auto increment success")
+	} else {
+		fmt.Println("weekendsetting alter set auto increment failed")
+		log.Fatal(err)
+	}
+
+	_, err = (*Singleton()).MysqlDB.Exec("alter table weekendSetting add primary key (date, companyId);")
+
+	if err == nil {
+		fmt.Println("weekendsetting alter set primary key success")
+	} else {
+		fmt.Println("weekendsetting alter set primary key failed")
+		log.Fatal(err)
+	}
+
+	_, err = (*Singleton()).MysqlDB.Exec("alter table weekendSetting add foreign key (companyId) references company(companyId) on update cascade on delete cascade;")
+	if err == nil {
+		fmt.Println("weekendsetting alter foreign key success")
+	} else {
+		fmt.Println("weekendsetting alter foreign key failed")
+		log.Fatal(err)
+	}
 	
 }
 func simulateData() {
@@ -636,22 +738,6 @@ func addCompany(x int) {
 }
 
 func addUser(x int) {
-	if (x == 0) {
-		userQuit := table.QuitWorkUser{
-			CompanyCode: "company0",
-			Account: "account2",
-			UserName: "siou2",
-			EmployeeNumber: "a00002",
-			OnWorkDay: time.Now(),
-			Banch: 1,
-			Permession: 2,
-			MonthSalary: 30000,
-			PartTimeSalary: 130,
-			CreateTime: time.Now(),
-			LastModify: time.Now(),
-		}
-		(*Singleton()).InsertQuitWorkUser(&userQuit)
-	}
 	for i := 0; i < 10; i++ {
 			permession := 2
 			if i == 1 {
