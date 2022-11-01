@@ -20,6 +20,7 @@ import EmployeeManager from './page/EmployeeManager/EmployeeManager'
 import BanchManager from './page/BanchManager/BanchManager'
 import HomePage from './page/Home/HomePage'
 import SignPage from './page/Sign/Sign'
+import WeekendSettingPage from './page/WeekendSetting/WeekendSettingPage'
 
 // global init
 window.styles = styles
@@ -41,7 +42,7 @@ const App = (): JSX.Element => {
 
                     <Route path='banchManager' element={<BanchManager />} />
                     <Route path='sign' element={<SignPage/>}/>
-                    <Route path='weekendSetting' element/>
+                    <Route path='weekendSetting' element={<WeekendSettingPage />}/>
 
                     <Route path='shiftSetting/:banchId' element={<ShiftSettingPage />} />
                     <Route path='shiftSearch' element={<ShiftSearchPage />} />
