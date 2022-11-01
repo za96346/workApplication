@@ -22,7 +22,7 @@ const filtInit = {
 }
 const EmployeeManager = (): JSX.Element => {
     const { company, loading } = useReduceing()
-    const [data, setData] = useState<UserType[]>(company.employee)
+    const [data, setData] = useState<UserType[]>([])
     const [filt, setFilt] = useState(filtInit)
     const companyFilter = useMemo(() => {
         // eslint-disable-next-line array-callback-return
@@ -64,6 +64,9 @@ const EmployeeManager = (): JSX.Element => {
     useEffect(() => {
         api.getUserAll()
     }, [])
+    useEffect(() => {
+        setData(company.employee)
+    }, [company.employee])
     useEffect(() => {
         const user = data?.find((item) => item?.UserId === edit.currentIdx)
         form.current = {

@@ -2,6 +2,7 @@ import { AppstoreOutlined, CalendarOutlined, EditFilled, ExportOutlined, GoldOut
 import { Button, MenuProps, Menu } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useBreakPoint } from '../Hook/useBreakPoint'
 import useReduceing from '../Hook/useReducing'
 import { clearAll } from '../reduxer/clearAll'
 import { BanchType } from '../type'
@@ -52,12 +53,13 @@ const items = (banch: BanchType[], companyCode: string): MenuItem[] => {
     ])
 }
 const App: React.FC = () => {
+    const { isMore, isLess } = useBreakPoint()
     const { loading, company, user } = useReduceing()
     const [current, setCurrent] = useState<any>({
         keyPath: 'shift',
         key: ''
     })
-    const [collapsed, setCollapsed] = useState(true)
+    const [collapsed, setCollapsed] = useState(!isLess('md'))
     const navigate = useNavigate()
 
     const onClick: MenuProps['onClick'] = e => {
@@ -66,6 +68,9 @@ const App: React.FC = () => {
     }
 
     const width = (): string | number => {
+        if (isLess('md')) {
+            return '100%'
+        }
         return collapsed ? '50px' : 246
     }
 
@@ -109,22 +114,26 @@ const App: React.FC = () => {
             }}
             className={styles.menuBlock}
             >
-                <Button
-                    type="primary"
-                    onClick={() => setCollapsed((prev) => !prev)}
-                    style={{
-                        transition: '0.2s',
-                        width: width(),
-                        marginBottom: 16,
-                        position: 'absolute'
-                    }}
-                >
-                    {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                </Button>
+                {
+                    isMore('md') && (
+                        <Button
+                            type="primary"
+                            onClick={() => setCollapsed((prev) => !prev)}
+                            style={{
+                                transition: '0.2s',
+                                width: width(),
+                                marginBottom: 16,
+                                position: 'absolute'
+                            }}
+                        >
+                            {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                        </Button>
+                    )
+                }
                 <div
                     style={{
-                        marginTop: '30px',
-                        height: '90vh',
+                        marginTop: isLess('md') ? '0px' : '30px',
+                        height: isLess('md') ? '80vh' : '90vh',
                         maxHeight: '90vh',
                         overflow: 'scroll'
                     }}
@@ -145,9 +154,9 @@ const App: React.FC = () => {
                 <div
                     style={{
                         width: width(),
-                        transition: '0.2s'
+                        transition: '0.2s',
+                        padding: isLess('md') ? '10px 34px 10px 34px' : '0px'
                     }}
-                    className={styles.logout}
                     onClick={() => {
                         clearAll()
                         navigate('/entry/login', { replace: true })
