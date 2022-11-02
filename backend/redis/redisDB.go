@@ -39,6 +39,8 @@ type DB struct {
 	banchStyleMux *sync.RWMutex
 	banchRuleMux *sync.RWMutex
 	quitWorkUserMux *sync.RWMutex
+	waitCompanyReply *sync.RWMutex
+	weekendSetting *sync.RWMutex
 }
 var redisInstance *DB
 
@@ -79,6 +81,8 @@ func Singleton() *DB {
 			(*redisInstance).table[10] = "banchStyle"
 			(*redisInstance).table[11] = "banchRule"
 			(*redisInstance).table[12] = "quitWorkUser"
+			(*redisInstance).table[13] = "waitCompanyReply"
+			(*redisInstance).table[14] = "weekendSetting"
 		}
 	}
 	return redisInstance
@@ -709,6 +713,114 @@ func(dbObj *DB) SelectQuitWorkUser(selectKey int, value... interface{}) *[]table
 	}
 }
 
+// 0 => all, value => nil
+//  1 => waitId, value => int64
+//  2 => userId, value => int64
+//  3 => companyId, value => int64
+//  4 => comapnyId && userId, value => int64, int64
+func(dbObj *DB) SelectWaitCompanyReply (selectKey int, value... interface{}) *[]table.WaitCompanyReply {
+	defer panichandler.Recover()
+	tableKey := (*dbObj).table[13]
+	switch selectKey {
+	case 0:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.WaitCompanyReply) bool {return true},
+		)
+	case 1:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).hmGet(tableKey, value...)
+			},
+			func(v table.WaitCompanyReply) bool {return true},
+		)
+	case 2:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.WaitCompanyReply) bool {
+				for _, filterItem := range value {
+					if filterItem == v.UserId {
+						return true
+					}
+				}
+				return false
+			},
+		)
+	case 3:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.WaitCompanyReply) bool {
+				for _, filterItem := range value {
+					if filterItem == v.CompanyId {
+						return true
+					}
+				}
+				return false
+			},
+		)
+	case 4:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.WaitCompanyReply) bool {
+				if value[0] == v.CompanyId && value[1] == v.UserId {
+					return true
+				}
+				return false
+			},
+		)
+	default:
+		return &[]table.WaitCompanyReply{}
+	}
+}
+
+// 0 => all, value => nil
+//  1 => weekendId, value => int64
+//  2 => companyId, value => int64
+func(dbObj *DB) SelectWeekendSetting (selectKey int, value... interface{}) *[]table.WeekendSetting {
+	defer panichandler.Recover()
+	tableKey := (*dbObj).table[14]
+	switch selectKey {
+	case 0:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.WeekendSetting) bool {return true},
+		)
+	case 1:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).hmGet(tableKey, value...)
+			},
+			func(v table.WeekendSetting) bool {return true},
+		)
+	case 2:
+		return forEach(
+			func() ([]string, error) {
+				return (*dbObj).RedisDb.HVals(tableKey).Result()
+			},
+			func(v table.WeekendSetting) bool {
+				for _, filterItem := range value {
+					if filterItem == v.CompanyId {
+						return true
+					}
+				}
+				return false
+			},
+		)
+	default:
+		return &[]table.WeekendSetting{}
+	}
+}
+
 //  ------------------------------delete------------------------------
 
 //使用者的唯一id
@@ -900,6 +1012,23 @@ func(dbObj *DB) DeleteQuitWorkUser(deleteKey int, quitId int64) bool {
 	return true
 }
 
+// wait company reply 的唯一id
+func(dbObj *DB) DeleteWaitCompanyReply(deleteKey int, waitId int64) bool {
+	defer panichandler.Recover()
+	(*dbObj).waitCompanyReply.Lock()
+	defer (*dbObj).waitCompanyReply.Unlock()
+	(*dbObj).RedisDb.HDel((*dbObj).table[13], strconv.FormatInt(waitId, 10))
+	return true
+}
+
+// weekend setting 的唯一id
+func(dbObj *DB) DeleteWeekendSetting(deleteKey int, weekendId int64) bool {
+	defer panichandler.Recover()
+	(*dbObj).weekendSetting.Lock()
+	defer (*dbObj).weekendSetting.Unlock()
+	(*dbObj).RedisDb.HDel((*dbObj).table[14], strconv.FormatInt(weekendId, 10))
+	return true
+}
 
 
 
@@ -1060,6 +1189,30 @@ func(dbObj *DB) InsertQuitWorkUser(data *table.QuitWorkUser) bool {
 	return true
 }
 
+func(dbObj *DB) InsertWaitCompanyReply(data *table.WaitCompanyReply) bool {
+	defer panichandler.Recover()
+	(*dbObj).waitCompanyReply.Lock()
+	defer (*dbObj).waitCompanyReply.Unlock()
+	key := strconv.FormatInt((*data).WaitId, 10)
+	jsonData, _ := json.Marshal(*data)
+	_, err := (*dbObj).RedisDb.HSet((*dbObj).table[13], key, jsonData).Result()
+	
+	(*dbObj).checkErr(err)
+	return true
+}
+
+func(dbObj *DB) InsertWeekendSetting(data *table.WeekendSetting) bool {
+	defer panichandler.Recover()
+	(*dbObj).weekendSetting.Lock()
+	defer (*dbObj).weekendSetting.Unlock()
+	key := strconv.FormatInt((*data).WeekendId, 10)
+	jsonData, _ := json.Marshal(*data)
+	_, err := (*dbObj).RedisDb.HSet((*dbObj).table[14], key, jsonData).Result()
+	
+	(*dbObj).checkErr(err)
+	return true
+}
+
 
 
 //  ------------------------------delete key------------------------------
@@ -1115,6 +1268,14 @@ func(dbObj *DB) DeleteKeyBanchRule(){
 func(dbObj *DB) DeleteKeyQuitWorkUser(){
 	defer panichandler.Recover()
 	(*dbObj).RedisDb.Del((*dbObj).table[12])
+}
+func(dbObj *DB) DeleteKeyWaitCompanyReply(){
+	defer panichandler.Recover()
+	(*dbObj).RedisDb.Del((*dbObj).table[13])
+}
+func(dbObj *DB) DeleteKeyWeekendSetting(){
+	defer panichandler.Recover()
+	(*dbObj).RedisDb.Del((*dbObj).table[14])
 }
 
 
