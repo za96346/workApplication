@@ -116,6 +116,10 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 	case 25:
 		routeFunc = service.DeleteBanch
 		break
+	case 26:
+		// get method of fetch wait reply
+		routeFunc = service.FetchWaitReply
+		break
 	default:
 		break;
 	}

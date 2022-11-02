@@ -729,3 +729,17 @@ func InsertCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 		"message": StatusText().InsertSuccess,
 	})
 }
+
+func FetchWaitReply (props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+
+	_, company, err := CheckUserAndCompany(props)
+	if err {return}
+
+	waitCompanyReply := (*dbHandle).SelectWaitCompanyReply(3, company.CompanyId)
+	props.JSON(http.StatusOK, gin.H{
+		"data": *waitCompanyReply,
+		"message": StatusText().FindSuccess,
+	})
+}

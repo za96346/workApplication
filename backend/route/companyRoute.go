@@ -75,5 +75,12 @@ func Company(props *gin.RouterGroup) {
 			middleWare.MyCompanyAndBanch,
 			worker.AssignWorker(21),
 		)
+
+		// wait company reply
+		props.GET("/wait/reply",
+			middleWare.Permession(100),
+			middleWare.MyCompanyAndBanch,
+			worker.AssignWorker(26),
+		)
 	}
 }
