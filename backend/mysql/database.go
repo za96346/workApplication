@@ -37,6 +37,8 @@ type DB struct {
 	banchRuleMux *sync.RWMutex
 	forgetPunchMux *sync.RWMutex
 	quitWorkUserMux *sync.RWMutex
+	waitCompanyReply *sync.RWMutex
+	weekendSetting *sync.RWMutex
 	MysqlDB *sql.DB // 要先使用連線方法後才能使用這個
 	containers
 }
@@ -55,6 +57,8 @@ type containers struct {
 	banchStyle []interface{}
 	banchRule []interface{}
 	quitWorkUser []interface{}
+	waitCompanyReply []interface{}
+	weekendSetting []interface{}
 }
 
 func Singleton() *DB {
@@ -77,6 +81,8 @@ func Singleton() *DB {
 				banchStyleMux: new(sync.RWMutex),
 				banchRuleMux: new(sync.RWMutex),
 				quitWorkUserMux: new(sync.RWMutex),
+				waitCompanyReply: new(sync.RWMutex),
+				weekendSetting: new(sync.RWMutex),
 			}
 		}
 	}
@@ -736,6 +742,98 @@ func(dbObj *DB) SelectQuitWorkUser(selectKey int, value... interface{}) *[]table
 	return &carry
 }
 
+// 0 => all, value => nil
+//  1 => waitId, value => int64
+//  2 => userId, value => int64
+//  3 => companyId, value => int64
+//  4 => comapnyId && userId, value => int64, int64
+func(dbObj *DB) SelectWaitCompanyReply(selectKey int, value... interface{}) *[]table.WaitCompanyReply {
+	defer panichandler.Recover()
+	querys := ""
+	switch selectKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).WaitCompanyReply.SelectAll
+		break
+	case 1:
+		querys = (*query.MysqlSingleton()).WaitCompanyReply.SelectSingleByWaitId
+		break
+	case 2:
+		querys = (*query.MysqlSingleton()).WaitCompanyReply.SelectAllByUserId
+		break
+	case 3:
+		querys = (query.MysqlSingleton()).WaitCompanyReply.SelectAllByCompanyId
+		break
+	case 4:
+		querys = (query.MysqlSingleton()).WaitCompanyReply.SelectAllByCompanyIdAndUserId
+		break
+	default:
+		querys = (*query.MysqlSingleton()).WaitCompanyReply.SelectAll
+		break
+	}
+	WaitCompanyReply := new(table.WaitCompanyReply)
+	carry := []table.WaitCompanyReply{}
+	res, err := (*dbObj).MysqlDB.Query(querys, value...)
+	defer res.Close()
+	(*dbObj).checkErr(err)
+	for res.Next() {
+		err = res.Scan(
+			&WaitCompanyReply.WaitId,
+			&WaitCompanyReply.UserId,
+			&WaitCompanyReply.UserId,
+			&WaitCompanyReply.SpecifyTag,
+			&WaitCompanyReply.IsAccept,
+			&WaitCompanyReply.CreateTime,
+			&WaitCompanyReply.LastModify,
+		)
+		(*dbObj).checkErr(err)
+		if err == nil {
+			carry = append(carry, *WaitCompanyReply)
+		}
+	}
+	return &carry
+}
+
+// 0 => all, value => nil
+//  1 => weekendId, value => int64
+//  2 => companyId, value => int64
+func(dbObj *DB) SelectWeekendSetting(selectKey int, value... interface{}) *[]table.WeekendSetting {
+	defer panichandler.Recover()
+	querys := ""
+	switch selectKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).WeekendSetting.SelectAll
+		break
+	case 1:
+		querys = (*query.MysqlSingleton()).WeekendSetting.SelectSingleByWeekendId
+		break
+	case 2:
+		querys = (*query.MysqlSingleton()).WeekendSetting.SelectAllByCompanyId
+		break
+	default:
+		querys = (*query.MysqlSingleton()).WeekendSetting.SelectAll
+		break
+	}
+	weekendSetting := new(table.WeekendSetting)
+	carry := []table.WeekendSetting{}
+	res, err := (*dbObj).MysqlDB.Query(querys, value...)
+	defer res.Close()
+	(*dbObj).checkErr(err)
+	for res.Next() {
+		err = res.Scan(
+			&weekendSetting.WeekendId,
+			&weekendSetting.CompanyId,
+			&weekendSetting.Date,
+			&weekendSetting.CreateTime,
+			&weekendSetting.LastModify,
+		)
+		(*dbObj).checkErr(err)
+		if err == nil {
+			carry = append(carry, *weekendSetting)
+		}
+	}
+	return &carry
+}
+
 // ---------------------------------delete------------------------------------
 
 //使用者的唯一id (關聯資料表userpreference 也上鎖)
@@ -966,6 +1064,38 @@ func(dbObj *DB) DeleteQuitWorkUser(deleteKey int, quitId interface{}) bool {
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
 	_, err = stmt.Exec(quitId)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// wait company reply 的唯一id
+func(dbObj *DB) DeleteWaitCompanyReply(deleteKey int, waitId interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).waitCompanyReply.Lock()
+	defer (*dbObj).waitCompanyReply.Unlock()
+	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).WaitCompanyReply.Delete)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(waitId)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// weekend setting 的唯一id
+func(dbObj *DB) DeleteWeekendSetting(deleteKey int, weekendId interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).weekendSetting.Lock()
+	defer (*dbObj).weekendSetting.Unlock()
+	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).WeekendSetting.Delete)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(weekendId)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
@@ -1409,6 +1539,7 @@ func(dbObj *DB) UpdateBanchRule(updateKey int, data *table.BanchRule, value ...i
 	}
 	return true
 }
+
 // 0 => all
 func(dbObj *DB) UpdateQuitWorkUser(updateKey int, data *table.QuitWorkUser, value ...interface{}) bool {
 	defer panichandler.Recover()
@@ -1444,6 +1575,71 @@ func(dbObj *DB) UpdateQuitWorkUser(updateKey int, data *table.QuitWorkUser, valu
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
 	_, err = stmt.Exec((*dbObj).containers.quitWorkUser...)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// 0 => all, by waitId => int64
+func(dbObj *DB) UpdateWaitCompanyReply(updateKey int, data *table.WaitCompanyReply, value ...interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).waitCompanyReply.Lock()
+	defer (*dbObj).waitCompanyReply.Unlock()
+	defer func ()  {
+		(*dbObj).containers.waitCompanyReply = nil
+	}()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).WaitCompanyReply.UpdateSingle
+		(*dbObj).containers.waitCompanyReply= append(
+			(*dbObj).containers.waitCompanyReply,
+			(*data).SpecifyTag,
+			(*data).IsAccept,
+			(*data).LastModify,
+			(*data).WaitId,
+		)
+		break;
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec((*dbObj).containers.waitCompanyReply...)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// 0 => all, by weekendId int64
+func(dbObj *DB) UpdateWeekendSetting(updateKey int, data *table.WeekendSetting, value ...interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).weekendSetting.Lock()
+	defer (*dbObj).weekendSetting.Unlock()
+	defer func ()  {
+		(*dbObj).containers.weekendSetting = nil
+	}()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).WeekendSetting.UpdateSingle
+		(*dbObj).containers.weekendSetting = append(
+			(*dbObj).containers.weekendSetting,
+			(*data).Date,
+			(*data).LastModify,
+			(*data).WeekendId,
+		)
+		break;
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec((*dbObj).containers.weekendSetting...)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
@@ -1777,6 +1973,50 @@ func(dbObj *DB) InsertQuitWorkUser(data *table.QuitWorkUser) (bool, int64) {
 		(*data).Permession,
 		(*data).MonthSalary,
 		(*data).PartTimeSalary,
+		(*data).CreateTime,
+		(*data).LastModify,
+	)
+	(*dbObj).checkErr(err)
+	id, _:= res.LastInsertId()
+	if err != nil {
+		return false, id
+	}
+	return true, id
+}
+func(dbObj *DB) InsertWaitCompanyReply (data *table.WaitCompanyReply) (bool, int64) {
+
+	defer panichandler.Recover()
+	(*dbObj).waitCompanyReply.Lock()
+	defer (*dbObj).waitCompanyReply.Unlock()
+	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).WaitCompanyReply.InsertAll)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	res, err := stmt.Exec(
+		(*data).UserId,
+		(*data).CompanyId,
+		(*data).SpecifyTag,
+		(*data).IsAccept,
+		(*data).CreateTime,
+		(*data).LastModify,
+	)
+	(*dbObj).checkErr(err)
+	id, _:= res.LastInsertId()
+	if err != nil {
+		return false, id
+	}
+	return true, id
+}
+func(dbObj *DB) InsertWeekendSetting (data *table.WeekendSetting) (bool, int64) {
+
+	defer panichandler.Recover()
+	(*dbObj).weekendSetting.Lock()
+	defer (*dbObj).weekendSetting.Unlock()
+	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).WeekendSetting.InsertAll)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	res, err := stmt.Exec(
+		(*data).CompanyId,
+		(*data).Date,
 		(*data).CreateTime,
 		(*data).LastModify,
 	)

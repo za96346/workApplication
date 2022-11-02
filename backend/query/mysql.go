@@ -23,6 +23,8 @@ type sqlQuery struct {
 	BanchStyle banchStyle
 	BanchRule banchRule
 	QuitWorkUser quitWorkUser
+	WaitCompanyReply waitCompanyReply
+	WeekendSetting weekendSetting
 }
 type queryCommonColumn struct {
 	InsertAll string
@@ -103,6 +105,18 @@ type quitWorkUser struct {
 	SelectSingleByQuitId string
 	SelectSingleByCompanyCodeAndUserId string
 }
+type waitCompanyReply struct {
+	queryCommonColumn
+	SelectSingleByWaitId string
+	SelectAllByUserId string
+	SelectAllByCompanyId string
+	SelectAllByCompanyIdAndUserId string
+}
+type weekendSetting struct {
+	queryCommonColumn
+	SelectSingleByWeekendId string
+	SelectAllByCompanyId string
+}
 
 func MysqlSingleton() *sqlQuery {
 	queryMux = new(sync.Mutex)
@@ -124,6 +138,8 @@ func MysqlSingleton() *sqlQuery {
 			addBanchStyleQuery()
 			addBanchRuleQuery()
 			addQuitWorkUserQuery()
+			addWaitCompanyReply()
+			addWeekendSetting()
 			return sqlQueryInstance
 		}
 	}
@@ -513,7 +529,7 @@ func addQuitWorkUserQuery() {
 			lastModify
 		) values(
 			?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-		)
+		);
 	`;
 	sqlQueryInstance.QuitWorkUser.UpdateSingle = `
 		update quitWorkUser
@@ -538,4 +554,58 @@ func addQuitWorkUserQuery() {
 	sqlQueryInstance.QuitWorkUser.SelectSingleByQuitId = `select * from quitWorkUser where quitId=?;`
 	sqlQueryInstance.QuitWorkUser.SelectSingleByCompanyCodeAndUserId = `select * from quitWorkUser where companyCode = ? and userId = ?;`
 	sqlQueryInstance.QuitWorkUser.Delete = `delete from quitWorkUser where quitId=?;`;
+}
+
+func addWaitCompanyReply () {
+	sqlQueryInstance.WaitCompanyReply.InsertAll = `
+		insert into waitCompanyReply(
+			userId,
+			companyId,
+			specifyTag,
+			isAccept,
+			createTime,
+			lastModify
+		) values(
+			?, ?, ?, ?, ?, ?
+		);
+	`
+	sqlQueryInstance.WaitCompanyReply.UpdateSingle = `
+		update waitCompanyReply
+		set
+			specifyTag=?,
+			isAccept=?,
+			lastModify=?
+		where waitId=?;
+	`
+	sqlQueryInstance.WaitCompanyReply.SelectAll = `select * from waitCompanyReply;`;
+	sqlQueryInstance.WaitCompanyReply.SelectSingleByWaitId = `select * from waitCompanyReply where waitId = ?;`
+	sqlQueryInstance.WaitCompanyReply.SelectAllByUserId = `select * from waitCompanyReply where userId = ?;`
+	sqlQueryInstance.WaitCompanyReply.SelectAllByCompanyId = `select * from waitCompanyReply where companyId = ?;`
+	sqlQueryInstance.WaitCompanyReply.SelectAllByCompanyIdAndUserId = `select * from waitCompanyReply where companyId = ? and userId = ?;`
+	sqlQueryInstance.WaitCompanyReply.Delete = `delete from waitCompanyReply where waitId = ?;`
+
+}
+func addWeekendSetting () {
+	sqlQueryInstance.WeekendSetting.InsertAll = `
+		insert into weekendSetting(
+			companyId,
+			date,
+			createTime,
+			lastModify
+		) values(
+			?, ?, ?, ?
+		);
+	`
+	sqlQueryInstance.WeekendSetting.UpdateSingle = `
+		update weekendSetting
+		set
+			date=?,
+			lastModify=?
+		where weekendId=?;
+	`
+	sqlQueryInstance.WeekendSetting.SelectAll = `select * from weekendSetting;`;
+	sqlQueryInstance.WeekendSetting.SelectSingleByWeekendId = `select * from weekendSetting where weekendId = ?;`
+	sqlQueryInstance.WeekendSetting.SelectAllByCompanyId = `select * from weekendSetting where companyId = ?;`
+	sqlQueryInstance.WeekendSetting.Delete = `delete from weekendSetting where weekendId = ?;`
+
 }
