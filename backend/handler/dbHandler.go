@@ -40,6 +40,8 @@ type DB struct {
 	banchStyleLock *bool
 	banchRuleLock *bool
 	quitWorkUserLock *bool
+	waitCompanyReplyLock *bool
+	weekendSettingLock *bool
 }
 
 func newBool(b bool) *bool {
@@ -68,6 +70,8 @@ func Singleton() *DB {
 				banchStyleLock: newBool(false),
 				banchRuleLock: newBool(false),
 				quitWorkUserLock: newBool(false),
+				waitCompanyReplyLock: newBool(false),
+				weekendSettingLock: newBool(false),
 			}
 		}
 	}
@@ -89,6 +93,8 @@ func(dbObj *DB) TakeAllFromMysql() {
 	(*dbObj).restoreBanchStyleAll()
 	(*dbObj).restoreBanchRuleAll()
 	(*dbObj).restoreQuitWorkUserAll()
+	(*dbObj).restoreWaitCompanyReplyAll()
+	(*dbObj).restoreWeekendSettingAll()
 
 }
 
@@ -242,6 +248,24 @@ func(dbObj *DB) restoreQuitWorkUserAll() {
 	arr := (*dbObj.Mysql).SelectQuitWorkUser(0)
 	forEach(arr, (*dbObj.Redis).InsertQuitWorkUser)
 	(*(*dbObj).quitWorkUserLock) = false
+}
+
+func(dbObj *DB) restoreWaitCompanyReplyAll() {
+	defer panichandler.Recover()
+	(*(*dbObj).waitCompanyReplyLock) = true
+	(*dbObj).Redis.DeleteKeyWaitCompanyReply()
+	arr := (*dbObj.Mysql).SelectWaitCompanyReply(0)
+	forEach(arr, (*dbObj.Redis).InsertWaitCompanyReply)
+	(*(*dbObj).waitCompanyReplyLock) = false
+}
+
+func(dbObj *DB) restoreWeekendSettingAll() {
+	defer panichandler.Recover()
+	(*(*dbObj).weekendSettingLock) = true
+	(*dbObj).Redis.DeleteKeyWeekendSetting()
+	arr := (*dbObj.Mysql).SelectWeekendSetting(0)
+	forEach(arr, (*dbObj.Redis).InsertWeekendSetting)
+	(*(*dbObj).weekendSettingLock) = false
 }
 
 
@@ -429,6 +453,35 @@ func(dbObj *DB) InsertQuitWorkUser(data *table.QuitWorkUser) (bool, int64) {
 }
 
 
+func(dbObj *DB) InsertWaitCompanyReply(data *table.WaitCompanyReply) (bool, int64) {
+	defer panichandler.Recover()
+	isOk, id := (*dbObj).Mysql.InsertWaitCompanyReply(data)
+	if isOk {
+		go func ()  {
+			res := (*dbObj).Mysql.SelectWaitCompanyReply(1, id)
+			for _, value := range *res {
+				(*dbObj).Redis.InsertWaitCompanyReply(&value)
+			}
+		}()
+	}
+	return isOk, id
+}
+
+func(dbObj *DB) InsertWeekendSetting(data *table.WeekendSetting) (bool, int64) {
+	defer panichandler.Recover()
+	isOk, id := (*dbObj).Mysql.InsertWeekendSetting(data)
+	if isOk {
+		go func ()  {
+			res := (*dbObj).Mysql.SelectWeekendSetting(1, id)
+			for _, value := range *res {
+				(*dbObj).Redis.InsertWeekendSetting(&value)
+			}
+		}()
+	}
+	return isOk, id
+}
+
+
 //  ------------------------------update------------------------------
 
 
@@ -605,6 +658,34 @@ func(dbObj *DB) UpdateQuitWorkUser(updateKey int, data *table.QuitWorkUser) bool
 	return isOk
 }
 
+func(dbObj *DB) UpdateWaitCompanyReply(updateKey int, data *table.WaitCompanyReply) bool {
+	defer panichandler.Recover()
+	isOk := (*dbObj).Mysql.UpdateWaitCompanyReply(updateKey, data)
+	if isOk {
+		go func ()  {
+			res := (*dbObj).Mysql.SelectWaitCompanyReply(1, int64((*data).WaitId))
+			for _, v := range *res {
+				(*dbObj).Redis.InsertWaitCompanyReply(&v)
+			}
+		}()
+	}
+	return isOk
+}
+
+func(dbObj *DB) UpdateWeekendSetting(updateKey int, data *table.WeekendSetting) bool {
+	defer panichandler.Recover()
+	isOk := (*dbObj).Mysql.UpdateWeekendSetting(updateKey, data)
+	if isOk {
+		go func ()  {
+			res := (*dbObj).Mysql.SelectWeekendSetting(1, int64((*data).WeekendId))
+			for _, v := range *res {
+				(*dbObj).Redis.InsertWeekendSetting(&v)
+			}
+		}()
+	}
+	return isOk
+}
+
 //  ------------------------------delete------------------------------
 
 
@@ -749,6 +830,29 @@ func(dbObj *DB) DeleteQuitWorkUser(deleteKey int, quitId int64) bool {
 	return res
 }
 
+func(dbObj *DB) DeleteWaitCompanyReply(deleteKey int, waitId int64) bool {
+	defer panichandler.Recover()
+	res := (*dbObj).Mysql.DeleteWaitCompanyReply(deleteKey, waitId)
+	if res {
+		go func ()  {
+			(*dbObj).Redis.DeleteWaitCompanyReply(deleteKey, waitId)
+		}()	
+	}
+	
+	return res
+}
+
+func(dbObj *DB) DeleteWeekendSetting(deleteKey int, weekendId int64) bool {
+	defer panichandler.Recover()
+	res := (*dbObj).Mysql.DeleteWeekendSetting(deleteKey, weekendId)
+	if res {
+		go func ()  {
+			(*dbObj).Redis.DeleteWeekendSetting(deleteKey, weekendId)
+		}()	
+	}
+	
+	return res
+}
 
 
 
@@ -962,5 +1066,41 @@ func(dbObj *DB) SelectQuitWorkUser(selectKey int, value... interface{}) *[]table
 			return (*dbObj.Mysql).SelectQuitWorkUser(selectKey, value...)
 		},
 		(*dbObj).quitWorkUserLock,
+	)
+}
+
+// 0 => all, value => nil
+//  1 => quitId, value => int64
+//   2 => userId, value => int64
+//   3 => companyCode, value => string 
+//   4=> companyCode && userId ,  value string && int64
+func(dbObj *DB) SelectWaitCompanyReply(selectKey int, value... interface{}) *[]table.WaitCompanyReply {
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.WaitCompanyReply {
+			return (*dbObj.Redis).SelectWaitCompanyReply(selectKey, value...)
+		},
+		func() *[]table.WaitCompanyReply {
+			return (*dbObj.Mysql).SelectWaitCompanyReply(selectKey, value...)
+		},
+		(*dbObj).waitCompanyReplyLock,
+	)
+}
+
+// 0 => all, value => nil
+//  1 => waitId, value => int64
+//  2 => userId, value => int64
+//  3 => companyId, value => int64
+//  4 => comapnyId && userId, value => int64, int64
+func(dbObj *DB) SelectWeekendSetting(selectKey int, value... interface{}) *[]table.WeekendSetting {
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.WeekendSetting {
+			return (*dbObj.Redis).SelectWeekendSetting(selectKey, value...)
+		},
+		func() *[]table.WeekendSetting {
+			return (*dbObj.Mysql).SelectWeekendSetting(selectKey, value...)
+		},
+		(*dbObj).weekendSettingLock,
 	)
 }
