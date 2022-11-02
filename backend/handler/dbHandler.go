@@ -1070,10 +1070,10 @@ func(dbObj *DB) SelectQuitWorkUser(selectKey int, value... interface{}) *[]table
 }
 
 // 0 => all, value => nil
-//  1 => quitId, value => int64
-//   2 => userId, value => int64
-//   3 => companyCode, value => string 
-//   4=> companyCode && userId ,  value string && int64
+//  1 => waitId, value => int64
+//  2 => userId, value => int64
+//  3 => companyId, value => int64
+//  4 => comapnyId && userId, value => int64, int64
 func(dbObj *DB) SelectWaitCompanyReply(selectKey int, value... interface{}) *[]table.WaitCompanyReply {
 	defer panichandler.Recover()
 	return selectAllHandler(
@@ -1088,10 +1088,8 @@ func(dbObj *DB) SelectWaitCompanyReply(selectKey int, value... interface{}) *[]t
 }
 
 // 0 => all, value => nil
-//  1 => waitId, value => int64
-//  2 => userId, value => int64
-//  3 => companyId, value => int64
-//  4 => comapnyId && userId, value => int64, int64
+//  1 => weekendId, value => int64
+//  2 => companyId, value => int64
 func(dbObj *DB) SelectWeekendSetting(selectKey int, value... interface{}) *[]table.WeekendSetting {
 	defer panichandler.Recover()
 	return selectAllHandler(
