@@ -3,6 +3,7 @@ package service
 import (
 	"backend/methods"
 	"backend/table"
+	"fmt"
 	"net/http"
 	"sync"
 	"time"
@@ -756,11 +757,19 @@ func UpdateWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
+	fmt.Println(request)
 
 	_, company, err := CheckUserAndCompany(props)
 	if err {return}
 
-	if company.CompanyId != request.CompanyId {
+	waitCompanyReply := (*dbHandle).SelectWaitCompanyReply(1, request.WaitId)
+	if methods.IsNotExited(waitCompanyReply) {
+		(*props).JSON(http.StatusBadRequest, gin.H{
+			"message": StatusText().NoData,
+		})
+		return
+	}
+	if company.CompanyId != (*waitCompanyReply)[0].CompanyId {
 		(*props).JSON(http.StatusBadRequest, gin.H{
 			"message": StatusText().CompanyNotEqual,
 		})

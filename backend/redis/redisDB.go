@@ -67,6 +67,8 @@ func Singleton() *DB {
 				banchStyleMux: new(sync.RWMutex),
 				banchRuleMux: new(sync.RWMutex),
 				quitWorkUserMux: new(sync.RWMutex),
+				waitCompanyReply: new(sync.RWMutex),
+				weekendSetting: new(sync.RWMutex),
 			}
 			(*redisInstance).table[0] = "user"
 			(*redisInstance).table[1] = "userPreference"

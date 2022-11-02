@@ -54,6 +54,7 @@ type statusText struct {
 	QuitWorkUserInsertFail string
 	YouAreNotBoss string
 	CompanyCodeIsNotTenLength string
+	NoData string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -103,6 +104,7 @@ func StatusText() *statusText {
 				QuitWorkUserInsertFail: "離職員工新增失敗",
 				YouAreNotBoss: "非公司負責人，無法更新",
 				CompanyCodeIsNotTenLength: "公司碼小於十碼",
+				NoData: "沒有資料",
 			}
 		}
 	}

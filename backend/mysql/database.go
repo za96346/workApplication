@@ -779,7 +779,7 @@ func(dbObj *DB) SelectWaitCompanyReply(selectKey int, value... interface{}) *[]t
 		err = res.Scan(
 			&WaitCompanyReply.WaitId,
 			&WaitCompanyReply.UserId,
-			&WaitCompanyReply.UserId,
+			&WaitCompanyReply.CompanyId,
 			&WaitCompanyReply.SpecifyTag,
 			&WaitCompanyReply.IsAccept,
 			&WaitCompanyReply.CreateTime,
