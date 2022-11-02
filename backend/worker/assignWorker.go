@@ -124,6 +124,10 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		// post method of update wait company reply
 		routeFunc = service.UpdateWaitCompanyReply
 		break
+	case 28:
+		// put method of insert wait company reply
+		routeFunc = service.InsertWaitCompanyReply
+		break
 	default:
 		break;
 	}

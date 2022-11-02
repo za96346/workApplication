@@ -3,7 +3,6 @@ package service
 import (
 	"backend/methods"
 	"backend/table"
-	"fmt"
 	"net/http"
 	"sync"
 	"time"
@@ -757,7 +756,6 @@ func UpdateWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
-	fmt.Println(request)
 
 	_, company, err := CheckUserAndCompany(props)
 	if err {return}
@@ -788,4 +786,50 @@ func UpdateWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
 		"message": StatusText().UpdateSuccess,
 	})
 
+}
+
+func InsertWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+	now := time.Now()
+
+	// 檢查格式
+	request := table.UserTable{}
+	if (*props).ShouldBindJSON(&request) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+
+	user, _, err := CheckUserAndCompany(props)
+	if err {return}
+
+	findCompany := (*dbHandle).SelectCompany(2, request.CompanyCode)
+	if methods.IsNotExited(findCompany) {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().CompanyCodeIsNotRight,
+		})
+		return
+	}
+
+	waitCompanyReply := table.WaitCompanyReply{
+		UserId: user.UserId,
+		CompanyId: (*findCompany)[0].CompanyId,
+		SpecifyTag: "您好我叫" + user.UserName,
+		IsAccept: 1,
+		CreateTime: now,
+		LastModify: now,
+	}
+	res, _ := (*dbHandle).InsertWaitCompanyReply(&waitCompanyReply)
+	if !res {
+		(*props).JSON(http.StatusConflict, gin.H{
+			"message": StatusText().InsertFail,
+		})
+		return
+	}
+
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().InsertSuccess,
+	})
 }
