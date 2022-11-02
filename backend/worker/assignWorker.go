@@ -120,6 +120,10 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		// get method of fetch wait reply
 		routeFunc = service.FetchWaitReply
 		break
+	case 27:
+		// post method of update wait company reply
+		routeFunc = service.UpdateWaitCompanyReply
+		break
 	default:
 		break;
 	}

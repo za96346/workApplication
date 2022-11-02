@@ -743,3 +743,40 @@ func FetchWaitReply (props *gin.Context, waitJob *sync.WaitGroup) {
 		"message": StatusText().FindSuccess,
 	})
 }
+
+func UpdateWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+
+	// 檢查格式
+	request := table.WaitCompanyReply{}
+	if (*props).ShouldBindJSON(&request) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+
+	_, company, err := CheckUserAndCompany(props)
+	if err {return}
+
+	if company.CompanyId != request.CompanyId {
+		(*props).JSON(http.StatusBadRequest, gin.H{
+			"message": StatusText().CompanyNotEqual,
+		})
+		return
+	}
+
+	request.LastModify = time.Now()
+	if !(*dbHandle).UpdateWaitCompanyReply(0, &request) {
+		(*props).JSON(http.StatusForbidden, gin.H{
+			"message": StatusText().UpdateFail,
+		})
+		return
+	}
+
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().UpdateSuccess,
+	})
+
+}
