@@ -43,4 +43,3 @@ const WeekendSettingPage = (): JSX.Element => {
     )
 }
 export default WeekendSettingPage
-f
