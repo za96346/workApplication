@@ -22,7 +22,7 @@ import HomePage from './page/Home/HomePage'
 import SignPage from './page/Sign/Sign'
 import WeekendSettingPage from './page/WeekendSetting/WeekendSettingPage'
 
-// global init
+// global init f
 window.styles = styles
 
 const App = (): JSX.Element => {
