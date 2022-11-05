@@ -2,6 +2,7 @@ package service
 
 import (
 	"backend/methods"
+	"backend/response"
 	"backend/table"
 	"net/http"
 	"sync"
@@ -738,8 +739,24 @@ func FetchWaitReply (props *gin.Context, waitJob *sync.WaitGroup) {
 	if err {return}
 
 	waitCompanyReply := (*dbHandle).SelectWaitCompanyReply(3, company.CompanyId)
+	res := []response.WaitReply{}
+	for _, v := range *waitCompanyReply {
+		findUser := (*dbHandle).SelectUser(1, v.UserId)
+		if !methods.IsNotExited(findUser) {
+			res = append(res, response.WaitReply{
+				UserName: (*findUser)[0].UserName,
+				WaitId: v.WaitId,
+				UserId: v.UserId,
+				CompanyId: v.CompanyId,
+				SpecifyTag: v.SpecifyTag,
+				IsAccept: v.IsAccept,
+				CreateTime: v.CreateTime,
+				LastModify: v.LastModify,
+			})
+		}
+	}
 	props.JSON(http.StatusOK, gin.H{
-		"data": *waitCompanyReply,
+		"data": res,
 		"message": StatusText().FindSuccess,
 	})
 }
