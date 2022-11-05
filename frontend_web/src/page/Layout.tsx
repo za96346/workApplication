@@ -37,7 +37,7 @@ const Layout = (): JSX.Element => {
                     <Header setShow={setShow} />
                 )
             }
-            <div className={styles.article}>
+            <div translate='no' className={styles.article}>
                 {
                     isLess('md')
                         ? <Drawer onClose={() => setShow(false)} open={show}>
