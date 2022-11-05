@@ -1,4 +1,4 @@
-import { BanchRuleType, BanchStyleType, BanchType, CompanyType, UserType, WeekendSettingType } from '../../type'
+import { BanchRuleType, BanchStyleType, BanchType, CompanyType, UserType, WaitReplyType, WeekendSettingType } from '../../type'
 import { action, companyType } from '../types'
 
 export const companyState = {
@@ -7,6 +7,7 @@ export const companyState = {
     banchStyle: [],
     banchRule: [],
     weekendSetting: [],
+    waitReply: [],
     info: {}
 }
 
@@ -16,6 +17,7 @@ export interface companyReducerType {
     banchStyle: BanchStyleType[]
     banchRule: BanchRuleType[]
     weekendSetting: WeekendSettingType[]
+    waitReply: WaitReplyType[]
     info: CompanyType
 }
 

@@ -1,4 +1,4 @@
-import { BanchRuleType, BanchStyleType, BanchType, CompanyType, UserType, WeekendSettingType } from '../../type'
+import { BanchRuleType, BanchStyleType, BanchType, CompanyType, UserType, WaitReplyType, WeekendSettingType } from '../../type'
 import { store } from '../store'
 import { action, companyType } from '../types'
 
@@ -64,6 +64,16 @@ class companyAction {
             payload: {
                 ...store.getState().company,
                 weekendSetting: weekendSetting || []
+            }
+        }
+    }
+
+    setWaitReply (waitReply: WaitReplyType[]): action {
+        return {
+            type: companyType.SET_WAIT_REPLY,
+            payload: {
+                ...store.getState().company,
+                waitReply: waitReply || []
             }
         }
     }

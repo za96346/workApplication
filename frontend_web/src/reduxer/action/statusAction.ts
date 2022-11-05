@@ -225,6 +225,37 @@ class statusAcion {
         }
     }
 
+    // 等候公司回覆
+    onFetchWaitReply (s: boolean): action {
+        return {
+            type: s ? statusType.FETCH_WAIT_REPLY_ON : statusType.FETCH_WAIT_REPLY_OFF,
+            payload: {
+                ...store.getState().status,
+                onFetchWaitReply: s
+            }
+        }
+    }
+
+    onUpdateWaitReply (s: boolean): action {
+        return {
+            type: s ? statusType.UPDATE_WAIT_REPLY_ON : statusType.UPDATE_WAIT_REPLY_OFF,
+            payload: {
+                ...store.getState().status,
+                onUpdateWaitReply: s
+            }
+        }
+    }
+
+    onCreateWaitReply (s: boolean): action {
+        return {
+            type: s ? statusType.CREATE_WAIT_REPLY_ON : statusType.CREATE_WAIT_REPLY_OFF,
+            payload: {
+                ...store.getState().status,
+                onCreateWaitReply: s
+            }
+        }
+    }
+
     // 清除
     clearStatusAll (): action {
         return {

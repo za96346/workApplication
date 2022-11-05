@@ -29,7 +29,11 @@ const statusState = {
 
     onFetchWeekendSetting: false,
     onCreateWeekendSetting: false,
-    onDeleteWeekendSetting: false
+    onDeleteWeekendSetting: false,
+
+    onFetchWaitReply: false,
+    onUpdateWaitReply: false,
+    onCreateWaitReply: false
 }
 
 export interface statusReducerType {
@@ -62,6 +66,10 @@ export interface statusReducerType {
     onFetchWeekendSetting: boolean
     onCreateWeekendSetting: boolean
     onDeleteWeekendSetting: boolean
+
+    onFetchWaitReply: boolean
+    onUpdateWaitReply: boolean
+    onCreateWaitReply: boolean
 }
 
 export const statusReducer = (state = statusState, action: action): any => {

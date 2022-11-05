@@ -1,6 +1,6 @@
 import api from './apiAbs'
 import axios from 'axios'
-import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, RegisterType, ResMessage, ResType, SelfDataType, UserType, WeekendSettingType } from '../type'
+import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, RegisterType, ResMessage, ResType, SelfDataType, UserType, WaitReplyType, WeekendSettingType } from '../type'
 import userAction from '../reduxer/action/userAction'
 import { store } from '../reduxer/store'
 import { FullMessage } from '../method/notice'
@@ -23,7 +23,8 @@ class ApiControl extends api {
         userSingle: 'user/single',
         changePassword: 'user/changePassword',
         forgetPassword: 'user/forgetPassword',
-        weekendSetting: 'company/weekend/setting'
+        weekendSetting: 'company/weekend/setting',
+        waitReply: 'company/wait/reply'
     }
 
     constructor () {
@@ -545,6 +546,52 @@ class ApiControl extends api {
             }
         })
         store.dispatch(statusAction.onDeleteWeekendSetting(false))
+        return res
+    }
+
+    // 等待公司回覆
+    async getWaitReply (): Promise<ResType<WaitReplyType[]>> {
+        store.dispatch(statusAction.onFetchWaitReply(true))
+        const res = await this.GET<WaitReplyType[]>({
+            url: this.route.waitReply,
+            successShow: false
+        })
+        if (res.status) {
+            store.dispatch(companyAction.setWaitReply(res.data))
+        }
+        store.dispatch(statusAction.onFetchWaitReply(false))
+        return res
+    }
+
+    async updateWaitReply ({
+        SpecifyTag, IsAccept, WaitId
+    }: {
+        SpecifyTag: WaitReplyType['SpecifyTag']
+        IsAccept: WaitReplyType['IsAccept']
+        WaitId: WaitReplyType['WaitId']
+    }): Promise<ResType<null>> {
+        store.dispatch(statusAction.onUpdateWaitReply(true))
+        const res = await this.POST<null>({
+            url: this.route.waitReply,
+            body: {
+                SpecifyTag,
+                IsAccept,
+                WaitId
+            }
+        })
+        store.dispatch(statusAction.onUpdateWaitReply(false))
+        return res
+    }
+
+    async createWaitReply (): Promise<ResType<null>> {
+        store.dispatch(statusAction.onCreateWaitReply(true))
+        const res = await this.PUT<null>({
+            url: this.route.waitReply,
+            body: {
+                companyCode: ''
+            }
+        })
+        store.dispatch(statusAction.onCreateWaitReply(false))
         return res
     }
 }

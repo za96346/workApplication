@@ -152,3 +152,14 @@ export interface WeekendSettingType {
     CreateTime: string | Date
     LastModify: string | Date
 }
+
+export interface WaitReplyType {
+    WaitId: number
+    UserId: number
+    UserName: string
+    CompanyId: number
+    SpecifyTag: string
+    IsAccept: number
+    CreateTime: string | Date
+    LastModify: string | Date
+}
