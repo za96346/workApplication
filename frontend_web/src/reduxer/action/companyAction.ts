@@ -1,4 +1,4 @@
-import { BanchRuleType, BanchStyleType, BanchType, CompanyType, UserType } from '../../type'
+import { BanchRuleType, BanchStyleType, BanchType, CompanyType, UserType, WeekendSettingType } from '../../type'
 import { store } from '../store'
 import { action, companyType } from '../types'
 
@@ -54,6 +54,16 @@ class companyAction {
             payload: {
                 ...store.getState().company,
                 info: info || {}
+            }
+        }
+    }
+
+    setWeekendSetting (weekendSetting: WeekendSettingType[]): action {
+        return {
+            type: companyType.SET_WEEKEND_SETTING,
+            payload: {
+                ...store.getState().company,
+                weekendSetting: weekendSetting || []
             }
         }
     }

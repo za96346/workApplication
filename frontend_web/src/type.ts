@@ -144,3 +144,11 @@ export interface ShiftSocketType {
     OnlineUser: OnlineUserType[]
     ShiftData: ShiftEditType[]
 }
+
+export interface WeekendSettingType {
+    WeekendId: number
+    CompanyId: number
+    Date: string | Date
+    CreateTime: string | Date
+    LastModify: string | Date
+}

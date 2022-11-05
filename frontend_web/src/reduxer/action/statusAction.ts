@@ -194,6 +194,37 @@ class statusAcion {
         }
     }
 
+    // 假日設定
+    onFetchWeekendSetting (s: boolean): action {
+        return {
+            type: s ? statusType.FETCH_WEEKEND_SETTING_ON : statusType.FETCH_WEEKEND_SETTING_OFF,
+            payload: {
+                ...store.getState().status,
+                onFetchWeekendSetting: s
+            }
+        }
+    }
+
+    onCreateWeekendSetting (s: boolean): action {
+        return {
+            type: s ? statusType.CREATE_WEEKEND_SETTING_ON : statusType.CREATE_WEEKEND_SETTING_OFF,
+            payload: {
+                ...store.getState().status,
+                onCreateWeekendSetting: s
+            }
+        }
+    }
+
+    onDeleteWeekendSetting (s: boolean): action {
+        return {
+            type: s ? statusType.DELETE_WEEKEND_SETTING_ON : statusType.DELETE_WEEKEND_SETTING_OFF,
+            payload: {
+                ...store.getState().status,
+                onDeleteWeekendSetting: s
+            }
+        }
+    }
+
     // 清除
     clearStatusAll (): action {
         return {

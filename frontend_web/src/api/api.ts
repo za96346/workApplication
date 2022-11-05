@@ -1,6 +1,6 @@
 import api from './apiAbs'
 import axios from 'axios'
-import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, RegisterType, ResMessage, ResType, SelfDataType, UserType } from '../type'
+import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, RegisterType, ResMessage, ResType, SelfDataType, UserType, WeekendSettingType } from '../type'
 import userAction from '../reduxer/action/userAction'
 import { store } from '../reduxer/store'
 import { FullMessage } from '../method/notice'
@@ -22,7 +22,8 @@ class ApiControl extends api {
         companyInfo: 'company/info',
         userSingle: 'user/single',
         changePassword: 'user/changePassword',
-        forgetPassword: 'user/forgetPassword'
+        forgetPassword: 'user/forgetPassword',
+        weekendSetting: 'company/weekend/setting'
     }
 
     constructor () {
@@ -506,6 +507,44 @@ class ApiControl extends api {
                 OldPassword
             }
         })
+        return res
+    }
+
+    // 假日設定
+    async getWeekendSetting (): Promise<ResType<WeekendSettingType[]>> {
+        store.dispatch(statusAction.onFetchWeekendSetting(true))
+        const res = await this.GET<WeekendSettingType[]>({
+            url: this.route.weekendSetting,
+            successShow: false
+        })
+        if (res.status) {
+            store.dispatch(companyAction.setWeekendSetting(res.data))
+        }
+        store.dispatch(statusAction.onFetchWeekendSetting(false))
+        return res
+    }
+
+    async createWeekendSetting (date: WeekendSettingType['Date']): Promise<ResType<null>> {
+        store.dispatch(statusAction.onCreateWeekendSetting(true))
+        const res = await this.PUT<null>({
+            url: this.route.weekendSetting,
+            body: {
+                Date: date
+            }
+        })
+        store.dispatch(statusAction.onCreateWeekendSetting(false))
+        return res
+    }
+
+    async deleteWeekendSetting (weekendId: WeekendSettingType['WeekendId']): Promise<ResType<null>> {
+        store.dispatch(statusAction.onDeleteWeekendSetting(true))
+        const res = await this.DELETE<null>({
+            url: this.route.weekendSetting,
+            params: {
+                weekendId
+            }
+        })
+        store.dispatch(statusAction.onDeleteWeekendSetting(false))
         return res
     }
 }

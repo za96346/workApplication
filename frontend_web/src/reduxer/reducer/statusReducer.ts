@@ -25,7 +25,11 @@ const statusState = {
     onFetchBanchRule: false,
     onCreateBanchRule: false,
     onUpdateBanchRule: false,
-    onDeleteBanchRule: false
+    onDeleteBanchRule: false,
+
+    onFetchWeekendSetting: false,
+    onCreateWeekendSetting: false,
+    onDeleteWeekendSetting: false
 }
 
 export interface statusReducerType {
@@ -54,6 +58,10 @@ export interface statusReducerType {
     onCreateBanchRule: boolean
     onUpdateBanchRule: boolean
     onDeleteBanchRule: boolean
+
+    onFetchWeekendSetting: boolean
+    onCreateWeekendSetting: boolean
+    onDeleteWeekendSetting: boolean
 }
 
 export const statusReducer = (state = statusState, action: action): any => {

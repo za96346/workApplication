@@ -1,31 +1,51 @@
 import { Calendar } from 'antd'
-import React, { ReactNode, useState } from 'react'
+import { v4 as uuid } from 'uuid'
+import React, { ReactNode, useEffect } from 'react'
+import api from '../../api/api'
+import useReduceing from '../../Hook/useReducing'
+import dateHandle from '../../method/dateHandle'
 
 const WeekendSettingPage = (): JSX.Element => {
-    const [weekend, setWeekend] = useState<string[]>([])
+    const { company } = useReduceing()
+    // const [weekend, setWeekend] = useState<Array<WeekendSettingType['Date']>>([])
     const isWeekend = (d: moment.Moment): ReactNode => {
         const dateToString = d.format('YYYY-MM-DD')
-        return weekend?.map((item) => {
-            if (item === dateToString) {
+        return company.weekendSetting?.map((item) => {
+            const trans = dateHandle.formatDate(new Date(item.Date))
+            if (trans === dateToString) {
                 return (
-                    <div key={item} style={{ color: 'red', display: 'flex', justifyContent: 'flex-end' }}>假日</div>
+                    <div
+                        key={uuid()}
+                        style={{
+                            color: 'red',
+                            display: 'flex',
+                            justifyContent: 'flex-end'
+                        }}>
+                        假日
+                    </div>
                 )
             }
             return <></>
         })
     }
-    const onSelect = (v: moment.Moment): void => {
+    const onSelect = async (v: moment.Moment): Promise<void> => {
         const dateToString = v.format('YYYY-MM-DD')
-        const isExited = weekend.indexOf(dateToString)
-        if (isExited === -1) {
-            setWeekend((prev) => ([...prev, dateToString]))
+        const isExited = company.weekendSetting?.filter((item) => {
+            const trans = dateHandle.formatDate(new Date(item.Date))
+            return trans === dateToString
+        })
+        if (isExited?.length === 0) {
+            // 新增
+            await api.createWeekendSetting(dateToString)
         } else {
-            setWeekend((prev) => {
-                prev.splice(isExited, 1)
-                return prev
-            })
+            // 刪除
+            await api.deleteWeekendSetting(isExited[0].WeekendId)
         }
+        await api.getWeekendSetting()
     }
+    useEffect(() => {
+        api.getWeekendSetting()
+    }, [])
     return (
         <>
             <Calendar
