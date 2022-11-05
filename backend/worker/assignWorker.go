@@ -128,6 +128,18 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		// put method of insert wait company reply
 		routeFunc = service.InsertWaitCompanyReply
 		break
+	case 29:
+		// get method of fetch weekend setting
+		routeFunc = service.FetchWeekendSetting
+		break
+	case 30:
+		// put method of insert weekend setting
+		routeFunc = service.InsertWeekendSetting
+		break
+	case 31:
+		// delete method of delete weekend setting
+		routeFunc = service.DeleteWeekendSetting
+		break
 	default:
 		break;
 	}

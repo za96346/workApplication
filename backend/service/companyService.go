@@ -833,3 +833,91 @@ func InsertWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
 		"message": StatusText().InsertSuccess,
 	})
 }
+
+func FetchWeekendSetting (props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+
+	_, company, err := CheckUserAndCompany(props)
+	if err {return}
+
+	weekendSetting := (*dbHandle).SelectWeekendSetting(2, company.CompanyId)
+	props.JSON(http.StatusOK, gin.H{
+		"message": StatusText().FindSuccess,
+		"data": *weekendSetting,
+	})
+}
+
+func InsertWeekendSetting (props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+	now := time.Now()
+	// 檢查格式
+	request := table.WeekendSetting{}
+	if (*props).ShouldBindJSON(&request) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+
+	_, company, err := CheckUserAndCompany(props)
+	if err {return}
+
+	request.CreateTime = now
+	request.LastModify = now
+	request.CompanyId = company.CompanyId
+
+	if v, _:= (*dbHandle).InsertWeekendSetting(&request); !v {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().InsertFail,
+		})
+		return
+	}
+
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().InsertSuccess,
+	})
+
+}
+
+func DeleteWeekendSetting (props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+
+	// 檢查weekend id
+	weekendId := (*props).Query("weekendId")
+	convertWeekendId, err := methods.AnyToInt64(weekendId)
+	if err != nil {
+		(*props).JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().WeekendIdNotRight,
+		})
+		return
+	}
+
+	// 判斷是否在公司
+	findCompanyWeekend := (*dbHandle).SelectWeekendSetting(1, convertWeekendId)
+
+	_, company, err1 := CheckUserAndCompany(props)
+	if err1 {return}
+	if !methods.IsNotExited(findCompanyWeekend) {
+		if (*findCompanyWeekend)[0].CompanyId != company.CompanyId {
+			(*props).JSON(http.StatusNotFound, gin.H{
+				"message": StatusText().CompanyNotEqual,
+			})
+			return
+		}
+	}
+
+	// 刪除
+	if !(*dbHandle).DeleteWeekendSetting(0, convertWeekendId) {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().DeleteFail,
+		})
+		return
+	}
+
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().DeleteSuccess,
+	})
+}

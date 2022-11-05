@@ -92,5 +92,22 @@ func Company(props *gin.RouterGroup) {
 			middleWare.MyCompanyAndBanch,
 			worker.AssignWorker(28),
 		)
+
+		// weekend setting
+		props.GET("/weekend/setting",
+			middleWare.Permession(100, 1, 2),
+			middleWare.MyCompanyAndBanch,
+			worker.AssignWorker(29),
+		)
+		props.PUT("/weekend/setting",
+			middleWare.Permession(100),
+			middleWare.MyCompanyAndBanch,
+			worker.AssignWorker(30),
+		)
+		props.DELETE("/weekend/setting",
+			middleWare.Permession(100),
+			middleWare.MyCompanyAndBanch,
+			worker.AssignWorker(31),
+		)
 	}
 }
