@@ -11,7 +11,7 @@ func Company(props *gin.RouterGroup) {
 	props.Use(middleWare.TokenPrase)
 	{
 		// info
-		props.GET("/info", middleWare.MyCompanyAndBanch, worker.AssignWorker(17))
+		props.GET("/info", worker.AssignWorker(17))
 		props.POST("/info",
 			middleWare.Permession(100),
 			middleWare.MyCompanyAndBanch,
