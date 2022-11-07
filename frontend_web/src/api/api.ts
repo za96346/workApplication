@@ -201,6 +201,7 @@ class ApiControl extends api {
         console.log(res)
         if (res.status) {
             store.dispatch(userAction.setToken(res.data))
+            await this.getSelfData()
         }
         store.dispatch(statusAction.onEntry(false))
     }
@@ -421,10 +422,13 @@ class ApiControl extends api {
     }
 
     // 公司資料
-    async getCompanyInfo (): Promise<ResType<CompanyType>> {
+    async getCompanyInfo (companyCode: CompanyType['CompanyCode']): Promise<ResType<CompanyType>> {
         store.dispatch(statusAction.onFetchCompany(true))
         const res = await this.GET<CompanyType>({
             url: this.route.companyInfo,
+            params: {
+                companyCode
+            },
             successShow: false
         })
         if (res.status && res?.data) {

@@ -611,12 +611,12 @@ func DeleteBanchRule(props *gin.Context, waitJob *sync.WaitGroup) {
 func FetchCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
-	_, company, err := CheckUserAndCompany(props)
-	if err {return}
+	companyCode := (*props).Query("companyCode")
+	company := (*dbHandle).SelectCompany(2, companyCode)
 
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().FindSuccess,
-		"data": company,
+		"data": *company,
 	})
 }
 

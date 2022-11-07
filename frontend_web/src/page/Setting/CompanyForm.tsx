@@ -6,16 +6,16 @@ import api from '../../api/api'
 import useReduceing from '../../Hook/useReducing'
 
 const CompanyForm = (): JSX.Element => {
-    const { company, loading } = useReduceing()
+    const { company, loading, user } = useReduceing()
     const onFinish = async (v: any): Promise<void> => {
         console.log(v)
         const res = await api.updateCompanyInfo({ ...v, CompanyId: company.info.CompanyId })
         if (res.status) {
-            await api.getCompanyInfo()
+            await api.getCompanyInfo(user.selfData.CompanyCode)
         }
     }
     useEffect(() => {
-        api.getCompanyInfo()
+        api.getCompanyInfo(user.selfData.CompanyCode)
     }, [])
     if (loading.onFetchCompany) {
         return <Spin />
