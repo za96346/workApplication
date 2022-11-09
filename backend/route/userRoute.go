@@ -19,9 +19,9 @@ func User(props *gin.RouterGroup) {
 		props.POST("/single",
 			middleWare.Permession(100),
 			middleWare.SameCompany,
-			middleWare.MyCompanyAndBanch,
+			middleWare.MyCompanyAndBanch(true),
 			worker.AssignWorker(2),
 		)
-		props.GET("/all", middleWare.Permession(100, 1), middleWare.MyCompanyAndBanch, worker.AssignWorker(7))
+		props.GET("/all", middleWare.Permession(100, 1), middleWare.MyCompanyAndBanch(true), worker.AssignWorker(7))
 	}
 }
