@@ -734,15 +734,27 @@ func FetchWaitReply (props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 
-	_, company, err := CheckUserAndCompany(props)
+	user, company, err := CheckUserAndCompany(props)
 	if err {return}
 
-	waitCompanyReply := (*dbHandle).Mysql.SelectWaitCompanyReply(5, company.CompanyId)
 
-	props.JSON(http.StatusOK, gin.H{
-		"data": *waitCompanyReply,
-		"message": StatusText().FindSuccess,
-	})
+	if user.Permession == 100 {
+		waitCompanyReply := (*dbHandle).Mysql.SelectWaitCompanyReply(5, company.CompanyId)
+		props.JSON(http.StatusOK, gin.H{
+			"data": *waitCompanyReply,
+			"message": StatusText().FindSuccess,
+		})
+	} else {
+		// 只能拿自己的
+		waitCompanyReply := (*dbHandle).SelectWaitCompanyReply(4, company.CompanyId, user.UserId)
+		if !methods.IsNotExited(waitCompanyReply) {
+			(*waitCompanyReply)[0].UserName = user.UserName
+		}
+		props.JSON(http.StatusOK, gin.H{
+			"data": *waitCompanyReply,
+			"message": StatusText().FindSuccess,
+		})
+	}
 }
 
 func UpdateWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
