@@ -808,7 +808,7 @@ func UpdateWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	// 進入 公司
-	if (*waitCompanyReply)[0].IsAccept == 2 {
+	if request.IsAccept == 2 {
 		targetUser := (*dbHandle).SelectUser(1, (*waitCompanyReply)[0].UserId)
 		if methods.IsNotExited(targetUser) {
 			(*props).JSON(http.StatusBadRequest, gin.H{
