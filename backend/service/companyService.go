@@ -807,6 +807,24 @@ func UpdateWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
+	// 進入 公司
+	if (*waitCompanyReply)[0].IsAccept == 2 {
+		targetUser := (*dbHandle).SelectUser(1, (*waitCompanyReply)[0].UserId)
+		if methods.IsNotExited(targetUser) {
+			(*props).JSON(http.StatusBadRequest, gin.H{
+				"message": StatusText().userDataNotFound,
+			})
+			return
+		}
+		(*targetUser)[0].CompanyCode = company.CompanyCode
+		if !(*dbHandle).UpdateUser(0, &(*targetUser)[0]) {
+			(*props).JSON(http.StatusForbidden, gin.H{
+				"message": StatusText().UpdateFail,
+			})
+			return
+		}
+	}
+
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().UpdateSuccess,
 	})
