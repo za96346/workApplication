@@ -56,6 +56,7 @@ type statusText struct {
 	CompanyCodeIsNotTenLength string
 	NoData string
 	WeekendIdNotRight string
+	CompanyIdNotRight string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -107,6 +108,7 @@ func StatusText() *statusText {
 				CompanyCodeIsNotTenLength: "公司碼小於十碼",
 				NoData: "沒有資料",
 				WeekendIdNotRight: "weekendId 不正確",
+				CompanyIdNotRight: "公司id 不正確",
 			}
 		}
 	}
