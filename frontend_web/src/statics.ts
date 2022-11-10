@@ -37,6 +37,14 @@ class statics {
         off: '離職',
         on: '在職'
     }
+
+    isAccept: {
+        [index: number]: string
+    } = {
+            1: '等待確認',
+            2: '接受',
+            3: '拒絕'
+        }
 }
 
 export default new statics()

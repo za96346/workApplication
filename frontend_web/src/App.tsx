@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import {
     BrowserRouter as Router,
@@ -21,12 +21,18 @@ import BanchManager from './page/BanchManager/BanchManager'
 import HomePage from './page/Home/HomePage'
 import SignPage from './page/Sign/Sign'
 import WeekendSettingPage from './page/WeekendSetting/WeekendSettingPage'
+import { store } from './reduxer/store'
+import statusAction from './reduxer/action/statusAction'
 
 // global init f
 window.styles = styles
-
+// console.log = () => {}
 const App = (): JSX.Element => {
     console.log('process env =>', process.env)
+    useEffect(() => {
+        // 每次 重整 reset 狀態
+        store.dispatch(statusAction.clearStatusAll())
+    }, [])
     return (
         <Router>
             <Routes>

@@ -422,17 +422,23 @@ class ApiControl extends api {
     }
 
     // 公司資料
-    async getCompanyInfo (companyCode: CompanyType['CompanyCode']): Promise<ResType<CompanyType>> {
+    async getCompanyInfo (
+        props: {
+            companyCode?: CompanyType['CompanyCode']
+            companyId?: CompanyType['CompanyId']
+        }): Promise<ResType<CompanyType[]>> {
         store.dispatch(statusAction.onFetchCompany(true))
-        const res = await this.GET<CompanyType>({
+        const res = await this.GET<CompanyType[]>({
             url: this.route.companyInfo,
             params: {
-                companyCode
+                ...props
             },
             successShow: false
         })
-        if (res.status && res?.data) {
-            store.dispatch(companyAction.setCompany(res.data))
+        if (res.status && res?.data?.length > 0) {
+            store.dispatch(companyAction.setCompany(res.data[0]))
+        } else {
+            store.dispatch(companyAction.setCompany(null))
         }
         store.dispatch(statusAction.onFetchCompany(false))
         return res
@@ -587,12 +593,12 @@ class ApiControl extends api {
         return res
     }
 
-    async createWaitReply (): Promise<ResType<null>> {
+    async createWaitReply (companyCode: CompanyType['CompanyCode']): Promise<ResType<null>> {
         store.dispatch(statusAction.onCreateWaitReply(true))
         const res = await this.PUT<null>({
             url: this.route.waitReply,
             body: {
-                companyCode: ''
+                companyCode
             }
         })
         store.dispatch(statusAction.onCreateWaitReply(false))

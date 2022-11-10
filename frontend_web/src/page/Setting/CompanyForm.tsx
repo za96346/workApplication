@@ -11,11 +11,11 @@ const CompanyForm = (): JSX.Element => {
         console.log(v)
         const res = await api.updateCompanyInfo({ ...v, CompanyId: company.info.CompanyId })
         if (res.status) {
-            await api.getCompanyInfo(user.selfData.CompanyCode)
+            await api.getCompanyInfo({ companyCode: user.selfData.CompanyCode })
         }
     }
     useEffect(() => {
-        api.getCompanyInfo(user.selfData.CompanyCode)
+        api.getCompanyInfo({ companyCode: user.selfData.CompanyCode })
     }, [])
     if (loading.onFetchCompany) {
         return <Spin />

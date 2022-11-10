@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import { DeleteOutlined, EditOutlined, SaveOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, SaveOutlined, UserAddOutlined } from '@ant-design/icons'
 import { Button } from 'antd'
 import React from 'react'
 
@@ -61,6 +61,20 @@ Btn.Cancel = ({ onClick }: { onClick: () => void }): JSX.Element => {
                 icon={<SaveOutlined style={{ marginRight: '10px' }} />}
             >
                 取消
+            </Button>
+        </>
+    )
+}
+Btn.Confirm = ({ onClick }: { onClick: () => void }): JSX.Element => {
+    return (
+        <>
+            <Button
+                onClick={onClick}
+                className={styles.editLabel}
+                style={{ color: 'skyblue' }}
+                icon={<UserAddOutlined style={{ marginRight: '10px' }} />}
+            >
+                加入
             </Button>
         </>
     )
