@@ -111,6 +111,7 @@ type waitCompanyReply struct {
 	SelectAllByUserId string
 	SelectAllByCompanyId string
 	SelectAllByCompanyIdAndUserId string
+	SelectAllJoinUserTable string
 }
 type weekendSetting struct {
 	queryCommonColumn
@@ -583,7 +584,18 @@ func addWaitCompanyReply () {
 	sqlQueryInstance.WaitCompanyReply.SelectAllByCompanyId = `select * from waitCompanyReply where companyId = ?;`
 	sqlQueryInstance.WaitCompanyReply.SelectAllByCompanyIdAndUserId = `select * from waitCompanyReply where companyId = ? and userId = ?;`
 	sqlQueryInstance.WaitCompanyReply.Delete = `delete from waitCompanyReply where waitId = ?;`
-
+	sqlQueryInstance.WaitCompanyReply.SelectAllJoinUserTable = `
+		select 
+			w.waitId,
+			w.userId,
+			u.userName,
+			w.companyId,
+			w.specifyTag,
+			w.isAccept,
+			w.createTime,
+			w.lastModify
+		from waitCompanyReply as w left join user as u on w.userId=u.userId where w.companyId=?;
+	`
 }
 func addWeekendSetting () {
 	sqlQueryInstance.WeekendSetting.InsertAll = `

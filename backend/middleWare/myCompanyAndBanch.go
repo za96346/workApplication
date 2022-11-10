@@ -39,7 +39,7 @@ func MyCompanyAndBanch(companyParse bool) func(*gin.Context) {
 			return
 		}
 
-		company := &[]table.CompanyTable{}
+		company := &[]table.CompanyTable{{}}
 		if companyParse {
 			// 尋找公司
 			company = (*handler.Singleton()).SelectCompany(2, (*myUserData)[0].CompanyCode)

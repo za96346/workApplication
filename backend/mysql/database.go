@@ -747,6 +747,7 @@ func(dbObj *DB) SelectQuitWorkUser(selectKey int, value... interface{}) *[]table
 //  2 => userId, value => int64
 //  3 => companyId, value => int64
 //  4 => comapnyId && userId, value => int64, int64
+//  5 => companyId, value => int64  this is only mysql query
 func(dbObj *DB) SelectWaitCompanyReply(selectKey int, value... interface{}) *[]table.WaitCompanyReply {
 	defer panichandler.Recover()
 	querys := ""
@@ -766,6 +767,9 @@ func(dbObj *DB) SelectWaitCompanyReply(selectKey int, value... interface{}) *[]t
 	case 4:
 		querys = (query.MysqlSingleton()).WaitCompanyReply.SelectAllByCompanyIdAndUserId
 		break
+	case 5:
+		querys = (query.MysqlSingleton()).WaitCompanyReply.SelectAllJoinUserTable
+		break
 	default:
 		querys = (*query.MysqlSingleton()).WaitCompanyReply.SelectAll
 		break
@@ -776,15 +780,28 @@ func(dbObj *DB) SelectWaitCompanyReply(selectKey int, value... interface{}) *[]t
 	defer res.Close()
 	(*dbObj).checkErr(err)
 	for res.Next() {
-		err = res.Scan(
-			&WaitCompanyReply.WaitId,
-			&WaitCompanyReply.UserId,
-			&WaitCompanyReply.CompanyId,
-			&WaitCompanyReply.SpecifyTag,
-			&WaitCompanyReply.IsAccept,
-			&WaitCompanyReply.CreateTime,
-			&WaitCompanyReply.LastModify,
-		)
+		if selectKey == 5 {
+			err = res.Scan(
+				&WaitCompanyReply.WaitId,
+				&WaitCompanyReply.UserId,
+				&WaitCompanyReply.UserName,
+				&WaitCompanyReply.CompanyId,
+				&WaitCompanyReply.SpecifyTag,
+				&WaitCompanyReply.IsAccept,
+				&WaitCompanyReply.CreateTime,
+				&WaitCompanyReply.LastModify,
+			)
+		} else  {
+			err = res.Scan(
+				&WaitCompanyReply.WaitId,
+				&WaitCompanyReply.UserId,
+				&WaitCompanyReply.CompanyId,
+				&WaitCompanyReply.SpecifyTag,
+				&WaitCompanyReply.IsAccept,
+				&WaitCompanyReply.CreateTime,
+				&WaitCompanyReply.LastModify,
+			)
+		}
 		(*dbObj).checkErr(err)
 		if err == nil {
 			carry = append(carry, *WaitCompanyReply)
