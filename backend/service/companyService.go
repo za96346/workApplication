@@ -742,12 +742,16 @@ func FetchWaitReply (props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 
-	user, company, err := CheckUserAndCompany(props)
+	user, _, err := CheckUserAndCompany(props)
 	if err {return}
 
 
 	if user.Permession == 100 {
-		waitCompanyReply := (*dbHandle).Mysql.SelectWaitCompanyReply(5, company.CompanyId)
+		company := (*dbHandle).SelectCompany(2, user.CompanyCode)
+		waitCompanyReply := &[]table.WaitCompanyReply{}
+		if !methods.IsNotExited(company) {
+			waitCompanyReply = (*dbHandle).Mysql.SelectWaitCompanyReply(5, (*company)[0].CompanyId)
+		}
 		props.JSON(http.StatusOK, gin.H{
 			"data": *waitCompanyReply,
 			"message": StatusText().FindSuccess,
