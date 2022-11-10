@@ -754,7 +754,7 @@ func FetchWaitReply (props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 	} else {
 		// 只能拿自己的
-		waitCompanyReply := (*dbHandle).SelectWaitCompanyReply(4, company.CompanyId, user.UserId)
+		waitCompanyReply := (*dbHandle).SelectWaitCompanyReply(2, user.UserId)
 		if !methods.IsNotExited(waitCompanyReply) {
 			(*waitCompanyReply)[0].UserName = user.UserName
 		}
