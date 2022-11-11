@@ -453,6 +453,7 @@ class ApiControl extends api {
                 CompanyName: company.CompanyName,
                 CompanyLocation: company.CompanyLocation,
                 CompanyPhoneNumber: company.CompanyPhoneNumber,
+                SettlementDate: company.SettlementDate,
                 TermStart: new Date().toISOString(),
                 TermEnd: new Date().toISOString()
             }

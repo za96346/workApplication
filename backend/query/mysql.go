@@ -221,6 +221,7 @@ func addCompanyQuery() {
 		companyLocation,
 		companyPhoneNumber,
 		bossId,
+		SettlementDate,
 		termStart,
 		termEnd,
 		createTime,
@@ -235,6 +236,7 @@ func addCompanyQuery() {
 		companyLocation=?,
 		companyPhoneNumber=?,
 		bossId=?,
+		SettlementDate
 		termStart=?,
 		termEnd=?,
 		lastModify=?
