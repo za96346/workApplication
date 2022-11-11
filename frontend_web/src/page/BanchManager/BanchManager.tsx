@@ -22,16 +22,23 @@ const data = (arr: BanchType[]): people[] => arr.map((item) => {
     )
 })
 
-const BanchEdit = ({ onFinish }: { onFinish: (v: any) => void }): JSX.Element => {
+const BanchEdit = (
+    { onFinish, label, btnName, initialValue }:
+    {
+        onFinish: (v: any) => void
+        label: string
+        btnName: string
+        initialValue: string
+    }): JSX.Element => {
     return (
         <>
             <Form onFinish={onFinish}>
-                <Form.Item rules={rule.banch()} name="BanchName" label="新增部門" initialValue="">
-                    <Input style={{ minWidth: '100px' }} placeholder='請輸入部門名稱' />
+                <Form.Item rules={rule.banch()} name="BanchName" label={label} initialValue={initialValue}>
+                    <Input placeholder='請輸入部門名稱' />
                 </Form.Item>
                 <Form.Item>
                     <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', width: '100%' }}>
-                        <Button htmlType='submit'>新增</Button>
+                        <Button htmlType='submit'>{btnName}</Button>
                     </div>
                 </Form.Item>
             </Form>
@@ -74,7 +81,12 @@ const BanchManager: React.FC = () => {
                     <List.Item>
                         <Card title={
                             status.currentEditIdx === item.id
-                                ? <BanchEdit onFinish={async (v) => await onFinish(v, 2)}/>
+                                ? <BanchEdit
+                                    initialValue={item.title}
+                                    btnName='修改'
+                                    label='更改部門'
+                                    onFinish={async (v) => await onFinish(v, 2)}
+                                />
                                 : <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     {item.title}
                                     <EditOutlined style={{ color: 'blue' }} onClick={() => setStatus((prev) => ({ ...prev, currentEditIdx: item.id }))} />
@@ -87,7 +99,12 @@ const BanchManager: React.FC = () => {
             />
             {
                 status.plusOnclick
-                    ? <BanchEdit onFinish={async (v) => await onFinish(v, 1)}/>
+                    ? <BanchEdit
+                        initialValue={''}
+                        btnName='新增'
+                        label="新增部門"
+                        onFinish={async (v) => await onFinish(v, 1)}
+                    />
                     : <PlusOutlined onClick={() => setStatus((prev) => ({ ...prev, plusOnclick: true }))} style={{ fontSize: '2rem' }} />
             }
         </div>

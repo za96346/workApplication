@@ -108,7 +108,7 @@ func UpdateBanch (props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
-	(*props).JSON(http.StatusNotAcceptable, gin.H{
+	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().UpdateSuccess,
 	})
 }

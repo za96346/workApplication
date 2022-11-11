@@ -9,7 +9,7 @@ interface props {
 }
 const PeopleList = ({ onConfirm, keys }: props): JSX.Element => {
     const { company } = useReduceing()
-    const waitReply = company.waitReply.filter((item) => item.IsAccept === keys)
+    const waitReply = company.waitReply?.filter((item) => item?.IsAccept === keys)
     return (
         <List
             itemLayout="horizontal"
