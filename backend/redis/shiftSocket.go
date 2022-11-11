@@ -43,7 +43,7 @@ func (dbObj *DB) InsertShiftData(banchId int64, value response.Shift) {
 
 	jsonData, _ := json.Marshal(value)
 	conBanchId := strconv.FormatInt(banchId, 10)
-	positionIdx := strconv.FormatInt(int64(value.Position), 10)
+	positionIdx := value.Date
 	(*dbObj).RedisOfShiftData.HSet(conBanchId, positionIdx, jsonData)
 }
 

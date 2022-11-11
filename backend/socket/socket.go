@@ -50,6 +50,30 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// 檢查公司部門
+	company := (*handler.Singleton()).SelectCompany(2, user.CompanyCode)
+	if methods.IsNotExited(company) {
+		log.Print("查無公司")
+		return
+	}
+	companyBanch := (*handler.Singleton()).SelectCompanyBanch(1, (*company)[0].CompanyId)
+	if methods.IsNotExited(companyBanch) {
+		log.Print("公司查無部門")
+		return
+	}
+	count := 0
+	for _, v := range *companyBanch {
+		if v.Id != conBanchId {
+			count += 1
+		} else {
+			break
+		}
+	}
+	if count == len(*companyBanch) {
+		log.Print("該公司未有此部門")
+		return
+	}
+
 	// 添加成員
 	v := response.Member{
 		UserName: user.UserName,
@@ -80,7 +104,10 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
         if err != nil {
             log.Println("Error during message reading:", err)
             break
-        }
+        } else if user.Banch != conBanchId && user.Permession != 100 {
+			log.Print("該權限不是管理員 因此無法編輯 此部門")
+			continue
+		}
 
 		data := struct {
 			Types int
@@ -105,7 +132,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 			// 插入 班表資料
 			shift := response.Shift {
 				UserId: data.Data.UserId,
-				Position: data.Data.Position,
+				Date: data.Data.Date,
 				BanchStyleId: data.Data.BanchStyleId,
 				// OnShiftTime: data.Data.OnShiftTime,
 				// OffShiftTime: data.Data.OffShiftTime,
