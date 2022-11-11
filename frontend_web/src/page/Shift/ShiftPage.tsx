@@ -9,7 +9,7 @@ import PeopleStatus from './PeopleStatus'
 const ShiftPage = (): JSX.Element => {
     const { banchId } = useParams()
     const { company, shiftEdit } = useReduceing()
-    const convertBanchId = parseInt(banchId)
+    const convertBanchId = parseInt(banchId.replace('a', ''))
     const [status, setStatus] = useState({
         drawerOpen: false,
         currentTabs: 0

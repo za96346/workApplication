@@ -27,7 +27,8 @@ const getItem = (
 // getItem('保育組', 2)
 
 const items = (banch: BanchType[], companyCode: string): MenuItem[] => {
-    const a = banch?.map((item) => getItem(item.BanchName, item.Id)) || []
+    const a = banch?.map((item) => getItem(item.BanchName, `a${item.Id}`)) || []
+    const b = banch?.map((item) => getItem(item.BanchName, `b${item.Id}`)) || []
     if (companyCode === '') {
         return (
             [
@@ -41,7 +42,7 @@ const items = (banch: BanchType[], companyCode: string): MenuItem[] => {
     return ([
         getItem('排班', 'shift', <InsertRowRightOutlined />, a),
 
-        getItem('班表設定', 'shiftSetting', <AppstoreOutlined />, a),
+        getItem('班表設定', 'shiftSetting', <AppstoreOutlined />, b),
         getItem('員工管理', 'employeeManager', <IdcardOutlined />),
         getItem('部門管理', 'banchManager', <GoldOutlined />),
         getItem('平假日設定', 'weekendSetting', <CalendarOutlined/>),
@@ -76,6 +77,7 @@ const App: React.FC = () => {
 
     useEffect(() => {
         const [path1, path2] = current.keyPath
+        console.log(current)
         if (path1 === 'setting' || path2 === 'setting') {
             navigate(`setting/${current.key}`)
             return
@@ -130,27 +132,30 @@ const App: React.FC = () => {
                         </Button>
                     )
                 }
-                <div
+                {/* <div
                     style={{
+
+                    }}
+                > */}
+                <Menu
+                    disabled={loading.onFetchBanch}
+                    inlineCollapsed={collapsed}
+                    overflowedIndicator
+                    theme={'light'}
+                    onClick={onClick}
+                    style={{
+                        width: width(),
                         marginTop: isLess('md') ? '0px' : '30px',
                         height: isLess('md') ? '80vh' : '90vh',
                         maxHeight: '90vh',
                         overflow: 'scroll'
                     }}
-                >
-                    <Menu
-                        disabled={loading.onFetchBanch}
-                        inlineCollapsed={collapsed}
-                        overflowedIndicator
-                        theme={'light'}
-                        onClick={onClick}
-                        style={{ width: width() }}
-                        defaultOpenKeys={['sub1']}
-                        selectedKeys={[current]}
-                        mode="inline"
-                        items={items(company.banch, user.selfData?.CompanyCode)}
-                    />
-                </div>
+                    defaultOpenKeys={['sub1']}
+                    selectable
+                    mode="inline"
+                    items={items(company.banch, user.selfData?.CompanyCode)}
+                />
+                {/* </div> */}
                 <div
                     style={{
                         width: width(),

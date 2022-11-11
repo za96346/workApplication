@@ -12,7 +12,7 @@ const Entry = (): JSX.Element => {
     const { path } = useParams()
     const nav = async (): Promise<void> => {
         await api.getBanch()
-        navigate('/home')
+        navigate('/setting/1000')
     }
     useEffect(() => {
         if (user.token) {

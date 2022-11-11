@@ -8,7 +8,7 @@ import BanchStyle from './BanchStyle'
 const ShiftSettingPage = (): JSX.Element => {
     const { banchId } = useParams()
     const { company } = useReduceing()
-    const banchIdNumber = parseInt(banchId)
+    const banchIdNumber = parseInt(banchId.replace('b', ''))
     const banch = company.banch.find((item) => item?.Id === banchIdNumber)
 
     return (
