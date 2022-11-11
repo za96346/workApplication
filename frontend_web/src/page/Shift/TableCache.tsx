@@ -1,17 +1,31 @@
 import { v4 as uuid } from 'uuid'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { companyReducerType } from '../../reduxer/reducer/companyReducer'
 import { userReducerType } from '../../reduxer/reducer/userReducer'
 import { BanchStyleType } from '../../type'
 import { Spin } from 'antd'
 import useShiftEditSocket from '../../Hook/useShiftEdit'
+import dateHandle from '../../method/dateHandle'
+import { useDispatch } from 'react-redux'
+import companyAction from '../../reduxer/action/companyAction'
 
 const useTableCache = (company: companyReducerType, banchId: number, user: userReducerType): any => {
+    const dispatch = useDispatch()
     const { connectionStatus, sendMessage, lastJsonMessage } = useShiftEditSocket(banchId, user?.token || '')
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [status, setStatus] = useState({
         clickPos: -1 // date
     })
+    const dayArray = useMemo(() => {
+        const start = lastJsonMessage?.StartDay
+        const end = lastJsonMessage?.EndDay
+        const dayContainer = ['']
+        for (let i = 0; i < new Date(end).getDate(); i++) {
+            const res = dateHandle.addDays(start, i)
+            dayContainer.push(res)
+        }
+        return dayContainer
+    }, [lastJsonMessage?.StartDay, lastJsonMessage?.EndDay])
     const onClickSendPosition = (pos: number): void => {
         setStatus((prev) => ({ ...prev, clickPos: pos }))
         sendMessage(JSON.stringify({
@@ -21,14 +35,14 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
             }
         }))
     }
-    const onClickSendShift = (userId: number, pos: number, it: BanchStyleType): void => {
+    const onClickSendShift = (userId: number, date: string, it: BanchStyleType): void => {
         // console.log(new Date(it.OnShiftTime))
         setStatus((prev) => ({ ...prev, clickPos: -1 }))
         sendMessage(JSON.stringify({
             Types: 2,
             Data: {
                 UserId: userId,
-                Position: pos,
+                Date: date,
                 BanchStyleId: it.StyleId
                 // OnShiftTime: dateHandle.transferToUtc('2022-02-02', it.OnShiftTime),
                 // OffShiftTime: dateHandle.transferToUtc('2022-02-02', it.OffShiftTime)
@@ -46,12 +60,12 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
                     <table >
                         <thead>
                             {
-                                new Array(31).fill('').map((item, index) => {
+                                dayArray.map((item, index) => {
                                     return (
                                         index === 0
                                             ? <td style={{ left: '1px' }} className={styles.stickyTd}>員工</td>
                                             : <td>
-                                                {index}<br/>
+                                                {item?.slice(8, 10)}<br/>
                                                 {'一'}
                                             </td>
                                     )
@@ -63,20 +77,14 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
                                 return (
                                     <tr key={uuid()}>
                                         {
-                                            new Array(31).fill('').map((item, index) => {
+                                            dayArray.map((item, index) => {
                                                 const position = parseInt(`${idx * 31 + index}`)
                                                 const bg = lastJsonMessage?.OnlineUser?.find((user) => user.Position === position)
-                                                const findIcon = lastJsonMessage?.ShiftData?.find((shift) => shift.Position === position)
+                                                const findIcon = lastJsonMessage?.ShiftData?.find((shift) =>
+                                                    shift.Date === item &&
+                                                    shift.UserId === i.UserId
+                                                )
                                                 const icon = company?.banchStyle?.find((icon) => {
-                                                    // const on = dateHandle.dateFormatToTime(new Date(findIcon?.OnShiftTime))
-                                                    // const off = dateHandle.dateFormatToTime(new Date(findIcon?.OffShiftTime))
-                                                    // if (findIcon?.OnShiftTime && findIcon?.OffShiftTime) {
-                                                    //     console.log(on, findIcon.OnShiftTime)
-                                                    // }
-                                                    // return (
-                                                    //     icon?.OnShiftTime === on &&
-                                                    //     icon?.OffShiftTime === off
-                                                    // )
                                                     return icon.StyleId === findIcon?.BanchStyleId
                                                 })
                                                 return (
@@ -104,7 +112,7 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
                                                                                     <div
                                                                                         onClick={(e) => {
                                                                                             e.stopPropagation()
-                                                                                            onClickSendShift(i.UserId, position, it)
+                                                                                            onClickSendShift(i.UserId, item, it)
                                                                                         }}
                                                                                         key={uuid()}
                                                                                     >
@@ -130,6 +138,10 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
             </>
         )
     }, [company, lastJsonMessage, status.clickPos, connectionStatus])
+
+    useEffect(() => {
+        dispatch(companyAction.setBanchStyle(lastJsonMessage?.BanchStyle || []))
+    }, [lastJsonMessage?.BanchStyle])
     return {
         tb
     }

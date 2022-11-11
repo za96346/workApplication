@@ -104,6 +104,13 @@ class DateHandle implements DateHandleInterface {
         return this.formatDate(monthEndDate)
     }
 
+    // 增加天數
+    addDays (date: string, days: number): string {
+        const dat = new Date(date) // (1)
+        dat.setDate(dat.getDate() + days) // (2)
+        return this.formatDate(dat)
+    }
+
     transferToUtc (date: DateOrString, time: DateOrString): any {
     // console.log(date, time, `utc => ${new Date(`${date} ${time}`).toISOString()}`);
         const res = `${date} ${time}`.replace(/-/g, '/').replace('T', ' ')

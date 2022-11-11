@@ -135,7 +135,7 @@ export interface ShiftEditType {
     // OffShiftTime: string | Date
     // OnShiftTime: string | Date
     BanchStyleId: number
-    Position: number
+    Date: string
     UserId: number
 }
 
@@ -144,6 +144,9 @@ export interface ShiftSocketType {
     EditUser: UserType[]
     OnlineUser: OnlineUserType[]
     ShiftData: ShiftEditType[]
+    BanchStyle: BanchStyleType[]
+    StartDay: string
+    EndDay: string
 }
 
 export interface WeekendSettingType {

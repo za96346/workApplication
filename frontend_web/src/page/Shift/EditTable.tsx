@@ -1,6 +1,5 @@
 import { Result, Skeleton, Spin } from 'antd'
-import React, { useEffect } from 'react'
-import api from '../../api/api'
+import React from 'react'
 import useReduceing from '../../Hook/useReducing'
 import useTableCache from './TableCache'
 
@@ -11,9 +10,6 @@ interface EditTableProps {
 const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
     const { loading, user, company } = useReduceing()
     const { tb } = useTableCache(company, banchId, user)
-    useEffect(() => {
-        api.getBanchStyle(banchId)
-    }, [banchId])
     if (loading.onFetchBanchStyle || loading.onFetchUserAll) {
         return (
             <>
