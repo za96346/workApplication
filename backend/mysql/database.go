@@ -846,6 +846,7 @@ func(dbObj *DB) SelectWeekendSetting(selectKey int, value... interface{}) *[]tab
 		)
 		(*dbObj).checkErr(err)
 		if err == nil {
+			weekendSetting.Date = weekendSetting.Date[0 : 10]
 			carry = append(carry, *weekendSetting)
 		}
 	}
