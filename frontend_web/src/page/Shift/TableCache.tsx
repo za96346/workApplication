@@ -8,6 +8,7 @@ import useShiftEditSocket from '../../Hook/useShiftEdit'
 import dateHandle from '../../method/dateHandle'
 import { useDispatch } from 'react-redux'
 import companyAction from '../../reduxer/action/companyAction'
+import statics from '../../statics'
 
 const useTableCache = (company: companyReducerType, banchId: number, user: userReducerType): any => {
     const dispatch = useDispatch()
@@ -66,7 +67,7 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
                                             ? <td style={{ left: '1px' }} className={styles.stickyTd}>員工</td>
                                             : <td>
                                                 {item?.slice(8, 10)}<br/>
-                                                {'一'}
+                                                {statics.days[new Date(item).getDay()]}
                                             </td>
                                     )
                                 })

@@ -45,6 +45,18 @@ class statics {
             2: '接受',
             3: '拒絕'
         }
+
+    days: {
+        [index: number]: string
+    } = {
+            0: '日',
+            1: '一',
+            2: '二',
+            3: '三',
+            4: '四',
+            5: '五',
+            6: '六'
+        }
 }
 
 export default new statics()
