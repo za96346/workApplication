@@ -19,6 +19,7 @@ var instance *Manager
 type Manager struct {
 	Conn chan struct {
 		BanchId int64
+		CompanyId int64
 		Value response.Member
 	}
 	SendMsg chan Msg
@@ -30,6 +31,7 @@ type Msg struct {
 	EditUser []response.User
 	ShiftData []response.Shift
 	BanchStyle []table.BanchStyle
+	WeekendSetting [] table.WeekendSetting
 	StartDay string
 	EndDay string
 }
@@ -42,7 +44,8 @@ func Singleton () *Manager {
 		if instance == nil {
 			instance = &Manager{
 				Conn: make(chan struct{
-					BanchId int64;
+					BanchId int64
+					CompanyId int64
 					Value response.Member
 				}),
 				SendMsg: make(chan Msg),
@@ -54,15 +57,16 @@ func Singleton () *Manager {
 	return instance
 }
 
-func (mg *Manager) send (banchId int64) {
+func (mg *Manager) send (banchId int64, companyId int64) {
 	defer panichandler.Recover()
 	// 發送訊息
 	onlineUsers := (*redis.Singleton()).GetShiftRoomUser(banchId)
 	EditUsers := (*handler.Singleton()).SelectUser(4, banchId)
 	ShiftData := (*redis.Singleton()).GetShiftData(banchId)
 	BanchStyle := (*handler.Singleton()).SelectBanchStyle(2, banchId)
+	WeekendSetting := (*handler.Singleton()).SelectWeekendSetting(2, companyId)
 	str, end := methods.GetNextMonthSE()
-	fmt.Print("開始結束", str, end)
+	// fmt.Print("開始結束", str, end)
 
 	editUserData := []response.User{}
 	for _, v := range *EditUsers {
@@ -83,6 +87,7 @@ func (mg *Manager) send (banchId int64) {
 		OnlineUser: *onlineUsers,
 		ShiftData: *ShiftData,
 		BanchStyle: *BanchStyle,
+		WeekendSetting: *WeekendSetting,
 		StartDay: str,
 		EndDay: end,
 	}
@@ -101,7 +106,7 @@ func (mg *Manager) enterRoom () {
 	for v := range (*mg).Conn {
 		fmt.Printf("\n使用者編號 %d 進入部門房間 %d\n", v.Value.UserId, v.BanchId)
 		(*redis.Singleton()).EnterShiftRoom(v.BanchId, v.Value)
-		(*mg).send(v.BanchId)
+		(*mg).send(v.BanchId, v.CompanyId)
 	}
 }
 

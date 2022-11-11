@@ -85,9 +85,11 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	Singleton().Conn <- struct {
 			BanchId int64
+			CompanyId int64
 			Value response.Member
 		}{
 			BanchId: conBanchId,
+			CompanyId: (*company)[0].CompanyId,
 			Value: v,
 	}
 
@@ -145,7 +147,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// send
-		Singleton().send(conBanchId)
+		Singleton().send(conBanchId, (*company)[0].CompanyId)
 
     }
 
@@ -154,7 +156,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	(*redis.Singleton()).LeaveShiftRoom(conBanchId, user.UserId)
 
 	// send
-	Singleton().send(conBanchId)
+	Singleton().send(conBanchId, (*company)[0].CompanyId)
 }
  
 func Conn() {
