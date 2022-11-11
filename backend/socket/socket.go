@@ -95,6 +95,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 
 	// 加入全域連線
 	Singleton().ConnLine[user.UserId] = conn
+	defer delete(Singleton().ConnLine, user.UserId)
 
     // The event loop
     for {
