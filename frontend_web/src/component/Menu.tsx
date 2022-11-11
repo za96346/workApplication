@@ -48,8 +48,8 @@ const items = (banch: BanchType[], companyCode: string): MenuItem[] => {
         getItem('平假日設定', 'weekendSetting', <CalendarOutlined/>),
         getItem('申請中', 'sign', <EditFilled />),
         getItem('設定', 'setting', <SettingOutlined />, [
-            getItem('個人資料', 1000),
-            getItem('公司資料', 1001)
+            getItem('個人資料', 'z1000'),
+            getItem('公司資料', 'z1001')
         ])
     ])
 }

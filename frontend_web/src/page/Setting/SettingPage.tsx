@@ -6,7 +6,8 @@ import statics from '../../statics'
 import api from '../../api/api'
 
 const SettingPage = (): JSX.Element => {
-    const { types } = useParams()
+    let { types } = useParams()
+    types = types.replace('z', '')
 
     useEffect(() => {
         if (types === statics.personalSetting) {

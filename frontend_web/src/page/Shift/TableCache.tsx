@@ -27,6 +27,9 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
         }
         return dayContainer
     }, [lastJsonMessage?.StartDay, lastJsonMessage?.EndDay])
+    const weekendArr = useMemo(() => {
+        return lastJsonMessage?.WeekendSetting
+    }, [lastJsonMessage?.WeekendSetting])
     const onClickSendPosition = (pos: number): void => {
         setStatus((prev) => ({ ...prev, clickPos: pos }))
         sendMessage(JSON.stringify({
@@ -57,15 +60,17 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
         }
         return (
             <>
+                <div>排班日期：{lastJsonMessage?.StartDay}~{lastJsonMessage?.EndDay}</div>
                 <div className={styles.shiftTable}>
                     <table >
                         <thead>
                             {
                                 dayArray.map((item, index) => {
+                                    const findWeekend = weekendArr?.find((weekend) => weekend?.Date === item)
                                     return (
                                         index === 0
                                             ? <td style={{ left: '1px' }} className={styles.stickyTd}>員工</td>
-                                            : <td>
+                                            : <td style={{ backgroundColor: findWeekend ? 'rgba(255, 0, 0, 0.4)' : 'white' }}>
                                                 {item?.slice(8, 10)}<br/>
                                                 {statics.days[new Date(item).getDay()]}
                                             </td>

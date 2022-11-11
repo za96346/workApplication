@@ -145,6 +145,7 @@ export interface ShiftSocketType {
     OnlineUser: OnlineUserType[]
     ShiftData: ShiftEditType[]
     BanchStyle: BanchStyleType[]
+    WeekendSetting: WeekendSettingType[]
     StartDay: string
     EndDay: string
 }
@@ -152,7 +153,7 @@ export interface ShiftSocketType {
 export interface WeekendSettingType {
     WeekendId: number
     CompanyId: number
-    Date: string | Date
+    Date: string
     CreateTime: string | Date
     LastModify: string | Date
 }

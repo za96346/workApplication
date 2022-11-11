@@ -36,6 +36,7 @@ const WeekendSettingPage = (): JSX.Element => {
         })
         if (isExited?.length === 0) {
             // 新增
+            console.log(dateToString)
             await api.createWeekendSetting(dateToString)
         } else {
             // 刪除
@@ -47,19 +48,17 @@ const WeekendSettingPage = (): JSX.Element => {
         api.getWeekendSetting()
     }, [])
     return (
-        <>
-            <Calendar
-                dateCellRender={isWeekend}
-                // headerRender={() => {
-                //     return (
-                //         <div style={{ color: 'rgb(195, 88 , 34)', fontSize: '1.5rem', marginLeft: '10px' }}>
-                //             平假日設定
-                //         </div>
-                //     )
-                // }}
-                onSelect={onSelect}
-            />
-        </>
+        <Calendar
+            dateCellRender={isWeekend}
+            // headerRender={() => {
+            //     return (
+            //         <div style={{ color: 'rgb(195, 88 , 34)', fontSize: '1.5rem', marginLeft: '10px' }}>
+            //             平假日設定
+            //         </div>
+            //     )
+            // }}
+            onSelect={onSelect}
+        />
     )
 }
 export default WeekendSettingPage
