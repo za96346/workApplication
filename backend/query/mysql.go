@@ -221,13 +221,13 @@ func addCompanyQuery() {
 		companyLocation,
 		companyPhoneNumber,
 		bossId,
-		SettlementDate,
+		settlementDate,
 		termStart,
 		termEnd,
 		createTime,
 		lastModify
 		) values(
-			?, ?, ?, ?, ?, ?, ?, ?, ?
+			?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 	);`;
 	sqlQueryInstance.Company.UpdateSingle = `
 	update company
@@ -236,7 +236,7 @@ func addCompanyQuery() {
 		companyLocation=?,
 		companyPhoneNumber=?,
 		bossId=?,
-		SettlementDate
+		settlementDate=?,
 		termStart=?,
 		termEnd=?,
 		lastModify=?

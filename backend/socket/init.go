@@ -29,6 +29,9 @@ type Msg struct {
 	OnlineUser []response.Member
 	EditUser []response.User
 	ShiftData []response.Shift
+	BanchStyle []table.BanchStyle
+	StartDay string
+	EndDay string
 }
 
 func Singleton () *Manager {
@@ -55,8 +58,11 @@ func (mg *Manager) send (banchId int64) {
 	defer panichandler.Recover()
 	// 發送訊息
 	onlineUsers := (*redis.Singleton()).GetShiftRoomUser(banchId)
-	EditUsers := (*redis.Singleton()).SelectUser(4, banchId)
+	EditUsers := (*handler.Singleton()).SelectUser(4, banchId)
 	ShiftData := (*redis.Singleton()).GetShiftData(banchId)
+	BanchStyle := (*handler.Singleton()).SelectBanchStyle(2, banchId)
+	str, end := methods.GetNextMonthSE()
+	fmt.Print("開始結束", str, end)
 
 	editUserData := []response.User{}
 	for _, v := range *EditUsers {
@@ -76,6 +82,9 @@ func (mg *Manager) send (banchId int64) {
 		EditUser: editUserData,
 		OnlineUser: *onlineUsers,
 		ShiftData: *ShiftData,
+		BanchStyle: *BanchStyle,
+		StartDay: str,
+		EndDay: end,
 	}
 }
 

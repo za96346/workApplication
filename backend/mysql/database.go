@@ -261,6 +261,7 @@ func(dbObj *DB) SelectCompany(selectKey int, value... interface{}) *[]table.Comp
 			&company.CompanyLocation,
 			&company.CompanyPhoneNumber,
 			&company.BossId,
+			&company.SettlementDate,
 			&company.TermStart,
 			&company.TermEnd,
 			&company.CreateTime,
