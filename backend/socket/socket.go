@@ -137,8 +137,9 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 				UserId: data.Data.UserId,
 				Date: data.Data.Date,
 				BanchStyleId: data.Data.BanchStyleId,
-				// OnShiftTime: data.Data.OnShiftTime,
-				// OffShiftTime: data.Data.OffShiftTime,
+				RestTime: data.Data.RestTime,
+				OnShiftTime: data.Data.OnShiftTime,
+				OffShiftTime: data.Data.OffShiftTime,
 			}
 			(*redis.Singleton()).InsertShiftData(conBanchId, shift)
 			fmt.Println("收到 shift =>", shift)

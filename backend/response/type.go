@@ -66,7 +66,8 @@ type Shift struct {
 	// Position int `json:"Position"` // 位置
 	Date string `json:"Date"` // 每天 ex: 2022-02-22
 	BanchStyleId int64
-	// OnShiftTime time.Time  `json:"OnShiftTime"`// 開始上班時間
-	// OffShiftTime time.Time `json:"OffShiftTime"` //結束上班的時間
+	RestTime string `json:"RestTime"` // 休息時間 ex: 01:00:00
+	OnShiftTime string  `json:"OnShiftTime"`// 開始上班時間 ex: 09:00:00
+	OffShiftTime string`json:"OffShiftTime"` //結束上班的時間 ex: 18:00:00
 
 }
