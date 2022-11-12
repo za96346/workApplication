@@ -57,7 +57,10 @@ const ShiftPage = (): JSX.Element => {
                 </Steps>
             </div>
             <div className={styles.shiftEdit}>
-                <Tabs onChange={(key) => setStatus((prev) => ({ ...prev, currentTabs: parseInt(key, 10) }))}>
+                <Tabs
+                    destroyInactiveTabPane
+                    onChange={(key) => setStatus((prev) => ({ ...prev, currentTabs: parseInt(key, 10) }))}
+                >
                     <Tabs.TabPane tab={'當前編輯'} key={0}>
                         <EditTable
                             banchId={convertBanchId}

@@ -13,9 +13,10 @@ import statics from '../../statics'
 const useTableCache = (company: companyReducerType, banchId: number, user: userReducerType): {
     tb: React.ReactNode
     lonelyShift: ShiftEditType[]
+    close: Function
 } => {
     const dispatch = useDispatch()
-    const { connectionStatus, sendMessage, lastJsonMessage } = useShiftEditSocket(banchId, user?.token || '')
+    const { connectionStatus, sendMessage, lastJsonMessage, close } = useShiftEditSocket(banchId, user?.token || '')
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [status, setStatus] = useState({
         clickPos: -1 // date
@@ -171,7 +172,7 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
         dispatch(companyAction.setBanchStyle(lastJsonMessage?.BanchStyle || []))
     }, [lastJsonMessage?.BanchStyle])
     return {
-        tb, lonelyShift
+        tb, lonelyShift, close
     }
 }
 export default useTableCache

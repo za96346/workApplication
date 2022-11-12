@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 
 import { Button, Form, Input, Select, Spin } from 'antd'
-import { FullMessage } from '../../method/notice'
 import api from '../../api/api'
 import useReduceing from '../../Hook/useReducing'
 
@@ -89,7 +88,7 @@ const CompanyForm = (): JSX.Element => {
                     <Button
                         style={{ width: '100%' }}
                         htmlType="submit"
-                        onClick={() => FullMessage.success('修改成功 ')}>修改</Button>
+                    >修改</Button>
                 </Form.Item>
             </Form>
         </>

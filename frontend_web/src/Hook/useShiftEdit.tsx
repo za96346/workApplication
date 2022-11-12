@@ -8,12 +8,13 @@ import { useWebsocket } from './useWebsocket'
 interface props {
     connectionStatus: string
     sendMessage: Function
+    close: Function
     lastJsonMessage: ShiftSocketType
 }
 const useShiftEditSocket = (banchId: number, token: string): props => {
     const dispatch = useDispatch()
     const record = useRef<OnlineUserType[]>([])
-    const { connectionStatus, sendMessage, lastJsonMessage }: props = useWebsocket({
+    const { connectionStatus, sendMessage, lastJsonMessage, socket } = useWebsocket({
         options: {
             onClose: (event: any) => {
                 console.log(event)
@@ -24,6 +25,9 @@ const useShiftEditSocket = (banchId: number, token: string): props => {
             }
         }
     })
+    const close = (): void => {
+        socket?.close()
+    }
     useEffect(() => {
         dispatch(shiftEditAction.setShiftEditOnlineUser(lastJsonMessage?.OnlineUser))
         if (!record.current) return
@@ -48,7 +52,7 @@ const useShiftEditSocket = (banchId: number, token: string): props => {
     //     firstEnter.current = true
     // }, [])
     return {
-        connectionStatus, sendMessage, lastJsonMessage
+        connectionStatus, sendMessage, lastJsonMessage, close
     }
 }
 export default useShiftEditSocket

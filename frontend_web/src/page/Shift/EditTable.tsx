@@ -1,16 +1,26 @@
 import { Result, Skeleton, Spin } from 'antd'
 import { v4 as uuid } from 'uuid'
-import React from 'react'
+import React, { useEffect } from 'react'
 import useReduceing from '../../Hook/useReducing'
 import useTableCache from './TableCache'
+import { useNavigate } from 'react-router-dom'
 
 interface EditTableProps {
     currentTabs: number
     banchId: number
 }
 const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
+    const navigate = useNavigate()
     const { loading, user, company } = useReduceing()
-    const { tb, lonelyShift } = useTableCache(company, banchId, user)
+    const { tb, lonelyShift, close } = useTableCache(company, banchId, user)
+    useEffect(() => {
+        if (currentTabs !== 0) {
+            close()
+        }
+    }, [currentTabs])
+    useEffect(() => {
+        return () => close()
+    }, [navigate])
     if (loading.onFetchBanchStyle || loading.onFetchUserAll) {
         return (
             <>
