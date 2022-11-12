@@ -659,6 +659,8 @@ func UpdateCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
+	request.BossId = user.UserId
+
 	res := (*dbHandle).UpdateCompany(0, &request)
 	if !res {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{

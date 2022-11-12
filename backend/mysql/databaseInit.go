@@ -680,7 +680,7 @@ func simulateData() {
 	addShift(0)
 }
 func addCompany(x int) {
-	boss :=0
+	boss := 0
 	if x == 0 {
 		boss = 2
 	} else {
