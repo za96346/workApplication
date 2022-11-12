@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid'
 import React, { useEffect, useMemo, useState } from 'react'
 import { companyReducerType } from '../../reduxer/reducer/companyReducer'
 import { userReducerType } from '../../reduxer/reducer/userReducer'
-import { BanchStyleType } from '../../type'
+import { BanchStyleType, ShiftEditType } from '../../type'
 import { Spin } from 'antd'
 import useShiftEditSocket from '../../Hook/useShiftEdit'
 import dateHandle from '../../method/dateHandle'
@@ -10,7 +10,10 @@ import { useDispatch } from 'react-redux'
 import companyAction from '../../reduxer/action/companyAction'
 import statics from '../../statics'
 
-const useTableCache = (company: companyReducerType, banchId: number, user: userReducerType): any => {
+const useTableCache = (company: companyReducerType, banchId: number, user: userReducerType): {
+    tb: React.ReactNode
+    lonelyShift: ShiftEditType[]
+} => {
     const dispatch = useDispatch()
     const { connectionStatus, sendMessage, lastJsonMessage } = useShiftEditSocket(banchId, user?.token || '')
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -47,9 +50,10 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
             Data: {
                 UserId: userId,
                 Date: date,
-                BanchStyleId: it.StyleId
-                // OnShiftTime: dateHandle.transferToUtc('2022-02-02', it.OnShiftTime),
-                // OffShiftTime: dateHandle.transferToUtc('2022-02-02', it.OffShiftTime)
+                BanchStyleId: it.StyleId,
+                RestTime: it.RestTime,
+                OnShiftTime: it.OnShiftTime,
+                OffShiftTime: it.OffShiftTime
             }
         }))
     }
@@ -145,11 +149,29 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
         )
     }, [company, lastJsonMessage, status.clickPos, connectionStatus])
 
+    const lonelyShift = useMemo(() => {
+        const shiftData = lastJsonMessage?.ShiftData
+        const banchStyle = lastJsonMessage?.BanchStyle
+        const res = shiftData?.filter((shift) => {
+            const found = banchStyle?.filter((banchStyle) =>
+                banchStyle.StyleId === shift.BanchStyleId
+            )
+            // 有找到
+            if (found?.length > 0) {
+                return false
+            } else {
+                // 沒找到
+                return true
+            }
+        })
+        return res
+    }, [lastJsonMessage?.ShiftData, lastJsonMessage?.BanchStyle])
+
     useEffect(() => {
         dispatch(companyAction.setBanchStyle(lastJsonMessage?.BanchStyle || []))
     }, [lastJsonMessage?.BanchStyle])
     return {
-        tb
+        tb, lonelyShift
     }
 }
 export default useTableCache

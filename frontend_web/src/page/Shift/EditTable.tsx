@@ -1,4 +1,5 @@
 import { Result, Skeleton, Spin } from 'antd'
+import { v4 as uuid } from 'uuid'
 import React from 'react'
 import useReduceing from '../../Hook/useReducing'
 import useTableCache from './TableCache'
@@ -9,7 +10,7 @@ interface EditTableProps {
 }
 const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
     const { loading, user, company } = useReduceing()
-    const { tb } = useTableCache(company, banchId, user)
+    const { tb, lonelyShift } = useTableCache(company, banchId, user)
     if (loading.onFetchBanchStyle || loading.onFetchUserAll) {
         return (
             <>
@@ -54,6 +55,19 @@ const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
                         {
                             tb
                         }
+                        <div >
+                            {
+                                lonelyShift?.map((item) => {
+                                    return (
+                                        <span key={uuid()}>
+                                            上班: {item.OnShiftTime}<br/>
+                                            下班: {item.OffShiftTime}<br/>
+                                            休息: {item.RestTime}
+                                        </span>
+                                    )
+                                })
+                            }
+                        </div>
 
                     </>
                 )

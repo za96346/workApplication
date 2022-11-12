@@ -132,8 +132,9 @@ export interface OnlineUserType {
 }
 
 export interface ShiftEditType {
-    // OffShiftTime: string | Date
-    // OnShiftTime: string | Date
+    OffShiftTime: string
+    OnShiftTime: string
+    RestTime: string
     BanchStyleId: number
     Date: string
     UserId: number
@@ -146,6 +147,7 @@ export interface ShiftSocketType {
     ShiftData: ShiftEditType[]
     BanchStyle: BanchStyleType[]
     WeekendSetting: WeekendSettingType[]
+    Status: number // 1 開放編輯、 2 主管審核 3 確認發布 ,
     StartDay: string
     EndDay: string
 }
