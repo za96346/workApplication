@@ -89,7 +89,7 @@ func (mg *Manager) send (banchId int64, companyId int64) {
 		ShiftData: *ShiftData,
 		BanchStyle: *BanchStyle,
 		WeekendSetting: *WeekendSetting,
-		Status: 1, // 1 開放編輯、 2 主管審核 3 確認發布
+		Status: methods.CheckWhichStep(), // 1 開放編輯、 2 主管審核 3 確認發布
 		StartDay: str,
 		EndDay: end,
 	}
