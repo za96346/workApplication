@@ -56,8 +56,8 @@ class Rule {
 
     public banchStyleIcon (): any[] {
         return [
-            { required: true, message: '不允許空白!', whitespace: true },
-            { required: true, message: '只可以是一個字元', len: 1 }
+            // { required: true, message: '不允許空白!', whitespace: true },
+            // { required: true, message: '只可以是一個字元', len: 1 }
         ]
     }
 
