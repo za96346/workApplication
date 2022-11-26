@@ -68,7 +68,7 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
             <>
                 <div>排班日期：{lastJsonMessage?.StartDay}~{lastJsonMessage?.EndDay}</div>
                 <div className={styles.shiftTable}>
-                    <table >
+                    <table>
                         <thead>
                             {
                                 dayArray.map((item, index) => {
