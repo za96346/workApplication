@@ -25,6 +25,11 @@ body{
 	width: 100vw;
 	padding: 0;
 	margin: 0;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+::-webkit-scrollbar {
+	display: none;
 }
 .article {
 	min-height: 100vh;
@@ -282,18 +287,16 @@ div {
 		}
 	}
 	.downList {
-		height: fit-content;
-		width: 100%;
+		display: flex;
 		position: absolute;
 		top: 100%;
-		background-color: #fff;
 		font-size: 0.4rem;
 		z-index: 10;
-		@extend %shadowNormal;
 		>div {
-			padding: 5px 0px;
-			border-bottom: 0.5px solid gray;
-			border-top: 0.5px solid gray;
+			flex: 1;
+			background-color: rgba(160, 160, 160, 0.4);
+			padding: 10px;
+			border-right: 0.5px solid gray;
 			&:hover {
 				cursor: pointer;
 			}
@@ -310,12 +313,8 @@ div {
 }
 
 .shiftSignBlock {
-	background-color: rgba(139, 136, 136, 0.2);
-	border-radius: 20px;
 	width: 100%;
 	height: fit-content;
-	margin-bottom: 20px;
-	padding: 20px;
 	display: flex;
 	flex-wrap: wrap;
 	span {
@@ -331,6 +330,7 @@ div {
 			border-right: 1px solid rgba(0, 0, 0, 0.1);
 		}
 		margin-right: 20px;
+		margin-top: 20px;
 		>div {
 			color: rgb(91, 161, 172);
 		}

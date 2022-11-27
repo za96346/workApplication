@@ -67,8 +67,8 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
         return (
             <>
                 <div>排班日期：{lastJsonMessage?.StartDay}~{lastJsonMessage?.EndDay}</div>
-                <div className={styles.shiftTable}>
-                    <table>
+                <div className={`${styles.shiftTable}`}>
+                    <table className='mb-5'>
                         <thead>
                             {
                                 dayArray.map((item, index) => {
@@ -117,7 +117,7 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
                                                             {
                                                                 status.clickPos === position
                                                                     ? (
-                                                                        <div className={styles.downList}>
+                                                                        <div className={`${styles.downList} shadow-lg bg-white rounded`}>
 
                                                                             {
                                                                                 company.banchStyle.map((it) => (

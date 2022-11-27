@@ -1,4 +1,4 @@
-import { Result, Skeleton, Spin } from 'antd'
+import { Result, Skeleton, Spin, Collapse } from 'antd'
 import { v4 as uuid } from 'uuid'
 import React, { useEffect } from 'react'
 import useReduceing from '../../Hook/useReducing'
@@ -49,19 +49,25 @@ const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
             {
                 currentTabs === 0 && (
                     <>
-                        <div className={styles.shiftSignBlock}>
-                            {
-                                company.banchStyle?.map((item) => {
-                                    return (
-                                        <div key={item.StyleId}>
-                                            <div>{item.TimeRangeName}</div>
-                                            {item.OnShiftTime} - {item.OffShiftTime}:
-                                            <span>{item.Icon}</span>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
+
+                        <Collapse ghost className='mb-4' defaultActiveKey={['1']} onChange={() => {}}>
+                            <Collapse.Panel header="圖標" key="1">
+                                <div className={styles.shiftSignBlock}>
+                                    {
+                                        company.banchStyle?.map((item) => {
+                                            return (
+                                                <div key={item.StyleId}>
+                                                    <div>{item.TimeRangeName}</div>
+                                                    {item.OnShiftTime} - {item.OffShiftTime}:
+                                                    <span>{item.Icon}</span>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            </Collapse.Panel>
+                        </Collapse>
+
                         {
                             tb
                         }

@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom'
 import styles from './index.module.scss'
 import 'antd/dist/antd.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 import Layout from './page/Layout'
 import ShiftSettingPage from './page/shiftSetting/ShiftSettingPage'
