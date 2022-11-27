@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Suspense, lazy } from 'react'
 
 import {
     BrowserRouter as Router,
@@ -10,20 +10,23 @@ import styles from './index.module.scss'
 import 'antd/dist/antd.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-import Layout from './page/Layout'
-import ShiftSettingPage from './page/shiftSetting/ShiftSettingPage'
-import ShiftPage from './page/Shift/ShiftPage'
-import SettingPage from './page/Setting/SettingPage'
-import ShiftSearchPage from './page/ShiftSearch/ShiftSearchPage'
-import ErrorPage from './page/ErrorPage'
-import Entry from './page/Entry/EntryPage'
-import EmployeeManager from './page/EmployeeManager/EmployeeManager'
-import BanchManager from './page/BanchManager/BanchManager'
-import HomePage from './page/Home/HomePage'
-import SignPage from './page/Sign/Sign'
-import WeekendSettingPage from './page/WeekendSetting/WeekendSettingPage'
+// import WeekendSettingPage from './page/WeekendSetting/WeekendSettingPage'
 import { store } from './reduxer/store'
 import statusAction from './reduxer/action/statusAction'
+import { Spin } from 'antd'
+
+const Entry = lazy((): any => import('./page/Entry/EntryPage'))
+const Layout = lazy((): any => import('./page/Layout'))
+const HomePage = lazy((): any => import('./page/Home/HomePage'))
+const EmployeeManager = lazy((): any => import('./page/EmployeeManager/EmployeeManager'))
+const ShiftPage = lazy((): any => import('./page/Shift/ShiftPage'))
+const BanchManager = lazy((): any => import('./page/BanchManager/BanchManager'))
+const SignPage = lazy((): any => import('./page/Sign/Sign'))
+const ShiftSettingPage = lazy((): any => import('./page/shiftSetting/ShiftSettingPage'))
+const ShiftSearchPage = lazy((): any => import('./page/ShiftSearch/ShiftSearchPage'))
+const SettingPage = lazy((): any => import('./page/Setting/SettingPage'))
+const ErrorPage = lazy((): any => import('./page/ErrorPage'))
+const WorkTimeManagerPage = lazy((): any => import('./page/WorkTImeManager/WorkTimeManagerPage'))
 
 // global init f
 window.styles = styles
@@ -35,30 +38,33 @@ const App = (): JSX.Element => {
         store.dispatch(statusAction.clearStatusAll())
     }, [])
     return (
-        <Router>
-            <Routes>
-                <Route path='/' element={<Layout />}>
-                    <Route path='/' element={<Navigate to={'entry/login'} />}/>
-                    <Route path='entry/:path' element={<Entry />} />
+        <Suspense fallback={<Spin/>}>
+            <Router>
+                <Routes>
+                    <Route path='/' element={<Layout />}>
+                        <Route path='/' element={<Navigate to={'entry/login'} />}/>
+                        <Route path='entry/:path' element={<Entry />} />
 
-                    <Route path='home' element={<HomePage />} />
+                        <Route path='home' element={<HomePage />} />
 
-                    <Route path='employeeManager' element={<EmployeeManager />} />
+                        <Route path='employeeManager' element={<EmployeeManager />} />
 
-                    <Route path='shift/:banchId' element={<ShiftPage />} />
+                        <Route path='shift/:banchId' element={<ShiftPage />} />
 
-                    <Route path='banchManager' element={<BanchManager />} />
-                    <Route path='sign' element={<SignPage/>}/>
-                    <Route path='weekendSetting' element={<WeekendSettingPage />}/>
+                        <Route path='banchManager' element={<BanchManager />} />
+                        <Route path='sign' element={<SignPage/>}/>
+                        {/* <Route path='weekendSetting' element={<WeekendSettingPage />}/> */}
+                        <Route path='workTimeManager' element={<WorkTimeManagerPage />} />
 
-                    <Route path='shiftSetting/:banchId' element={<ShiftSettingPage />} />
-                    <Route path='shiftSearch' element={<ShiftSearchPage />} />
+                        <Route path='shiftSetting/:banchId' element={<ShiftSettingPage />} />
+                        <Route path='shiftSearch' element={<ShiftSearchPage />} />
 
-                    <Route path='setting/:types' element={<SettingPage />} />
-                </Route>
-                <Route path='*' element={<ErrorPage/>} />
-            </Routes>
-        </Router>
+                        <Route path='setting/:types' element={<SettingPage />} />
+                    </Route>
+                    <Route path='*' element={<ErrorPage/>} />
+                </Routes>
+            </Router>
+        </Suspense>
     )
 }
 

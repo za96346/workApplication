@@ -1,5 +1,5 @@
 /* eslint-disable array-callback-return */
-import { SearchOutlined } from '@ant-design/icons'
+import { PlusCircleFilled, SearchOutlined } from '@ant-design/icons'
 import { Button, DatePicker, Input, Spin } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
@@ -85,6 +85,10 @@ const EmployeeManager = (): JSX.Element => {
                 />
                 <BanchSelector onChange={(e) => setFilt((prev) => ({ ...prev, banch: e }))} defaultValue={0}/>
                 <StatusSelector onChange={(e) => setFilt((prev) => ({ ...prev, workState: e }))} defaultValue={'on'}/>
+                <button className='btn btn-secondary d-flex align-items-center m-1'>
+                    <PlusCircleFilled style={{ marginRight: '5px' }}/>
+                    新增員工
+                </button>
             </div>
             <div className={styles.empManagerTable}>
                 <table>
