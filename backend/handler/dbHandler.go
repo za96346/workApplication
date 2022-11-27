@@ -115,7 +115,7 @@ func selectAllHandler[
 	) *[]callbackT {
 
 	defer panichandler.Recover()
-	if (*redis.Singleton()).IsAlive() && !(*isLocked) {
+	if (*redis.Singleton()).IsAlive() && !(*isLocked) && false {
 		// redis
 		fmt.Println("從 redis 拿取資料 開始")
 		res := redisCallback()
