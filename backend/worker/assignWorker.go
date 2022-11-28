@@ -140,6 +140,38 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		// delete method of delete weekend setting
 		routeFunc = service.DeleteWeekendSetting
 		break
+	case 32:
+		// get method of fetch workTime
+		routeFunc = service.FetchWorkTime
+		break
+	case 33:
+		// put method of insert workTime
+		routeFunc = service.InsertWorkTime
+		break
+	case 34:
+		// post method of update workTime
+		routeFunc = service.UpdateWorkTime
+		break
+	case 35:
+		// delete method of delete workTime
+		routeFunc = service.DeleteWorkTime
+		break
+	case 36:
+		// get method of fetch paidVocation
+		routeFunc = service.FetchPaidVocation
+		break
+	case 37:
+		// put method of insert paidVocation
+		routeFunc = service.InsertPaidVocation
+		break
+	case 38:
+		// post method of update paidVocation
+		routeFunc = service.UpdatePaidVocation
+		break
+	case 39:
+		// delete method of delete paidVocation
+		routeFunc = service.DeletePaidVocation
+		break
 	default:
 		break;
 	}
