@@ -54,9 +54,11 @@ func SetRouter() *gin.Engine {
 	userApi := apiServer.Group("/workApp/user")
 	entryApi := apiServer.Group("/workApp/entry")
 	companyApi := apiServer.Group("/workApp/company")
+	shiftApi := apiServer.Group("/workApp/shift")
 	route.User(userApi)
 	route.EntryRoute(entryApi)
 	route.Company(companyApi)
+	route.Shift(shiftApi)
 
 	go socket.Conn()
 
