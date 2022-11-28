@@ -42,6 +42,8 @@ type DB struct {
 	quitWorkUserLock *bool
 	waitCompanyReplyLock *bool
 	weekendSettingLock *bool
+	workTime *bool
+	paidVocation *bool
 }
 
 func newBool(b bool) *bool {
@@ -72,6 +74,8 @@ func Singleton() *DB {
 				quitWorkUserLock: newBool(false),
 				waitCompanyReplyLock: newBool(false),
 				weekendSettingLock: newBool(false),
+				workTime: newBool(false),
+				paidVocation: newBool(false),
 			}
 		}
 	}
@@ -481,6 +485,18 @@ func(dbObj *DB) InsertWeekendSetting(data *table.WeekendSetting) (bool, int64) {
 	return isOk, id
 }
 
+func(dbObj *DB) InsertWorkTime (data *table.WorkTime) (bool, int64) {
+	defer panichandler.Recover()
+	isOk, id := (*dbObj).Mysql.InsertWorkTime(data)
+	return isOk, id
+}
+
+func(dbObj *DB) InsertPaidVocation (data *table.PaidVocation) (bool, int64) {
+	defer panichandler.Recover()
+	isOk, id := (*dbObj).Mysql.InsertPaidVocation(data)
+	return isOk, id
+}
+
 
 //  ------------------------------update------------------------------
 
@@ -686,6 +702,18 @@ func(dbObj *DB) UpdateWeekendSetting(updateKey int, data *table.WeekendSetting) 
 	return isOk
 }
 
+func(dbObj *DB) UpdateWorkTime (updateKey int, data *table.WorkTime) bool {
+	defer panichandler.Recover()
+	isOk := (*dbObj).Mysql.UpdateWorkTime(updateKey, data)
+	return isOk
+}
+
+func(dbObj *DB) UpdatePaidVocation (updateKey int, data *table.PaidVocation) bool {
+	defer panichandler.Recover()
+	isOk := (*dbObj).Mysql.UpdatePaidVocation(updateKey, data)
+	return isOk
+}
+
 //  ------------------------------delete------------------------------
 
 
@@ -851,6 +879,18 @@ func(dbObj *DB) DeleteWeekendSetting(deleteKey int, weekendId int64) bool {
 	// 	}()	
 	// }
 	
+	return res
+}
+
+func(dbObj *DB) DeleteWorkTime (deleteKey int, workTimeId int64) bool {
+	defer panichandler.Recover()
+	res := (*dbObj).Mysql.DeleteWorkTime(deleteKey, workTimeId)
+	return res
+}
+
+func(dbObj *DB) DeletePaidVocation (deleteKey int, paidVocationId int64) bool {
+	defer panichandler.Recover()
+	res := (*dbObj).Mysql.DeletePaidVocation(deleteKey, paidVocationId)
 	return res
 }
 
@@ -1100,5 +1140,37 @@ func(dbObj *DB) SelectWeekendSetting(selectKey int, value... interface{}) *[]tab
 			return (*dbObj.Mysql).SelectWeekendSetting(selectKey, value...)
 		},
 		(*dbObj).weekendSettingLock,
+	)
+}
+
+// . 0 => all, value => nil
+// . 1 => userId, value => int64
+// . 2 => year && month, value => int && int
+func(dbObj *DB) SelectWorkTime (selectKey int, value... interface{}) *[]table.WorkTime {
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.WorkTime {
+			return &[]table.WorkTime{}
+		},
+		func() *[]table.WorkTime {
+			return (*dbObj.Mysql).SelectWorkTime(selectKey, value...)
+		},
+		(*dbObj).workTime,
+	)
+}
+
+// . 0 => all, value => nil
+// . 1 => userId, value => int64
+// . 2 => year, value => int
+func(dbObj *DB) SelectPaidVocation (selectKey int, value... interface{}) *[]table.PaidVocation {
+	defer panichandler.Recover()
+	return selectAllHandler(
+		func() *[]table.PaidVocation {
+			return &[]table.PaidVocation{}
+		},
+		func() *[]table.PaidVocation {
+			return (*dbObj.Mysql).SelectPaidVocation(selectKey, value...)
+		},
+		(*dbObj).paidVocation,
 	)
 }

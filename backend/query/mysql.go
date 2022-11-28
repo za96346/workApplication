@@ -25,6 +25,8 @@ type sqlQuery struct {
 	QuitWorkUser quitWorkUser
 	WaitCompanyReply waitCompanyReply
 	WeekendSetting weekendSetting
+	WorkTime workTime
+	PaidVocation paidVocation
 }
 type queryCommonColumn struct {
 	InsertAll string
@@ -118,6 +120,16 @@ type weekendSetting struct {
 	SelectSingleByWeekendId string
 	SelectAllByCompanyId string
 }
+type workTime struct {
+	queryCommonColumn
+	SelectAllByUserId string
+	SelectAllByTime string
+}
+type paidVocation struct {
+	queryCommonColumn
+	SelectAllByUserId string
+	SelectAllByTime string
+}
 
 func MysqlSingleton() *sqlQuery {
 	queryMux = new(sync.Mutex)
@@ -141,6 +153,8 @@ func MysqlSingleton() *sqlQuery {
 			addQuitWorkUserQuery()
 			addWaitCompanyReply()
 			addWeekendSetting()
+			addWorkTime()
+			addPaidVocation()
 			return sqlQueryInstance
 		}
 	}
@@ -622,4 +636,60 @@ func addWeekendSetting () {
 	sqlQueryInstance.WeekendSetting.SelectAllByCompanyId = `select * from weekendSetting where companyId = ?;`
 	sqlQueryInstance.WeekendSetting.Delete = `delete from weekendSetting where weekendId = ?;`
 
+}
+func addWorkTime () {
+	sqlQueryInstance.WorkTime.InsertAll = `
+		insert into workTime(
+			userId,
+			year,
+			month,
+			workHours,
+			timeOff,
+			usePaidVocation,
+			createTime,
+			lastModify
+		) values(
+			?, ?, ?, ?, ?, ?, ?, ?
+		);
+	`;
+	sqlQueryInstance.WorkTime.UpdateSingle = `
+		update workTime
+		set
+			year=?,
+			month=?,
+			workHours=?,
+			timeOff=?,
+			usePaidVocation=?,
+			lastModify=?
+		where workTimeId=?;
+	`;
+	sqlQueryInstance.WorkTime.SelectAll = `select * from workTime;`;
+	sqlQueryInstance.WorkTime.Delete = `delete from workTime where workTimeId=?;`;
+	sqlQueryInstance.WorkTime.SelectAllByUserId = `select * from workTime where userId=?`;
+	sqlQueryInstance.WorkTime.SelectAllByTime = `select * from workTime where year=? and month=?`
+}
+func addPaidVocation () {
+	sqlQueryInstance.PaidVocation.InsertAll = `
+		insert into paidVocation(
+			userId,
+			year,
+			count,
+			createTime,
+			lastModify
+		) values(
+			?, ?, ?, ?, ?
+		);
+	`;
+	sqlQueryInstance.PaidVocation.UpdateSingle = `
+		update paidVocation
+		set
+			year=?,
+			count=?,
+			lastModify=?
+		where paidVocationId=?;
+	`;
+	sqlQueryInstance.PaidVocation.SelectAll = `select * from paidVocation;`
+	sqlQueryInstance.PaidVocation.Delete = `delete from paidVocation where paidVocationId=?;`
+	sqlQueryInstance.PaidVocation.SelectAllByUserId = `select * from paidVocation where userId=?;`
+	sqlQueryInstance.PaidVocation.SelectAllByTime = `select * from paidVocation where year=?;`
 }

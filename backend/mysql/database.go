@@ -39,6 +39,8 @@ type DB struct {
 	quitWorkUserMux *sync.RWMutex
 	waitCompanyReply *sync.RWMutex
 	weekendSetting *sync.RWMutex
+	workTime *sync.RWMutex
+	paidVocation *sync.RWMutex
 	MysqlDB *sql.DB // 要先使用連線方法後才能使用這個
 	containers
 }
@@ -59,6 +61,8 @@ type containers struct {
 	quitWorkUser []interface{}
 	waitCompanyReply []interface{}
 	weekendSetting []interface{}
+	worktime []interface{}
+	paidVocation []interface{}
 }
 
 func Singleton() *DB {
@@ -83,6 +87,8 @@ func Singleton() *DB {
 				quitWorkUserMux: new(sync.RWMutex),
 				waitCompanyReply: new(sync.RWMutex),
 				weekendSetting: new(sync.RWMutex),
+				workTime: new(sync.RWMutex),
+				paidVocation: new(sync.RWMutex),
 			}
 		}
 	}
@@ -853,6 +859,87 @@ func(dbObj *DB) SelectWeekendSetting(selectKey int, value... interface{}) *[]tab
 	return &carry
 }
 
+// . 0 => all, value => nil
+// . 1 => userId, value => int64
+// . 2 => year && month, value => int && int
+func(dbObj *DB) SelectWorkTime (selectKey int, value... interface{}) *[]table.WorkTime {
+	defer panichandler.Recover()
+	querys := ""
+	switch selectKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).WorkTime.SelectAll
+		break
+	case 1:
+		querys = (*query.MysqlSingleton()).WorkTime.SelectAllByUserId
+		break
+	case 2:
+		querys = (*query.MysqlSingleton()).WorkTime.SelectAllByTime
+		break
+	}
+	workTime := new(table.WorkTime)
+	carry := []table.WorkTime{}
+	res, err := (*dbObj).MysqlDB.Query(querys, value...)
+	defer res.Close()
+	(*dbObj).checkErr(err)
+	for res.Next() {
+		err = res.Scan(
+			&workTime.WorkTimeId,
+			&workTime.UserId,
+			&workTime.Year,
+			&workTime.Month,
+			&workTime.WorkHours,
+			&workTime.TimeOff,
+			&workTime.UsePaidVocation,
+			&workTime.CreateTime,
+			&workTime.LastModify,
+		)
+		(*dbObj).checkErr(err)
+		if err == nil {
+			carry = append(carry, *workTime)
+		}
+	}
+	return &carry
+}
+
+// . 0 => all, value => nil
+// . 1 => userId, value => int64
+// . 2 => year, value => int
+func(dbObj *DB) SelectPaidVocation (selectKey int, value... interface{}) *[]table.PaidVocation {
+	defer panichandler.Recover()
+	querys := ""
+	switch selectKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).PaidVocation.SelectAll
+		break
+	case 1:
+		querys = (*query.MysqlSingleton()).PaidVocation.SelectAllByUserId
+		break
+	case 2:
+		querys = (*query.MysqlSingleton()).PaidVocation.SelectAllByTime
+		break
+	}
+	paidVocation := new(table.PaidVocation)
+	carry := []table.PaidVocation{}
+	res, err := (*dbObj).MysqlDB.Query(querys, value...)
+	defer res.Close()
+	(*dbObj).checkErr(err)
+	for res.Next() {
+		err = res.Scan(
+			&paidVocation.PaidVocationId,
+			&paidVocation.UserId,
+			&paidVocation.Year,
+			&paidVocation.Count,
+			&paidVocation.CreateTime,
+			&paidVocation.LastModify,
+		)
+		(*dbObj).checkErr(err)
+		if err == nil {
+			carry = append(carry, *paidVocation)
+		}
+	}
+	return &carry
+}
+
 // ---------------------------------delete------------------------------------
 
 //使用者的唯一id (關聯資料表userpreference 也上鎖)
@@ -1115,6 +1202,38 @@ func(dbObj *DB) DeleteWeekendSetting(deleteKey int, weekendId interface{}) bool 
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
 	_, err = stmt.Exec(weekendId)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// workTime 的唯一id
+func(dbObj *DB) DeleteWorkTime (deleteKey int, workTimeId interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).workTime.Lock()
+	defer (*dbObj).workTime.Unlock()
+	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).WorkTime.Delete)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(workTimeId)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// paidVocation 的唯一id
+func(dbObj *DB) DeletePaidVocation (deleteKey int, paidVocationId interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).paidVocation.Lock()
+	defer (*dbObj).paidVocation.Unlock()
+	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).PaidVocation.Delete)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(paidVocationId)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
@@ -1667,6 +1786,74 @@ func(dbObj *DB) UpdateWeekendSetting(updateKey int, data *table.WeekendSetting, 
 	return true
 }
 
+// 0 => all, by workTimeId int64
+func(dbObj *DB) UpdateWorkTime (updateKey int, data *table.WorkTime, value ...interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).workTime.Lock()
+	defer (*dbObj).workTime.Unlock()
+	defer func ()  {
+		(*dbObj).containers.worktime = nil
+	}()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).WorkTime.UpdateSingle
+		(*dbObj).containers.worktime = append(
+			(*dbObj).containers.worktime,
+			(*data).Year,
+			(*data).Month,
+			(*data).WorkHours,
+			(*data).TimeOff,
+			(*data).UsePaidVocation,
+			(*data).LastModify,
+			(*data).WorkTimeId,
+		)
+		break;
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec((*dbObj).containers.worktime...)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+// 0 => all, by paidVocationId int64
+func(dbObj *DB) UpdatePaidVocation (updateKey int, data *table.PaidVocation, value ...interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).paidVocation.Lock()
+	defer (*dbObj).paidVocation.Unlock()
+	defer func ()  {
+		(*dbObj).containers.paidVocation = nil
+	}()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).PaidVocation.UpdateSingle
+		(*dbObj).containers.paidVocation = append(
+			(*dbObj).containers.paidVocation,
+			(*data).Year,
+			(*data).Count,
+			(*data).LastModify,
+			(*data).PaidVocationId,
+		)
+		break;
+	}
+	
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec((*dbObj).containers.paidVocation...)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
 //  ---------------------------------insert------------------------------------
 func(dbObj *DB) InsertUser(data *table.UserTable) (bool, int64) {
 	///
@@ -2038,6 +2225,53 @@ func(dbObj *DB) InsertWeekendSetting (data *table.WeekendSetting) (bool, int64) 
 	res, err := stmt.Exec(
 		(*data).CompanyId,
 		(*data).Date,
+		(*data).CreateTime,
+		(*data).LastModify,
+	)
+	(*dbObj).checkErr(err)
+	id, _:= res.LastInsertId()
+	if err != nil {
+		return false, id
+	}
+	return true, id
+}
+func(dbObj *DB) InsertWorkTime (data *table.WorkTime) (bool, int64) {
+
+	defer panichandler.Recover()
+	(*dbObj).workTime.Lock()
+	defer (*dbObj).workTime.Unlock()
+	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).WorkTime.InsertAll)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	res, err := stmt.Exec(
+		(*data).UserId,
+		(*data).Year,
+		(*data).Month,
+		(*data).WorkHours,
+		(*data).TimeOff,
+		(*data).UsePaidVocation,
+		(*data).CreateTime,
+		(*data).LastModify,
+	)
+	(*dbObj).checkErr(err)
+	id, _:= res.LastInsertId()
+	if err != nil {
+		return false, id
+	}
+	return true, id
+}
+func(dbObj *DB) InsertPaidVocation (data *table.PaidVocation) (bool, int64) {
+
+	defer panichandler.Recover()
+	(*dbObj).paidVocation.Lock()
+	defer (*dbObj).paidVocation.Unlock()
+	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).PaidVocation.InsertAll)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	res, err := stmt.Exec(
+		(*data).UserId,
+		(*data).Year,
+		(*data).Count,
 		(*data).CreateTime,
 		(*data).LastModify,
 	)
