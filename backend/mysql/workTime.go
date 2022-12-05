@@ -13,9 +13,10 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// . 0 => all, value => nil
-// . 1 => userId, value => int64
-// . 2 => year && month, value => int && int
+//0 => companyCode, value => string
+// . 1 => userId, companyCode, value => int64, string
+// . 2 => year && month && companyCode, value => int && int && string
+// . 3 => year && month && userId && companyCode, value => int, int, int64 && string
 func(dbObj *DB) SelectWorkTime (selectKey int, value... interface{}) *[]table.WorkTime {
 	defer panichandler.Recover()
 	querys := ""
@@ -28,6 +29,9 @@ func(dbObj *DB) SelectWorkTime (selectKey int, value... interface{}) *[]table.Wo
 		break
 	case 2:
 		querys = (*query.MysqlSingleton()).WorkTime.SelectAllByTime
+		break
+	case 3:
+		querys = (*query.MysqlSingleton()).WorkTime.SelectAllByPrimaryKey
 		break
 	}
 	workTime := new(table.WorkTime)

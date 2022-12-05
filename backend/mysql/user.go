@@ -19,6 +19,7 @@ import (
 //  2 => account, value => string
 // 3 => companyCode, value => string
 //  4 => banch, value = > int64
+// . 5 => companyCode, userId, value => string, int64
 func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTable {
 	defer panichandler.Recover()
 	querys := ""
@@ -41,6 +42,9 @@ func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTab
 	case 4:
 		//value need int64
 		querys = (*query.MysqlSingleton()).User.SelectAllByBanchId
+		break
+	case 5:
+		querys = (*query.MysqlSingleton()).User.SelectAllByUserIdAndCompanyCode
 		break
 	default:
 		querys = (*query.MysqlSingleton()).User.SelectAll

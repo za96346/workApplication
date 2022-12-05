@@ -42,6 +42,7 @@ type userQuery struct {
 	SelectSingleByAccount string
 	SelectAllByCompanyCode string
 	SelectAllByBanchId string
+	SelectAllByUserIdAndCompanyCode string
 }
 type userPreferenceQuery struct {
 	queryCommonColumn
@@ -124,6 +125,7 @@ type workTime struct {
 	queryCommonColumn
 	SelectAllByUserId string
 	SelectAllByTime string
+	SelectAllByPrimaryKey string
 }
 type paidVocation struct {
 	queryCommonColumn
@@ -195,6 +197,9 @@ func addUserQuery() {
 			partTimeSalary=?
 		where userId=?;
 	`;
+	sqlQueryInstance.User.SelectAllByUserIdAndCompanyCode = `
+		select * from user where companyCode=? and userId=?;
+	`
 	sqlQueryInstance.User.SelectAllByCompanyCode = `select * from user where companyCode=?;`
 	sqlQueryInstance.User.SelectAll = `select * from user;`;
 	sqlQueryInstance.User.SelectSingleByUserId = `select * from user where userId=?;`;
@@ -663,10 +668,80 @@ func addWorkTime () {
 			lastModify=?
 		where workTimeId=?;
 	`;
-	sqlQueryInstance.WorkTime.SelectAll = `select * from workTime;`;
+	sqlQueryInstance.WorkTime.SelectAll = `
+		select
+			workTime.WorkTimeId,
+			workTime.UserId,
+			workTime.Year,
+			workTime.Month,
+			workTime.WorkHours,
+			workTime.TimeOff,
+			workTime.UsePaidVocation,
+			workTime.CreateTime,
+			workTime.LastModify
+		from workTime
+		left join user
+		on workTime.userId=user.userId
+		where user.companyCode=?;
+	`;
 	sqlQueryInstance.WorkTime.Delete = `delete from workTime where workTimeId=?;`;
-	sqlQueryInstance.WorkTime.SelectAllByUserId = `select * from workTime where userId=?`;
-	sqlQueryInstance.WorkTime.SelectAllByTime = `select * from workTime where year=? and month=?`
+	sqlQueryInstance.WorkTime.SelectAllByUserId = `
+		select
+			workTime.WorkTimeId,
+			workTime.UserId,
+			workTime.Year,
+			workTime.Month,
+			workTime.WorkHours,
+			workTime.TimeOff,
+			workTime.UsePaidVocation,
+			workTime.CreateTime,
+			workTime.LastModify
+		from workTime
+		left join user
+		on workTime.userId=user.userId
+		where
+			workTime.userId=? and
+			user.companyCode=?;
+		`;
+	sqlQueryInstance.WorkTime.SelectAllByTime = `
+		select
+			workTime.WorkTimeId,
+			workTime.UserId,
+			workTime.Year,
+			workTime.Month,
+			workTime.WorkHours,
+			workTime.TimeOff,
+			workTime.UsePaidVocation,
+			workTime.CreateTime,
+			workTime.LastModify
+		from workTime
+		left join user
+		on workTime.userId=user.userId
+		where
+			workTime.year=? and
+			workTime.month=? and
+			user.companyCode=?;
+	`;
+	sqlQueryInstance.WorkTime.SelectAllByPrimaryKey = `
+	select
+		workTime.WorkTimeId,
+		workTime.UserId,
+		workTime.Year,
+		workTime.Month,
+		workTime.WorkHours,
+		workTime.TimeOff,
+		workTime.UsePaidVocation,
+		workTime.CreateTime,
+		workTime.LastModify
+	from workTime
+	inner join user
+	on workTime.userId=user.userId
+	where
+		workTime.year=? and
+		workTime.month=? and
+		workTime.userId=? and
+		user.companyCode=?;
+`;
 }
 func addPaidVocation () {
 	sqlQueryInstance.PaidVocation.InsertAll = `
@@ -676,7 +751,7 @@ func addPaidVocation () {
 			count,
 			createTime,
 			lastModify
-		) values(
+		) values (
 			?, ?, ?, ?, ?
 		);
 	`;

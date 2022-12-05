@@ -26,9 +26,10 @@ func(dbObj *DB) DeleteWorkTime (deleteKey int, workTimeId int64) bool {
 	return res
 }
 
-// . 0 => all, value => nil
-// . 1 => userId, value => int64
-// . 2 => year && month, value => int && int
+//0 => companyCode, value => string
+//  . 1 => userId, companyCode, value => int64, string
+//  . 2 => year && month && companyCode, value => int && int && string
+//  . 3 => year && month && userId && companyCode, value => int, int, int64 && string
 func(dbObj *DB) SelectWorkTime (selectKey int, value... interface{}) *[]table.WorkTime {
 	defer panichandler.Recover()
 	return selectAllHandler(
