@@ -33,7 +33,7 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	// 檢查帳號是否存在
-	res := (*dbHandle).SelectUser(2, (*reqBody).Account)
+	res := (*Mysql).SelectUser(2, (*reqBody).Account)
 	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusUnauthorized, gin.H{
 			"message": StatusText().NoUser,
@@ -55,7 +55,7 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 		UserId: (*res)[0].UserId,
 		Account: (*res)[0].Account,
 	}
-	(*dbHandle).Redis.InsertToken(tk.GetLoginToken())
+	(*Redis).InsertToken(tk.GetLoginToken())
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().LoginSuccess,
 		"data": tk.GetLoginToken(),
@@ -87,7 +87,7 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 	}
 
 	// 檢查帳號是否被註冊
-	res := (*dbHandle).SelectUser(2, (*registeForm).Account)
+	res := (*Mysql).SelectUser(2, (*registeForm).Account)
 	if !methods.IsNotExited(res) {
 		(*props).JSON(http.StatusConflict, gin.H{
 			"message": StatusText().AccountHasBeenRegisted,
@@ -97,7 +97,7 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 
 	// 檢查公司碼 是否存在
 	if (*registeForm).CompanyCode != "" {
-		company := (*dbHandle).SelectCompany(2, (*registeForm).CompanyCode)
+		company := (*Mysql).SelectCompany(2, (*registeForm).CompanyCode)
 		if !methods.IsNotExited(company) {
 			(*props).JSON(http.StatusConflict, gin.H{
 				"message": StatusText().CompanyCodeIsNotRight,
@@ -107,7 +107,7 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 	}
 
 	// 檢查驗證碼是否正確
-	rightCaptcha := (*dbHandle).Redis.SelectEmailCaptcha((*registeForm).Account)
+	rightCaptcha := (*Redis).SelectEmailCaptcha((*registeForm).Account)
 	if (*registeForm).Captcha != rightCaptcha || rightCaptcha == -1 {
 		(*props).JSON(http.StatusBadRequest, gin.H{
 			"message": StatusText().EmailCaptchaIsNotRight,
@@ -148,7 +148,7 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 		CreateTime: now,
 		LastModify: now,
 	}
-	status, _ := (*dbHandle).InsertUser(user)
+	status, _ := (*Mysql).InsertUser(user)
 	if !status {
 		// 註冊失敗
 		(*props).JSON(http.StatusForbidden, gin.H{
@@ -158,7 +158,7 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 	}
 
 	// 註冊成功 把captcha 刪掉
-	(*dbHandle).Redis.DeleteCaptcha((*registeForm).Account)
+	(*Redis).DeleteCaptcha((*registeForm).Account)
 
 	// 註冊成功
 	(*props).JSON(http.StatusOK, gin.H{

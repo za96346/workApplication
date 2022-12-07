@@ -26,7 +26,7 @@ func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
-	res := (*dbHandle).SelectUser(1, intUserId)
+	res := (*Mysql).SelectUser(1, intUserId)
 	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,
@@ -61,7 +61,7 @@ func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 	if !status {return}
 
 	// 尋找資料
-	res := (*dbHandle).SelectUser(1, userId)
+	res := (*Mysql).SelectUser(1, userId)
 	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,
@@ -95,7 +95,7 @@ func UpdateMine (props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
-	mineUserData := (*dbHandle).SelectUser(1, mineId)
+	mineUserData := (*Mysql).SelectUser(1, mineId)
 	if methods.IsNotExited(mineUserData) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,
@@ -106,7 +106,7 @@ func UpdateMine (props *gin.Context, waitJob *sync.WaitGroup) {
 	(*mineUserData)[0].UserName = user.UserName
 	(*mineUserData)[0].LastModify = time.Now()
 
-	if !(*dbHandle).UpdateUser(0, &(*mineUserData)[0]) {
+	if !(*Mysql).UpdateUser(0, &(*mineUserData)[0]) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().UpdateFail,
 		})
@@ -133,7 +133,7 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	if err {return}
 
 	// 拿在職的員工資料
-	userList := (*dbHandle).SelectUser(3, companyCode.(string))
+	userList := (*Mysql).SelectUser(3, companyCode.(string))
 	data := []response.User{}
 	for _, v := range *userList {
 		if user.Permession == 1 && v.Banch != user.Banch{
@@ -153,7 +153,7 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 
 
 	// 拿離職的員工資料
-	quitWorkUser := (*dbHandle).SelectQuitWorkUser(3, companyCode.(string))
+	quitWorkUser := (*Mysql).SelectQuitWorkUser(3, companyCode.(string))
 	for _, v := range *quitWorkUser {
 		if user.Permession == 1 && v.Banch != user.Banch{
 			continue
@@ -247,7 +247,7 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 			PartTimeSalary: 0,
 			UserId: convertTargetUser.UserId,
 		}
-		if a, _ := (*dbHandle).InsertQuitWorkUser(&quitWorkUser); !a {
+		if a, _ := (*Mysql).InsertQuitWorkUser(&quitWorkUser); !a {
 			(*props).JSON(http.StatusForbidden, gin.H{
 				"message": StatusText().QuitWorkUserInsertFail,
 			})
@@ -255,9 +255,9 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		}
 		companyCode = ""
 	} else if request.WorkState == "on" {
-		res := (*dbHandle).SelectQuitWorkUser(4, companyCode, convertTargetUser.UserId)
+		res := (*Mysql).SelectQuitWorkUser(4, companyCode, convertTargetUser.UserId)
 		if !methods.IsNotExited(res) {
-			(*dbHandle).DeleteQuitWorkUser(0, (*res)[0].QuitId)
+			(*Mysql).DeleteQuitWorkUser(0, (*res)[0].QuitId)
 		}
 	}
 
@@ -275,7 +275,7 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		UserId: convertTargetUser.UserId,
 	}
 
-	res := (*dbHandle).UpdateUser(0, &user)
+	res := (*Mysql).UpdateUser(0, &user)
 	if !res {
 		(*props).JSON(http.StatusForbidden, gin.H{
 			"message": StatusText().UpdateFail,
@@ -304,7 +304,7 @@ func ChangePassword (props *gin.Context, waitJob *sync.WaitGroup) {
 	if !err {return}
 
 	// get user
-	res := (*dbHandle).SelectUser(1, userId)
+	res := (*Mysql).SelectUser(1, userId)
 	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,
@@ -313,7 +313,7 @@ func ChangePassword (props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	// 驗證碼驗證
-	rightCaptcha := (*dbHandle).Redis.SelectEmailCaptcha((*res)[0].Account)
+	rightCaptcha := (*Redis).SelectEmailCaptcha((*res)[0].Account)
 	if rightCaptcha != changePwd.Captcha || rightCaptcha == -1 {
 		(*props).JSON(http.StatusBadRequest, gin.H{
 			"message": StatusText().EmailCaptchaIsNotRight,
@@ -346,14 +346,14 @@ func ChangePassword (props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	(*res)[0].Password = changePwd.NewPassword
-	status := (*dbHandle).UpdateUser(0, &(*res)[0])
+	status := (*Mysql).UpdateUser(0, &(*res)[0])
 	if !status {
 		(*props).JSON(http.StatusUnprocessableEntity, gin.H{
 			"message": StatusText().UpdateFail,
 		})
 		return
 	}
-	(*dbHandle).Redis.DeleteCaptcha((*res)[0].Account)
+	(*Redis).DeleteCaptcha((*res)[0].Account)
 
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().UpdateSuccess,
@@ -376,7 +376,7 @@ func ForgetPassword(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	// get user
-	res := (*dbHandle).SelectUser(2, forgetPwd.Email)
+	res := (*Mysql).SelectUser(2, forgetPwd.Email)
 	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,
@@ -385,7 +385,7 @@ func ForgetPassword(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	// 驗證碼驗證
-	rightCaptcha := (*dbHandle).Redis.SelectEmailCaptcha((*res)[0].Account)
+	rightCaptcha := (*Redis).SelectEmailCaptcha((*res)[0].Account)
 	if rightCaptcha != forgetPwd.Captcha || rightCaptcha == -1 {
 		(*props).JSON(http.StatusBadRequest, gin.H{
 			"message": StatusText().EmailCaptchaIsNotRight,
@@ -410,14 +410,14 @@ func ForgetPassword(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	(*res)[0].Password = forgetPwd.NewPassword
-	status := (*dbHandle).UpdateUser(0, &(*res)[0])
+	status := (*Mysql).UpdateUser(0, &(*res)[0])
 	if !status {
 		(*props).JSON(http.StatusUnprocessableEntity, gin.H{
 			"message": StatusText().UpdateFail,
 		})
 		return
 	}
-	(*dbHandle).Redis.DeleteCaptcha((*res)[0].Account)
+	(*Redis).DeleteCaptcha((*res)[0].Account)
 
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().UpdateSuccess,

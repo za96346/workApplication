@@ -19,7 +19,6 @@ import (
 	// "github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"backend/handler"
 	// . "./middleWare/permessionMiddleWare"
 	"backend/middleWare"
 	"backend/route"
@@ -28,7 +27,6 @@ import (
 	"backend/socket"
 )
 func init() {
-	handler.Init("./.env")
 	runtime.SetMutexProfileFraction(-1)
 	worker.WorkerSingleton().CreateWorker(runtime.NumCPU() * 2)
 	fmt.Println("開啟的worker數量", runtime.NumCPU() * 2)

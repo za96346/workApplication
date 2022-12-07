@@ -53,25 +53,13 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		// get method of fetch banch style
 		routeFunc = service.FetchBanchStyle
 		break
-	case 10:
-		// get method of fetch banch rule
-		routeFunc = service.FetchBanchRule
-		break
 	case 11:
 		// post method of update banch style
 		routeFunc = service.UpdateBanchStyle
 		break
-	case 12:
-		// post method of update banch rule
-		routeFunc = service.UpdateBanchRule
-		break
 	case 13:
 		// put method of insert banch style
 		routeFunc = service.InsertBanchStyle
-		break
-	case 14:
-		// put method of insert banch rule
-		routeFunc = service.InsertBanchRule
 		break
 	case 15:
 		// put method of insert banch
@@ -96,10 +84,6 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 	case 20:
 		// delete method of delete banch style
 		routeFunc = service.DeleteBanchStyle
-		break
-	case 21:
-		// delete method of delete banch rule
-		routeFunc = service.DeleteBanchRule
 		break
 	case 22:
 		// post method of update myself user data
@@ -127,18 +111,6 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 	case 28:
 		// put method of insert wait company reply
 		routeFunc = service.InsertWaitCompanyReply
-		break
-	case 29:
-		// get method of fetch weekend setting
-		routeFunc = service.FetchWeekendSetting
-		break
-	case 30:
-		// put method of insert weekend setting
-		routeFunc = service.InsertWeekendSetting
-		break
-	case 31:
-		// delete method of delete weekend setting
-		routeFunc = service.DeleteWeekendSetting
 		break
 	case 32:
 		// get method of fetch workTime

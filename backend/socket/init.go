@@ -3,6 +3,7 @@ package socket
 import (
 	"backend/handler"
 	"backend/methods"
+	"backend/mysql"
 	panichandler "backend/panicHandler"
 	"backend/redis"
 	"backend/response"
@@ -15,6 +16,7 @@ import (
 
 var lock = new(sync.Mutex)
 var instance *Manager
+var Redis = redis.Singleton()
 
 type Manager struct {
 	Conn chan struct {
@@ -62,10 +64,10 @@ func (mg *Manager) send (banchId int64, companyId int64) {
 	defer panichandler.Recover()
 	// 發送訊息
 	onlineUsers := (*redis.Singleton()).GetShiftRoomUser(banchId)
-	EditUsers := (*handler.Singleton()).SelectUser(4, banchId)
+	EditUsers := (*mysql.Singleton()).SelectUser(4, banchId)
 	ShiftData := (*redis.Singleton()).GetShiftData(banchId)
-	BanchStyle := (*handler.Singleton()).SelectBanchStyle(2, banchId)
-	WeekendSetting := (*handler.Singleton()).SelectWeekendSetting(2, companyId)
+	BanchStyle := (*mysql.Singleton()).SelectBanchStyle(2, banchId)
+	WeekendSetting := (*mysql.Singleton()).SelectWeekendSetting(2, companyId)
 	str, end := methods.GetNextMonthSE()
 	// fmt.Print("開始結束", str, end)
 
@@ -127,7 +129,7 @@ func (mg *Manager) sendMsg () {
 func (mg *Manager) TokenPrase (tokenParams string) (table.UserTable, bool) {
 	defer panichandler.Recover()
 	// 判斷 token 是否過期
-	if !handler.Singleton().Redis.IsTokenExited(tokenParams) {
+	if !(*Redis).IsTokenExited(tokenParams) {
 		return table.UserTable{}, false
 	}
 		
@@ -137,9 +139,9 @@ func (mg *Manager) TokenPrase (tokenParams string) (table.UserTable, bool) {
 		return table.UserTable{}, false
 	}
 	
-	(*handler.Singleton()).Redis.ResetExpireTime(tokenParams)
+	(*Redis).ResetExpireTime(tokenParams)
 
-	user := (*handler.Singleton()).SelectUser(1, int64(userInfo["UserId"].(float64)))
+	user := (*mysql.Singleton()).SelectUser(1, int64(userInfo["UserId"].(float64)))
 	if methods.IsNotExited(user) {
 		return table.UserTable{}, false
 	}

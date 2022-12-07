@@ -24,11 +24,11 @@ func FetchWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 
 	var res *[]table.WorkTime
 	if err3 != nil {
-		res = (*dbHandle).SelectWorkTime(2, year, month, company.CompanyCode)
+		res = (*Mysql).SelectWorkTime(2, year, month, company.CompanyCode)
 	} else if err2 != nil && err1 != nil {
-		res = (*dbHandle).SelectWorkTime(1, userId, company.CompanyCode)
+		res = (*Mysql).SelectWorkTime(1, userId, company.CompanyCode)
 	} else {
-		res = (*dbHandle).SelectWorkTime(3, year, month, userId, company.CompanyCode)
+		res = (*Mysql).SelectWorkTime(3, year, month, userId, company.CompanyCode)
 	}
 
 	(*props).JSON(http.StatusOK, gin.H{
@@ -54,7 +54,7 @@ func InsertWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 	workTime.CreateTime = now
 	workTime.LastModify = now
 
-	res := (*dbHandle).SelectUser(5, company.CompanyCode, workTime.UserId)
+	res := (*Mysql).SelectUser(5, company.CompanyCode, workTime.UserId)
 	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().IsNotHaveCompany,
@@ -62,7 +62,7 @@ func InsertWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 		return
 	}
 
-	if err1, _ := (*dbHandle).InsertWorkTime(&workTime); !err1 {
+	if err1, _ := (*Mysql).InsertWorkTime(&workTime); !err1 {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().InsertFail,
 		})
@@ -87,7 +87,7 @@ func DeleteWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 	_, company, err := CheckUserAndCompany(props)
 	if err {return}
 
-	res := (*dbHandle).DeleteWorkTime(1, convWorkTimeId, company.CompanyCode)
+	res := (*Mysql).DeleteWorkTime(1, convWorkTimeId, company.CompanyCode)
 	if !res {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().DeleteFail,
@@ -114,7 +114,7 @@ func UpdateWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 	}
 	workTime.LastModify = now
 
-	if !(*dbHandle).UpdateWorkTime(0, &workTime, company.CompanyCode) {
+	if !(*Mysql).UpdateWorkTime(0, &workTime, company.CompanyCode) {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().UpdateFail,
 		})

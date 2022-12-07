@@ -1,9 +1,10 @@
 package service
 
 import (
-	"backend/handler"
 	"backend/methods"
+	"backend/mysql"
 	"backend/panicHandler"
+	"backend/redis"
 	"backend/table"
 	"net/http"
 	"sync"
@@ -11,7 +12,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var dbHandle = handler.Singleton()
+var Mysql = mysql.Singleton()
+var Redis = redis.Singleton()
 var panicHandle = panichandler.Recover
 
 type statusText struct {
@@ -116,7 +118,7 @@ func StatusText() *statusText {
 }
 
 func BanchIsInCompany(banchId int64, companyId int64) bool {
-	res := (*dbHandle).SelectCompanyBanch(1, companyId)
+	res := (*Mysql).SelectCompanyBanch(1, companyId)
 	for _, v := range *res {
 		if v.Id == banchId {
 			return true

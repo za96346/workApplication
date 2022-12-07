@@ -2,6 +2,7 @@ package handler
 
 import (
 	panichandler "backend/panicHandler"
+	"backend/redis"
 	"fmt"
 	"net/smtp"
 	"os"
@@ -46,7 +47,7 @@ func SendEmail(emailAdd string) bool {
 	em.Subject = "work App 電子信箱驗證"
 	 
 	v := Rand(100000, 999999)
-	(*Singleton()).Redis.InsertEmailCaptcha(emailAdd, v)
+	(*redis.Singleton()).InsertEmailCaptcha(emailAdd, v)
 	
 	em.HTML = []byte(htmlBoard(v))
 	 

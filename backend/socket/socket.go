@@ -3,6 +3,7 @@ package socket
 import (
 	"backend/handler"
 	"backend/methods"
+	"backend/mysql"
 	panichandler "backend/panicHandler"
 	"backend/redis"
 	"backend/response"
@@ -51,12 +52,12 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 檢查公司部門
-	company := (*handler.Singleton()).SelectCompany(2, user.CompanyCode)
+	company := (*mysql.Singleton()).SelectCompany(2, user.CompanyCode)
 	if methods.IsNotExited(company) {
 		log.Print("查無公司")
 		return
 	}
-	companyBanch := (*handler.Singleton()).SelectCompanyBanch(1, (*company)[0].CompanyId)
+	companyBanch := (*mysql.Singleton()).SelectCompanyBanch(1, (*company)[0].CompanyId)
 	if methods.IsNotExited(companyBanch) {
 		log.Print("公司查無部門")
 		return

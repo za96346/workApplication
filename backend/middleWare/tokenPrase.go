@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"backend/redis"
 )
 
 func TokenPrase(props *gin.Context) {
@@ -25,7 +26,7 @@ func TokenPrase(props *gin.Context) {
 	}
 
 	// 判斷 token 是否過期
-	if !handler.Singleton().Redis.IsTokenExited(tokenParams) {
+	if (*redis.Singleton()).IsTokenExited(tokenParams) {
 		(*props).AbortWithStatusJSON(http.StatusNotExtended, gin.H{
 			"message": "token Expire",
 		})
@@ -41,7 +42,7 @@ func TokenPrase(props *gin.Context) {
 		return
 	}
 
-	(*handler.Singleton()).Redis.ResetExpireTime(tokenParams)
+	(*redis.Singleton()).ResetExpireTime(tokenParams)
 	
 	(*props).Set("Account", userInfo["Account"].(string))
 	(*props).Set("UserId", int64(userInfo["UserId"].(float64)))
