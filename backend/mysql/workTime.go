@@ -60,14 +60,24 @@ func(dbObj *DB) SelectWorkTime (selectKey int, value... interface{}) *[]table.Wo
 }
 
 // workTime 的唯一id
-func(dbObj *DB) DeleteWorkTime (deleteKey int, workTimeId interface{}) bool {
+// workTimeId && companyCode, int64 && string
+func(dbObj *DB) DeleteWorkTime (deleteKey int, value... interface{}) bool {
 	defer panichandler.Recover()
 	(*dbObj).workTime.Lock()
 	defer (*dbObj).workTime.Unlock()
-	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).WorkTime.Delete)
+	querys := ""
+	switch deleteKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).WorkTime.Delete
+		break
+	case 1:
+		querys = (*query.MysqlSingleton()).WorkTime.DeleteByCompanyAndId
+		break
+	}
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
-	_, err = stmt.Exec(workTimeId)
+	_, err = stmt.Exec(value...)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
@@ -75,7 +85,7 @@ func(dbObj *DB) DeleteWorkTime (deleteKey int, workTimeId interface{}) bool {
 	return true
 }
 
-// 0 => all, by workTimeId int64
+//  0 => all, by workTimeId int64, companyCode string
 func(dbObj *DB) UpdateWorkTime (updateKey int, data *table.WorkTime, value ...interface{}) bool {
 	defer panichandler.Recover()
 	(*dbObj).workTime.Lock()
@@ -99,7 +109,7 @@ func(dbObj *DB) UpdateWorkTime (updateKey int, data *table.WorkTime, value ...in
 		)
 		break;
 	}
-	
+	(*dbObj).containers.worktime = append((*dbObj).containers.worktime, value...)
 	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)

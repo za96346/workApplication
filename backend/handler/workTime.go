@@ -14,15 +14,19 @@ func(dbObj *DB) InsertWorkTime (data *table.WorkTime) (bool, int64) {
 	return isOk, id
 }
 
-func(dbObj *DB) UpdateWorkTime (updateKey int, data *table.WorkTime) bool {
+//  0 => all, by workTimeId int64, companyCode string
+func(dbObj *DB) UpdateWorkTime (updateKey int, data *table.WorkTime, value... interface{}) bool {
 	defer panichandler.Recover()
-	isOk := (*dbObj).Mysql.UpdateWorkTime(updateKey, data)
+	isOk := (*dbObj).Mysql.UpdateWorkTime(updateKey, data, value...)
 	return isOk
 }
 
-func(dbObj *DB) DeleteWorkTime (deleteKey int, workTimeId int64) bool {
+
+//   workTime 的唯一id
+//   workTimeId && companyCode, int64 && string
+func(dbObj *DB) DeleteWorkTime (deleteKey int, value... interface{}) bool {
 	defer panichandler.Recover()
-	res := (*dbObj).Mysql.DeleteWorkTime(deleteKey, workTimeId)
+	res := (*dbObj).Mysql.DeleteWorkTime(deleteKey, value...)
 	return res
 }
 

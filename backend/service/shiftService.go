@@ -62,7 +62,7 @@ func InsertWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 		return
 	}
 
-	if err1, _ := (*dbHandle).InsertWorkTime(&workTime); err1 {
+	if err1, _ := (*dbHandle).InsertWorkTime(&workTime); !err1 {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().InsertFail,
 		})
@@ -72,16 +72,57 @@ func InsertWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().InsertSuccess,
 	})
-	return
 }
 func DeleteWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 	defer panicHandle()
 	defer (*waitJob).Done()
-	
+	workTimeId := (*props).Query("workTimeId")
+	convWorkTimeId, conErr := methods.AnyToInt64(workTimeId)
+	if conErr != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+	_, company, err := CheckUserAndCompany(props)
+	if err {return}
+
+	res := (*dbHandle).DeleteWorkTime(1, convWorkTimeId, company.CompanyCode)
+	if !res {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().DeleteFail,
+		})
+		return
+	}
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().DeleteSuccess,
+	})
 }
 func UpdateWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 	defer panicHandle()
 	defer (*waitJob).Done()
+	_, company, err := CheckUserAndCompany(props)
+	if err {return}
+	now := time.Now()
+
+	var workTime table.WorkTime
+	if (*props).ShouldBindJSON(&workTime) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+	workTime.LastModify = now
+
+	if !(*dbHandle).UpdateWorkTime(0, &workTime, company.CompanyCode) {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().UpdateFail,
+		})
+		return
+	}
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().UpdateSuccess,
+	})
 }
 
 // paid Vocation

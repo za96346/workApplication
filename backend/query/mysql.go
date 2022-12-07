@@ -27,6 +27,7 @@ type sqlQuery struct {
 	WeekendSetting weekendSetting
 	WorkTime workTime
 	PaidVocation paidVocation
+	Log log
 }
 type queryCommonColumn struct {
 	InsertAll string
@@ -126,13 +127,16 @@ type workTime struct {
 	SelectAllByUserId string
 	SelectAllByTime string
 	SelectAllByPrimaryKey string
+	DeleteByCompanyAndId string
 }
 type paidVocation struct {
 	queryCommonColumn
 	SelectAllByUserId string
 	SelectAllByTime string
 }
-
+type log struct {
+	queryCommonColumn
+}
 func MysqlSingleton() *sqlQuery {
 	queryMux = new(sync.Mutex)
 	if sqlQueryInstance == nil {
@@ -157,6 +161,7 @@ func MysqlSingleton() *sqlQuery {
 			addWeekendSetting()
 			addWorkTime()
 			addPaidVocation()
+			addLog()
 			return sqlQueryInstance
 		}
 	}
@@ -659,14 +664,16 @@ func addWorkTime () {
 	`;
 	sqlQueryInstance.WorkTime.UpdateSingle = `
 		update workTime
+		left join user
+		on user.userId=workTime.userId
 		set
-			year=?,
-			month=?,
-			workHours=?,
-			timeOff=?,
-			usePaidVocation=?,
-			lastModify=?
-		where workTimeId=?;
+			workTime.year=?,
+			workTime.month=?,
+			workTime.workHours=?,
+			workTime.timeOff=?,
+			workTime.usePaidVocation=?,
+			workTime.lastModify=?
+		where workTime.workTimeId=? and user.companyCode=?;
 	`;
 	sqlQueryInstance.WorkTime.SelectAll = `
 		select
@@ -741,7 +748,18 @@ func addWorkTime () {
 		workTime.month=? and
 		workTime.userId=? and
 		user.companyCode=?;
-`;
+	`;
+	sqlQueryInstance.WorkTime.DeleteByCompanyAndId = `
+	delete wt from workTime wt
+		left join user
+		on
+			user.userId=wt.userId
+		where
+			wt.workTimeId=?
+			and
+			user.companyCode=?
+	;`;
+
 }
 func addPaidVocation () {
 	sqlQueryInstance.PaidVocation.InsertAll = `
@@ -767,4 +785,15 @@ func addPaidVocation () {
 	sqlQueryInstance.PaidVocation.Delete = `delete from paidVocation where paidVocationId=?;`
 	sqlQueryInstance.PaidVocation.SelectAllByUserId = `select * from paidVocation where userId=?;`
 	sqlQueryInstance.PaidVocation.SelectAllByTime = `select * from paidVocation where year=?;`
+}
+func addLog () {
+	sqlQueryInstance.Log.InsertAll = `
+		insert into log(
+			msg,
+			createTime,
+			lastModify
+		) values (
+			?,?,?
+		)
+	;`;
 }

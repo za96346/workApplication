@@ -219,3 +219,11 @@ type PaidVocation struct {
 	CreateTime time.Time `json:"CreateTime"`//創建的時間
 	LastModify time.Time `json:"LastModify"`// 上次修改的時間
 }
+
+// log
+type Log struct {
+	LogId int64
+	Msg string
+	CreateTime time.Time `json:"CreateTime"`//創建的時間
+	LastModify time.Time `json:"LastModify"`// 上次修改的時間
+}

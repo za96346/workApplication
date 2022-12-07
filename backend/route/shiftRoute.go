@@ -18,17 +18,17 @@ func Shift (props *gin.RouterGroup) {
 			worker.AssignWorker(32),
 		)
 		props.PUT("/workTime",
-			middleWare.Permession(100, 1),
+			middleWare.Permession(100),
 			middleWare.MyCompanyAndBanch(true),
 			worker.AssignWorker(33),
 		)
 		props.POST("/workTime",
-			middleWare.Permession(100, 1),
+			middleWare.Permession(100),
 			middleWare.MyCompanyAndBanch(true),
 			worker.AssignWorker(34),
 		)
 		props.DELETE("/workTime",
-			middleWare.Permession(100, 1),
+			middleWare.Permession(100),
 			middleWare.MyCompanyAndBanch(true),
 			worker.AssignWorker(35),
 		)
@@ -40,17 +40,17 @@ func Shift (props *gin.RouterGroup) {
 			worker.AssignWorker(36),
 		)
 		props.PUT("/paidVocation",
-			middleWare.Permession(100, 1),
+			middleWare.Permession(100),
 			middleWare.MyCompanyAndBanch(true),
 			worker.AssignWorker(37),
 		)
 		props.POST("/paidVocation",
-			middleWare.Permession(100, 1),
+			middleWare.Permession(100),
 			middleWare.MyCompanyAndBanch(true),
 			worker.AssignWorker(38),
 		)
 		props.DELETE("/paidVocation",
-			middleWare.Permession(100, 1),
+			middleWare.Permession(100),
 			middleWare.MyCompanyAndBanch(true),
 			worker.AssignWorker(39),
 		)
