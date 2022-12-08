@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	"backend/logger"
 	"backend/panicHandler"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -86,14 +87,15 @@ func Singleton() *DB {
 				workTime: new(sync.RWMutex),
 				paidVocation: new(sync.RWMutex),
 			}
+			(*dbInstance).Conn()
 		}
 	}
 	return dbInstance
 }
 
-func(dbObj *DB) Conn(path string) {
+func(dbObj *DB) Conn() {
 	defer panichandler.Recover()
-	err := godotenv.Load(path)
+	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("error loading .env file")
 	}
@@ -120,5 +122,6 @@ func(dbObj *DB) Conn(path string) {
 func(dbObj *DB) checkErr(err error) {
 	if err != nil {
 		fmt.Println(err)
+		logger.Logger().Println(err)
 	}
 }

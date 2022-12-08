@@ -3,12 +3,18 @@ package middleWare
 import (
 	"backend/handler"
 	panichandler "backend/panicHandler"
+	"backend/table"
+
 	// "fmt"
 	// "log"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"backend/redis"
+
+	"github.com/gin-gonic/gin"
+	"github.com/goinggo/mapstructure"
+	"backend/logger"
+
 )
 
 func TokenPrase(props *gin.Context) {
@@ -24,15 +30,13 @@ func TokenPrase(props *gin.Context) {
 		
 		// log.Println("token => ", tokenParams)
 	}
-
 	// 判斷 token 是否過期
-	if (*redis.Singleton()).IsTokenExited(tokenParams) {
+	if !(*redis.Singleton()).IsTokenExited(tokenParams) {
 		(*props).AbortWithStatusJSON(http.StatusNotExtended, gin.H{
 			"message": "token Expire",
 		})
 		return
 	}
-	
 	// 解析 token
 	userInfo, err := handler.ParseToken(tokenParams)
 	if err != nil {
@@ -43,8 +47,31 @@ func TokenPrase(props *gin.Context) {
 	}
 
 	(*redis.Singleton()).ResetExpireTime(tokenParams)
+	user := new(table.UserTable)
+	company := new(table.CompanyTable)
+
+	mapstructure.Decode(userInfo["User"], user)
+	mapstructure.Decode(userInfo["Company"], company)
 	
-	(*props).Set("Account", userInfo["Account"].(string))
-	(*props).Set("UserId", int64(userInfo["UserId"].(float64)))
+	(*props).Set("Account", (*user).Account)
+	(*props).Set("UserId", (*user).UserId)
+	(*props).Set("CompanyCode", (*user).CompanyCode)
+	(*props).Set("UserName", (*user).UserName)
+	(*props).Set("EmployeeNumber", (*user).EmployeeNumber)
+	(*props).Set("OnWorkDay", (*user).OnWorkDay)
+	(*props).Set("Banch", (*user).Banch)
+	(*props).Set("Permession", (*user).Permession)
+	(*props).Set("CompanyId", (*company).CompanyId)
+	(*props).Set("BossId", (*company).BossId)
+
+	// logrus.
+	Log := logger.Logger()
+	Log.Print("\n\n")
+	Log.Println("使用者id: ", user.UserId)
+	Log.Println("使用者姓名: ", user.UserName)
+	Log.Println("使用者權限: ", user.Permession)
+	Log.Println("使用者的公司id: ", company.CompanyId)
+	Log.Println("使用者的公司碼: ", company.CompanyCode)
+	Log.Print("\n\n")
 	(*props).Next()
 }

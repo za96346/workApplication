@@ -83,14 +83,15 @@ func Singleton() *DB {
 			(*redisInstance).table[12] = "quitWorkUser"
 			(*redisInstance).table[13] = "waitCompanyReply"
 			(*redisInstance).table[14] = "weekendSetting"
+			(*redisInstance).Conn()
 		}
 	}
 	return redisInstance
 }
 
-func(dbObj *DB) Conn(path string) { // 實體化redis.Client 並返回實體的位址
+func(dbObj *DB) Conn() { // 實體化redis.Client 並返回實體的位址
 	defer panichandler.Recover()
-	err := godotenv.Load(path)
+	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("error loading .env file")
 	}

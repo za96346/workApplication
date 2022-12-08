@@ -44,6 +44,8 @@ type userQuery struct {
 	SelectAllByCompanyCode string
 	SelectAllByBanchId string
 	SelectAllByUserIdAndCompanyCode string
+	SelectAllNeedJoin string
+	UpdateJoin string
 }
 type userPreferenceQuery struct {
 	queryCommonColumn
@@ -202,6 +204,28 @@ func addUserQuery() {
 			partTimeSalary=?
 		where userId=?;
 	`;
+	sqlQueryInstance.User.SelectAllNeedJoin = `
+		select
+			u.userId,
+			u.companyCode,
+			u.userName,
+			u.employeeNumber,
+			u.onWorkDay,
+			u.banch,
+			u.permession,
+			IF(q.userId is null = 1, 'on', 'off') AS workState 
+		from user u
+		left join quitWorkUser q
+		on u.userId=q.userId
+		and u.companyCode=q.companyCode
+		where u.companyCode=?;
+	`
+	sqlQueryInstance.User.UpdateJoin = `
+		update user
+		left join 
+		on user.userId=workTime.userId
+		set
+	`
 	sqlQueryInstance.User.SelectAllByUserIdAndCompanyCode = `
 		select * from user where companyCode=? and userId=?;
 	`

@@ -454,8 +454,8 @@ func InsertCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 
-	userId, status := checkMineUserId(props)
-	if !status {return}
+	me, _, err := CheckUserAndCompany(props)
+	if err {return}
 
 	company := table.CompanyTable{}
 	if (*props).ShouldBindJSON(&company) != nil {
@@ -476,7 +476,7 @@ func InsertCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 	// 更改company 的欄位
 
 	now := time.Now()
-	company.BossId = userId
+	company.BossId = me.UserId
 	company.CreateTime = now
 	company.LastModify = now
 	
@@ -489,7 +489,7 @@ func InsertCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 
 	// 更改負責人的資料
 
-	user := (*Mysql).SelectUser(1, userId)
+	user := (*Mysql).SelectUser(1, me.UserId)
 	if methods.IsNotExited(user) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,

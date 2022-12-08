@@ -50,18 +50,17 @@ func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		"message": StatusText().FindSuccess,
 		"data": data,
 	})
-	
 }
 
 func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 
-	userId, status := checkMineUserId(props)
-	if !status {return}
+	user, _, err := CheckUserAndCompany(props)
+	if err {return}
 
 	// 尋找資料
-	res := (*Mysql).SelectUser(1, userId)
+	res := (*Mysql).SelectUser(1, user.UserId)
 	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,
@@ -84,8 +83,8 @@ func UpdateMine (props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 
-	mineId, status := checkMineUserId(props)
-	if !status {return}
+	me, _, err := CheckUserAndCompany(props)
+	if err {return}
 
 	user := table.UserTable{}
 	if (*props).ShouldBindJSON(&user) != nil {
@@ -95,7 +94,7 @@ func UpdateMine (props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
-	mineUserData := (*Mysql).SelectUser(1, mineId)
+	mineUserData := (*Mysql).SelectUser(1, me.UserId)
 	if methods.IsNotExited(mineUserData) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,
@@ -121,59 +120,15 @@ func UpdateMine (props *gin.Context, waitJob *sync.WaitGroup) {
 func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
-	companyCode, existed := (*props).Get("CompanyCode")
-	if !existed {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().GetCompanyCodeFailed,
-		})
-		return
-	}
 
-	user, _, err := CheckUserAndCompany(props)
+	_, company, err := CheckUserAndCompany(props)
 	if err {return}
-
-	// 拿在職的員工資料
-	userList := (*Mysql).SelectUser(3, companyCode.(string))
-	data := []response.User{}
-	for _, v := range *userList {
-		if user.Permession == 1 && v.Banch != user.Banch{
-			continue
-		}
-		data = append(data, response.User{
-			UserId: v.UserId,
-			CompanyCode: v.CompanyCode,
-			OnWorkDay: v.OnWorkDay,
-			UserName: v.UserName,
-			EmployeeNumber: v.EmployeeNumber,
-			Banch: v.Banch,
-			Permession: v.Permession,
-			WorkState: "on",
-		})
-	}
-
-
-	// 拿離職的員工資料
-	quitWorkUser := (*Mysql).SelectQuitWorkUser(3, companyCode.(string))
-	for _, v := range *quitWorkUser {
-		if user.Permession == 1 && v.Banch != user.Banch{
-			continue
-		}
-		data = append(data, response.User{
-			UserId: v.UserId,
-			CompanyCode: v.CompanyCode,
-			OnWorkDay: v.OnWorkDay,
-			UserName: v.UserName,
-			EmployeeNumber: v.EmployeeNumber,
-			Banch: v.Banch,
-			Permession: v.Permession,
-			WorkState: "off", // 這個要去離職表找
-		})
-	}
+	data := (*Mysql).SelectAllUser(0, company.CompanyCode)
 
 
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().FindSuccess,
-		"data": data,
+		"data": (*data),
 	})
 }
 
@@ -300,11 +255,11 @@ func ChangePassword (props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
-	userId, err := checkMineUserId(props)
-	if !err {return}
+	user, _, err := CheckUserAndCompany(props)
+	if err {return}
 
 	// get user
-	res := (*Mysql).SelectUser(1, userId)
+	res := (*Mysql).SelectUser(1, user.UserId)
 	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,

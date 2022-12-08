@@ -47,6 +47,7 @@ require (
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.1 // indirect
 	github.com/goccy/go-json v0.9.11 // indirect
+	github.com/goinggo/mapstructure v0.0.0-20140717182941-194205d9b4a9
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/gorilla/websocket v1.5.0
 	github.com/json-iterator/go v1.1.12 // indirect
@@ -57,6 +58,7 @@ require (
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.20.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
+	github.com/sirupsen/logrus v1.9.0
 	github.com/stretchr/testify v1.8.0
 	github.com/swaggo/files v0.0.0-20220728132757-551d4a08d97a
 	github.com/ugorji/go/codec v1.2.7 // indirect

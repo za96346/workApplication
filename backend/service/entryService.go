@@ -31,7 +31,6 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
-
 	// 檢查帳號是否存在
 	res := (*Mysql).SelectUser(2, (*reqBody).Account)
 	if methods.IsNotExited(res) {
@@ -40,7 +39,6 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
-
 	// 檢查帳號密碼是否正確
 	if (*res)[0].Account != (reqBody).Account || (*res)[0].Password != (reqBody).Password {
 		//登入失敗
@@ -50,11 +48,20 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
+	var company []table.CompanyTable
+	findCompany := (*Mysql).SelectCompany(2, (*res)[0].CompanyCode)
+	if methods.IsNotExited(findCompany) {
+		company = append(company, *new(table.CompanyTable))
+	} else {
+		company = (*findCompany)
+	}
+
 	//登入成功
 	tk := handler.Token {
-		UserId: (*res)[0].UserId,
-		Account: (*res)[0].Account,
+		User: (*res)[0],
+		Company: company[0],
 	}
+
 	(*Redis).InsertToken(tk.GetLoginToken())
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().LoginSuccess,
@@ -105,7 +112,6 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 			return
 		}
 	}
-
 	// 檢查驗證碼是否正確
 	rightCaptcha := (*Redis).SelectEmailCaptcha((*registeForm).Account)
 	if (*registeForm).Captcha != rightCaptcha || rightCaptcha == -1 {
@@ -114,7 +120,6 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 		})
 		return
 	}
-
 	// 密碼是否相等
 	if (*registeForm).Password != (*registeForm).PasswordConfirm {
 		(*props).JSON(http.StatusUnprocessableEntity, gin.H{
@@ -122,16 +127,12 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 		})
 		return
 	}
-
 	if len((*registeForm).Password) < 8 {
 		(*props).JSON(http.StatusUnprocessableEntity, gin.H{
 			"message": StatusText().PasswordNotSafe,
 		})
 		return
 	}
-	
-
-
 	// 新增使用者
 
 	user := &table.UserTable{
@@ -157,9 +158,9 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 		return
 	}
 
+
 	// 註冊成功 把captcha 刪掉
 	(*Redis).DeleteCaptcha((*registeForm).Account)
-
 	// 註冊成功
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().RegisterSuccess,

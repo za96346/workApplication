@@ -6,7 +6,6 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
@@ -19,12 +18,14 @@ import (
 	// "github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"backend/logger"
+
 	// . "./middleWare/permessionMiddleWare"
 	"backend/middleWare"
 	"backend/route"
+	"backend/socket"
 	"backend/worker"
 	"path/filepath"
-	"backend/socket"
 )
 func init() {
 	runtime.SetMutexProfileFraction(-1)
@@ -40,13 +41,13 @@ func init() {
 
 func main() {
 	SetRouter()
+	go socket.Conn()
 }
 
 func SetRouter() *gin.Engine {
 	port := os.Getenv("PORT")
-	loggers()
 	apiServer := gin.Default()
-	apiServer.Use(middleWare.RateLimit(time.Second, 100, 100), middleWare.CORS)
+	apiServer.Use(middleWare.RateLimit(time.Second, 100, 100), middleWare.CORS, logger.LoggerToFile())
 
 	// route group
 	userApi := apiServer.Group("/workApp/user")
@@ -58,14 +59,8 @@ func SetRouter() *gin.Engine {
 	route.Company(companyApi)
 	route.Shift(shiftApi)
 
-	go socket.Conn()
-
 	// start
 	apiServer.Run(":" + port)
 	return apiServer
 }
 
-func loggers() {
-	file, _ := os.Create("gin.log")                     // create log file
-    gin.DefaultWriter = io.MultiWriter(file, os.Stdout)
-}

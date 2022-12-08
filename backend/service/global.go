@@ -1,12 +1,10 @@
 package service
 
 import (
-	"backend/methods"
 	"backend/mysql"
 	"backend/panicHandler"
 	"backend/redis"
 	"backend/table"
-	"net/http"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -128,57 +126,66 @@ func BanchIsInCompany(banchId int64, companyId int64) bool {
 }
 
 func CheckUserAndCompany(props *gin.Context) (table.UserTable, table.CompanyTable, bool) {
-	// 檢查是否是 company table type
-	myCompany, exited := (*props).Get("MyCompany")
-	if !exited {
-		(*props).JSON(http.StatusNotFound, gin.H{
-			"message": StatusText().IsNotHaveCompany,
-		})
-		return table.UserTable{}, table.CompanyTable{}, true
+
+	Account, _ := (*props).Get("Account")
+	UserId, _ := (*props).Get("UserId")
+	CompanyCode, _ := (*props).Get("CompanyCode")
+	UserName, _ := (*props).Get("UserName")
+	// EmployeeNumber, _ := (*props).Get("EmployeeNumber")
+	// OnWorkDay, _ := (*props).Get("OnWorkDay")
+	Banch, _ := (*props).Get("Banch")
+	Permession, _ := (*props).Get("Permession")
+	CompanyId, _ := (*props).Get("CompanyId")
+	BossId, _ := (*props).Get("BossId")
+
+
+	convUserId, ok := UserId.(int64)
+	if !ok {
+		convUserId = int64(-10)
 	}
-	company, a := methods.Assertion[table.CompanyTable](myCompany)
-	if !a {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().AssertionFail,
-		})
-		return table.UserTable{}, table.CompanyTable{}, true
+	convAccount, ok := Account.(string)
+	if !ok {
+		convAccount = ""
 	}
-		
-	// 檢查是否是 user table type
-	myUserData, exited := (*props).Get("MyUserData")
-	if !exited {
-		(*props).JSON(http.StatusNotFound, gin.H{
-			"message": StatusText().userDataNotFound,
-		})
-		return table.UserTable{}, table.CompanyTable{}, true
+	convCompanyCode, ok := CompanyCode.(string)
+	if !ok {
+		convCompanyCode = ""
 	}
-	user, a := methods.Assertion[table.UserTable](myUserData)
-	if !a {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().AssertionFail,
-		})
-		return table.UserTable{}, table.CompanyTable{}, true
+	convUserName, ok := UserName.(string)
+	if !ok {
+		convUserName = ""
 	}
+	convBanch, ok := Banch.(int64)
+	if !ok {
+		convBanch = int64(-20)
+	}
+	convPremession, ok := Permession.(int)
+	if !ok {
+		convPremession = 2
+	}
+	convCompanyId, ok := CompanyId.(int64)
+	if !ok {
+		convCompanyId = int64(-20)
+	}
+	convBossId, ok := BossId.(int64)
+	if !ok {
+		convBossId = int64(-100)
+	}
+
+
+	user := table.UserTable{
+		UserId: convUserId,
+		Account: convAccount,
+		CompanyCode: convCompanyCode,
+		UserName: convUserName,
+		Banch: convBanch,
+		Permession: convPremession,
+	}
+	company := table.CompanyTable {
+		CompanyId: convCompanyId,
+		BossId: convBossId,
+		CompanyCode: convCompanyCode,
+	}
+	
 	return user, company, false
-}
-
-func checkMineUserId (props *gin.Context) (int64, bool) {
-	userId, existed := (*props).Get("UserId")
-
-	// user id 尋找
-	if !existed {
-		(*props).JSON(http.StatusInternalServerError, gin.H{
-			"message": StatusText().UserIdNotFound,
-		})
-		return -1, false
-	}
-
-	converUserId, err := methods.AnyToInt64(userId)
-	if err != nil {
-		(*props).JSON(http.StatusNotFound, gin.H{
-			"message": "轉換格式失敗",
-		})
-		return -1, false
-	}
-	return converUserId, true
 }

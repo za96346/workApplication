@@ -1,7 +1,6 @@
 package middleWare
 
 import (
-	"backend/mysql"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,28 +8,12 @@ import (
 
 func Permession(allowPermession ...int) gin.HandlerFunc {
 	return func(props *gin.Context) {
-		userId, existed := (*props).Get("UserId")
-		// user id 尋找
-		if !existed {
-			(*props).AbortWithStatusJSON(http.StatusVariantAlsoNegotiates, gin.H{
-				"message": "找不到使用者2",
-			})
-			return
-		}
-
-		// 尋找user
-		user := (*mysql.Singleton()).SelectUser(1, userId.(int64))
-		if len(*user) == 0 {
-			(*props).AbortWithStatusJSON(http.StatusVariantAlsoNegotiates, gin.H{
-				"message": "找不到使用者3",
-			})
-			return
-		}
+		permession, _ := (*props).Get("Permession")
 
 		// 判斷權限
 		count := 0
 		for _, v := range allowPermession {
-			if (*user)[0].Permession != v {
+			if permession != v {
 				count += 1
 			}
 		}
@@ -40,7 +23,6 @@ func Permession(allowPermession ...int) gin.HandlerFunc {
 			})
 			return
 		}
-		(*props).Set("CompanyCode", (*user)[0].CompanyCode)
 		(*props).Next()
 	}
 }
