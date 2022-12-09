@@ -1,14 +1,11 @@
 package worker
 
 import (
-	"fmt"
 	"sync"
-
 )
 
 var workerInstance *WorkerPool
 var workerMux = new(sync.Mutex)
-
 
 type WorkerPool struct {
 	JobChan chan func()
@@ -37,10 +34,11 @@ func WorkerSingleton() *WorkerPool {
 func(t *WorkerPool) worker(id int) {
 			
     for job := range (*t).JobChan {
-        
-        fmt.Println("------------------------------------worker", id, "started  job------------------------------------")
+        Log.Println()
+        // Log.Println("------------------------------------worker", id, "started  job------------------------------------")
         job()//do task
-        fmt.Println("------------------------------------worker", id, "finished job------------------------------------")
+        // Log.Println("------------------------------------worker", id, "finished job------------------------------------")
+        Log.Println()
     }
     
     

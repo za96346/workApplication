@@ -48,7 +48,7 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
-	var company []table.CompanyTable
+	company := *(new([]table.CompanyTable))
 	findCompany := (*Mysql).SelectCompany(2, (*res)[0].CompanyCode)
 	if methods.IsNotExited(findCompany) {
 		company = append(company, *new(table.CompanyTable))

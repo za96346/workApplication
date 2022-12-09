@@ -7,12 +7,14 @@ import (
 	"time"
 
 	// "strconv"
+
 	"backend/methods"
 	"backend/response"
 	"backend/table"
 
 	"github.com/gin-gonic/gin"
 )
+
 func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
@@ -136,30 +138,11 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 	now := time.Now()
-
 	// 檢查格式
 	request := response.User{}
 	if (*props).ShouldBindJSON(&request) != nil {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().FormatError,
-		})
-		return
-	}
-
-	// 抓曲目標user
-	targetUser, existed := (*props).Get("targetUser")
-	if !existed {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().userDataNotFound,
-		})
-		return
-	}
-
-	// 斷言
-	convertTargetUser, a := methods.Assertion[table.UserTable](targetUser)
-	if !a {
-		(*props).JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().AssertionFail,
 		})
 		return
 	}
@@ -176,11 +159,11 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	myUserData, myCompany, err := CheckUserAndCompany(props)
 	if err {return}
 
-	if convertTargetUser.UserId == myCompany.BossId {
+	if request.UserId == myCompany.BossId {
 		permession = 100
 		companyCode = myCompany.CompanyCode
 		banch = -1
-		if myUserData.UserId != convertTargetUser.UserId {
+		if myUserData.UserId != request.UserId {
 			(*props).JSON(http.StatusForbidden, gin.H{
 				"message": StatusText().CanNotUpdateBoss,
 			})
@@ -188,49 +171,25 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		}
 	} else if request.WorkState == "off" {
 		// 要去判斷 工作狀態並把它丟到quit work user table
-		quitWorkUser := table.QuitWorkUser{
-			CompanyCode: companyCode,
-			EmployeeNumber: request.EmployeeNumber,
-			Account: convertTargetUser.Account,
-			UserName: convertTargetUser.UserName,
-			OnWorkDay: request.OnWorkDay,
-			Banch: banch,
-			Permession: permession,
-			CreateTime: convertTargetUser.CreateTime,
-			LastModify: now,
-			MonthSalary: 0,
-			PartTimeSalary: 0,
-			UserId: convertTargetUser.UserId,
-		}
-		if a, _ := (*Mysql).InsertQuitWorkUser(&quitWorkUser); !a {
-			(*props).JSON(http.StatusForbidden, gin.H{
-				"message": StatusText().QuitWorkUserInsertFail,
-			})
-			return
-		}
+		(*Mysql).InsertQuitWorkUserBySelectUser(request.UserId, myCompany.CompanyCode)
 		companyCode = ""
 	} else if request.WorkState == "on" {
-		res := (*Mysql).SelectQuitWorkUser(4, companyCode, convertTargetUser.UserId)
-		if !methods.IsNotExited(res) {
-			(*Mysql).DeleteQuitWorkUser(0, (*res)[0].QuitId)
-		}
+		(*Mysql).DeleteQuitWorkUser(1, request.UserId, myCompany.CompanyCode, myCompany.CompanyCode)
 	}
 
 	user := table.UserTable{
 		CompanyCode: companyCode,
 		EmployeeNumber: request.EmployeeNumber,
-		Password: convertTargetUser.Password,
-		UserName: convertTargetUser.UserName,
 		OnWorkDay: request.OnWorkDay,
 		Banch: banch,
 		Permession: permession,
 		LastModify: now,
 		MonthSalary: 0,
 		PartTimeSalary: 0,
-		UserId: convertTargetUser.UserId,
+		UserId: request.UserId,
 	}
 
-	res := (*Mysql).UpdateUser(0, &user)
+	res := (*Mysql).UpdateUser(1, &user, myCompany.CompanyCode)
 	if !res {
 		(*props).JSON(http.StatusForbidden, gin.H{
 			"message": StatusText().UpdateFail,

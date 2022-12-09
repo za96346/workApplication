@@ -116,7 +116,7 @@ func(dbObj *DB) Conn() {
 		(*dbObj).MysqlDB.SetMaxOpenConns(100000)
 		(*dbObj).MysqlDB.SetConnMaxLifetime(time.Second * 100)
 	}
-	DataBaseInit();
+	// DataBaseInit();
 }
 
 func(dbObj *DB) checkErr(err error) {

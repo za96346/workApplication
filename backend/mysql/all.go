@@ -42,3 +42,23 @@ func(dbObj *DB) SelectAllUser(selectKey int, value... interface{}) *[]response.U
 	}
 	return &carry
 }
+
+
+// .  userId companyCode int64 string
+func(dbObj *DB) InsertQuitWorkUserBySelectUser(userId int64, companyCode string) (bool, int64) {
+	///
+		defer panichandler.Recover()
+		(*dbObj).quitWorkUserMux.Lock()
+		defer (*dbObj).quitWorkUserMux.Unlock()
+		stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).QuitWorkUser.InsertBySelectUser)
+		defer stmt.Close()
+		(*dbObj).checkErr(err)
+		res, err := stmt.Exec(userId, companyCode)
+		(*dbObj).checkErr(err)
+		id, _:= res.LastInsertId()
+		if err != nil {
+			return false, id
+		}
+		return true, id
+
+}

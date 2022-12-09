@@ -1,17 +1,22 @@
 package worker
 
 import (
+	"backend/logger"
 	"backend/panicHandler"
 	"backend/service"
+	"bytes"
+	"encoding/json"
+	"io/ioutil"
 	"sync"
 
 	"github.com/gin-gonic/gin"
 )
-
-
+var Log = logger.Logger()
+var bd []byte
 func AssignWorker(routerMethod int) func(props *gin.Context) {
 	defer panichandler.Recover()
 	routeFunc := service.FindSingleUser
+
 	switch routerMethod {
 	case 0:
 		//get method of fetch single user
@@ -148,6 +153,22 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		break;
 	}
 	return func (props *gin.Context)  {
+
+		for i, v := range (*props).Request.URL.Query() {
+			Log.Println("參數 ", i, ": ", v)
+		}
+
+
+		bd, _ = ioutil.ReadAll(props.Request.Body)
+		body := make(map[string]interface{})
+		json.Unmarshal(bd, &body)
+		for i, v := range body {
+			Log.Println("body ", i, ": ", v)
+		}
+		props.Request.Body = ioutil.NopCloser(bytes.NewBuffer(bd))
+
+		Log.Println("IP: ", (*props).Request.Header.Get("X-Forwarded-For"))
+		// Log.Printf("")
 		waitJob := new(sync.WaitGroup)
 		waitJob.Add(1)
 		(*props).Writer.Header().Set("Transfer-Encoding", "chunked")

@@ -45,7 +45,7 @@ type userQuery struct {
 	SelectAllByBanchId string
 	SelectAllByUserIdAndCompanyCode string
 	SelectAllNeedJoin string
-	UpdateJoin string
+	UpdateCompanyUser string
 }
 type userPreferenceQuery struct {
 	queryCommonColumn
@@ -110,6 +110,8 @@ type quitWorkUser struct {
 	SelectAllByCompanyCode string
 	SelectSingleByQuitId string
 	SelectSingleByCompanyCodeAndUserId string
+	InsertBySelectUser string
+	DeleteByJoinUser string
 }
 type waitCompanyReply struct {
 	queryCommonColumn
@@ -220,11 +222,17 @@ func addUserQuery() {
 		and u.companyCode=q.companyCode
 		where u.companyCode=?;
 	`
-	sqlQueryInstance.User.UpdateJoin = `
-		update user
-		left join 
-		on user.userId=workTime.userId
-		set
+	sqlQueryInstance.User.UpdateCompanyUser = `
+	update user
+	set
+		employeeNumber=?,
+		companyCode=?,
+		userName=?,
+		onWorkDay=?,
+		banch=?,
+		permession=?,
+		lastModify=?,
+	where userId=? and companyCode=?;
 	`
 	sqlQueryInstance.User.SelectAllByUserIdAndCompanyCode = `
 		select * from user where companyCode=? and userId=?;
@@ -582,6 +590,37 @@ func addQuitWorkUserQuery() {
 			?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 		);
 	`;
+	sqlQueryInstance.QuitWorkUser.InsertBySelectUser = `
+			insert into quitWorkUser(
+				userId,
+				companyCode,
+				userName,
+				employeeNumber,
+				account,
+				onWorkDay,
+				banch,
+				permession,
+				monthSalary,
+				partTimeSalary,
+				createTime,
+				lastModify
+			)
+			select
+				userId,
+				companyCode,
+				userName,
+				employeeNumber,
+				account,
+				onWorkDay,
+				banch,
+				permession,
+				monthSalary,
+				partTimeSalary,
+				createTime,
+				lastModify
+			from user
+			where userId=? and companyCode=?;
+	`
 	sqlQueryInstance.QuitWorkUser.UpdateSingle = `
 		update quitWorkUser
 		set
@@ -598,6 +637,17 @@ func addQuitWorkUserQuery() {
 			createTime=?,
 			lastModify=?
 		where quitId=?;
+	`
+	sqlQueryInstance.QuitWorkUser.DeleteByJoinUser = `
+		delete qw from quitWorkUser qw
+		left join user u
+		on u.userId=qw.userId
+		where
+			qw.userId=?
+		and
+			qw.companyCode=?
+		and
+			u.companyCode=?;
 	`
 	sqlQueryInstance.QuitWorkUser.SelectAll = `select * from quitWorkUser;`
 	sqlQueryInstance.QuitWorkUser.SelectAllByCompanyCode = `select * from quitWorkUser where companyCode=?;`

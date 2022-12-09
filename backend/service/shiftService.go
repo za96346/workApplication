@@ -22,7 +22,7 @@ func FetchWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 	month, err2 := strconv.Atoi((*props).Query("month"))
 	userId, err3 := methods.AnyToInt64((*props).Query("userId"))
 
-	var res *[]table.WorkTime
+	res :=  new([]table.WorkTime)
 	if err3 != nil {
 		res = (*Mysql).SelectWorkTime(2, year, month, company.CompanyCode)
 	} else if err2 != nil && err1 != nil {
@@ -43,7 +43,7 @@ func InsertWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 	if err {return}
 	now := time.Now()
 
-	var workTime table.WorkTime
+	workTime :=  new(table.WorkTime)
 	if (*props).ShouldBindJSON(&workTime) != nil {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().FormatError,
@@ -51,10 +51,10 @@ func InsertWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 		return
 	}
 
-	workTime.CreateTime = now
-	workTime.LastModify = now
+	(*workTime).CreateTime = now
+	(*workTime).LastModify = now
 
-	res := (*Mysql).SelectUser(5, company.CompanyCode, workTime.UserId)
+	res := (*Mysql).SelectUser(5, company.CompanyCode, (*workTime).UserId)
 	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().IsNotHaveCompany,
@@ -62,7 +62,7 @@ func InsertWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 		return
 	}
 
-	if err1, _ := (*Mysql).InsertWorkTime(&workTime); !err1 {
+	if err1, _ := (*Mysql).InsertWorkTime(workTime); !err1 {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().InsertFail,
 		})
@@ -105,16 +105,16 @@ func UpdateWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 	if err {return}
 	now := time.Now()
 
-	var workTime table.WorkTime
+	workTime := new(table.WorkTime)
 	if (*props).ShouldBindJSON(&workTime) != nil {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().FormatError,
 		})
 		return
 	}
-	workTime.LastModify = now
+	(*workTime).LastModify = now
 
-	if !(*Mysql).UpdateWorkTime(0, &workTime, company.CompanyCode) {
+	if !(*Mysql).UpdateWorkTime(0, workTime, company.CompanyCode) {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().UpdateFail,
 		})

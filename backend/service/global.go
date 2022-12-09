@@ -8,12 +8,13 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"backend/logger"
 )
 
 var Mysql = mysql.Singleton()
 var Redis = redis.Singleton()
 var panicHandle = panichandler.Recover
-
+var Log = logger.Logger()
 type statusText struct {
 	LoginFail string
 	NoUser string

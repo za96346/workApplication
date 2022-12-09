@@ -16,7 +16,7 @@ import (
 // 0 => all, value => nil
 //  1 => quitId, value => int64
 //   2 => userId, value => int64
-//   3 => companyCode, value => string 
+//   3 => companyCode, value => string
 //   4=> companyCode && userId ,  value string && int64
 func(dbObj *DB) SelectQuitWorkUser(selectKey int, value... interface{}) *[]table.QuitWorkUser {
 	defer panichandler.Recover()
@@ -70,15 +70,26 @@ func(dbObj *DB) SelectQuitWorkUser(selectKey int, value... interface{}) *[]table
 	return &carry
 }
 
-// quit work suer 的唯一id
-func(dbObj *DB) DeleteQuitWorkUser(deleteKey int, quitId interface{}) bool {
+// 0, quit work suer 的唯一id
+// .  1 => userId int64, companyCode string, companyCode string
+func(dbObj *DB) DeleteQuitWorkUser(deleteKey int, value... interface{}) bool {
 	defer panichandler.Recover()
 	(*dbObj).quitWorkUserMux.Lock()
 	defer (*dbObj).quitWorkUserMux.Unlock()
-	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).QuitWorkUser.Delete)
+	querys := ""
+	switch deleteKey {
+	case 0:
+			querys = (*query.MysqlSingleton()).QuitWorkUser.Delete
+			break
+	case 1:
+		querys = (*query.MysqlSingleton()).QuitWorkUser.DeleteByJoinUser
+		break
+
+	}
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
-	_, err = stmt.Exec(quitId)
+	_, err = stmt.Exec(value...)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
