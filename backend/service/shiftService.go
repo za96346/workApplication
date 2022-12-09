@@ -113,6 +113,7 @@ func UpdateWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 		return
 	}
 	(*workTime).LastModify = now
+	Log.Println("hi")
 
 	if !(*Mysql).UpdateWorkTime(0, workTime, company.CompanyCode) {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{

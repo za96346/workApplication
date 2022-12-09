@@ -141,7 +141,6 @@ func(dbObj *DB) UpdateUser(updateKey int, data *table.UserTable, value... interf
 			(*dbObj).containers.user,
 			(*data).EmployeeNumber,
 			(*data).CompanyCode,
-			(*data).UserName,
 			(*data).OnWorkDay,
 			(*data).Banch,
 			(*data).Permession,

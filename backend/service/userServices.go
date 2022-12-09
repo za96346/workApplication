@@ -147,9 +147,7 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
-	permession := request.Permession
-	companyCode := request.CompanyCode
-	banch := request.Banch
+
 
 	// 當要被更改的人是公司負責人時
 	//就要去判斷是不是自己更改自己
@@ -158,6 +156,10 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	// 以及把公司碼射為自己的公司
 	myUserData, myCompany, err := CheckUserAndCompany(props)
 	if err {return}
+
+	permession := request.Permession
+	companyCode := myCompany.CompanyCode
+	banch := request.Banch
 
 	if request.UserId == myCompany.BossId {
 		permession = 100
@@ -174,8 +176,10 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		(*Mysql).InsertQuitWorkUserBySelectUser(request.UserId, myCompany.CompanyCode)
 		companyCode = ""
 	} else if request.WorkState == "on" {
-		(*Mysql).DeleteQuitWorkUser(1, request.UserId, myCompany.CompanyCode, myCompany.CompanyCode)
+		(*Mysql).DeleteQuitWorkUser(1, request.UserId, myCompany.CompanyCode)
+		companyCode = myCompany.CompanyCode
 	}
+	Log.Println("companyCode => ", companyCode)
 
 	user := table.UserTable{
 		CompanyCode: companyCode,

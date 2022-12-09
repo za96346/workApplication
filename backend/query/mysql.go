@@ -227,12 +227,16 @@ func addUserQuery() {
 	set
 		employeeNumber=?,
 		companyCode=?,
-		userName=?,
 		onWorkDay=?,
 		banch=?,
 		permession=?,
-		lastModify=?,
-	where userId=? and companyCode=?;
+		lastModify=?
+	where userId=?
+	and(
+		companyCode=?
+		or companyCode is null
+		or companyCode=''
+	);
 	`
 	sqlQueryInstance.User.SelectAllByUserIdAndCompanyCode = `
 		select * from user where companyCode=? and userId=?;
@@ -647,7 +651,7 @@ func addQuitWorkUserQuery() {
 		and
 			qw.companyCode=?
 		and
-			u.companyCode=?;
+			(u.companyCode is null or u.companyCode='');
 	`
 	sqlQueryInstance.QuitWorkUser.SelectAll = `select * from quitWorkUser;`
 	sqlQueryInstance.QuitWorkUser.SelectAllByCompanyCode = `select * from quitWorkUser where companyCode=?;`
