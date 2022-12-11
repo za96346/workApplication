@@ -40,8 +40,8 @@ func init() {
 }
 
 func main() {
-	SetRouter()
 	go socket.Conn()
+	SetRouter()
 }
 
 func SetRouter() *gin.Engine {
