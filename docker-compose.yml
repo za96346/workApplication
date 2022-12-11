@@ -30,7 +30,7 @@ services:
     command: >
       bash -c "./app"
     volumes:
-      - ./volume/logs:/logs
+      - ./volume/logs:/backend/logs
     depends_on:
       - work_app_redis
       - work_app_mysql
