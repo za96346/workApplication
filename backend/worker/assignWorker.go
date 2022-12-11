@@ -153,7 +153,9 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		break;
 	}
 	return func (props *gin.Context)  {
-
+		for i := 0; i<10; i++ {
+			Log.Println("")
+		}
 		for i, v := range (*props).Request.URL.Query() {
 			Log.Println("參數 ", i, ": ", v)
 		}

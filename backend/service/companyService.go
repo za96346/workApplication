@@ -17,7 +17,10 @@ func FetchBanchAll(props *gin.Context, waitJob *sync.WaitGroup) {
 	if err {return}
 
 	res := (*Mysql).SelectCompanyBanch(1, company.CompanyId)
-	(*props).JSON(http.StatusOK, (*res))
+	(*props).JSON(http.StatusOK, gin.H {
+		"data": (*res),
+		"message": StatusText().FindSuccess,
+	})
 	
 }
 
