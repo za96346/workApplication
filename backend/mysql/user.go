@@ -109,6 +109,7 @@ func(dbObj *DB) DeleteUser(deleteKey int, userId interface{}) bool {
 
 // 0 => all
 //  1 => CompanyCode, value string
+// . 2 => boss
 func(dbObj *DB) UpdateUser(updateKey int, data *table.UserTable, value... interface{}) bool {
 	defer panichandler.Recover()
 	(*dbObj).userMux.Lock()
@@ -142,6 +143,17 @@ func(dbObj *DB) UpdateUser(updateKey int, data *table.UserTable, value... interf
 			(*data).EmployeeNumber,
 			(*data).CompanyCode,
 			(*data).OnWorkDay,
+			(*data).Banch,
+			(*data).Permession,
+			(*data).LastModify,
+			(*data).UserId,
+		)
+		break
+	case 2:
+		querys = (*query.MysqlSingleton()).User.UpdateBoss
+		(*dbObj).containers.user = append(
+			(*dbObj).containers.user,
+			(*data).CompanyCode,
 			(*data).Banch,
 			(*data).Permession,
 			(*data).LastModify,

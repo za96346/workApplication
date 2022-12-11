@@ -16,6 +16,7 @@ import (
 // 0 => 全部, value => nil
 //	1 => 公司Id, value => int64
 // 	2 => id (banchId), value => int64
+// . 3 => id and companyId, value => int64, int64
 func(dbObj *DB) SelectCompanyBanch(selectKey int, value... interface{}) *[]table.CompanyBanchTable {
 	defer panichandler.Recover()
 	querys := ""
@@ -31,6 +32,9 @@ func(dbObj *DB) SelectCompanyBanch(selectKey int, value... interface{}) *[]table
 		// value need int
 		querys = (*query.MysqlSingleton()).CompanyBanch.SelectSingleById
 		break;
+	case 3:
+		querys = (*query.MysqlSingleton()).CompanyBanch.SelectByCompanyCodeAndBanchID
+		break
 	default:
 		querys = (*query.MysqlSingleton()).CompanyBanch.SelectAll
 		break
@@ -58,15 +62,25 @@ func(dbObj *DB) SelectCompanyBanch(selectKey int, value... interface{}) *[]table
 	return &carry 
 }
 
-// 公司部門的id
-func(dbObj *DB) DeleteCompanyBanch(deleteKey int, id interface{}) bool {
+// 0,  公司部門的id int64
+// . 1, 公司部門的id int64 and companyCode string
+func(dbObj *DB) DeleteCompanyBanch(deleteKey int, value... interface{}) bool {
 	defer panichandler.Recover()
 	(*dbObj).companyBanchMux.Lock()
 	defer (*dbObj).companyBanchMux.Unlock()
-	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).CompanyBanch.Delete)
+	querys := ""
+	switch deleteKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).CompanyBanch.Delete
+		break
+	case 1:
+		querys = (*query.MysqlSingleton()).CompanyBanch.DeleteByCompanyCode
+		break
+	}
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)
-	_, err = stmt.Exec(id)
+	_, err = stmt.Exec(value...)
 	if err != nil {
 		(*dbObj).checkErr(err)
 		return false
@@ -75,6 +89,7 @@ func(dbObj *DB) DeleteCompanyBanch(deleteKey int, id interface{}) bool {
 }
 
 // 0 => all
+//  1 => companyCode string
 func(dbObj *DB) UpdateCompanyBanch(updateKey int, data *table.CompanyBanchTable, value ...interface{}) bool {
 	defer panichandler.Recover()
 	(*dbObj).companyBanchMux.Lock()
@@ -94,8 +109,21 @@ func(dbObj *DB) UpdateCompanyBanch(updateKey int, data *table.CompanyBanchTable,
 			(*data).Id,
 		)
 		break;
+	case 1:
+		querys = (*query.MysqlSingleton()).CompanyBanch.UpdateByCompanyCode
+		(*dbObj).containers.companyBanch = append(
+			(*dbObj).containers.companyBanch,
+			(*data).BanchName,
+			(*data).BanchShiftStyle,
+			(*data).LastModify,
+			(*data).Id,
+		)
+		break;
 	}
-	
+	(*dbObj).containers.companyBanch = append(
+		(*dbObj).containers.companyBanch,
+		value...
+	)
 	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
 	defer stmt.Close()
 	(*dbObj).checkErr(err)

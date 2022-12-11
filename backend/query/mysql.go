@@ -46,6 +46,7 @@ type userQuery struct {
 	SelectAllByUserIdAndCompanyCode string
 	SelectAllNeedJoin string
 	UpdateCompanyUser string
+	UpdateBoss string
 }
 type userPreferenceQuery struct {
 	queryCommonColumn
@@ -62,6 +63,9 @@ type companyBanchQuery struct {
 	queryCommonColumn
 	SelectSingleByCompanyId string
 	SelectSingleById string
+	UpdateByCompanyCode string
+	DeleteByCompanyCode string
+	SelectByCompanyCodeAndBanchID string
 }
 type shiftQuery struct {
 	queryCommonColumn
@@ -98,6 +102,9 @@ type banchStyle struct {
 	queryCommonColumn
 	SelectSingleByStyleId string
 	SelectAllByBanchId string
+	SelectByCompanyCode string
+	UpdateByCompanyCode string
+	DeleteByCompanyCode string
 }
 type banchRule struct {
 	queryCommonColumn
@@ -206,6 +213,15 @@ func addUserQuery() {
 			partTimeSalary=?
 		where userId=?;
 	`;
+	sqlQueryInstance.User.UpdateBoss = `
+		update user
+		set
+			companyCode=?,
+			banch=?,
+			permession=?,
+			lastModify=?
+		where userId=?;
+	`
 	sqlQueryInstance.User.SelectAllNeedJoin = `
 		select
 			u.userId,
@@ -326,6 +342,25 @@ func addCompanyBanchQuery() {
 		lastModify=?
 	where id=?;
 	`;
+	sqlQueryInstance.CompanyBanch.UpdateByCompanyCode = `
+	update companyBanch b
+	left join company c
+	on b.companyId=c.companyId
+	set
+		b.banchName=?,
+		b.banchShiftStyle=?,
+		b.lastModify=?
+	where b.id=? and c.companyCode=?;
+	`
+	sqlQueryInstance.CompanyBanch.DeleteByCompanyCode = `
+	delete b from companyBanch b
+	left join company c
+	on b.companyId=c.companyId
+	where b.id=? and c.companyCode=?;
+	`
+	sqlQueryInstance.CompanyBanch.SelectByCompanyCodeAndBanchID = `
+		select * from companyBanch where id=? and companyId=?;
+	`
 	sqlQueryInstance.CompanyBanch.SelectAll = `select * from companyBanch`;
 	sqlQueryInstance.CompanyBanch.Delete = `delete from companyBanch where id = ?;`;
 	sqlQueryInstance.CompanyBanch.SelectSingleByCompanyId = `select * from companyBanch where companyId = ?;`
@@ -536,6 +571,40 @@ func addBanchStyleQuery() {
 			lastModify=?
 		where styleId=?;
 	`;
+	sqlQueryInstance.BanchStyle.SelectByCompanyCode = `
+	select bs.* from banchStyle as bs
+	left join companyBanch cb
+		on cb.id=bs.banchId
+	left join company c
+		on cb.companyId=c.companyId
+	where
+		bs.banchId=?
+	and
+		c.companyCode=?;
+	`
+	sqlQueryInstance.BanchStyle.UpdateByCompanyCode = `
+		update banchStyle bs
+		left join companyBanch cb
+			on cb.id=bs.banchId
+		left join company c
+			on cb.companyId=c.companyId
+		set
+			bs.icon=?,
+			bs.restTime=?,
+			bs.timeRangeName=?,
+			bs.onShiftTime=?,
+			bs.offShiftTime=?,
+			bs.lastModify=?
+		where bs.styleId=? and c.companyCode=?;
+	`
+	sqlQueryInstance.BanchStyle.DeleteByCompanyCode = `
+		delete bs from banchStyle bs
+		left join companyBanch cb
+			on cb.id=bs.banchId
+		left join company c
+			on cb.companyId=c.companyId
+		where bs.styleId=? and c.companyCode=?;
+	`
 	sqlQueryInstance.BanchStyle.SelectSingleByStyleId = `select * from banchStyle where styleId = ?;`;
 	sqlQueryInstance.BanchStyle.SelectAll = `select * from banchStyle;`;
 	sqlQueryInstance.BanchStyle.Delete = `delete from banchStyle where styleId=?;`;
@@ -755,15 +824,7 @@ func addWorkTime () {
 	`;
 	sqlQueryInstance.WorkTime.SelectAll = `
 		select
-			workTime.WorkTimeId,
-			workTime.UserId,
-			workTime.Year,
-			workTime.Month,
-			workTime.WorkHours,
-			workTime.TimeOff,
-			workTime.UsePaidVocation,
-			workTime.CreateTime,
-			workTime.LastModify
+			workTime.*
 		from workTime
 		left join user
 		on workTime.userId=user.userId
@@ -772,15 +833,7 @@ func addWorkTime () {
 	sqlQueryInstance.WorkTime.Delete = `delete from workTime where workTimeId=?;`;
 	sqlQueryInstance.WorkTime.SelectAllByUserId = `
 		select
-			workTime.WorkTimeId,
-			workTime.UserId,
-			workTime.Year,
-			workTime.Month,
-			workTime.WorkHours,
-			workTime.TimeOff,
-			workTime.UsePaidVocation,
-			workTime.CreateTime,
-			workTime.LastModify
+			workTime.*
 		from workTime
 		left join user
 		on workTime.userId=user.userId
@@ -790,15 +843,7 @@ func addWorkTime () {
 		`;
 	sqlQueryInstance.WorkTime.SelectAllByTime = `
 		select
-			workTime.WorkTimeId,
-			workTime.UserId,
-			workTime.Year,
-			workTime.Month,
-			workTime.WorkHours,
-			workTime.TimeOff,
-			workTime.UsePaidVocation,
-			workTime.CreateTime,
-			workTime.LastModify
+			workTime.*
 		from workTime
 		left join user
 		on workTime.userId=user.userId
@@ -809,15 +854,7 @@ func addWorkTime () {
 	`;
 	sqlQueryInstance.WorkTime.SelectAllByPrimaryKey = `
 	select
-		workTime.WorkTimeId,
-		workTime.UserId,
-		workTime.Year,
-		workTime.Month,
-		workTime.WorkHours,
-		workTime.TimeOff,
-		workTime.UsePaidVocation,
-		workTime.CreateTime,
-		workTime.LastModify
+		workTime.*
 	from workTime
 	inner join user
 	on workTime.userId=user.userId

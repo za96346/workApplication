@@ -116,16 +116,6 @@ func StatusText() *statusText {
 	return statusTextInstance
 }
 
-func BanchIsInCompany(banchId int64, companyId int64) bool {
-	res := (*Mysql).SelectCompanyBanch(1, companyId)
-	for _, v := range *res {
-		if v.Id == banchId {
-			return true
-		}
-	}
-	return false
-}
-
 func CheckUserAndCompany(props *gin.Context) (table.UserTable, table.CompanyTable, bool) {
 
 	Account, _ := (*props).Get("Account")
