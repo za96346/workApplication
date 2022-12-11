@@ -2,21 +2,23 @@ package socket
 
 import (
 	"backend/handler"
+	"backend/logger"
 	"backend/methods"
 	"backend/mysql"
 	panichandler "backend/panicHandler"
 	"backend/redis"
 	"backend/response"
 	"backend/table"
-	"fmt"
 	"sync"
 
+	"github.com/goinggo/mapstructure"
 	"github.com/gorilla/websocket"
 )
 
 var lock = new(sync.Mutex)
 var instance *Manager
 var Redis = redis.Singleton()
+var Log = logger.Logger()
 
 type Manager struct {
 	Conn chan struct {
@@ -108,7 +110,7 @@ func (mg *Manager) Worker() {
 func (mg *Manager) enterRoom () {
 	defer panichandler.Recover()
 	for v := range (*mg).Conn {
-		fmt.Printf("\n使用者編號 %d 進入部門房間 %d\n", v.Value.UserId, v.BanchId)
+		Log.Printf("\n使用者編號 %d 進入部門房間 %d\n", v.Value.UserId, v.BanchId)
 		(*redis.Singleton()).EnterShiftRoom(v.BanchId, v.Value)
 		(*mg).send(v.BanchId, v.CompanyId)
 	}
@@ -126,25 +128,26 @@ func (mg *Manager) sendMsg () {
 	}
 }
 
-func (mg *Manager) TokenPrase (tokenParams string) (table.UserTable, bool) {
+func (mg *Manager) TokenPrase (tokenParams string) (table.UserTable, table.CompanyTable, bool) {
 	defer panichandler.Recover()
 	// 判斷 token 是否過期
 	if !(*Redis).IsTokenExited(tokenParams) {
-		return table.UserTable{}, false
+		return table.UserTable{}, table.CompanyTable{}, false
 	}
 		
 	// 解析 token
 	userInfo, err := handler.ParseToken(tokenParams)
 	if err != nil {
-		return table.UserTable{}, false
+		return table.UserTable{}, table.CompanyTable{}, false
 	}
 	
+	user := new(table.UserTable)
+	company := new(table.CompanyTable)
+
+	mapstructure.Decode(userInfo["User"], user)
+	mapstructure.Decode(userInfo["Company"], company)
+
 	(*Redis).ResetExpireTime(tokenParams)
 
-	user := (*mysql.Singleton()).SelectUser(1, int64(userInfo["UserId"].(float64)))
-	if methods.IsNotExited(user) {
-		return table.UserTable{}, false
-	}
-
-	return (*user)[0], true
+	return *user, *company, true
 }

@@ -9,7 +9,7 @@ import (
 	"backend/response"
 	"encoding/json"
 	"fmt"
-	"log"
+
 	"net/http"
 	"os"
 
@@ -32,7 +32,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
     // Upgrade our raw HTTP connection to a websocket based one
     conn, err := upgrader.Upgrade(w, r, nil)
     if err != nil {
-        log.Print("Error during connection upgradation:", err)
+        Log.Print("Error during connection upgradation:", err)
         return
     }
     defer conn.Close()
@@ -46,20 +46,15 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	conBanchId , perr := methods.AnyToInt64(banchId[0])
 
 	// 解析token
-	user, sts := Singleton().TokenPrase(token[0])
+	user, company, sts := Singleton().TokenPrase(token[0])
 	if !sts || perr != nil {
 		return
 	}
 
 	// 檢查公司部門
-	company := (*mysql.Singleton()).SelectCompany(2, user.CompanyCode)
-	if methods.IsNotExited(company) {
-		log.Print("查無公司")
-		return
-	}
-	companyBanch := (*mysql.Singleton()).SelectCompanyBanch(1, (*company)[0].CompanyId)
+	companyBanch := (*mysql.Singleton()).SelectCompanyBanch(1, company.CompanyId)
 	if methods.IsNotExited(companyBanch) {
-		log.Print("公司查無部門")
+		Log.Print("公司查無部門")
 		return
 	}
 	count := 0
@@ -71,7 +66,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if count == len(*companyBanch) {
-		log.Print("該公司未有此部門")
+		Log.Print("該公司未有此部門")
 		return
 	}
 
@@ -90,7 +85,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 			Value response.Member
 		}{
 			BanchId: conBanchId,
-			CompanyId: (*company)[0].CompanyId,
+			CompanyId: company.CompanyId,
 			Value: v,
 	}
 
@@ -100,16 +95,21 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 
     // The event loop
     for {
+		Log.Println("socket 傳送")
+		Log.Println("使用者id", user.UserId)
+		Log.Print("使用者姓名", user.UserName)
+		Log.Println("使用者公司碼", user.CompanyCode)
+		Log.Println("使用者公司id", company.CompanyId)
 		// 重設 token 過期時間
 		(*redis.Singleton()).ResetExpireTime(token[0])
 
 		// 接收訊息
         _, msg, err := conn.ReadMessage()
         if err != nil {
-            log.Println("Error during message reading:", err)
+            Log.Println("Error during message reading:", err)
             break
         } else if user.Banch != conBanchId && user.Permession != 100 {
-			log.Print("該權限不是管理員 因此無法編輯 此部門")
+			Log.Print("該權限不是管理員 因此無法編輯 此部門")
 			continue
 		}
 
@@ -121,7 +121,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}{}
 		if json.Unmarshal(msg, &data) != nil {
-			fmt.Println(json.Unmarshal(msg, &data))
+			Log.Println(json.Unmarshal(msg, &data))
 			continue
 		}
 
@@ -130,7 +130,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 			// 我的位置
 			v.Position = data.Data.MyPosition
 			(*redis.Singleton()).EnterShiftRoom(conBanchId, v)
-			fmt.Println("收到 position =>",  v.Position)
+			Log.Println("收到 position =>",  v.Position)
 			break
 		case 2:
 			// 插入 班表資料
@@ -143,23 +143,23 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 				OffShiftTime: data.Data.OffShiftTime,
 			}
 			(*redis.Singleton()).InsertShiftData(conBanchId, shift)
-			fmt.Println("收到 shift =>", shift)
+			Log.Println("收到 shift =>", shift)
 			break
 		default:
 			continue
 		}
 
 		// send
-		Singleton().send(conBanchId, (*company)[0].CompanyId)
+		Singleton().send(conBanchId, company.CompanyId)
 
     }
 
 	// 離開房間
-	fmt.Printf("\n使用者 %d 離開房間 %d\n", user.UserId, conBanchId)
+	Log.Printf("\n使用者 %d 離開房間 %d\n", user.UserId, conBanchId)
 	(*redis.Singleton()).LeaveShiftRoom(conBanchId, user.UserId)
 
 	// send
-	Singleton().send(conBanchId, (*company)[0].CompanyId)
+	Singleton().send(conBanchId, company.CompanyId)
 }
  
 func Conn() {
@@ -167,5 +167,5 @@ func Conn() {
 	ip := os.Getenv("SOCKET_IP")
 	port := os.Getenv("SOCKET_PORT")
     http.HandleFunc("/workAppSocket/shift", socketHandler)
-    log.Fatal(http.ListenAndServe(ip + ":" + port, nil))
+    Log.Fatal(http.ListenAndServe(ip + ":" + port, nil))
 }
