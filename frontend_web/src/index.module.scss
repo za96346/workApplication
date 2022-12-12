@@ -376,3 +376,7 @@ div {
 	align-items: center;
 	font-size: large;
 }
+
+.workTimeBlock {
+	@extend %whiteBoard;
+}

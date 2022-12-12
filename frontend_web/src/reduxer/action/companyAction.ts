@@ -78,6 +78,16 @@ class companyAction {
         }
     }
 
+    setWorkTime (workTime): action {
+        return {
+            type: companyType.SET_WORK_TIME,
+            payload: {
+                ...store.getState().company,
+                workTime: workTime || []
+            }
+        }
+    }
+
     clearCompanyAll (): action {
         return {
             type: companyType.CLEAR_COMPANY_ALL,

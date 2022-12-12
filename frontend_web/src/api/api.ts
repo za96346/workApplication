@@ -1,6 +1,6 @@
 import api from './apiAbs'
 import axios from 'axios'
-import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, RegisterType, ResMessage, ResType, SelfDataType, UserType, WaitReplyType, WeekendSettingType } from '../type'
+import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, RegisterType, ResMessage, ResType, SelfDataType, UserType, WaitReplyType, WeekendSettingType, workTimeType } from '../type'
 import userAction from '../reduxer/action/userAction'
 import { store } from '../reduxer/store'
 import { FullMessage } from '../method/notice'
@@ -24,7 +24,8 @@ class ApiControl extends api {
         changePassword: 'user/changePassword',
         forgetPassword: 'user/forgetPassword',
         weekendSetting: 'company/weekend/setting',
-        waitReply: 'company/wait/reply'
+        waitReply: 'company/wait/reply',
+        workTime: 'shift/workTime'
     }
 
     constructor () {
@@ -603,6 +604,28 @@ class ApiControl extends api {
             }
         })
         store.dispatch(statusAction.onCreateWaitReply(false))
+        return res
+    }
+
+    async getWorkTime (
+        year: workTimeType['Year'],
+        month: workTimeType['Month'],
+        userId: workTimeType['UserId']
+    ): Promise<ResType<workTimeType[]>> {
+        store.dispatch(statusAction.onFetchWorkTime(true))
+        const res = await this.GET<workTimeType[]>({
+            url: this.route.workTime,
+            params: {
+                ...(year && { year }),
+                ...(month && { month }),
+                ...(userId && { userId })
+            },
+            successShow: false
+        })
+        if (res.status) {
+            store.dispatch(companyAction.setWorkTime(res.data))
+        }
+        store.dispatch(statusAction.onFetchWorkTime(false))
         return res
     }
 }

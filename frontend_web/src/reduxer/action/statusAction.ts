@@ -256,6 +256,16 @@ class statusAcion {
         }
     }
 
+    onFetchWorkTime (s: boolean): action {
+        return {
+            type: s ? statusType.FETCH_WORK_TIME_ON : statusType.FETCH_WORK_TIME_OFF,
+            payload: {
+                ...store.getState().status,
+                onFetchWorkTime: s
+            }
+        }
+    }
+
     // 清除
     clearStatusAll (): action {
         return {

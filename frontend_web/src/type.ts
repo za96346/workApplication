@@ -170,3 +170,15 @@ export interface WaitReplyType {
     CreateTime: string | Date
     LastModify: string | Date
 }
+
+export interface workTimeType {
+    WorkTimeId: number
+    UserId: number
+    Year: number
+    Month: number
+    WorkHours: number
+    TimeOff: number
+    UsePaidVocation: number
+    CreateTime: string | Date
+    LastModify: string | Date
+}
