@@ -1,28 +1,18 @@
-import { OnlineUserType } from '../../type'
+import { ShiftSocketType } from '../../type'
 import { store } from '../store'
 import { action, shiftEditType } from '../types'
 
 class shiftEditAction {
     constructor () {
-        this.setShiftEditOnlineUser = this.setShiftEditOnlineUser.bind(this)
+        this.setShiftEdit = this.setShiftEdit.bind(this)
     }
 
-    setShiftEditOnlineUser (onlineUser: OnlineUserType[]): action {
+    setShiftEdit (shift: ShiftSocketType): action {
         return {
-            type: shiftEditType.SET_SHIFT_ONLINE_USER,
+            type: shiftEditType.SET_SHIFT,
             payload: {
                 ...store.getState().shiftEdit,
-                onlineUser
-            }
-        }
-    }
-
-    setShiftStatus (status: number): action {
-        return {
-            type: shiftEditType.SET_SHIFT_STATUS,
-            payload: {
-                ...store.getState().shiftEdit,
-                status
+                ...shift
             }
         }
     }

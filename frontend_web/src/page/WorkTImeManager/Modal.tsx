@@ -11,7 +11,6 @@ const Modal = ({ ...attr }: props): JSX.Element => {
             destroyOnClose
             forceRender
         >
-            hi
 
         </AntdModal>
     )

@@ -47,7 +47,7 @@ const columns = [
 ]
 
 const dataSource = (arr: workTimeType[]): any[] => {
-    return arr.map((item) => {
+    return arr?.map((item) => {
         return {
             user: item.UserId,
             year: item.Year,
@@ -91,7 +91,7 @@ const WorkTimeManagerPage = (): JSX.Element => {
                     <Button text="搜尋" className="col-md-2 btn btn-secondary" onClick={() => {}} />
                 </div>
                 <Table
-                    dataSource={dataSource(company.workTime)}
+                    dataSource={dataSource(company?.workTime || [])}
                     columns={columns}
                 />
 

@@ -29,7 +29,7 @@ const useShiftEditSocket = (banchId: number, token: string): props => {
         socket?.close()
     }
     useEffect(() => {
-        dispatch(shiftEditAction.setShiftEditOnlineUser(lastJsonMessage?.OnlineUser))
+        dispatch(shiftEditAction.setShiftEdit(lastJsonMessage))
         if (!record.current) return
         // 找到新進的使用者
         lastJsonMessage?.OnlineUser?.forEach((item) => {

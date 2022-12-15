@@ -41,7 +41,7 @@ const ShiftPage = (): JSX.Element => {
                 open={status.drawerOpen}
             >
                 {
-                    shiftEdit?.onlineUser?.map((item, index) => {
+                    shiftEdit?.OnlineUser?.map((item, index) => {
                         return (
                             <PeopleStatus name={item.UserName} color={item.Color} key={index} currentStatus='online'/>
                         )
@@ -50,8 +50,8 @@ const ShiftPage = (): JSX.Element => {
             </Drawer>
             <div className={styles.shiftProcessBar}>
                 <h3>{company.banch.find((item) => item.Id === convertBanchId)?.BanchName || ''}</h3>
-                <Steps current={shiftEdit.status - 1}>
-                    <Steps.Step title="開放編輯" description="2022-11-01 ~ 2022-11-09" />
+                <Steps current={shiftEdit.Status - 1}>
+                    <Steps.Step title="開放編輯" description={`${shiftEdit.StartDay} ${shiftEdit.EndDay}`} />
                     <Steps.Step title="主管審核" subTitle="2022-11-10" description="部門主管確認班表無誤" />
                     <Steps.Step title="確認發布" description="進行中..." />
                 </Steps>

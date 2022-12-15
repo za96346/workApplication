@@ -1,14 +1,19 @@
 
-import { OnlineUserType } from '../../type'
+import { ShiftSocketType } from '../../type'
 import { action, shiftEditType } from '../types'
 
 const shiftState = {
-    onlineUser: [],
-    status: 1
+    BanchId: -1,
+    EditUser: [],
+    OnlineUser: [],
+    ShiftData: [],
+    BanchStyle: [],
+    WeekendSetting: [],
+    Status: 1, // 1 開放編輯、 2 主管審核 3 確認發布 ,
+    StartDay: '',
+    EndDay: ''
 }
-export interface shiftReducerType {
-    onlineUser: OnlineUserType[]
-    status: number
+export interface shiftReducerType extends ShiftSocketType {
 }
 
 export const shiftEditReducer = (state = shiftState, action: action): any => {

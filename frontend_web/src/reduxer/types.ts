@@ -90,7 +90,7 @@ export const statusType = {
 }
 
 export const shiftEditType = {
-    SET_SHIFT_ONLINE_USER: 'SET_SHIFT_ONLINE_USER',
+    SET_SHIFT: 'SET_SHIFT',
     SET_SHIFT_STATUS: 'SET_SHIFT_STATUS',
     CLEAR_SHIFT_ALL: 'CLEAR_SHIFT_ALL'
 }

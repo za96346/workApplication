@@ -9,7 +9,6 @@ import dateHandle from '../../method/dateHandle'
 import { useDispatch } from 'react-redux'
 import companyAction from '../../reduxer/action/companyAction'
 import statics from '../../statics'
-import shiftEditAction from '../../reduxer/action/shiftEditAction'
 
 const useTableCache = (company: companyReducerType, banchId: number, user: userReducerType): {
     tb: React.ReactNode
@@ -172,9 +171,6 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
     useEffect(() => {
         dispatch(companyAction.setBanchStyle(lastJsonMessage?.BanchStyle || []))
     }, [lastJsonMessage?.BanchStyle])
-    useEffect(() => {
-        dispatch(shiftEditAction.setShiftStatus(lastJsonMessage?.Status || 1))
-    }, [lastJsonMessage?.Status])
     return {
         tb, lonelyShift, close
     }
