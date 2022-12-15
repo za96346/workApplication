@@ -172,13 +172,13 @@ export interface WaitReplyType {
 }
 
 export interface workTimeType {
-    WorkTimeId: number
+    WorkTimeId?: number
     UserId: number
     Year: number
     Month: number
     WorkHours: number
     TimeOff: number
     UsePaidVocation: number
-    CreateTime: string | Date
-    LastModify: string | Date
+    CreateTime?: string | Date
+    LastModify?: string | Date
 }

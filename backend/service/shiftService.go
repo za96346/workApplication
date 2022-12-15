@@ -22,7 +22,7 @@ func FetchWorkTime (props *gin.Context, waitJob *sync.WaitGroup)  {
 	month, err2 := strconv.Atoi((*props).Query("month"))
 	userId, err3 := methods.AnyToInt64((*props).Query("userId"))
 
-	res :=  new([]table.WorkTime)
+	res :=  new([]table.WorkTimeExtend)
 	if err3 != nil {
 		res = (*Mysql).SelectWorkTime(2, year, month, company.CompanyCode)
 	} else if err2 != nil && err1 != nil {

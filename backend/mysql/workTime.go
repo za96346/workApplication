@@ -17,7 +17,7 @@ import (
 // . 1 => userId, companyCode, value => int64, string
 // . 2 => year && month && companyCode, value => int && int && string
 // . 3 => year && month && userId && companyCode, value => int, int, int64 && string
-func(dbObj *DB) SelectWorkTime (selectKey int, value... interface{}) *[]table.WorkTime {
+func(dbObj *DB) SelectWorkTime (selectKey int, value... interface{}) *[]table.WorkTimeExtend {
 	defer panichandler.Recover()
 	querys := ""
 	switch selectKey {
@@ -34,8 +34,8 @@ func(dbObj *DB) SelectWorkTime (selectKey int, value... interface{}) *[]table.Wo
 		querys = (*query.MysqlSingleton()).WorkTime.SelectAllByPrimaryKey
 		break
 	}
-	workTime := new(table.WorkTime)
-	carry := []table.WorkTime{}
+	workTime := new(table.WorkTimeExtend)
+	carry := []table.WorkTimeExtend{}
 	res, err := (*dbObj).MysqlDB.Query(querys, value...)
 	defer res.Close()
 	(*dbObj).checkErr(err)
@@ -50,6 +50,10 @@ func(dbObj *DB) SelectWorkTime (selectKey int, value... interface{}) *[]table.Wo
 			&workTime.UsePaidVocation,
 			&workTime.CreateTime,
 			&workTime.LastModify,
+			&workTime.UserName,
+			&workTime.Banch,
+			&workTime.EmployeeNumber,
+			&workTime.BanchName,
 		)
 		(*dbObj).checkErr(err)
 		if err == nil {

@@ -4,6 +4,14 @@ import (
 	"time"
 )
 
+type WorkTimeExtend struct {
+	WorkTime
+	UserName string `json:"UserName"` // 名字
+	Banch int64 `json:"Banch"` // 部門
+	EmployeeNumber string `json:"EmployeeNumber"` // 員工編號
+	BanchName string `json:"BanchName"` // 部門名
+}
+
 //使用者
 type UserTable struct {
 	UserId int64 `json:"UserId"`// 使用者的編號

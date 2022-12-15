@@ -628,5 +628,13 @@ class ApiControl extends api {
         store.dispatch(statusAction.onFetchWorkTime(false))
         return res
     }
+
+    async createWorkTime (data: workTimeType): Promise<ResType<null>> {
+        const res = await this.PUT<null>({
+            url: this.route.workTime,
+            body: data
+        })
+        return res
+    }
 }
 export default new ApiControl()

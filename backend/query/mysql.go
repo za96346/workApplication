@@ -825,28 +825,46 @@ func addWorkTime () {
 	sqlQueryInstance.WorkTime.SelectAll = `
 		select
 			workTime.*
+			user.userName,
+			user.banch,
+			user.employeeNumber,
+			ifnull(companyBanch.banchName, '')
 		from workTime
 		left join user
 		on workTime.userId=user.userId
+		left join companyBanch
+		on user.banch=companyBanch.id
 		where user.companyCode=?;
 	`;
 	sqlQueryInstance.WorkTime.Delete = `delete from workTime where workTimeId=?;`;
 	sqlQueryInstance.WorkTime.SelectAllByUserId = `
 		select
-			workTime.*
+			workTime.*,
+			user.userName,
+			user.banch,
+			user.employeeNumber,
+			ifnull(companyBanch.banchName, '')
 		from workTime
 		left join user
 		on workTime.userId=user.userId
+		left join companyBanch
+		on user.banch=companyBanch.id
 		where
 			workTime.userId=? and
 			user.companyCode=?;
 		`;
 	sqlQueryInstance.WorkTime.SelectAllByTime = `
 		select
-			workTime.*
+			workTime.*,
+			user.userName,
+			user.banch,
+			user.employeeNumber,
+			ifnull(companyBanch.banchName, '')
 		from workTime
 		left join user
 		on workTime.userId=user.userId
+		left join companyBanch
+		on user.banch=companyBanch.id
 		where
 			workTime.year=? and
 			workTime.month=? and
@@ -854,10 +872,16 @@ func addWorkTime () {
 	`;
 	sqlQueryInstance.WorkTime.SelectAllByPrimaryKey = `
 	select
-		workTime.*
+		workTime.*,
+		user.userName,
+		user.banch,
+		user.employeeNumber,
+		ifnull(companyBanch.banchName, '')
 	from workTime
 	inner join user
 	on workTime.userId=user.userId
+	left join companyBanch
+	on user.banch=companyBanch.id
 	where
 		workTime.year=? and
 		workTime.month=? and

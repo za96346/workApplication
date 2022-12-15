@@ -72,7 +72,7 @@ const WorkTimeManagerPage = (): JSX.Element => {
         setOpen(false)
     }
     useEffect(() => {
-        api.getWorkTime(2022, 5, null)
+        api.getWorkTime(2022, 6, null)
     }, [])
     console.log(company.workTime)
     return (
