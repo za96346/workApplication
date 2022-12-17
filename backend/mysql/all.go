@@ -34,6 +34,9 @@ func(dbObj *DB) SelectAllUser(selectKey int, value... interface{}) *[]response.U
 			&user.Banch,
 			&user.Permession,
 			&user.WorkState,
+			&user.BanchName,
+			&user.CompanyId,
+			&user.CompanyName,
 		)
 		(*dbObj).checkErr(err)
 		if err == nil {

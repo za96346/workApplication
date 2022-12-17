@@ -20,7 +20,7 @@ import (
 // 3 => companyCode, value => string
 //  4 => banch, value = > int64
 // . 5 => companyCode, userId, value => string, int64
-func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTable {
+func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserExtend {
 	defer panichandler.Recover()
 	querys := ""
 	switch selectKey {
@@ -50,8 +50,8 @@ func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTab
 		querys = (*query.MysqlSingleton()).User.SelectAll
 		break
 	}
-	user := new(table.UserTable)
-	carry := []table.UserTable{}
+	user := new(table.UserExtend)
+	carry := []table.UserExtend{}
 	res, err := (*dbObj).MysqlDB.Query(querys, value...)
 	defer res.Close()
 	(*dbObj).checkErr(err)
@@ -71,6 +71,9 @@ func(dbObj *DB) SelectUser(selectKey int, value... interface{}) *[]table.UserTab
 			&user.LastModify,
 			&user.MonthSalary,
 			&user.PartTimeSalary,
+			&user.BanchName,
+			&user.CompanyId,
+			&user.CompanyName,
 		)
 		(*dbObj).checkErr(err)
 		if companyCode.String == "" {

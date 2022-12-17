@@ -231,11 +231,18 @@ func addUserQuery() {
 			u.onWorkDay,
 			u.banch,
 			u.permession,
-			IF(q.userId is null = 1, 'on', 'off') AS workState 
+			IF(q.userId is null = 1, 'on', 'off') AS workState,
+			ifnull(cb.banchName, '') as banchName,
+			c.companyId,
+			ifnull(c.companyName, '') as companyName
 		from user u
 		left join quitWorkUser q
-		on u.userId=q.userId
-		and u.companyCode=q.companyCode
+			on u.userId=q.userId
+			and u.companyCode=q.companyCode
+		left join companyBanch cb
+			on cb.id=u.banch
+		left join company c
+			on u.companyCode=c.companyCode
 		where u.companyCode=?;
 	`
 	sqlQueryInstance.User.UpdateCompanyUser = `
@@ -255,14 +262,83 @@ func addUserQuery() {
 	);
 	`
 	sqlQueryInstance.User.SelectAllByUserIdAndCompanyCode = `
-		select * from user where companyCode=? and userId=?;
+		select
+			u.*,
+			ifnull(cb.banchName, '') as banchName,
+			c.companyId,
+			ifnull(c.companyName, '') as companyName
+		from user as u
+		left join companyBanch cb
+			on cb.id=u.banch
+		left join company c
+			on u.companyCode=c.companyCode
+		where u.companyCode=? and u.userId=?;
 	`
-	sqlQueryInstance.User.SelectAllByCompanyCode = `select * from user where companyCode=?;`
-	sqlQueryInstance.User.SelectAll = `select * from user;`;
-	sqlQueryInstance.User.SelectSingleByUserId = `select * from user where userId=?;`;
-	sqlQueryInstance.User.SelectSingleByAccount = `select * from user where account=?;`;
+	sqlQueryInstance.User.SelectAllByCompanyCode = `
+		select
+			u.*,
+			ifnull(cb.banchName, '') as banchName,
+			c.companyId,
+			ifnull(c.companyName, '') as companyName
+		from user as u
+		left join companyBanch cb
+			on cb.id=u.banch
+		left join company c
+			on u.companyCode=c.companyCode
+		where u.companyCode=?;
+	`
+	sqlQueryInstance.User.SelectAll = `
+		select
+			u.*,
+			ifnull(cb.banchName, '') as banchName,
+			c.companyId,
+			ifnull(c.companyName, '') as companyName
+		from user as u
+		left join companyBanch cb
+			on cb.id=u.banch
+		left join company c
+			on u.companyCode=c.companyCode;
+	`;
+	sqlQueryInstance.User.SelectSingleByUserId = `
+		select
+			u.*,
+			ifnull(cb.banchName, '') as banchName,
+			c.companyId,
+			ifnull(c.companyName, '') as companyName
+		from user as u
+		left join companyBanch cb
+			on cb.id=u.banch
+		left join company c
+			on u.companyCode=c.companyCode
+		where u.userId=?;
+	`;
+	sqlQueryInstance.User.SelectSingleByAccount = `
+		select
+			u.*,
+			ifnull(cb.banchName, '') as banchName,
+			c.companyId,
+			ifnull(c.companyName, '') as companyName
+		from user as u
+		left join companyBanch cb
+			on cb.id=u.banch
+		left join company c
+			on u.companyCode=c.companyCode
+		where u.account=?;
+	`;
 	sqlQueryInstance.User.Delete = `delete from user where userId=?;`;
-	sqlQueryInstance.User.SelectAllByBanchId = `select * from user where banch = ?;`;
+	sqlQueryInstance.User.SelectAllByBanchId = `
+		select
+			u.*,
+			ifnull(cb.banchName, '') as banchName,
+			c.companyId,
+			ifnull(c.companyName, '') as companyName
+		from user as u
+		left join companyBanch cb
+			on cb.id=u.banch
+		left join company c
+			on u.companyCode=c.companyCode
+		where u.banch=?;
+	`;
 }
 func addUserPreferenceQuery() {
 	sqlQueryInstance.UserPreference.InsertAll = `

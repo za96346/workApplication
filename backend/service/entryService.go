@@ -58,7 +58,7 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 
 	//登入成功
 	tk := handler.Token {
-		User: (*res)[0],
+		User: *UserExtendToUserTable(&(*res)[0]),
 		Company: company[0],
 	}
 

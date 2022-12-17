@@ -180,3 +180,29 @@ func CheckUserAndCompany(props *gin.Context) (table.UserTable, table.CompanyTabl
 	
 	return user, company, false
 }
+
+func UserExtendToUserTable (props *table.UserExtend) *table.UserTable {
+	user := table.UserTable{
+		UserId: (*props).UserId,
+		CompanyCode: (*props).CompanyCode,
+		Account: (*props).Account,
+		Password: (*props).Password,
+		UserName: (*props).UserName,
+		EmployeeNumber: (*props).EmployeeNumber,
+		OnWorkDay: (*props).OnWorkDay,
+		Banch: (*props).Banch,
+		Permession: (*props).Permession,
+		MonthSalary: (*props).MonthSalary,
+		PartTimeSalary: (*props).PartTimeSalary,
+		CreateTime: (*props).CreateTime,
+		LastModify: (*props).LastModify,
+	}
+
+	return &user
+}
+
+// func UserExtendToUserTable (props *table.UserTable) *table.UserExtend {
+// 	user := table.UserExtend {
+
+// 	}
+// }

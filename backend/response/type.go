@@ -19,6 +19,9 @@ type User struct {
 	Banch int64 `json:"Banch"` // 部門
 	Permession int `json:"Permession"` // 權限
 	WorkState string `json:"WorkState"` // 工作狀態 (到職on or 離職off)
+	BanchName string `json:"BanchName"` // 公司部們名稱
+	CompanyName string `json:"CompanyName"` // 公司名稱
+	CompanyId int64 `json:"CompanyId"` // 公司編號
 }
 
 func NewResponse(message string, data string, status bool) *Response {

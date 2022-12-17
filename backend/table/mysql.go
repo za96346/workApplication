@@ -12,6 +12,13 @@ type WorkTimeExtend struct {
 	BanchName string `json:"BanchName"` // 部門名
 }
 
+type UserExtend struct {
+	UserTable
+	BanchName string `json:"BanchName"` // 公司部們名稱
+	CompanyName string `json:"CompanyName"` // 公司名稱
+	CompanyId int64 `json:"CompanyId"` // 公司編號
+}
+
 //使用者
 type UserTable struct {
 	UserId int64 `json:"UserId"`// 使用者的編號

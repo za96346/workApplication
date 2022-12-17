@@ -107,7 +107,7 @@ func UpdateMine (props *gin.Context, waitJob *sync.WaitGroup) {
 	(*mineUserData)[0].UserName = user.UserName
 	(*mineUserData)[0].LastModify = time.Now()
 
-	if !(*Mysql).UpdateUser(0, &(*mineUserData)[0]) {
+	if !(*Mysql).UpdateUser(0, UserExtendToUserTable(&(*mineUserData)[0])) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().UpdateFail,
 		})
@@ -264,7 +264,7 @@ func ChangePassword (props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	(*res)[0].Password = changePwd.NewPassword
-	status := (*Mysql).UpdateUser(0, &(*res)[0])
+	status := (*Mysql).UpdateUser(0, UserExtendToUserTable(&(*res)[0]))
 	if !status {
 		(*props).JSON(http.StatusUnprocessableEntity, gin.H{
 			"message": StatusText().UpdateFail,
@@ -328,7 +328,7 @@ func ForgetPassword(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	(*res)[0].Password = forgetPwd.NewPassword
-	status := (*Mysql).UpdateUser(0, &(*res)[0])
+	status := (*Mysql).UpdateUser(0, UserExtendToUserTable(&(*res)[0]))
 	if !status {
 		(*props).JSON(http.StatusUnprocessableEntity, gin.H{
 			"message": StatusText().UpdateFail,

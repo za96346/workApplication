@@ -508,7 +508,7 @@ func UpdateWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
 			return
 		}
 		(*targetUser)[0].CompanyCode = company.CompanyCode
-		if !(*Mysql).UpdateUser(0, &(*targetUser)[0]) {
+		if !(*Mysql).UpdateUser(0, UserExtendToUserTable(&(*targetUser)[0])) {
 			(*props).JSON(http.StatusForbidden, gin.H{
 				"message": StatusText().UpdateFail,
 			})
