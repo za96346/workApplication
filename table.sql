@@ -258,5 +258,21 @@ alter table paidVocation add primary key(`userId`, `year`);
 alter table paidVocation add foreign key(`userId`) references user(`userId`) on update cascade on delete cascade;
 alter table paidVocation auto_increment=1;
 
- 
-
+# 績效評核
+create table performance(
+	performanceId bigint not null unique auto_increment,
+	userId bigInt not null,
+	goal varchar(1000),
+	year int,
+	month int,
+	banch bigInt,
+	attitude int,
+	efficiency int,
+	professional int,
+	directions varchar(1000),
+	beLate int,
+	dayOffNotOnRule int,
+	banchName varchar(50)        
+);
+alter table performance add primary key(`userId`, `year`, `month`);
+alter table performance add foreign key(`userId`) references user(`userId`) on update cascade on delete cascade;
