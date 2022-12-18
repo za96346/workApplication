@@ -149,6 +149,18 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		// delete method of delete paidVocation
 		routeFunc = service.DeletePaidVocation
 		break
+	case 40:
+		routeFunc = service.FetchPerformance
+		break
+	case 41:
+		routeFunc = service.UpdatePerformance
+		break
+	case 42:
+		routeFunc = service.InsertPerformance
+		break
+	case 43:
+		routeFunc = service.DeletePerformance
+		break
 	default:
 		break;
 	}

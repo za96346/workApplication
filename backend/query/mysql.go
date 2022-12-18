@@ -233,7 +233,7 @@ func addUserQuery() {
 			u.permession,
 			IF(q.userId is null = 1, 'on', 'off') AS workState,
 			ifnull(cb.banchName, '') as banchName,
-			c.companyId,
+			ifnull(c.companyId, -1),
 			ifnull(c.companyName, '') as companyName
 		from user u
 		left join quitWorkUser q
@@ -265,7 +265,7 @@ func addUserQuery() {
 		select
 			u.*,
 			ifnull(cb.banchName, '') as banchName,
-			c.companyId,
+			ifnull(c.companyId, -1),
 			ifnull(c.companyName, '') as companyName
 		from user as u
 		left join companyBanch cb
@@ -278,7 +278,7 @@ func addUserQuery() {
 		select
 			u.*,
 			ifnull(cb.banchName, '') as banchName,
-			c.companyId,
+			ifnull(c.companyId, -1),
 			ifnull(c.companyName, '') as companyName
 		from user as u
 		left join companyBanch cb
@@ -291,7 +291,7 @@ func addUserQuery() {
 		select
 			u.*,
 			ifnull(cb.banchName, '') as banchName,
-			c.companyId,
+			ifnull(c.companyId, -1),
 			ifnull(c.companyName, '') as companyName
 		from user as u
 		left join companyBanch cb
@@ -303,7 +303,7 @@ func addUserQuery() {
 		select
 			u.*,
 			ifnull(cb.banchName, '') as banchName,
-			c.companyId,
+			ifnull(c.companyId, -1),
 			ifnull(c.companyName, '') as companyName
 		from user as u
 		left join companyBanch cb
@@ -316,7 +316,7 @@ func addUserQuery() {
 		select
 			u.*,
 			ifnull(cb.banchName, '') as banchName,
-			c.companyId,
+			ifnull(c.companyId, -1),
 			ifnull(c.companyName, '') as companyName
 		from user as u
 		left join companyBanch cb
@@ -330,7 +330,7 @@ func addUserQuery() {
 		select
 			u.*,
 			ifnull(cb.banchName, '') as banchName,
-			c.companyId,
+			ifnull(c.companyId, -1),
 			ifnull(c.companyName, '') as companyName
 		from user as u
 		left join companyBanch cb
