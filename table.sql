@@ -262,10 +262,10 @@ alter table paidVocation auto_increment=1;
 create table performance(
 	performanceId bigint not null unique auto_increment,
 	userId bigInt not null,
-	goal varchar(1000),
 	year int,
 	month int,
-	banch bigInt,
+	banchId bigInt,
+	goal varchar(1000),
 	attitude int,
 	efficiency int,
 	professional int,
