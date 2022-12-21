@@ -28,6 +28,7 @@ type sqlQuery struct {
 	WorkTime workTime
 	PaidVocation paidVocation
 	Log log
+	Performance performance
 }
 type queryCommonColumn struct {
 	InsertAll string
@@ -148,6 +149,12 @@ type paidVocation struct {
 type log struct {
 	queryCommonColumn
 }
+type performance struct {
+	queryCommonColumn
+	SelectAllByAdmin string
+	SelectAllByManager string
+	SelectAllByPerson string
+}
 func MysqlSingleton() *sqlQuery {
 	queryMux = new(sync.Mutex)
 	if sqlQueryInstance == nil {
@@ -173,6 +180,7 @@ func MysqlSingleton() *sqlQuery {
 			addWorkTime()
 			addPaidVocation()
 			addLog()
+			addPerformance()
 			return sqlQueryInstance
 		}
 	}
@@ -1011,4 +1019,65 @@ func addLog () {
 			?,?,?
 		)
 	;`;
+}
+func addPerformance(){
+	sqlQueryInstance.Performance.SelectAllByAdmin = `
+		select
+			p.*,
+			ifnull(u.userName, ''),
+			ifnull(c.companyId, -1)
+		from performance as p
+		left join user u
+			on u.userId=p.userId
+		left join companyBanch cb
+			on cb.id=p.banchId
+		left join company c
+			on u.companyCode=c.companyCode
+		left join quitWorkUser qu
+			on qu.userId=p.userId
+		where
+			(u.companyCode=?
+			or qu.companyCode=?)
+			and (p.year>=? and p.month>=?)
+			order by p.year asc, p.month asc;
+	`;
+	sqlQueryInstance.Performance.SelectAllByManager = `
+		select
+			p.*,
+			ifnull(u.userName, ''),
+			ifnull(c.companyId, -1)
+		from performance as p
+		left join user u
+			on u.userId=p.userId
+		left join companyBanch cb
+			on cb.id=p.banchId
+		left join company c
+			on u.companyCode=c.companyCode
+		left join quitWorkUser qu
+			on qu.userId=p.userId
+		where
+			(u.companyCode=?
+				or qu.companyCode=?)
+			and (p.banchId=?
+				or p.banchName=?)
+			and (p.year>=? and p.month>=?)
+			order by p.year asc, p.month asc;
+	`;
+	sqlQueryInstance.Performance.SelectAllByPerson = `
+		select
+			p.*,
+			ifnull(u.userName, ''),
+			ifnull(c.companyId, -1)
+		from performance as p
+		left join user u
+			on u.userId=p.userId
+		left join companyBanch cb
+			on cb.id=p.banchId
+		left join company c
+			on u.companyCode=c.companyCode
+		left join quitWorkUser qu
+			on qu.userId=p.userId
+		where p.userId=? and (p.year>=? and p.month>=?)
+		order by p.year asc, p.month asc;
+	`;
 }
