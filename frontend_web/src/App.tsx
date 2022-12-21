@@ -6,7 +6,7 @@ import {
     Route,
     Navigate
 } from 'react-router-dom'
-import styles from './index.module.scss'
+import stylees from './index.module.scss'
 import 'antd/dist/antd.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -28,8 +28,12 @@ const SettingPage = lazy((): any => import('./page/Setting/SettingPage'))
 const ErrorPage = lazy((): any => import('./page/ErrorPage'))
 const WorkTimeManagerPage = lazy((): any => import('./page/WorkTImeManager/WorkTimeManagerPage'))
 
+declare global {
+    interface Window { styles: any }
+    var styles: any
+}
 // global init f
-window.styles = styles
+window.styles = stylees
 // console.log = () => {}
 const App = (): JSX.Element => {
     console.log('process env =>', process.env)

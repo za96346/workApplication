@@ -16,24 +16,20 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        loader: 'ts-loader',
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: { localIdentName: '[name]__[local]___[hash:base64:5]' },
-            },
-          },
-          {
-            loader: 'sass-loader',
-          },
-        ],
+        test: /\.(ts|tsx)?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
       },
-      
+      {
+        loader: 'css-loader',
+        options: {
+          modules: { localIdentName: '[name]__[local]___[hash:base64:5]' },
+        },
+      },
+      {
+        test: /\.scss$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+      },
     ]
   },
   plugins: [

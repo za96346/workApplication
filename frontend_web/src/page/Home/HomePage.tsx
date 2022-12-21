@@ -1,6 +1,6 @@
 import { Avatar, List, Tabs } from 'antd'
 import Search from 'antd/lib/input/Search'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import api from '../../api/api'
 import Btn from '../../component/Btn'
 import useReduceing from '../../Hook/useReducing'
@@ -57,7 +57,7 @@ const HomePage = (): JSX.Element => {
                                 <List.Item style={{ flexWrap: 'wrap', position: 'relative' }}>
                                     <List.Item.Meta
                                         style={{ minWidth: '200px', marginBottom: '30px' }}
-                                        avatar={<Avatar src={companyIcon} />}
+                                        avatar={<Avatar src={companyIcon as unknown as ReactNode} />}
                                         title={<>{item.CompanyName}</>}
                                         description={`公司地址: ${item.CompanyLocation}`}
                                     />
@@ -84,7 +84,7 @@ const HomePage = (): JSX.Element => {
                                 <List.Item style={{ flexWrap: 'wrap', position: 'relative' }}>
                                     <List.Item.Meta
                                         style={{ minWidth: '200px', marginBottom: '30px' }}
-                                        avatar={<Avatar src={companyIcon} />}
+                                        avatar={<Avatar src={companyIcon as unknown as ReactNode} />}
                                         title={<>{item.CompanyName}</>}
                                         description={<>
                                             公司地址: {item.CompanyLocation}<br/>

@@ -9,8 +9,11 @@
     "esModuleInterop": true,
     "outDir": "./build",
     "rootDir": "src",
-    "jsx": "preserve"
+    "jsx": "react-jsx",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
   },
-  "include": ["src/**/*",  "./src/index.d.ts"],
+  "include": ["src/**/*", "index.d.ts"],
   "exclude": ["node_modules"]
 }
