@@ -1,4 +1,4 @@
-import { BanchRuleType, BanchStyleType, BanchType, CompanyType, UserType, WaitReplyType, WeekendSettingType, workTimeType } from '../../type'
+import { BanchRuleType, BanchStyleType, BanchType, CompanyType, performanceType, UserType, WaitReplyType, WeekendSettingType, workTimeType } from '../../type'
 import { action, companyType } from '../types'
 
 export const companyState = {
@@ -9,7 +9,8 @@ export const companyState = {
     weekendSetting: [],
     waitReply: [],
     info: {},
-    workTime: []
+    workTime: [],
+    performance: []
 }
 
 export interface companyReducerType {
@@ -21,6 +22,7 @@ export interface companyReducerType {
     waitReply: WaitReplyType[]
     info: CompanyType
     workTime: workTimeType[]
+    performance: performanceType[]
 }
 
 export const companyReducer = (state = companyState, action: action): any => {

@@ -53,6 +53,9 @@ export interface UserType {
     Banch: number // 部門編號
     Permession: number // 權限(0 admin , 1 manager, 2 personal)
     WorkState: string // 工作狀態
+    BanchName: string // 部門名
+    CompanyName: string // 公司名
+    CompanyId: number // 公司id
 }
 
 export interface SelfDataType extends UserType {
@@ -181,4 +184,24 @@ export interface workTimeType {
     UsePaidVocation: number
     CreateTime?: string | Date
     LastModify?: string | Date
+}
+
+export interface performanceType {
+    PerformanceId: number
+    UserId: number
+    Year: number
+    Month: number
+    BanchId: number
+    Goal: string
+    Attitude: number
+    Efficiency: number
+    Professional: number
+    Directions: string
+    BeLate: number
+    DayOffNotOnRule: number
+    BanchName: string
+    CreateTime: string | Date
+    LastModify: string | Date
+    UserName: string
+    CompanyId: number
 }

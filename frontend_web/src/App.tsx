@@ -24,14 +24,11 @@ const BanchManager = lazy((): any => import('./page/BanchManager/BanchManager'))
 const SignPage = lazy((): any => import('./page/Sign/Sign'))
 const ShiftSettingPage = lazy((): any => import('./page/shiftSetting/ShiftSettingPage'))
 const ShiftSearchPage = lazy((): any => import('./page/ShiftSearch/ShiftSearchPage'))
-const SettingPage = lazy((): any => import('./page/Setting/SettingPage'))
+const SettingPage = lazy((): any => import('./page/Setting/Index'))
 const ErrorPage = lazy((): any => import('./page/ErrorPage'))
 const WorkTimeManagerPage = lazy((): any => import('./page/WorkTImeManager/WorkTimeManagerPage'))
+const PerformancePage = lazy((): any => import('./page/Performance/Index'))
 
-declare global {
-    interface Window { styles: any }
-    var styles: any
-}
 // global init f
 window.styles = stylees
 // console.log = () => {}
@@ -64,6 +61,7 @@ const App = (): JSX.Element => {
                         <Route path='shiftSearch' element={<ShiftSearchPage />} />
 
                         <Route path='setting/:types' element={<SettingPage />} />
+                        <Route path='performance/:banchId' element={<PerformancePage />}/>
                     </Route>
                     <Route path='*' element={<ErrorPage/>} />
                 </Routes>

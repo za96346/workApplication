@@ -1,10 +1,10 @@
-import Menu from '../component/Menu'
+import Menu from '../Share/Menu'
 import React, { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import useReduceing from '../Hook/useReducing'
 import { useBreakPoint } from '../Hook/useBreakPoint'
 import { Drawer } from 'antd'
-import Header from '../component/Header'
+import Header from '../Share/Header'
 
 const Layout = (): JSX.Element => {
     const [show, setShow] = useState(false)
@@ -25,7 +25,7 @@ const Layout = (): JSX.Element => {
 
     if (pathname.includes('entry')) {
         return (
-            <div className={styles.entryLayOut}>
+            <div className={window.styles.entryLayOut}>
                 <Outlet />
             </div>
         )
@@ -37,7 +37,7 @@ const Layout = (): JSX.Element => {
                     <Header setShow={setShow} />
                 )
             }
-            <div translate='no' className={styles.article}>
+            <div translate='no' className={window.styles.article}>
                 {
                     isLess('md')
                         ? <Drawer onClose={() => setShow(false)} open={show}>
@@ -45,7 +45,7 @@ const Layout = (): JSX.Element => {
                         </Drawer>
                         : <Menu />
                 }
-                <div className={styles.rightBlock}>
+                <div className={window.styles.rightBlock}>
                     <Outlet />
                 </div>
             </div>

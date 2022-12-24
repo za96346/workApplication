@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Form } from 'antd'
-import Insert from '../../component/Insert'
+import Insert from '../../Share/Insert'
 import api from '../../api/api'
 import { useNavigate } from 'react-router-dom'
 

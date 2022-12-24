@@ -11,11 +11,11 @@ interface PeopleStatusProps {
 const PeopleStatus = ({ currentStatus, name, color }: PeopleStatusProps): JSX.Element => {
     return (
         <>
-            <div className={styles.peopleList}>
+            <div className={window.styles.peopleList}>
                 <Avatar
                     icon={<UserOutlined />}
                 />
-                <div className={styles.peopleText}>
+                <div className={window.styles.peopleText}>
                     <div>{name}</div>
                     <div>編輯顏色: {<Badge color={color} status="error" />}</div>
                 </div>

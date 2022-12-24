@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
 
 import { Button, Form, Input, Select, Spin } from 'antd'
-import api from '../../api/api'
-import useReduceing from '../../Hook/useReducing'
-
+import api from '../../../../api/api'
+import useReduceing from '../../../../Hook/useReducing'
 const CompanyForm = (): JSX.Element => {
     const { company, loading, user } = useReduceing()
     const onFinish = async (v: any): Promise<void> => {

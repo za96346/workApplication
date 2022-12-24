@@ -66,7 +66,7 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
         return (
             <>
                 <div>排班日期：{lastJsonMessage?.StartDay}~{lastJsonMessage?.EndDay}</div>
-                <div className={`${styles.shiftTable}`}>
+                <div className={`${window.styles.shiftTable}`}>
                     <table className='mb-5'>
                         <thead>
                             {
@@ -74,7 +74,7 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
                                     const findWeekend = weekendArr?.find((weekend) => weekend?.Date === item)
                                     return (
                                         index === 0
-                                            ? <td style={{ left: '1px' }} className={styles.stickyTd}>員工</td>
+                                            ? <td style={{ left: '1px' }} className={window.styles.stickyTd}>員工</td>
                                             : <td style={{ backgroundColor: findWeekend ? 'rgba(255, 0, 0, 0.4)' : 'white' }}>
                                                 {item?.slice(8, 10)}<br/>
                                                 {statics.days[new Date(item).getDay()]}
@@ -100,13 +100,13 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
                                                 })
                                                 return (
                                                     index === 0
-                                                        ? <td key={uuid()} style={{ left: '1px' }} className={styles.stickyTd}>
+                                                        ? <td key={uuid()} style={{ left: '1px' }} className={window.styles.stickyTd}>
                                                             {
                                                                 i.UserName
                                                             }
                                                         </td>
                                                         : <td
-                                                            className={styles.td}
+                                                            className={window.styles.td}
                                                             key={uuid()}
                                                             onClickCapture={() => onClickSendPosition(position)}
                                                             style={{
@@ -116,7 +116,7 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
                                                             {
                                                                 status.clickPos === position
                                                                     ? (
-                                                                        <div className={`${styles.downList} shadow-lg bg-white rounded`}>
+                                                                        <div className={`${window.styles.downList} shadow-lg bg-white rounded`}>
 
                                                                             {
                                                                                 company.banchStyle.map((it) => (

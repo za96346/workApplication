@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import api from '../../api/api'
 import useReduceing from '../../Hook/useReducing'
-import Input from '../../component/Input'
-import { Button } from '../../component/Button'
+import Input from '../../Share/Input'
+import { Button } from '../../Share/Button'
 import { Table } from 'antd'
 import { workTimeType } from '../../type'
 import Modal from './Modal'
-import Btn from '../../component/Btn'
+import Btn from 'Share/Btn'
 
 const columns = [
     {
@@ -82,7 +82,7 @@ const WorkTimeManagerPage = (): JSX.Element => {
                 onOk={onClose}
                 open={open}
             />
-            <div className={styles.workTimeBlock}>
+            <div className={window.styles.workTimeBlock}>
                 <Button onClick={() => { setOpen(true) }} className="btn btn-secondary" text="新增"/>
                 <div className="row">
                     <Input className="col-md-4" title='年份' />

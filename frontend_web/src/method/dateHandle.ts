@@ -104,6 +104,11 @@ class DateHandle implements DateHandleInterface {
         return this.formatDate(monthEndDate)
     }
 
+    // 民國
+    getMingQuar (): number {
+        return new Date().getFullYear() - 1911
+    }
+
     // 增加天數
     addDays (date: string, days: number): string {
         const dat = new Date(date) // (1)

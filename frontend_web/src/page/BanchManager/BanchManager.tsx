@@ -1,6 +1,6 @@
 import { EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { Card, Input, List, Form, Button } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import api from '../../api/api'
 import useReduceing from '../../Hook/useReducing'
 import rule from '../../method/rule'
@@ -64,8 +64,11 @@ const BanchManager: React.FC = () => {
             await api.getBanch()
         }
     }
+    useEffect(() => {
+        api.getBanch()
+    }, [])
     return (
-        <div className={styles.banchManagerBlock}>
+        <div className={window.styles.banchManagerBlock}>
             <List
                 grid={{
                     gutter: 16,

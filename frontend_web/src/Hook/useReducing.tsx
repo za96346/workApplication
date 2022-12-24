@@ -1,9 +1,9 @@
-import { useSelector } from "react-redux"
-import { companyReducerType } from "../reduxer/reducer/companyReducer"
-import { shiftReducerType } from "../reduxer/reducer/shiftEditReducer"
-import { statusReducerType } from "../reduxer/reducer/statusReducer"
-import { userReducerType } from "../reduxer/reducer/userReducer"
-import { RootState } from "../reduxer/store"
+import { useSelector } from 'react-redux'
+import { companyReducerType } from '../reduxer/reducer/companyReducer'
+import { shiftReducerType } from '../reduxer/reducer/shiftEditReducer'
+import { statusReducerType } from '../reduxer/reducer/statusReducer'
+import { userReducerType } from '../reduxer/reducer/userReducer'
+import { RootState } from '../reduxer/store'
 
 interface props {
     company: companyReducerType

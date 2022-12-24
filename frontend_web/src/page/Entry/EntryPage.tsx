@@ -21,12 +21,12 @@ const Entry = (): JSX.Element => {
     }, [user.token])
     return (
         <>
-            <div className={styles.entryBlock}>
+            <div className={window.styles.entryBlock}>
                 {
                     path !== 'forgetPwd' && (
                         <div>
-                            <div className={path === 'login' ? styles.tabActive : ''} onClick={() => navigate('/entry/login')}>登入</div>
-                            <div className={path === 'register' ? styles.tabActive : ''} onClick={() => navigate('/entry/register')}>註冊</div>
+                            <div className={path === 'login' ? window.styles.tabActive : ''} onClick={() => navigate('/entry/login')}>登入</div>
+                            <div className={path === 'register' ? window.styles.tabActive : ''} onClick={() => navigate('/entry/register')}>註冊</div>
                         </div>
                     )
                 }
@@ -42,14 +42,14 @@ const Entry = (): JSX.Element => {
                 }
                 {
                     path !== 'forgetPwd' && (
-                        <div onClick={() => navigate('/entry/forgetPwd')} className={styles.forgetPwd}>忘記密碼?</div>
+                        <div onClick={() => navigate('/entry/forgetPwd')} className={window.styles.forgetPwd}>忘記密碼?</div>
                     )
                 }
                 {
                     path === 'forgetPwd' && (
                         <>
                             <ForgetPwdForm />
-                            <div onClick={() => navigate('/entry/login')} className={styles.forgetPwd}>返回登入畫面</div>
+                            <div onClick={() => navigate('/entry/login')} className={window.styles.forgetPwd}>返回登入畫面</div>
                         </>
                     )
                 }

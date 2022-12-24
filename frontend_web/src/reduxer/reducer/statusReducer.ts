@@ -35,6 +35,8 @@ const statusState = {
     onUpdateWaitReply: false,
     onCreateWaitReply: false,
 
+    onFetchPerformance: false,
+
     onFetchWorkTime: false
 }
 
@@ -72,6 +74,8 @@ export interface statusReducerType {
     onFetchWaitReply: boolean
     onUpdateWaitReply: boolean
     onCreateWaitReply: boolean
+
+    onFetchPerformance: boolean
 
     onFetchWorkTime: boolean
 }

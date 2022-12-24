@@ -81,7 +81,7 @@ div {
     width: 100vw;
     height: 100vh;
 	position: relative;
-	background-image: url(asserts/bg1.jpeg);
+	background-image: url(./asserts/bg1.jpeg);
 	background-size: cover;
 	background-repeat: no-repeat;
 }
@@ -143,26 +143,7 @@ div {
 	height: 100%;
 	display: flex;
 	flex-wrap: wrap;
-	.settingBody {
-		@extend %whiteBoard;
-		flex-grow: 1;
-		>div {
-			width: 90%;
-			margin: 0px auto;
-		}
-		>div:first-child {
-			height: 60px;
-			@extend %boderGray;
-			text-align: center;
-			font-size: 2rem;
-			font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-			letter-spacing: 3px;
-			margin-bottom: 20px;
-		}
-		>div:last-child {
-			
-		}
-	}
+	@extend %whiteBoard;
 }
 
 .empManagerTable {
@@ -379,4 +360,8 @@ div {
 
 .workTimeBlock {
 	@extend %whiteBoard;
+}
+.performanceBlock {
+	@extend %whiteBoard;
+	margin-bottom: 10px;
 }

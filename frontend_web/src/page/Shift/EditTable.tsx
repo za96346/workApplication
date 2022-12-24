@@ -52,7 +52,7 @@ const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
 
                         <Collapse ghost className='mb-4' defaultActiveKey={['1']} onChange={() => {}}>
                             <Collapse.Panel header="圖標" key="1">
-                                <div className={styles.shiftSignBlock}>
+                                <div className={window.styles.shiftSignBlock}>
                                     {
                                         company.banchStyle?.map((item) => {
                                             return (

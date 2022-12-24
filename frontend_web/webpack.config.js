@@ -2,12 +2,20 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require("webpack")
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 // const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/index.tsx',
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    plugins:[
+      new TsconfigPathsPlugin({
+          configFile: 'tsconfig.json',
+          extensions: ['.ts', '.js', 'tsx', 'jsx'],
+          baseUrl: './src'
+      }),
+    ],
   },
   output: {
     path: path.join(__dirname, '/dist'),
@@ -22,6 +30,7 @@ module.exports = {
       },
       {
         loader: 'css-loader',
+        test: /\.css$/i,
         options: {
           modules: { localIdentName: '[name]__[local]___[hash:base64:5]' },
         },
@@ -30,14 +39,22 @@ module.exports = {
         test: /\.scss$/i,
         use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+          },
+        ],
+      },
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/index.html'
-    }),
+    // new HtmlWebpackPlugin({
+    //   template: './src/index.html'
+    // }),
     new MiniCssExtractPlugin({
-      filename: './src/index.css',
+      filename: 'index.css',
     }),
     new webpack.DefinePlugin({
       PRODUCTION: JSON.stringify(true),

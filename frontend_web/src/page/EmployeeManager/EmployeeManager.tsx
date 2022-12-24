@@ -4,10 +4,10 @@ import { Button, DatePicker, Input, Spin } from 'antd'
 import moment from 'moment'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import api from '../../api/api'
-import BanchSelector from '../../component/BanchSelector'
-import Btn from '../../component/Btn'
-import PermessionSelector from '../../component/PermessionSelector'
-import StatusSelector from '../../component/StatusSelector'
+import BanchSelector from '../../Share/BanchSelector'
+import Btn from '../../Share/Btn'
+import PermessionSelector from '../../Share/PermessionSelector'
+import StatusSelector from '../../Share/StatusSelector'
 import useReduceing from '../../Hook/useReducing'
 import statics from '../../statics'
 import { UserType } from '../../type'
@@ -49,7 +49,10 @@ const EmployeeManager = (): JSX.Element => {
         OnWorkDay: '',
         Banch: -1,
         Permession: 2,
-        WorkState: 'on'
+        WorkState: 'on',
+        BanchName: '',
+        CompanyName: '',
+        CompanyId: -1
     })
     const [edit, setEdit] = useState(editInit)
     const onSave = async (): Promise<void> => {
@@ -75,7 +78,7 @@ const EmployeeManager = (): JSX.Element => {
     }, [edit.currentIdx])
     return (
         <>
-            <div className={styles.empManagerFilter}>
+            <div className={window.styles.empManagerFilter}>
                 <Button onClick={() => setFilt(filtInit)} style={{ marginRight: '20px' }}>重設</Button>
                 <Input
                     onChange={(e) => setFilt((prev) => ({ ...prev, userName: e.target?.value || '' }))}
@@ -90,7 +93,7 @@ const EmployeeManager = (): JSX.Element => {
                     新增員工
                 </button>
             </div>
-            <div className={styles.empManagerTable}>
+            <div className={window.styles.empManagerTable}>
                 <table>
                     <thead>
                         <tr>

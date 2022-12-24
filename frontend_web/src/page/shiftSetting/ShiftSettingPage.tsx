@@ -16,7 +16,7 @@ const ShiftSettingPage = (): JSX.Element => {
 
             <Tabs
                 destroyInactiveTabPane
-                className={styles.shiftSettingBlock}
+                className={window.styles.shiftSettingBlock}
             >
                 <Tabs.TabPane tab={'圖標設定'} key={0}>
                     <div style={{ marginBottom: '20px', fontSize: '1.2rem' }}>{banch?.BanchName}</div>

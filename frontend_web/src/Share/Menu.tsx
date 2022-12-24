@@ -1,11 +1,11 @@
-import { AppstoreOutlined, EditFilled, ExportOutlined, FieldTimeOutlined, GoldOutlined, HomeOutlined, IdcardOutlined, InsertRowRightOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined } from '@ant-design/icons'
+import { AppstoreOutlined, EditFilled, ExportOutlined, FieldTimeOutlined, GoldOutlined, HomeOutlined, IdcardOutlined, InsertRowRightOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined, WalletOutlined } from '@ant-design/icons'
 import { Button, MenuProps, Menu } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useBreakPoint } from '../Hook/useBreakPoint'
 import useReduceing from '../Hook/useReducing'
 import { clearAll } from '../reduxer/clearAll'
-import { BanchType } from '../type'
+import { BanchType, UserType } from '../type'
 
 type MenuItem = Required<MenuProps>['items'][number]
 
@@ -26,10 +26,18 @@ const getItem = (
 
 // getItem('保育組', 2)
 
-const items = (banch: BanchType[], companyCode: string): MenuItem[] => {
+const items = (banch: BanchType[], selfData: UserType): MenuItem[] => {
     const a = banch?.map((item) => getItem(item.BanchName, `a${item.Id}`)) || []
     const b = banch?.map((item) => getItem(item.BanchName, `b${item.Id}`)) || []
-    if (companyCode === '') {
+    const c = banch?.reduce((accr, item) => {
+        if (selfData.Permession === 100) {
+            accr.push(getItem(item.BanchName, `c${item.Id}`))
+        } else if (selfData.Permession === 1 && selfData.Banch === item.Id) {
+            accr.push(getItem(item.BanchName, `c${item.Id}`))
+        }
+        return accr
+    }, [])
+    if (selfData.CompanyCode === '') {
         return (
             [
                 getItem('首頁', 'home', <HomeOutlined />),
@@ -43,6 +51,7 @@ const items = (banch: BanchType[], companyCode: string): MenuItem[] => {
         getItem('排班', 'shift', <InsertRowRightOutlined />, a),
 
         getItem('班表設定', 'shiftSetting', <AppstoreOutlined />, b),
+        getItem('績效評核', 'performance', <WalletOutlined />, c.length > 0 && c),
         getItem('員工管理', 'employeeManager', <IdcardOutlined />),
         getItem('部門管理', 'banchManager', <GoldOutlined />),
         getItem('時數管理', 'workTimeManager', <FieldTimeOutlined />),
@@ -93,6 +102,11 @@ const App: React.FC = () => {
         }
         if (path1 === 'shiftSetting' || path2 === 'shiftSetting') {
             navigate(`shiftSetting/${current.key}`)
+            return
+        }
+        if (path1 === 'performance' || path2 === 'performance') {
+            navigate(`performance/${current.key}`)
+            return
         }
         if (path1 === 'banchManager') {
             navigate('banchManager')
@@ -118,7 +132,7 @@ const App: React.FC = () => {
                 width: width(),
                 transition: '0.2s'
             }}
-            className={styles.menuBlock}
+            className={window.styles.menuBlock}
             >
                 {
                     isMore('md') && (
@@ -157,7 +171,7 @@ const App: React.FC = () => {
                     defaultOpenKeys={['sub1']}
                     selectable
                     mode="inline"
-                    items={items(company.banch, user.selfData?.CompanyCode)}
+                    items={items(company.banch, user.selfData)}
                 />
                 {/* </div> */}
                 <div

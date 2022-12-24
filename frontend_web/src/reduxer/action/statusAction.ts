@@ -256,12 +256,24 @@ class statusAcion {
         }
     }
 
+    // 工作時數
     onFetchWorkTime (s: boolean): action {
         return {
             type: s ? statusType.FETCH_WORK_TIME_ON : statusType.FETCH_WORK_TIME_OFF,
             payload: {
                 ...store.getState().status,
                 onFetchWorkTime: s
+            }
+        }
+    }
+
+    // 績效
+    onFetchPerformance (s: boolean): action {
+        return {
+            type: s ? statusType.FETCH_PERFORMANCE_ON : statusType.FETCH_PERFORMANCE_OFF,
+            payload: {
+                ...store.getState().status,
+                onFetchPerformance: s
             }
         }
     }

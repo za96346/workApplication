@@ -15,7 +15,7 @@ Btn.Edit = ({ onClick }: { onClick: () => void }): JSX.Element => {
             <Button
                 style={{ color: 'blue' }}
                 onClick={onClick}
-                className={styles.editLabel}
+                className={window.styles.editLabel}
                 icon={<EditOutlined style={{ marginRight: '10px' }} />}
             >
                 編輯
@@ -28,7 +28,7 @@ Btn.Delete = ({ onClick }: { onClick: () => void }): JSX.Element => {
         <>
             <Button
                 onClick={onClick}
-                className={styles.editLabel}
+                className={window.styles.editLabel}
                 style={{ color: 'red' }}
                 icon={<DeleteOutlined style={{ marginRight: '10px' }} />}
             >
@@ -42,7 +42,7 @@ Btn.Save = ({ onClick }: { onClick: () => void }): JSX.Element => {
         <>
             <Button
                 onClick={onClick}
-                className={styles.editLabel}
+                className={window.styles.editLabel}
                 style={{ color: 'green' }}
                 icon={<SaveOutlined style={{ marginRight: '10px' }} />}
             >
@@ -56,7 +56,7 @@ Btn.Cancel = ({ onClick }: { onClick: () => void }): JSX.Element => {
         <>
             <Button
                 onClick={onClick}
-                className={styles.editLabel}
+                className={window.styles.editLabel}
                 style={{ color: 'skyblue' }}
                 icon={<SaveOutlined style={{ marginRight: '10px' }} />}
             >
@@ -70,7 +70,7 @@ Btn.Confirm = ({ onClick }: { onClick: () => void }): JSX.Element => {
         <>
             <Button
                 onClick={onClick}
-                className={styles.editLabel}
+                className={window.styles.editLabel}
                 style={{ color: 'skyblue' }}
                 icon={<UserAddOutlined style={{ marginRight: '10px' }} />}
             >

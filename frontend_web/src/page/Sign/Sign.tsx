@@ -20,7 +20,7 @@ const SignPage = (): JSX.Element => {
     }, [])
     return (
 
-        <div className={styles.signBlock}>
+        <div className={window.styles.signBlock}>
             <Tabs>
                 <Tabs.TabPane tab={'申請中'} key={0}>
                     <PeopleList keys={1} onConfirm={onConfirm}/>

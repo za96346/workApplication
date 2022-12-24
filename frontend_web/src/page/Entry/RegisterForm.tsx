@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { Form, Input } from 'antd'
 import { NumberOutlined } from '@ant-design/icons'
 
-import { Button } from '../../component/Button'
-import { Modal } from '../../component/Modal'
+import { Button } from '../../Share/Button'
+import { Modal } from '../../Share/Modal'
 import api from '../../api/api'
 import { useNavigate } from 'react-router-dom'
-import Insert from '../../component/Insert'
+import Insert from '../../Share/Insert'
 import FullSpin from './FullSpin'
 
 const Register = (): JSX.Element => {

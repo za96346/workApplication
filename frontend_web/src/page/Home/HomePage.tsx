@@ -2,7 +2,7 @@ import { Avatar, List, Tabs } from 'antd'
 import Search from 'antd/lib/input/Search'
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import api from '../../api/api'
-import Btn from '../../component/Btn'
+import Btn from '../../Share/Btn'
 import useReduceing from '../../Hook/useReducing'
 import { CompanyType } from '../../type'
 import companyIcon from '../../asserts/company.png'
@@ -31,7 +31,7 @@ const HomePage = (): JSX.Element => {
         api.getCompanyInfo({ companyCode: '' })
     }, [])
     return (
-        <div className={styles.HomeBlock}>
+        <div className={window.styles.HomeBlock}>
             <Tabs onChange={(e) => {
                 setSign([])
                 if (e === '3') {

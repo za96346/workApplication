@@ -8,7 +8,7 @@ const Header = ({ setShow }: { setShow: (arg0: boolean) => void }): JSX.Element 
     console.log(pathname, key)
     return (
         <>
-            <div onClick={() => setShow(true)} className={styles.headerBlock}>
+            <div onClick={() => setShow(true)} className={window.styles.headerBlock}>
                 <MenuOutlined />
             </div>
         </>

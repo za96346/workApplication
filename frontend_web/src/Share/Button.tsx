@@ -14,7 +14,7 @@ export const Button = ({ text, onClick, style, ...attr }: props): JSX.Element =>
                 {...other}
                 style={style}
                 onClick={onClick}
-                className={className?.length > 0 ? className : styles.mainBtn}
+                className={className?.length > 0 ? className : window.styles.mainBtn}
             >
                 {
                     text

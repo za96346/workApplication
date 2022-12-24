@@ -1,11 +1,10 @@
-import * as React from "react"
-import * as ReactDOM from "react-dom/client"
-import App from "./App.tsx"
-import { Provider } from "react-redux"
+import * as React from 'react'
+import * as ReactDOM from 'react-dom/client'
+import App from './App'
+import { Provider } from 'react-redux'
 
-import { PersistGate } from "redux-persist/integration/react"
-import { persisStore, store } from "./reduxer/store"
-
+import { PersistGate } from 'redux-persist/integration/react'
+import { persisStore, store } from './reduxer/store'
 // npm i -D @types/node-sass
 // npm i -D node-sass
 
@@ -20,7 +19,7 @@ import { persisStore, store } from "./reduxer/store"
 
 // npm install mini-css-extract-plugin --save-dev
 
-const root = ReactDOM.createRoot(document.getElementById("root"))
+const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
     <React.StrictMode>
         <Provider store={store}>

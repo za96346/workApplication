@@ -3,7 +3,7 @@ import { Button, Form } from 'antd'
 // import { useNavigate } from 'react-router-dom'
 import { LoginType } from '../../type'
 import api from '../../api/api'
-import Insert from '../../component/Insert'
+import Insert from '../../Share/Insert'
 import FullSpin from './FullSpin'
 
 const Login = (): JSX.Element => {

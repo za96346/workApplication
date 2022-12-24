@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import api from '../../api/api'
-import { Modal as AntdModal, props as antdModalprops } from '../../component/Modal'
+import { Modal as AntdModal, props as antdModalprops } from '../../Share/Modal'
 
 interface props extends antdModalprops {
 }

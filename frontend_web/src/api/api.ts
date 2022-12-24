@@ -1,6 +1,6 @@
-import api from './apiAbs'
+import apiAbs from './apiAbs'
 import axios from 'axios'
-import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, RegisterType, ResMessage, ResType, SelfDataType, UserType, WaitReplyType, WeekendSettingType, workTimeType } from '../type'
+import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, performanceType, RegisterType, ResMessage, ResType, SelfDataType, UserType, WaitReplyType, WeekendSettingType, workTimeType } from '../type'
 import userAction from '../reduxer/action/userAction'
 import { store } from '../reduxer/store'
 import { FullMessage } from '../method/notice'
@@ -8,7 +8,7 @@ import companyAction from '../reduxer/action/companyAction'
 import statusAction from '../reduxer/action/statusAction'
 import { clearAll } from '../reduxer/clearAll'
 
-class ApiControl extends api {
+class ApiControl extends apiAbs {
     baseUrl: string
     protected readonly route = {
         login: 'entry/login',
@@ -25,7 +25,8 @@ class ApiControl extends api {
         forgetPassword: 'user/forgetPassword',
         weekendSetting: 'company/weekend/setting',
         waitReply: 'company/wait/reply',
-        workTime: 'shift/workTime'
+        workTime: 'shift/workTime',
+        performance: 'pr/performance'
     }
 
     constructor () {
@@ -629,11 +630,35 @@ class ApiControl extends api {
         return res
     }
 
+    // 工作時數
     async createWorkTime (data: workTimeType): Promise<ResType<null>> {
         const res = await this.PUT<null>({
             url: this.route.workTime,
             body: data
         })
+        return res
+    }
+
+    // 績效
+    async getPerformance ({
+        year = new Date().getFullYear() - 1911,
+        month = new Date().getMonth(),
+        banchId = 0
+    }): Promise<ResType<performanceType[]>> {
+        store.dispatch(statusAction.onFetchPerformance(true))
+        const res = await this.GET<performanceType[]>({
+            url: this.route.performance,
+            successShow: false,
+            params: {
+                year,
+                month,
+                banchId
+            }
+        })
+        if (res.status) {
+            store.dispatch(companyAction.setPerformance(res.data))
+        }
+        store.dispatch(statusAction.onFetchPerformance(false))
         return res
     }
 }

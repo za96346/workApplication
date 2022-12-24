@@ -25,7 +25,7 @@ const ShiftPage = (): JSX.Element => {
                 !status.drawerOpen && (
                     <div
                         onClick={() => setStatus((prev) => ({ ...prev, drawerOpen: true }))}
-                        className={styles.peopleListBtn}
+                        className={window.styles.peopleListBtn}
                     >
                         <HolderOutlined />
                     </div>
@@ -48,7 +48,7 @@ const ShiftPage = (): JSX.Element => {
                     })
                 }
             </Drawer>
-            <div className={styles.shiftProcessBar}>
+            <div className={window.styles.shiftProcessBar}>
                 <h3>{company.banch.find((item) => item.Id === convertBanchId)?.BanchName || ''}</h3>
                 <Steps current={shiftEdit.Status - 1}>
                     <Steps.Step title="開放編輯" description={`${shiftEdit.StartDay} ${shiftEdit.EndDay}`} />
@@ -56,7 +56,7 @@ const ShiftPage = (): JSX.Element => {
                     <Steps.Step title="確認發布" description="進行中..." />
                 </Steps>
             </div>
-            <div className={styles.shiftEdit}>
+            <div className={window.styles.shiftEdit}>
                 <Tabs
                     destroyInactiveTabPane
                     onChange={(key) => setStatus((prev) => ({ ...prev, currentTabs: parseInt(key, 10) }))}
