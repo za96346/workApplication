@@ -13,6 +13,7 @@
     "noEmitOnError": true,
     "baseUrl": "./src",
     "paths": {
+      "Root/*": ["*"],
       "Hook/*": ["Hook/*"],
       "Share/*": ["Share/*"],
       "api": ["api/*"],
@@ -21,7 +22,7 @@
       "reducxer/*": ["reducxer/*"],
       "Hoc/*": ["Hoc/*"],
       "asserts/*": ["asserts/*"],
-      "type": ["type"]
+      "type": ["type"],
     },
     "plugins": [
       // Transform paths in output .js files

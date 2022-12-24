@@ -3,7 +3,7 @@ import { HolderOutlined } from '@ant-design/icons'
 import { Drawer, Spin, Steps, Tabs } from 'antd'
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import useReduceing from '../../Hook/useReducing'
+import useReduceing from 'Hook/useReducing'
 import EditTable from './EditTable'
 import PeopleStatus from './PeopleStatus'
 const ShiftPage = (): JSX.Element => {

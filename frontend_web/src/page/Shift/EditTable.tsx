@@ -1,7 +1,7 @@
 import { Result, Skeleton, Spin, Collapse } from 'antd'
 import { v4 as uuid } from 'uuid'
 import React, { useEffect } from 'react'
-import useReduceing from '../../Hook/useReducing'
+import useReduceing from 'Hook/useReducing'
 import useTableCache from './TableCache'
 import { useNavigate } from 'react-router-dom'
 

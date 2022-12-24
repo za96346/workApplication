@@ -1,12 +1,12 @@
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Collapse, List, Modal, Skeleton } from 'antd'
 import React, { useEffect, useState } from 'react'
-import api from '../../api/api'
-import Btn from '../../Share/Btn'
-import useReduceing from '../../Hook/useReducing'
-import dateHandle from '../../method/dateHandle'
-import statics from '../../statics'
-import { BanchRuleListType, BanchRuleType, ResType } from '../../type'
+import api from 'api/api'
+import Btn from 'Share/Btn'
+import useReduceing from 'Hook/useReducing'
+import dateHandle from 'method/dateHandle'
+import statics from 'statics'
+import { BanchRuleListType, BanchRuleType, ResType } from 'type'
 import EditForm from './EditForm'
 
 const statusInit = {

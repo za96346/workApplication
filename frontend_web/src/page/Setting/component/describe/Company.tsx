@@ -1,7 +1,7 @@
 import React from 'react'
 import { Descriptions, Spin } from 'antd'
 
-import useReduceing from '../../../../Hook/useReducing'
+import useReduceing from 'Hook/useReducing'
 // import { Button as MainBtn } from '../../../../component/Button'
 
 const CompanyDescibe = (): JSX.Element => {

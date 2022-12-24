@@ -1,8 +1,8 @@
-import Insert from '../../../../Share/Insert'
+import Insert from 'Share/Insert'
 import { Button, Form } from 'antd'
 import React from 'react'
-import useReduceing from '../../../../Hook/useReducing'
-import api from '../../../../api/api'
+import useReduceing from 'Hook/useReducing'
+import api from 'api/api'
 
 const PasswordForm = (): JSX.Element => {
     const { user } = useReduceing()

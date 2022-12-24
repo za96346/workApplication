@@ -1,7 +1,7 @@
 import { Tabs } from 'antd'
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import useReduceing from '../../Hook/useReducing'
+import useReduceing from 'Hook/useReducing'
 // import BanchRule from './BanchRule'
 import BanchStyle from './BanchStyle'
 

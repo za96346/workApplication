@@ -2,10 +2,10 @@ import { EditOutlined, PictureOutlined } from '@ant-design/icons'
 import { Button, Form, Input, InputNumber, TimePicker } from 'antd'
 import moment from 'moment'
 import React from 'react'
-import WeekDaySelector from '../../Share/WeekDaySelector'
-import WeekTypeSelector from '../../Share/WeekTypeSelector'
-import useReduceing from '../../Hook/useReducing'
-import rule from '../../method/rule'
+import WeekDaySelector from 'Share/WeekDaySelector'
+import WeekTypeSelector from 'Share/WeekTypeSelector'
+import useReduceing from 'Hook/useReducing'
+import rule from 'method/rule'
 
 interface props {
     onFinish: (v: any) => Promise<void>

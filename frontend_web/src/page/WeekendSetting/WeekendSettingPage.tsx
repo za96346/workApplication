@@ -1,9 +1,9 @@
 import { Calendar } from 'antd'
 import { v4 as uuid } from 'uuid'
 import React, { ReactNode, useEffect } from 'react'
-import api from '../../api/api'
-import useReduceing from '../../Hook/useReducing'
-import dateHandle from '../../method/dateHandle'
+import api from 'api/api'
+import useReduceing from 'Hook/useReducing'
+import dateHandle from 'method/dateHandle'
 
 const WeekendSettingPage = (): JSX.Element => {
     const { company } = useReduceing()

@@ -1,8 +1,8 @@
 import { Avatar, Button, List } from 'antd'
 import React from 'react'
-import useReduceing from '../../Hook/useReducing'
-import statics from '../../statics'
-import { WaitReplyType } from '../../type'
+import useReduceing from 'Hook/useReducing'
+import statics from 'statics'
+import { WaitReplyType } from 'type'
 interface props {
     onConfirm: (a: WaitReplyType['WaitId'], isAccept: WaitReplyType['IsAccept']) => Promise<void>
     keys: WaitReplyType['IsAccept']

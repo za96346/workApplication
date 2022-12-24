@@ -1,14 +1,14 @@
 import { v4 as uuid } from 'uuid'
 import React, { useEffect, useMemo, useState } from 'react'
-import { companyReducerType } from '../../reduxer/reducer/companyReducer'
-import { userReducerType } from '../../reduxer/reducer/userReducer'
-import { BanchStyleType, ShiftEditType } from '../../type'
+import { companyReducerType } from 'reduxer/reducer/companyReducer'
+import { userReducerType } from 'reduxer/reducer/userReducer'
+import { BanchStyleType, ShiftEditType } from 'type'
 import { Spin } from 'antd'
-import useShiftEditSocket from '../../Hook/useShiftEdit'
-import dateHandle from '../../method/dateHandle'
+import useShiftEditSocket from 'Hook/useShiftEdit'
+import dateHandle from 'method/dateHandle'
 import { useDispatch } from 'react-redux'
-import companyAction from '../../reduxer/action/companyAction'
-import statics from '../../statics'
+import companyAction from 'reduxer/action/companyAction'
+import statics from 'statics'
 
 const useTableCache = (company: companyReducerType, banchId: number, user: userReducerType): {
     tb: React.ReactNode

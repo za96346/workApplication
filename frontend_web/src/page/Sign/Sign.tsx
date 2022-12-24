@@ -1,7 +1,7 @@
 import { Tabs } from 'antd'
 import React, { useEffect } from 'react'
-import api from '../../api/api'
-import { WaitReplyType } from '../../type'
+import api from 'api/api'
+import { WaitReplyType } from 'type'
 import PeopleList from './PeopleList'
 
 const SignPage = (): JSX.Element => {
