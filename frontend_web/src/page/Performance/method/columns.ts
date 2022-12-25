@@ -60,5 +60,11 @@ export const columns: ColumnsType<performanceType> = [
         key: 'Directions',
         title: '績效描述',
         dataIndex: 'Directions'
+    },
+    {
+        key: 'action',
+        title: '',
+        dataIndex: 'action',
+        width: '100px'
     }
 ]

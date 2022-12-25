@@ -1,7 +1,6 @@
 /* eslint-disable array-callback-return */
 import { PlusCircleFilled, SearchOutlined } from '@ant-design/icons'
 import { Button, DatePicker, Input, Spin } from 'antd'
-import moment from 'moment'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import api from '../../api/api'
 import BanchSelector from '../../Share/BanchSelector'
@@ -11,6 +10,7 @@ import StatusSelector from '../../Share/StatusSelector'
 import useReduceing from '../../Hook/useReducing'
 import statics from '../../statics'
 import { UserType } from '../../type'
+import dayjs from 'dayjs'
 
 const editInit = {
     currentIdx: -1
@@ -127,7 +127,7 @@ const EmployeeManager = (): JSX.Element => {
                                                     allowClear={false}
                                                     inputReadOnly
                                                     onChange={(v: any) => { form.current.OnWorkDay = v._d.toISOString() }}
-                                                    defaultValue={moment(item.OnWorkDay)}
+                                                    defaultValue={dayjs(item.OnWorkDay)}
                                                 />
                                             </td>
                                             <td>

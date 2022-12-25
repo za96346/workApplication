@@ -7,7 +7,7 @@ import {
     Navigate
 } from 'react-router-dom'
 import stylees from './index.module.scss'
-import 'antd/dist/antd.min.css'
+import 'antd/dist/reset.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 // import WeekendSettingPage from './page/WeekendSetting/WeekendSettingPage'

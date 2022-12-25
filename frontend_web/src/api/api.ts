@@ -640,20 +640,13 @@ class ApiControl extends apiAbs {
     }
 
     // 績效
-    async getPerformance ({
-        year = new Date().getFullYear() - 1911,
-        month = new Date().getMonth(),
-        banchId = 0
-    }): Promise<ResType<performanceType[]>> {
+    async getPerformance (v: any): Promise<ResType<performanceType[]>> {
+        console.log(v)
         store.dispatch(statusAction.onFetchPerformance(true))
         const res = await this.GET<performanceType[]>({
             url: this.route.performance,
             successShow: false,
-            params: {
-                year,
-                month,
-                banchId
-            }
+            params: v
         })
         if (res.status) {
             store.dispatch(companyAction.setPerformance(res.data))
