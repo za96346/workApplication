@@ -36,7 +36,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
     defer conn.Close()
-
+	
 	// header
 	token := r.URL.Query()["token"]
 	banchId := r.URL.Query()["banchId"]
@@ -88,7 +88,6 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 			CompanyId: company.CompanyId,
 			Value: v,
 	}
-
 	// 加入全域連線
 	Singleton().ConnLine[user.UserId] = conn
 	defer delete(Singleton().ConnLine, user.UserId)

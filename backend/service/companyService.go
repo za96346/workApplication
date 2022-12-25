@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
+
 // banch
 func FetchBanchAll(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()

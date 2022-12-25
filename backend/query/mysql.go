@@ -1038,7 +1038,17 @@ func addPerformance(){
 		where
 			(u.companyCode=?
 			or qu.companyCode=?)
-			and (p.year>=? and p.month>=?)
+			and 
+				concat(
+					p.year,
+					if(p.month < 10, concat('0', p.month), p.month)
+				) >= ?
+			and
+				concat(
+					p.year,
+					if(p.month < 10, concat('0', p.month), p.month)
+				) <= ?
+			and u.userName=if(?='' or ?=null, u.userName, ?)
 			order by p.year asc, p.month asc;
 	`;
 	sqlQueryInstance.Performance.SelectAllByManager = `
@@ -1060,7 +1070,17 @@ func addPerformance(){
 				or qu.companyCode=?)
 			and (p.banchId=?
 				or p.banchName=?)
-			and (p.year>=? and p.month>=?)
+				and 
+				concat(
+					p.year,
+					if(p.month < 10, concat('0', p.month), p.month)
+				) >= ?
+			and
+				concat(
+					p.year,
+					if(p.month < 10, concat('0', p.month), p.month)
+				) <= ?
+			and u.userName=if(?='' or ?=null, u.userName, ?)
 			order by p.year asc, p.month asc;
 	`;
 	sqlQueryInstance.Performance.SelectAllByPerson = `
@@ -1077,7 +1097,18 @@ func addPerformance(){
 			on u.companyCode=c.companyCode
 		left join quitWorkUser qu
 			on qu.userId=p.userId
-		where p.userId=? and (p.year>=? and p.month>=?)
+		where
+			p.userId=? 
+			and 
+				concat(
+					p.year,
+					if(p.month < 10, concat('0', p.month), p.month)
+				) >= ?
+			and
+				concat(
+					p.year,
+					if(p.month < 10, concat('0', p.month), p.month)
+				) <= ?
 		order by p.year asc, p.month asc;
 	`;
 }

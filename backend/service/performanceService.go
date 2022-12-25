@@ -3,8 +3,8 @@ package service
 import (
 	"backend/methods"
 	"backend/table"
+	"fmt"
 	"net/http"
-	"strconv"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -14,13 +14,26 @@ func FetchPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 
-	yearProps := (*props).Query("year")
-	monthProps := (*props).Query("month")
+	startYearProps := (*props).Query("startYear")
+	startMonthProps := (*props).Query("startMonth")
+	endYearProps := (*props).Query("endYear")
+	endMonthProps := (*props).Query("endMonth")
+	name := (*props).Query("name")
 	banchIdProps := (*props).Query("banchId")
 
-	year, _ := strconv.Atoi(yearProps)
-	month, _ := strconv.Atoi(monthProps)
 	banchId, isBanchError := methods.AnyToInt64(banchIdProps)
+
+	if len(startMonthProps) == 1 {
+		startMonthProps = fmt.Sprintf("0%s", startMonthProps)
+	}
+	if len(endMonthProps) == 1 {
+		endMonthProps = fmt.Sprintf("0%s", endMonthProps)
+	}
+
+	start := fmt.Sprintf("%s%s", startYearProps, startMonthProps)
+	end := fmt.Sprintf("%s%s", endYearProps, endMonthProps)
+
+	Log.Println("start, end",start, "--", end)
 
 	user, _, err := CheckUserAndCompany(props)
 	if err {return}
@@ -32,8 +45,11 @@ func FetchPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 			0,
 			user.CompanyCode,
 			user.CompanyCode,
-			year,
-			month,
+			start,
+			end,
+			name,
+			name,
+			name,
 		)
 	// 管理元 有帶 banchId
 	} else if user.Permession == 100 && isBanchError == nil {
@@ -45,8 +61,11 @@ func FetchPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 				user.CompanyCode,
 				banchId,
 				(*banch)[0].BanchName,
-				year,
-				month,
+				start,
+				end,
+				name,
+				name,
+				name,
 			)
 		}
 	// 主管 有帶 banchId 拿部門成員
@@ -59,13 +78,21 @@ func FetchPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 				user.CompanyCode,
 				user.Banch,
 				(*banch)[0].BanchName,
-				year,
-				month,
+				start,
+				end,
+				name,
+				name,
+				name,
 			)
 		}
 	// 一般職員 或事 主管自己
 	} else {
-		res = *(*Mysql).SelectPerformance(2, user.UserId, year, month)
+		res = *(*Mysql).SelectPerformance(
+			2,
+			user.UserId,
+			start,
+			end,
+		)
 	}
 	props.JSON(http.StatusOK, gin.H{
 		"message": "not bad",
