@@ -63,3 +63,72 @@ func(dbObj *DB) SelectPerformance(selectKey int, value... interface{}) *[]table.
 
 	return &carry
 }
+
+// 0 => admin => performanceId, companyCode
+// 1 => manager => performanceId, companyCode, performanceBanchId, performanceBanchName
+// 2 => personal => performanceId, userId
+func(dbObj *DB) UpdatePerformance(updateKey int, data *table.Performance, value ...interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).performanceMux.Lock()
+	defer (*dbObj).performanceMux.Unlock()
+	defer func ()  {
+		(*dbObj).containers.performance = nil
+	}()
+	querys := ""
+	switch updateKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).Performance.UpdateByAdmin
+		(*dbObj).containers.performance = append(
+			(*dbObj).containers.performance,
+			(*data).BanchId,
+			(*data).Goal,
+			(*data).Attitude,
+			(*data).Efficiency,
+			(*data).Professional,
+			(*data).Directions,
+			(*data).BeLate,
+			(*data).DayOffNotOnRule,
+			(*data).BanchName,
+			(*data).LastModify,
+		)
+		break;
+	case 1:
+		querys = (*query.MysqlSingleton()).Performance.UpdateByManager
+		(*dbObj).containers.performance = append(
+			(*dbObj).containers.performance,
+			(*data).BanchId,
+			(*data).Goal,
+			(*data).Attitude,
+			(*data).Efficiency,
+			(*data).Professional,
+			(*data).Directions,
+			(*data).BeLate,
+			(*data).DayOffNotOnRule,
+			(*data).BanchName,
+			(*data).LastModify,
+		)
+		break;
+	case 2:
+		querys = (*query.MysqlSingleton()).Performance.UpdateByPerson
+		(*dbObj).containers.performance = append(
+			(*dbObj).containers.performance,
+			(*data).Goal,
+			(*data).LastModify,
+		)
+		break;
+	
+	}
+	(*dbObj).containers.performance = append(
+		(*dbObj).containers.performance,
+		value...
+	)
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec((*dbObj).containers.performance...)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}

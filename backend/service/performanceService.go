@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"sync"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -95,15 +96,65 @@ func FetchPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 		)
 	}
 	props.JSON(http.StatusOK, gin.H{
-		"message": "not bad",
+		"message": StatusText().FindSuccess,
 		"data": res,
 	})
 }
 func UpdatePerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
+	now := time.Now()
+	performance := table.Performance {}
+	if (*props).ShouldBindJSON(&performance) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+	performance.LastModify = now
+	user, company, err := CheckUserAndCompany(props)
+	if err {return}
+
+	updateStatus := false
+
+	if user.Permession == 100 {
+		updateStatus = (*Mysql).UpdatePerformance(
+			0,
+			&performance,
+			performance.PerformanceId,
+			company.CompanyCode,
+		)
+	} else if user.Permession == 1 {
+		banch := (*Mysql).SelectCompanyBanch(2, user.Banch)
+		banchName := ""
+		if !methods.IsNotExited(banch) {
+			banchName = (*banch)[0].BanchName
+		}
+		updateStatus = (*Mysql).UpdatePerformance(
+			1,
+			&performance,
+			performance.PerformanceId,
+			company.CompanyCode,
+			user.Banch,
+			banchName,
+		)
+	} else {
+		updateStatus = (*Mysql).UpdatePerformance(
+			0,
+			&performance,
+			performance.PerformanceId,
+			user.UserId,
+		)
+	}
+
+	if !updateStatus {
+		props.JSON(http.StatusOK, gin.H{
+			"message": StatusText().UpdateFail,
+		})
+		return
+	}
 	props.JSON(http.StatusOK, gin.H{
-		"message": "not bad",
+		"message": StatusText().UpdateSuccess,
 	})
 }
 func InsertPerformance(props *gin.Context, waitJob *sync.WaitGroup) {

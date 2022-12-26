@@ -154,6 +154,9 @@ type performance struct {
 	SelectAllByAdmin string
 	SelectAllByManager string
 	SelectAllByPerson string
+	UpdateByAdmin string
+	UpdateByManager string
+	UpdateByPerson string
 }
 func MysqlSingleton() *sqlQuery {
 	queryMux = new(sync.Mutex)
@@ -1110,5 +1113,46 @@ func addPerformance(){
 					if(p.month < 10, concat('0', p.month), p.month)
 				) <= ?
 		order by p.year asc, p.month asc;
+	`;
+	sqlQueryInstance.Performance.UpdateByAdmin = `
+		update performance p
+		left join user u
+			on u.userId=p.userId
+		set
+			banchId=?,
+			goal=?,
+			attitude=?,
+			efficiency=?,
+			professional=?,
+			directions=?,
+			beLate=?,
+			dayOffNotOnRule=?,
+			banchName=?,
+			p.lastModify=?
+		where p.performanceId=? and u.companyCode=?;
+	`
+	sqlQueryInstance.Performance.UpdateByManager = `
+		update performance p
+		left join user u
+			on u.userId=p.userId
+		set
+			banchId=?,
+			goal=?,
+			attitude=?,
+			efficiency=?,
+			professional=?,
+			directions=?,
+			beLate=?,
+			dayOffNotOnRule=?,
+			banchName=?,
+			p.lastModify=?
+		where p.performanceId=? and u.companyCode=? and (p.banchId=? or p.banchName=?);
+	`;
+	sqlQueryInstance.Performance.UpdateByPerson = `
+		update performance p
+		set
+			goal=?,
+			p.lastModify=?
+		where p.performanceId=? and p.userId=?;
 	`;
 }
