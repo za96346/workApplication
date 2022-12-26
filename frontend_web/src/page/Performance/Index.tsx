@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/dot-notation */
 import React, { useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react'
 import { Table, Form, Button, Space, Dropdown, Typography, Input, Spin } from 'antd'
@@ -10,6 +11,7 @@ import DateSelect from './component/DateSelect'
 import dayjs from 'dayjs'
 import { MenuItemType } from 'antd/es/menu/hooks/useItems'
 import swal from 'sweetalert'
+import { performanceType } from 'Root/type'
 
 const EditModal = lazy(async () => await import('./component/modal/Edit'))
 const ChangeBanchModal = lazy(async () => await import('./component/modal/ChangeBanch'))
@@ -30,7 +32,11 @@ const list: MenuItemType[] = [
         icon: <SwitcherOutlined />
     }
 ]
-const modalStateInit = {
+const modalStateInit: {
+    open: boolean
+    type: string
+    value: performanceType
+} = {
     open: false,
     type: '-1',
     value: null
@@ -71,9 +77,9 @@ const Index = (): JSX.Element => {
             )
         }))
     }, [company.performance, modal.type])
-    const onSearch = (): void => {
+    const onSearch = async (): Promise<void> => {
         console.log(formData.current.range)
-        void api.getPerformance({
+        await api.getPerformance({
             banchId: convertBanchId,
             name: formData.current.name,
             startYear: formData.current.range[0].year() - 1911,
@@ -85,14 +91,25 @@ const Index = (): JSX.Element => {
     const onClose = (): void => {
         setModal(modalStateInit)
     }
+    const onEditSave = async (v: performanceType): Promise<void> => {
+        const res = await api.updatePermession(v)
+        if (res.status) {
+            await onSearch()
+            onClose()
+        }
+    }
     useEffect(() => {
         onSearch()
     }, [convertBanchId])
     useEffect(() => {
         if (modal.type === '2') {
-            swal({
+            void swal({
                 title: '警告',
-                text: '是否刪除'
+                text: '是否刪除' +
+                    '\n姓名：' + modal.value.UserName +
+                    '\n年度：' + modal.value.Year +
+                    '\n日期：' + modal.value.Month,
+                dangerMode: true
             }).then(() => { onClose() })
         }
     }, [modal])
@@ -101,7 +118,7 @@ const Index = (): JSX.Element => {
             <Suspense fallback={<Spin />}>
                 {
                     modal.type === '1' && (
-                        <EditModal onClose={onClose} value={modal.value} open={modal.open}/>
+                        <EditModal onSave={onEditSave} onClose={onClose} value={modal.value} open={modal.open}/>
                     )
                 }
                 {

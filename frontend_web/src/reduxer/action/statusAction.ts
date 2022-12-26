@@ -278,6 +278,16 @@ class statusAcion {
         }
     }
 
+    onUpdatePerformance (s: boolean): action {
+        return {
+            type: s ? statusType.UPDATE_PERFORMANCE_ON : statusType.UPDATE_PERFORMANCE_OFF,
+            payload: {
+                ...store.getState().status,
+                onUpdatePerformance: s
+            }
+        }
+    }
+
     // 清除
     clearStatusAll (): action {
         return {

@@ -641,7 +641,7 @@ class ApiControl extends apiAbs {
 
     // 績效
     async getPerformance (v: any): Promise<ResType<performanceType[]>> {
-        console.log(v)
+        // console.log(v)
         store.dispatch(statusAction.onFetchPerformance(true))
         const res = await this.GET<performanceType[]>({
             url: this.route.performance,
@@ -652,6 +652,16 @@ class ApiControl extends apiAbs {
             store.dispatch(companyAction.setPerformance(res.data))
         }
         store.dispatch(statusAction.onFetchPerformance(false))
+        return res
+    }
+
+    async updatePermession (v: performanceType): Promise<ResType<null>> {
+        store.dispatch(statusAction.onUpdatePerformance(true))
+        const res = await this.POST<null>({
+            url: this.route.performance,
+            body: v
+        })
+        store.dispatch(statusAction.onUpdatePerformance(false))
         return res
     }
 }
