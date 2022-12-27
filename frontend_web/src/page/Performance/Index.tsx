@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/dot-notation */
 import React, { useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react'
-import { Table, Form, Button, Space, Dropdown, Typography, Input, Spin } from 'antd'
+import { Table, Form, Button, Space, Dropdown, Typography, Input, Spin, Divider } from 'antd'
 import useReduceing from 'Hook/useReducing'
 import { columns } from './method/columns'
 import api from 'api/api'
@@ -12,10 +12,11 @@ import dayjs from 'dayjs'
 import { MenuItemType } from 'antd/es/menu/hooks/useItems'
 import swal from 'sweetalert'
 import { performanceType } from 'Root/type'
+import StatusSelector from 'Share/StatusSelector'
 
 const EditModal = lazy(async () => await import('./component/modal/Edit'))
 const ChangeBanchModal = lazy(async () => await import('./component/modal/ChangeBanch'))
-const list: MenuItemType[] = [
+const list = (disabled: boolean): MenuItemType[] => [
     {
         label: '編輯',
         key: 1,
@@ -24,12 +25,14 @@ const list: MenuItemType[] = [
     {
         label: '刪除',
         key: 2,
-        icon: <DeleteOutlined/>
+        icon: <DeleteOutlined/>,
+        disabled
     },
     {
         label: '更換組別',
         key: 3,
-        icon: <SwitcherOutlined />
+        icon: <SwitcherOutlined />,
+        disabled
     }
 ]
 const modalStateInit: {
@@ -43,15 +46,19 @@ const modalStateInit: {
 }
 
 const Index = (): JSX.Element => {
-    const { company } = useReduceing()
+    const { company, user } = useReduceing()
     const { banchId } = useParams()
     const [modal, setModal] = useState(modalStateInit)
 
     const formData = useRef({
         name: '',
-        range: [dayjs(), dayjs()]
+        range: [dayjs(), dayjs()],
+        workState: 'on'
     })
     const convertBanchId = parseInt(banchId.replace('c', ''))
+    const disabled = (value: performanceType): boolean => user.selfData.Permession === 2 ||
+        (user.selfData.Permession === 1 &&
+        value.UserId === user.selfData.UserId)
     const performance = useMemo(() => {
         return company.performance.map((item) => ({
             ...item,
@@ -60,7 +67,7 @@ const Index = (): JSX.Element => {
                 <>
                     <Dropdown
                         menu={{
-                            items: list,
+                            items: list(disabled(item)),
                             selectable: true,
                             onSelect: (v) => { setModal((prev) => ({ ...prev, open: true, type: v.key, value: item })) },
                             selectedKeys: [modal.type]
@@ -85,7 +92,8 @@ const Index = (): JSX.Element => {
             startYear: formData.current.range[0].year() - 1911,
             startMonth: formData.current.range[0].month() + 1,
             endYear: formData.current.range[1].year() - 1911,
-            endMonth: formData.current.range[1].month() + 1
+            endMonth: formData.current.range[1].month() + 1,
+            workState: formData.current.workState || 'on'
         })
     }
     const onClose = (): void => {
@@ -123,11 +131,13 @@ const Index = (): JSX.Element => {
                 }
                 {
                     modal.type === '3' && (
-                        <ChangeBanchModal onClose={onClose} value={modal.value} open={modal.open}/>
+                        <ChangeBanchModal onSave={onEditSave} onClose={onClose} value={modal.value} open={modal.open}/>
                     )
                 }
             </Suspense>
             <div className={window.styles.performanceBlock}>
+                <Button>新增</Button>
+                <Divider />
                 <Form onValuesChange={(v, allV) => { formData.current = allV }} className='row'>
                     <Form.Item label='範圍搜尋' name='range' className='col-md-4'>
                         <DateSelect onChange={(v) => { }} />
@@ -135,9 +145,12 @@ const Index = (): JSX.Element => {
                     <Form.Item label='姓名' name='name' className='col-md-4'>
                         <Input placeholder='輸入姓名'/>
                     </Form.Item>
+                    <Form.Item label='狀態' name='workState' className='col-md-4'>
+                        <StatusSelector defaultValue={'on'}/>
+                    </Form.Item>
                     <div className='d-flex w-100 justify-content-end'>
                         <Button htmlType='submit' onClick={onSearch} icon={<SearchOutlined />}>
-                        搜尋
+                        搜尋/reload
                         </Button>
                     </div>
                 </Form>
