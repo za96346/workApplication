@@ -125,7 +125,7 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 
 	_, company, err := CheckUserAndCompany(props)
 	if err {return}
-	data := (*Mysql).SelectAllUser(0, company.CompanyCode)
+	data := (*Mysql).SelectAllUser(0, company.CompanyCode, company.CompanyCode)
 
 
 	(*props).JSON(http.StatusOK, gin.H{

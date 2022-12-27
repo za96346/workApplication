@@ -45,7 +45,8 @@ type userQuery struct {
 	SelectAllByCompanyCode string
 	SelectAllByBanchId string
 	SelectAllByUserIdAndCompanyCode string
-	SelectAllNeedJoin string
+	SelectAllByAdmin string
+	SelectAllByManager string
 	UpdateCompanyUser string
 	UpdateBoss string
 }
@@ -233,7 +234,7 @@ func addUserQuery() {
 			lastModify=?
 		where userId=?;
 	`
-	sqlQueryInstance.User.SelectAllNeedJoin = `
+	sqlQueryInstance.User.SelectAllByAdmin = `
 		select
 			u.userId,
 			u.companyCode,
@@ -249,12 +250,11 @@ func addUserQuery() {
 		from user u
 		left join quitWorkUser q
 			on u.userId=q.userId
-			and u.companyCode=q.companyCode
 		left join companyBanch cb
 			on cb.id=u.banch
 		left join company c
 			on u.companyCode=c.companyCode
-		where u.companyCode=?;
+		where u.companyCode=? or q.companyCode=?;
 	`
 	sqlQueryInstance.User.UpdateCompanyUser = `
 	update user

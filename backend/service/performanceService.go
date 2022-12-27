@@ -21,6 +21,8 @@ func FetchPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	endMonthProps := (*props).Query("endMonth")
 	name := (*props).Query("name")
 	banchIdProps := (*props).Query("banchId")
+	workState := (*props).Query("workState")
+
 
 	banchId, isBanchError := methods.AnyToInt64(banchIdProps)
 
@@ -95,9 +97,18 @@ func FetchPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 			end,
 		)
 	}
+	// 判斷工作狀態
+	val := []table.PerformanceExtend{}
+	for _, v := range res {
+		if workState == "on" && v.CompanyId != -1 {
+			val = append(val, v)
+		} else if workState == "off" && v.CompanyId == -1 {
+			val = append(val, v)
+		}
+	}
 	props.JSON(http.StatusOK, gin.H{
 		"message": StatusText().FindSuccess,
-		"data": res,
+		"data": val,
 	})
 }
 func UpdatePerformance(props *gin.Context, waitJob *sync.WaitGroup) {
@@ -124,7 +135,10 @@ func UpdatePerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 			performance.PerformanceId,
 			company.CompanyCode,
 		)
-	} else if user.Permession == 1 {
+		// 主管更改不是自己的
+	} else if user.Permession == 1 &&
+		&performance.UserId != &user.UserId {
+
 		banch := (*Mysql).SelectCompanyBanch(2, user.Banch)
 		banchName := ""
 		if !methods.IsNotExited(banch) {
@@ -138,9 +152,13 @@ func UpdatePerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 			user.Banch,
 			banchName,
 		)
-	} else {
+		// 一般權限 更改 或是主管更改自己的
+	} else if user.Permession == 2 ||
+		(user.Permession == 1 &&
+		&performance.UserId == &user.UserId) {
+
 		updateStatus = (*Mysql).UpdatePerformance(
-			0,
+			2,
 			&performance,
 			performance.PerformanceId,
 			user.UserId,
@@ -160,6 +178,7 @@ func UpdatePerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 func InsertPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
+
 	props.JSON(http.StatusOK, gin.H{
 		"message": "not bad",
 	})

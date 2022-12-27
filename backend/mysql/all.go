@@ -13,12 +13,12 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// 0 => all, value => nil
+// 0 => all, value => u.companyCode, q.companyCode
 //  1 => ruleId, value => int64
 //  2=> banchId, value => int64
 func(dbObj *DB) SelectAllUser(selectKey int, value... interface{}) *[]response.User {
 	defer panichandler.Recover()
-	querys := (*query.MysqlSingleton()).User.SelectAllNeedJoin
+	querys := (*query.MysqlSingleton()).User.SelectAllByAdmin
 	user := new(response.User)
 	carry := []response.User{}
 	res, err := (*dbObj).MysqlDB.Query(querys, value...)
