@@ -19,7 +19,7 @@ import useReduceing from 'Hook/useReducing'
 const Entry = lazy((): any => import('./page/Entry/EntryPage'))
 const Layout = lazy((): any => import('./page/Layout'))
 const HomePage = lazy((): any => import('./page/Home/HomePage'))
-const EmployeeManager = lazy((): any => import('./page/EmployeeManager/EmployeeManager'))
+const EmployeeManager = lazy((): any => import('./page/EmployeeManager/Index'))
 const ShiftPage = lazy((): any => import('./page/Shift/ShiftPage'))
 const BanchManager = lazy((): any => import('./page/BanchManager/BanchManager'))
 const SignPage = lazy((): any => import('./page/Sign/Sign'))

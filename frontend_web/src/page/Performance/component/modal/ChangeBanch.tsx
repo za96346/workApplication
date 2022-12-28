@@ -1,7 +1,7 @@
 import { Form, Modal } from 'antd'
 import React, { useRef, useEffect } from 'react'
 import BanchSelector from 'Share/BanchSelector'
-import { performanceType } from 'Root/type'
+import { performanceType } from 'type'
 import useReduceing from 'Hook/useReducing'
 import DescribeValue from '../DescribeValue'
 

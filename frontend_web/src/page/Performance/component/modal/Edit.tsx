@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { Modal, Form, Input, InputNumber } from 'antd'
-import { performanceType } from 'Root/type'
+import { performanceType } from 'type'
 import useReduceing from 'Hook/useReducing'
 import DescribeValue from '../DescribeValue'
 

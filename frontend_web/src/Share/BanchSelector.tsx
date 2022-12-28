@@ -8,11 +8,11 @@ interface BanchSelectorProps extends SelectProps {
 }
 
 const BanchSelector = ({ ...rest }: BanchSelectorProps): JSX.Element => {
-    const { defaultValue, ...other } = rest
+    const { defaultValue, style, ...other } = rest
     const { company } = useReduceing()
     const df = company.banch?.find((item: BanchType) => item.Id === defaultValue)
     return (
-        <Select {...other} defaultValue={df?.Id}>
+        <Select allowClear style={{ ...style, minWidth: '100px' }} {...other} defaultValue={df?.Id}>
             {
                 company.banch.map((item) => (
                     <Select.Option

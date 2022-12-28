@@ -465,11 +465,12 @@ class ApiControl extends apiAbs {
     }
 
     // 員工 資料
-    async getUserAll (): Promise<ResType<UserType[]>> {
+    async getUserAll (v: any): Promise<ResType<UserType[]>> {
         store.dispatch(statusAction.onFetchUserAll(true))
         const res = await this.GET<UserType[]>({
             url: this.route.getUserAll,
-            successShow: false
+            successShow: false,
+            params: v
         })
         if (res.status) {
             store.dispatch(companyAction.setEmployee(res.data))

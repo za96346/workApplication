@@ -11,7 +11,7 @@ import DateSelect from './component/DateSelect'
 import dayjs from 'dayjs'
 import { MenuItemType } from 'antd/es/menu/hooks/useItems'
 import swal from 'sweetalert'
-import { performanceType } from 'Root/type'
+import { performanceType } from 'type'
 import StatusSelector from 'Share/StatusSelector'
 
 const EditModal = lazy(async () => await import('./component/modal/Edit'))
