@@ -122,15 +122,57 @@ func UpdateMine (props *gin.Context, waitJob *sync.WaitGroup) {
 func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
+	workState := (*props).Query("workState")
+	name := (*props).Query("name")
+	banch, isBanchError := methods.AnyToInt64((*props).Query("banch"))
 
-	_, company, err := CheckUserAndCompany(props)
+	user, company, err := CheckUserAndCompany(props)
 	if err {return}
-	data := (*Mysql).SelectAllUser(0, company.CompanyCode, company.CompanyCode)
+
+	data := []response.User{}
+	// 管理員 沒帶部門查詢
+	if user.Permession == 100 && isBanchError != nil {
+		data = *((*Mysql).SelectAllUser(
+			0,
+			company.CompanyCode,
+			company.CompanyCode,
+			name,
+			name,
+			name,
+		))
+	// 主管查詢 或是 管理員 有帶部門查詢
+	} else if user.Permession == 1 ||
+		(user.Permession == 100 && isBanchError == nil) {
+		b := user.Banch
+		if user.Permession == 100 {
+			b = banch
+		}
+		data = *((*Mysql).SelectAllUser(
+			1,
+			company.CompanyCode,
+			company.CompanyCode,
+			b,
+			b,
+			name,
+			name,
+			name,
+		))
+	}
+
+	// 判斷工作狀態
+	val := []response.User{}
+	for _, v := range data {
+		if workState == "on" && v.WorkState == "on" {
+			val = append(val, v)
+		} else if workState == "off" && v.WorkState == "off" {
+			val = append(val, v)
+		}
+	}
 
 
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().FindSuccess,
-		"data": (*data),
+		"data": val,
 	})
 }
 

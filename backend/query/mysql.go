@@ -254,8 +254,40 @@ func addUserQuery() {
 			on cb.id=u.banch
 		left join company c
 			on u.companyCode=c.companyCode
-		where u.companyCode=? or q.companyCode=?;
+		where
+			(u.companyCode=? or q.companyCode=?)
+			and
+			u.userName=if(?='' or ?=null, u.userName, ?)
+		;
 	`
+	sqlQueryInstance.User.SelectAllByManager = `
+	select
+		u.userId,
+		u.companyCode,
+		u.userName,
+		u.employeeNumber,
+		u.onWorkDay,
+		u.banch,
+		u.permession,
+		IF(q.userId is null = 1, 'on', 'off') AS workState,
+		ifnull(cb.banchName, '') as banchName,
+		ifnull(c.companyId, -1),
+		ifnull(c.companyName, '') as companyName
+	from user u
+	left join quitWorkUser q
+		on u.userId=q.userId
+	left join companyBanch cb
+		on cb.id=u.banch
+	left join company c
+		on u.companyCode=c.companyCode
+	where
+		(u.companyCode=? or q.companyCode=?)
+		and
+		(q.banch=? or u.banch=?)
+		and
+		u.userName=if(?='' or ?=null, u.userName, ?)
+	;
+	`;
 	sqlQueryInstance.User.UpdateCompanyUser = `
 	update user
 	set
