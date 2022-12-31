@@ -132,3 +132,63 @@ func(dbObj *DB) UpdatePerformance(updateKey int, data *table.Performance, value 
 	}
 	return true
 }
+//  
+//   1 admin, performanceId
+//   2 manager, performanceId, p.banchId, p.userId != ?
+func(dbObj *DB) DeletePerformance(deleteKey int, value...interface{}) bool {
+	defer panichandler.Recover()
+	(*dbObj).performanceMux.Lock()
+	defer (*dbObj).performanceMux.Unlock()
+	querys := ""
+	switch deleteKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).Performance.DeleteByAdmin
+		break
+	case 1:
+		querys = (*query.MysqlSingleton()).Performance.DeleteByManage
+		break
+	}
+	stmt, err := (*dbObj).MysqlDB.Prepare(querys)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+	_, err = stmt.Exec(value...)
+	if err != nil {
+		(*dbObj).checkErr(err)
+		return false
+	}
+	return true
+}
+
+
+func(dbObj *DB) InsertPerformance(data *table.Performance) (bool, int64) {
+
+	defer panichandler.Recover()
+	(*dbObj).performanceMux.Lock()
+	defer (*dbObj).performanceMux.Unlock()
+	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).Performance.InsertAll)
+	defer stmt.Close()
+	(*dbObj).checkErr(err)
+
+	res, err := stmt.Exec(
+		(*data).UserId,
+		(*data).Year,
+		(*data).Month,
+		(*data).BanchId,
+		(*data).Goal,
+		(*data).Attitude,
+		(*data).Efficiency,
+		(*data).Professional,
+		(*data).Directions,
+		(*data).BeLate,
+		(*data).DayOffNotOnRule,
+		(*data).BanchName,
+		(*data).CreateTime,
+		(*data).LastModify,
+	)
+	(*dbObj).checkErr(err)
+	id, _:= res.LastInsertId()
+	if err != nil {
+		return false, id
+	}
+	return true, id
+}

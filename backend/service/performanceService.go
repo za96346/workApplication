@@ -179,14 +179,70 @@ func InsertPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 
+	now := time.Now()
+	performance := table.Performance {}
+	if (*props).ShouldBindJSON(&performance) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+	performance.CreateTime = now
+	performance.LastModify = now
+
+	user, _, err := CheckUserAndCompany(props)
+	if err {return}
+
+	// 擋掉 主管新增自己
+	if performance.UserId == user.UserId && user.Permession == 1 {
+		props.JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().InsertFail,
+		})
+		return
+	}
+
+	res, _ := (*Mysql).InsertPerformance(&performance)
+
+	if !res {
+		props.JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().InsertFail,
+		})
+		return
+	}
 	props.JSON(http.StatusOK, gin.H{
-		"message": "not bad",
+		"message": StatusText().InsertSuccess,
 	})
 }
 func DeletePerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
+	performanceId, isIdErr := methods.AnyToInt64((*props).Query("performanceId"))
+
+	if isIdErr != nil {
+		props.JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+
+	user, _, err := CheckUserAndCompany(props)
+	if err {return}
+
+	res := false
+	if user.Permession == 100 {
+		res = (*Mysql).DeletePerformance(0, performanceId)
+	} else if user.Permession == 1 {
+		res = (*Mysql).DeletePerformance(1, performanceId, user.Banch, user.UserId)
+	}
+
+	if !res {
+		props.JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().DeleteFail,
+		})
+		return
+	}
 	props.JSON(http.StatusOK, gin.H{
-		"message": "not bad",
+		"message": StatusText().DeleteSuccess,
 	})
+
 }

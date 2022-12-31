@@ -158,6 +158,10 @@ type performance struct {
 	UpdateByAdmin string
 	UpdateByManager string
 	UpdateByPerson string
+	DeleteByManage string
+	DeleteByAdmin string
+	InsertByAdmin string
+	InsertByManager string
 }
 func MysqlSingleton() *sqlQuery {
 	queryMux = new(sync.Mutex)
@@ -1180,6 +1184,34 @@ func addPerformance(){
 			p.lastModify=?
 		where p.performanceId=? and u.companyCode=? and (p.banchId=? or p.banchName=?);
 	`;
+	sqlQueryInstance.Performance.InsertAll = `
+		insert into performance (
+			userId,
+			year,
+			month,
+			banchId,
+			goal,
+			attitude,
+			efficiency,
+			professional,
+			directions,
+			beLate,
+			dayOffNotOnRule,
+			banchName,
+			createTime,
+			lastModify
+		) values (
+			?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+		);
+	`
+	sqlQueryInstance.Performance.DeleteByAdmin = `
+		delete p from performance p
+		where performanceId=?;
+	`
+	sqlQueryInstance.Performance.DeleteByManage = `
+		delete p from performance p
+		where performanceId=? && p.banchId=? && p.userId!=?;
+	`
 	sqlQueryInstance.Performance.UpdateByPerson = `
 		update performance p
 		set
