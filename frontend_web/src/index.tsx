@@ -5,6 +5,8 @@ import { Provider } from 'react-redux'
 
 import { PersistGate } from 'redux-persist/integration/react'
 import { persisStore, store } from './reduxer/store'
+import { ConfigProvider } from 'antd'
+import Locale from 'antd/es/locale/zh_TW'
 // npm i -D @types/node-sass
 // npm i -D node-sass
 
@@ -22,11 +24,13 @@ import { persisStore, store } from './reduxer/store'
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
     <React.StrictMode>
-        <Provider store={store}>
-            <PersistGate loading={null} persistor={persisStore}>
-                <App />
-            </PersistGate>
-        </Provider>
+        <ConfigProvider locale={Locale}>
+            <Provider store={store}>
+                <PersistGate loading={null} persistor={persisStore}>
+                    <App />
+                </PersistGate>
+            </Provider>
+        </ConfigProvider>
 
     </React.StrictMode>
 )

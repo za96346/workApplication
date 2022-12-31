@@ -2,7 +2,7 @@ import { Select, SelectProps } from 'antd'
 import React from 'react'
 
 interface props extends SelectProps {
-    defaultValue: 'on' | 'off' | string
+    defaultValue?: 'on' | 'off' | string
 }
 
 const StatusSelector = ({ ...rest }: props): JSX.Element => {

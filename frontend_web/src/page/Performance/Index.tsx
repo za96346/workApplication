@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 /* eslint-disable @typescript-eslint/dot-notation */
 import React, { useEffect, useMemo, useRef, useState, lazy, Suspense } from 'react'
-import { Table, Form, Button, Space, Dropdown, Typography, Input, Spin, Divider } from 'antd'
+import { Table, Form, Button, Space, Dropdown, Typography, Input, Spin, Divider, Modal } from 'antd'
 import useReduceing from 'Hook/useReducing'
 import { columns } from './method/columns'
 import api from 'api/api'
@@ -10,7 +10,6 @@ import { DeleteOutlined, DownOutlined, EditOutlined, SearchOutlined, SwitcherOut
 import DateSelect from './component/DateSelect'
 import dayjs from 'dayjs'
 import { MenuItemType } from 'antd/es/menu/hooks/useItems'
-import swal from 'sweetalert'
 import { performanceType } from 'type'
 import StatusSelector from 'Share/StatusSelector'
 
@@ -89,10 +88,10 @@ const Index = (): JSX.Element => {
         await api.getPerformance({
             banchId: convertBanchId,
             name: formData.current.name,
-            startYear: formData.current.range[0].year() - 1911,
-            startMonth: formData.current.range[0].month() + 1,
-            endYear: formData.current.range[1].year() - 1911,
-            endMonth: formData.current.range[1].month() + 1,
+            startYear: formData.current.range[0]?.year() - 1911,
+            startMonth: formData.current.range[0]?.month() + 1,
+            endYear: formData.current.range[1]?.year() - 1911,
+            endMonth: formData.current.range[1]?.month() + 1,
             workState: formData.current.workState || 'on'
         })
     }
@@ -111,14 +110,18 @@ const Index = (): JSX.Element => {
     }, [convertBanchId])
     useEffect(() => {
         if (modal.type === '2') {
-            void swal({
-                title: '警告',
-                text: '是否刪除' +
+            Modal.confirm({
+                okText: '確認',
+                cancelText: '取消',
+                title: "刪除",
+                content: '是否刪除' +
                     '\n姓名：' + modal.value.UserName +
                     '\n年度：' + modal.value.Year +
                     '\n日期：' + modal.value.Month,
-                dangerMode: true
-            }).then(() => { onClose() })
+                onOk: async () => {
+                    onClose()
+                }
+            })
         }
     }, [modal])
     return (
@@ -154,6 +157,10 @@ const Index = (): JSX.Element => {
                         </Button>
                     </div>
                 </Form>
+                <Divider />
+                <Button onClick={() => { window.open('/print', '績效評核', 'height=800,width=800') }}>
+                    預覽 / 列印
+                </Button>
             </div>
 
             <Table

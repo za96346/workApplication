@@ -3,7 +3,7 @@ import React from 'react'
 import statics from '../statics'
 
 interface props extends SelectProps {
-    defaultValue: number
+    defaultValue?: number
 }
 
 const PermessionSelector = ({ ...rest }: props): JSX.Element => {

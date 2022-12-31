@@ -1,116 +1,96 @@
-import { EditOutlined, PlusOutlined } from '@ant-design/icons'
-import { Card, Input, List, Form, Button } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Button, Form, Input, Modal, Table } from 'antd'
+import rule from 'method/rule'
+import React, { useEffect, useState, useRef } from 'react'
 import api from '../../api/api'
 import useReduceing from '../../Hook/useReducing'
-import rule from '../../method/rule'
-import { BanchType, ResType } from '../../type'
 
-interface people {
-    title: string
-    peopleAmount: number
-    id: number
-}
-
-const data = (arr: BanchType[]): people[] => arr.map((item) => {
-    return (
-        {
-            title: item.BanchName,
-            peopleAmount: 0,
-            id: item.Id
-        }
-    )
-})
-
-const BanchEdit = (
-    { onFinish, label, btnName, initialValue }:
-    {
-        onFinish: (v: any) => void
-        label: string
-        btnName: string
-        initialValue: string
-    }): JSX.Element => {
-    return (
-        <>
-            <Form onFinish={onFinish}>
-                <Form.Item rules={rule.banch()} name="BanchName" label={label} initialValue={initialValue}>
-                    <Input placeholder='請輸入部門名稱' />
-                </Form.Item>
-                <Form.Item>
-                    <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'flex-end', width: '100%' }}>
-                        <Button htmlType='submit'>{btnName}</Button>
-                    </div>
-                </Form.Item>
-            </Form>
-        </>
-    )
-}
+import { BanchType } from '../../type'
+import { columns, dataSource } from './method/tableData'
 
 const BanchManager: React.FC = () => {
     const { company } = useReduceing()
-    const [status, setStatus] = useState({
-        plusOnclick: false,
-        currentEditIdx: -1
+    const formRef = useRef('')
+    const [modal, setModal] = useState<{ open: boolean, value: BanchType, type: number }>({
+        open: false,
+        value: null,
+        type: 1 // 1 編輯 // 2 新增
     })
-    const onFinish = async (v: any, types: 1 | 2): Promise<void> => {
-        let res: ResType<null>
-        const { BanchName } = v
-        if (types === 1) {
-            res = await api.createBanch(BanchName)
-        } else if (types === 2) {
-            res = await api.UpdateBanch(BanchName, status.currentEditIdx)
+    const modalTitle = modal.type === 1 ? '編輯部門' : '新增部門'
+    const onClose = async (): Promise<void> => {
+        setModal((prev) => ({ ...prev, open: false, value: null }))
+        await api.getBanch()
+    }
+    const onEdit = (v: BanchType): void => {
+        setModal((prev) => ({ ...prev, value: v, open: true, type: 1 }))
+    }
+    const onCreate = (): void => {
+        setModal((prev) => ({ ...prev, value: null, open: true, type: 2 }))
+    }
+    const onDelete = async (v: BanchType): Promise<void> => {
+        Modal.confirm({
+            okText: '確認',
+            cancelText: '取消',
+            title: "刪除部門",
+            content: `使否要刪除 ${v.BanchName}`,
+            onOk: async () => {
+                await api.deleteBanch(v.Id)
+                await onClose()
+            }
+        })
+    }
+    const onSave = async (): Promise<void> => {
+        if (modal.type === 2) {
+            await api.createBanch(formRef.current)
+        } else {
+            await api.UpdateBanch(formRef.current, modal.value.Id)
         }
-        if (res.status) {
-            await api.getBanch()
-        }
+        await onClose()
     }
     useEffect(() => {
-        api.getBanch()
+        void api.getUserAll({
+            name: '',
+            workState: 'on'
+        })
+        void api.getBanch()
     }, [])
     return (
-        <div className={window.styles.banchManagerBlock}>
-            <List
-                grid={{
-                    gutter: 16,
-                    xs: 1,
-                    sm: 2,
-                    md: 4,
-                    lg: 4,
-                    xl: 6,
-                    xxl: 3
-                }}
-                dataSource={data(company.banch)}
-                renderItem={item => (
-                    <List.Item>
-                        <Card title={
-                            status.currentEditIdx === item.id
-                                ? <BanchEdit
-                                    initialValue={item.title}
-                                    btnName='修改'
-                                    label='更改部門'
-                                    onFinish={async (v) => await onFinish(v, 2)}
-                                />
-                                : <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                    {item.title}
-                                    <EditOutlined style={{ color: 'blue' }} onClick={() => setStatus((prev) => ({ ...prev, currentEditIdx: item.id }))} />
-                                </div>
-                        }>
-                            人數：{item.peopleAmount}
-                        </Card>
-                    </List.Item>
-                )}
-            />
-            {
-                status.plusOnclick
-                    ? <BanchEdit
-                        initialValue={''}
-                        btnName='新增'
-                        label="新增部門"
-                        onFinish={async (v) => await onFinish(v, 1)}
-                    />
-                    : <PlusOutlined onClick={() => setStatus((prev) => ({ ...prev, plusOnclick: true }))} style={{ fontSize: '2rem' }} />
-            }
-        </div>
+        <>
+            <Modal
+                open={modal.open}
+                onOk={onSave}
+                onCancel={onClose}
+                cancelText="取消"
+                okText="儲存"
+                title={modalTitle}
+                destroyOnClose
+            >
+                <Form onValuesChange={(v, allV) => { formRef.current = allV?.BanchName }}>
+                    <Form.Item
+                        rules={rule.banch()}
+                        name="BanchName"
+                        label={modalTitle}
+                        initialValue={modal.value?.BanchName || ''}
+                    >
+                        <Input placeholder='請輸入部門名稱' />
+                    </Form.Item>
+                </Form>
+            </Modal>
+            <div className={window.styles.banchManagerBlock}>
+                <Button onClick={onCreate} className='mb-3'>
+                    新增部門
+                </Button>
+                <Table
+                    dataSource={dataSource(
+                        company.banch,
+                        onEdit,
+                        company.employee,
+                        onDelete
+                    )}
+                    columns={columns}
+                />
+            </div>
+        </>
+
     )
 }
 

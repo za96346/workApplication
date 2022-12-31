@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 import { SearchOutlined } from '@ant-design/icons'
-import { Button, Form, Input } from 'antd'
+import { Button, Divider, Form, Input } from 'antd'
 import React, { useRef, useEffect } from 'react'
 import api from 'api/api'
 
@@ -13,7 +13,7 @@ const formInit = {
     workState: 'on',
     banch: null
 }
-const SearchBar = (): JSX.Element => {
+const SearchBar = ({ reSearching }: { reSearching: boolean }): JSX.Element => {
     const form = useRef({ ...formInit })
     const { user } = useReduceing()
     const onSearch = (): void => {
@@ -21,15 +21,14 @@ const SearchBar = (): JSX.Element => {
     }
     useEffect(() => {
         onSearch()
-    }, [])
+    }, [reSearching])
     return (
         <>
             <div className={window.styles.empManagerFilter}>
                 {/* <button className='btn btn-secondary d-flex align-items-center m-1'>
-                    <PlusCircleFilled style={{ marginRight: '5px' }}/>
                     新增員工
-                </button>
-                <Divider/> */}
+                </button> */}
+                <Divider/>
                 <Form onFinish={onSearch} className='row'>
                     <Form.Item className='col-md-4' label={'姓名'}>
                         <Input
@@ -51,7 +50,7 @@ const SearchBar = (): JSX.Element => {
                     </Form.Item>
                     <div className='w-100 d-flex justify-content-end'>
                         <Button htmlType='submit' onClick={onSearch} icon={<SearchOutlined />}>
-                        搜尋/reload
+                        搜尋 / reload
                         </Button>
                     </div>
 

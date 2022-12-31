@@ -49,6 +49,16 @@ class statusAcion {
         }
     }
 
+    onDeleteBanch (s: boolean): action {
+        return {
+            type: s ? statusType.DELETE_BANCH_ON : statusType.DELETE_BANCH_OFF,
+            payload: {
+                ...store.getState().status,
+                onDeleteBanch: s
+            }
+        }
+    }
+
     // 所有員工
     onFetchUserAll (s: boolean): action {
         return {

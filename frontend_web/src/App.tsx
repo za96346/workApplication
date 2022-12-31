@@ -15,6 +15,7 @@ import { store } from './reduxer/store'
 import statusAction from './reduxer/action/statusAction'
 import { Spin } from 'antd'
 import useReduceing from 'Hook/useReducing'
+import Word from 'page/Performance/component/Word'
 
 const Entry = lazy((): any => import('./page/Entry/EntryPage'))
 const Layout = lazy((): any => import('./page/Layout'))
@@ -35,7 +36,7 @@ window.styles = stylees
 // console.log = () => {}
 const App = (): JSX.Element => {
     const { loading } = useReduceing()
-    console.log('process env =>', process.env)
+    // console.log('process env =>', process.env)
     const hasLoading = Object.values(loading).filter((i) => i === true).length > 0
     useEffect(() => {
         // 每次 重整 reset 狀態
@@ -75,6 +76,7 @@ const App = (): JSX.Element => {
                             <Route path='performance/:banchId' element={<PerformancePage />}/>
                         </Route>
                         <Route path='*' element={<ErrorPage/>} />
+                        <Route path='print' element={<Word />}/>
                     </Routes>
                 </Router>
             </Suspense>

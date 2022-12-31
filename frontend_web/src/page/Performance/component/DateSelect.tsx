@@ -31,6 +31,7 @@ const DateSelect = ({ onChange }: props): JSX.Element => {
     return (
         <>
             <DatePicker.RangePicker
+                allowClear={false}
                 allowEmpty={[false, true]}
                 value={dates || value}
                 disabledDate={disabledDate}

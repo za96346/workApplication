@@ -8,6 +8,7 @@ import Btn from 'Share/Btn'
 import statics from 'statics'
 import ModalEdit from './component/modal/Index'
 import { UserType } from 'type'
+import dateHandle from 'method/dateHandle'
 // import dateHandle from 'method/dateHandle'
 
 interface modalType {
@@ -32,6 +33,7 @@ const EmployeeManager = (): JSX.Element => {
         return company.employee.map((item) => ({
             ...item,
             Permession: statics.permession[item.Permession],
+            OnWorkDay: dateHandle.transferUtcFormat(item.OnWorkDay).substring(0, 10),
             action: (
                 <div>
                     <Btn.Edit onClick={() => { onOpen(item) }} />
@@ -42,7 +44,7 @@ const EmployeeManager = (): JSX.Element => {
     return (
         <>
             <ModalEdit data={modal.value} open={modal.open} onClose={onClose} />
-            <SearchBar />
+            <SearchBar reSearching={modal.open} />
             <Table
                 sticky={{ offsetHeader: -20 }}
                 columns={column}

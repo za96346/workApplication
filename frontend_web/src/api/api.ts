@@ -265,6 +265,16 @@ class ApiControl extends apiAbs {
         return res
     }
 
+    async deleteBanch (banchId: BanchType['Id']): Promise<ResType<null>> {
+        store.dispatch(statusAction.onDeleteBanch(true))
+        const res = await this.DELETE<null>({
+            url: this.route.BanchAll,
+            params: { banchId }
+        })
+        store.dispatch(statusAction.onDeleteBanch(false))
+        return res
+    }
+
     // 自己的個人資料
     async getSelfData (): Promise<void> {
         store.dispatch(statusAction.onFetchSelfData(true))

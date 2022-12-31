@@ -4,7 +4,7 @@ import useReduceing from '../Hook/useReducing'
 import { BanchType } from '../type'
 
 interface BanchSelectorProps extends SelectProps {
-    defaultValue: number
+    defaultValue?: number
 }
 
 const BanchSelector = ({ ...rest }: BanchSelectorProps): JSX.Element => {
