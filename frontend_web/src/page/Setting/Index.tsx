@@ -7,7 +7,7 @@ import api from 'api/api'
 import { Modal } from 'antd'
 import PersonalDescibe from './component/describe/Personal'
 import CompanyDescibe from './component/describe/Company'
-import Btn from 'Share/Btn'
+// import Btn from 'Share/Btn'
 
 const statusInit = {
     changePwdBtn: false,
@@ -53,7 +53,7 @@ const Index = (): JSX.Element => {
                         </>
                     )
                 }
-                <Btn.Edit onClick={() => {}}/>
+                {/* <Btn.Edit onClick={() => {}}/> */}
             </div>
         </>
     )
