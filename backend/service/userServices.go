@@ -166,6 +166,8 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 			val = append(val, v)
 		} else if workState == "off" && v.WorkState == "off" {
 			val = append(val, v)
+		} else {
+			val = append(val, v)
 		}
 	}
 

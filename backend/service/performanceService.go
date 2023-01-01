@@ -201,6 +201,13 @@ func InsertPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
+	if user.Permession == 1 {
+		performance.BanchId = user.Banch
+		res := (*Mysql).SelectCompanyBanch(2, user.Banch)
+		if !methods.IsNotExited(res) {
+			performance.BanchName = (*res)[0].BanchName
+		}
+	}
 	res, _ := (*Mysql).InsertPerformance(&performance)
 
 	if !res {
