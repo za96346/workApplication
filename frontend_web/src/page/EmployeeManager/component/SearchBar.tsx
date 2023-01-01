@@ -38,13 +38,14 @@ const SearchBar = ({ reSearching }: { reSearching: boolean }): JSX.Element => {
                             placeholder='姓名'
                         />
                     </Form.Item>
-                    <Form.Item className='col-md-4' label={'組別'}>
-                        {
-                            user.selfData.Permession === 100 && (
+                    {
+                        user.selfData.Permession === 100 && (
+                            <Form.Item className='col-md-4' label={'組別'}>
                                 <BanchSelector onChange={(e) => { form.current = { ...form.current, banch: e } }} defaultValue={0}/>
-                            )
-                        }
-                    </Form.Item>
+                            </Form.Item>
+                        )
+                    }
+
                     <Form.Item className='col-md-4' label={'狀態'}>
                         <StatusSelector onChange={(e) => { form.current = { ...form.current, workState: e } }} defaultValue={'on'}/>
                     </Form.Item>

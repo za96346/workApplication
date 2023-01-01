@@ -9,10 +9,13 @@ const Btn = (): JSX.Element => {
         </>
     )
 }
-Btn.Edit = ({ onClick }: { onClick: () => void }): JSX.Element => {
+Btn.Edit = (
+    { onClick, disabled = false }: { onClick: () => void, disabled?: boolean }
+): JSX.Element => {
     return (
         <>
             <Button
+                disabled={disabled}
                 style={{ color: 'blue' }}
                 onClick={onClick}
                 className={window.styles.editLabel}

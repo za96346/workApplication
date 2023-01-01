@@ -17,7 +17,7 @@ interface modalType {
     value: UserType
 }
 const EmployeeManager = (): JSX.Element => {
-    const { company } = useReduceing()
+    const { company, user } = useReduceing()
     const [modal, setModal] = useState<modalType>({
         open: false,
         type: '',
@@ -36,7 +36,7 @@ const EmployeeManager = (): JSX.Element => {
             OnWorkDay: dateHandle.transferUtcFormat(item.OnWorkDay).substring(0, 10),
             action: (
                 <div>
-                    <Btn.Edit onClick={() => { onOpen(item) }} />
+                    <Btn.Edit disabled={user.selfData.Permession !== 100} onClick={() => { onOpen(item) }} />
                 </div>
             )
         }))
