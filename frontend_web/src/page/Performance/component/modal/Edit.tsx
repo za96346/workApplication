@@ -1,24 +1,33 @@
-import React, { useRef } from 'react'
-import { Modal, Form, Input, InputNumber } from 'antd'
+import React, { useRef, useEffect } from 'react'
+import { Modal, Form, Input, InputNumber, DatePicker, Select } from 'antd'
 import { performanceType } from 'type'
 import useReduceing from 'Hook/useReducing'
 import DescribeValue from '../DescribeValue'
+import dayjs from 'dayjs'
+import api from 'api/api'
+import BanchSelector from 'Share/BanchSelector'
 
 interface props {
     open: boolean
     value: performanceType | null
     onClose: () => void
     onSave: ((v: performanceType) => void)
+    type: '1' | '4' // 1 編輯,  4 新增
 }
-const Edit = ({ open, value, onClose, onSave }: props): JSX.Element => {
+const Edit = ({ open, value, onClose, onSave, type }: props): JSX.Element => {
     const form = useRef<performanceType>(value)
-    const { user } = useReduceing()
-    const disabled = user.selfData.Permession === 2 ||
-        (user.selfData.Permession === 1 &&
-        value.UserId === user.selfData.UserId)
+    const { user, company } = useReduceing()
+    const disabled = user.selfData?.Permession === 2 ||
+        (user.selfData?.Permession === 1 &&
+        value?.UserId === user.selfData?.UserId)
+    useEffect(() => {
+        api.getUserAll({
+            workState: ''
+        })
+    }, [])
     return (
         <Modal
-            title="編輯績效"
+            title={type === '1' ? '編輯績效' : '新增績效'}
             destroyOnClose
             open={open}
             onCancel={onClose}
@@ -26,8 +35,61 @@ const Edit = ({ open, value, onClose, onSave }: props): JSX.Element => {
             okText="儲存"
             cancelText="取消"
         >
-            <DescribeValue value={value}/>
-            <Form onValuesChange={(v, allV) => { form.current = allV; console.log(allV) }} className="row mt-4">
+            {
+                type === '1' && (
+                    <DescribeValue value={value}/>
+                )
+            }
+            <Form
+                onValuesChange={(v, allV) => {
+                    form.current = {
+                        ...allV,
+                        Year: allV.Year?.$y - 1911,
+                        BanchName: company.banch?.find((item) => item.Id === allV?.BanchId)?.BanchName
+                    }
+                }}
+                className="row mt-4"
+            >
+                {
+                    type === '4' && (
+                        <>
+                            <Form.Item name="Year" initialValue={dayjs()} className="col-6" label="年度">
+                                <DatePicker picker='year' placeholder="選擇年度"/>
+                            </Form.Item>
+                            <Form.Item name="Month" initialValue={value?.Month} className="col-6" label="年度">
+                                <Select>
+                                    {
+                                        new Array(12).fill('').map((item, index) => (
+                                            <Select.Option value={index + 1} key={index + 1}>{index + 1} 月</Select.Option>
+                                        ))
+                                    }
+                                </Select>
+                            </Form.Item>
+                            <Form.Item name="UserId" className="col-md-6" label="姓名">
+                                <Select>
+                                    {
+                                        company.employee?.map((item, index) => (
+                                            item.UserId !== user.selfData.UserId &&
+                                            user.selfData.Permession === 1
+                                                ? <Select.Option key={index} value={item.UserId}>
+                                                    {item.UserName}
+                                                </Select.Option>
+                                                : <></>
+                                        ))
+                                    }
+                                </Select>
+                            </Form.Item>
+                            {
+                                user.selfData.Permession === 100 && (
+                                    <Form.Item name="BanchId" className="col-md-6" label="部門">
+                                        <BanchSelector />
+                                    </Form.Item>
+                                )
+                            }
+
+                        </>
+                    )
+                }
                 <Form.Item name="Goal" initialValue={value?.Goal || ''} className="" label="年度目標">
                     <Input.TextArea autoSize placeholder="輸入年度目標"/>
                 </Form.Item>

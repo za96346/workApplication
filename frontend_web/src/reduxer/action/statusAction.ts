@@ -298,6 +298,26 @@ class statusAcion {
         }
     }
 
+    onDeletePerformance (s: boolean): action {
+        return {
+            type: s ? statusType.DELETE_PERFORMANCE_ON : statusType.DELETE_PERFORMANCE_OFF,
+            payload: {
+                ...store.getState().status,
+                onDeletePerformance: s
+            }
+        }
+    }
+
+    onCreatePerformance (s: boolean): action {
+        return {
+            type: s ? statusType.CREATE_PERFORMANCE_ON : statusType.CREATE_PERFORMANCE_OFF,
+            payload: {
+                ...store.getState().status,
+                onCreatePerformance: s
+            }
+        }
+    }
+
     // 清除
     clearStatusAll (): action {
         return {

@@ -68,7 +68,14 @@ const Index = (): JSX.Element => {
                         menu={{
                             items: list(disabled(item)),
                             selectable: true,
-                            onSelect: (v) => { setModal((prev) => ({ ...prev, open: true, type: v.key, value: item })) },
+                            onSelect: (v) => {
+                                setModal((prev) => ({
+                                    ...prev,
+                                    open: true,
+                                    type: v.key,
+                                    value: item
+                                }))
+                            },
                             selectedKeys: [modal.type]
                         }}
                     >
@@ -99,8 +106,13 @@ const Index = (): JSX.Element => {
         setModal(modalStateInit)
     }
     const onEditSave = async (v: performanceType): Promise<void> => {
-        const res = await api.updatePermession(v)
-        if (res.status) {
+        let res = null
+        if (modal.type === '4') {
+            res = await api.createPerformance(v)
+        } else {
+            res = await api.updatePerformance(v)
+        }
+        if (res?.status) {
             await onSearch()
             onClose()
         }
@@ -113,14 +125,21 @@ const Index = (): JSX.Element => {
             Modal.confirm({
                 okText: '確認',
                 cancelText: '取消',
-                title: "刪除",
-                content: '是否刪除' +
-                    '\n姓名：' + modal.value.UserName +
-                    '\n年度：' + modal.value.Year +
-                    '\n日期：' + modal.value.Month,
+                title: "警告",
+                content: <>
+                    是否刪除<br/>
+                        姓名： {modal.value.UserName}<br/>
+                        年度： {modal.value.Year}<br/>
+                        日期： {modal.value.Month}<br/>
+                </>,
                 onOk: async () => {
-                    onClose()
-                }
+                    const res = await api.deletePerformance(modal.value.PerformanceId)
+                    if (res.status) {
+                        void onSearch()
+                        onClose()
+                    }
+                },
+                onCancel: onClose
             })
         }
     }, [modal])
@@ -128,8 +147,8 @@ const Index = (): JSX.Element => {
         <>
             <Suspense fallback={<Spin />}>
                 {
-                    modal.type === '1' && (
-                        <EditModal onSave={onEditSave} onClose={onClose} value={modal.value} open={modal.open}/>
+                    (modal.type === '1' || modal.type === '4') && (
+                        <EditModal type={modal.type} onSave={onEditSave} onClose={onClose} value={modal.value} open={modal.open}/>
                     )
                 }
                 {
@@ -139,7 +158,18 @@ const Index = (): JSX.Element => {
                 }
             </Suspense>
             <div className={window.styles.performanceBlock}>
-                <Button>新增</Button>
+                <Button
+                    onClick={() => {
+                        setModal((prev) => ({
+                            ...prev,
+                            open: true,
+                            type: '4',
+                            value: null
+                        }))
+                    }}
+                >
+                    新增
+                </Button>
                 <Divider />
                 <Form onValuesChange={(v, allV) => { formData.current = allV }} className='row'>
                     <Form.Item label='範圍搜尋' name='range' className='col-md-4'>

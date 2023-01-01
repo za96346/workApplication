@@ -666,13 +666,35 @@ class ApiControl extends apiAbs {
         return res
     }
 
-    async updatePermession (v: performanceType): Promise<ResType<null>> {
+    async updatePerformance (v: performanceType): Promise<ResType<null>> {
         store.dispatch(statusAction.onUpdatePerformance(true))
         const res = await this.POST<null>({
             url: this.route.performance,
             body: v
         })
         store.dispatch(statusAction.onUpdatePerformance(false))
+        return res
+    }
+
+    async deletePerformance (performanceId: performanceType['PerformanceId']): Promise<ResType<null>> {
+        store.dispatch(statusAction.onDeletePerformance(true))
+        const res = await this.DELETE<null>({
+            url: this.route.performance,
+            params: {
+                performanceId
+            }
+        })
+        store.dispatch(statusAction.onDeletePerformance(false))
+        return res
+    }
+
+    async createPerformance (v: performanceType): Promise<ResType<null>> {
+        store.dispatch(statusAction.onCreatePerformance(true))
+        const res = await this.PUT<null>({
+            url: this.route.performance,
+            body: v
+        })
+        store.dispatch(statusAction.onCreatePerformance(false))
         return res
     }
 }

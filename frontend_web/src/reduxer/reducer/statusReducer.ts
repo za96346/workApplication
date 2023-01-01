@@ -37,6 +37,8 @@ const statusState = {
 
     onFetchPerformance: false,
     onUpdatePerformance: false,
+    onDeletePerformance: false,
+    onCreatePerformance: false,
 
     onFetchWorkTime: false
 }
@@ -78,6 +80,8 @@ export interface statusReducerType {
 
     onFetchPerformance: boolean
     onUpdatePerformance: boolean
+    onDeletePerformance: boolean
+    onCreatePerformance: boolean
 
     onFetchWorkTime: boolean
 }

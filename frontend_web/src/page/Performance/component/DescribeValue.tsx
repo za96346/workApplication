@@ -23,7 +23,7 @@ const DescribeValue = ({ value }: { value: performanceType }): JSX.Element => (
             </Descriptions.Item>
             <Descriptions.Item span={3} label="狀態">
                 {
-                    value.CompanyId === -1
+                    value?.CompanyId === -1
                         ? <span className='text-danger'>離職</span>
                         : <span className='text-primary'>在職</span>
                 }
