@@ -59,7 +59,7 @@ const Index = (): JSX.Element => {
         (user.selfData.Permession === 1 &&
         value.UserId === user.selfData.UserId)
     const performance = useMemo(() => {
-        return company.performance.map((item) => ({
+        return company.performance?.map((item) => ({
             ...item,
             Goal: item.Goal.replace('', ''),
             action: (

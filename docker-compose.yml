@@ -65,9 +65,9 @@ services:
       #  MYSQL_USER: wordpress
       #  MYSQL_PASSWORD: wordpress
       MYSQL_DATABASE: workApplication
-      # expose: 3306
-    ports:
-      - "3306:3306"
+      expose: 3306
+    # ports:
+    #   - "3306:3306"
     networks:
       workAppNet:
         ipv4_address: 172.21.0.2

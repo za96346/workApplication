@@ -230,7 +230,7 @@ alter table weekendSetting add primary key (date, companyId);
 alter table weekendSetting add foreign key (companyId) references company(companyId) on update cascade on delete cascade;
 
 # 個人時數
-create table workTIme(
+create table workTime(
 	workTimeId bigInt not null unique auto_increment,
 	userId bigInt,
 	year int,
