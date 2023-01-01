@@ -52,7 +52,7 @@ Insert.PwdConfirm = (): JSX.Element => {
 Insert.Email = (): JSX.Element => {
     return (
         <Form.Item name="Account" rules={rule.email()}>
-            <Input size="large" placeholder="請輸入電子信箱" prefix={<MailOutlined />} />
+            <Input size="large" placeholder="請輸入 電子信箱 / 員工編號" prefix={<MailOutlined />} />
         </Form.Item>
     )
 }
