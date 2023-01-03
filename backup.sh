@@ -1,6 +1,14 @@
 #!/bin/bash
 CONTAINER=workapp_mysql
 DB_NAME=workApplication
-FILENAME=/backup/workApplication/${DB_NAME}_$(date "+%Y%m%d_%H%M%S").sql
-
-docker exec ${CONTAINER} sh -c "mysqldump -u root ${DB_NAME}" > ${FILENAME}
+FILENAME=~/backup/workApplication/${DB_NAME}_$(date "+%Y%m%d_%H%M%S").sql
+expect << EOF
+spawn docker exec -it ${CONTAINER} sh -c "mysqldump -u root -p ${DB_NAME}" > ${FILENAME}
+expect {
+    "*Enter password:*" {
+        send "siou0722\r"
+        send "exit\r"
+    }
+}
+expect eof
+EOF
