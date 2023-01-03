@@ -1,7 +1,7 @@
 #!/bin/bash
 CONTAINER=workapp_mysql
 DB_NAME=workApplication
-FILENAME=~/backup/workApplication/${DB_NAME}_$(date "+%Y%m%d_%H%M%S").sql
+FILENAME=~/backup/workApplication/$(date "+%Y%m%d_%H%M%S").sql
 expect << EOF
 spawn docker exec -it ${CONTAINER} sh -c "mysqldump -u root -p ${DB_NAME}" > ${FILENAME}
 expect {
@@ -12,3 +12,4 @@ expect {
 }
 expect eof
 EOF
+echo "success" > &2
