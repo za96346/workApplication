@@ -12,4 +12,4 @@ expect {
 }
 expect eof
 EOF
-echo "success" > &2
+echo "success" >&2
