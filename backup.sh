@@ -8,7 +8,6 @@ spawn docker exec -i $CONTAINER bash -c "mysqldump -u root -p $DB_NAME" > $FILEN
 expect {
     "*Enter password*" {
         send "siou0722\r"
-        send "exit\r"
     }
 }
 expect eof
