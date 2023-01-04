@@ -13,6 +13,6 @@ expect {
 }
 expect eof
 EOF
-echo FILENAME
-echo DB_NAME
-echo CONTAINER
+echo $FILENAME
+echo $DB_NAME
+echo $CONTAINER
