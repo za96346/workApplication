@@ -1,9 +1,10 @@
 #!/bin/bash
 CONTAINER=workapp_mysql
 DB_NAME=workApplication
-FILENAME=~/backup/workApplication/hi.sql
+FILENAME=~/backup/workApplication/"$(date "+%Y%m%d_%H%M%S")".sql
+echo "" > FILENAME
 expect <<EOF
-spawn docker exec -i $CONTAINER sh -c "mysqldump -u root -p $DB_NAME" > hi.sql
+spawn docker exec -i $CONTAINER bash -c "mysqldump -u root -p $DB_NAME" > $FILENAME
 expect {
     "*Enter password*" {
         send "siou0722\r"
@@ -12,6 +13,3 @@ expect {
 }
 expect eof
 EOF
-echo $FILENAME
-echo $DB_NAME
-echo $CONTAINER
