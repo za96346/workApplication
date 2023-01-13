@@ -1,6 +1,6 @@
 import Menu from 'Share/Menu'
 import React, { useEffect, useState } from 'react'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import useReduceing from 'Hook/useReducing'
 import { useBreakPoint } from 'Hook/useBreakPoint'
 import { Drawer } from 'antd'
@@ -10,6 +10,8 @@ const Layout = (): JSX.Element => {
     const [show, setShow] = useState(false)
     const { isLess } = useBreakPoint()
     const { pathname } = useLocation()
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [searchP, setSearchP] = useSearchParams()
     const navigate = useNavigate()
     const { user } = useReduceing()
 
@@ -18,7 +20,10 @@ const Layout = (): JSX.Element => {
             navigate('/entry/login')
         }
     }, [user.token])
-
+    console.log('state => ', searchP.get('state'))
+    console.log('scope => ', searchP.get('scope'))
+    console.log('code => ', searchP.get('code'))
+    console.log('error => ', searchP.get('error'))
     useEffect(() => {
         setShow(false)
     }, [navigate])

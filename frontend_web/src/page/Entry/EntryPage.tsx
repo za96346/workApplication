@@ -1,6 +1,7 @@
+import { Divider } from 'antd'
 import React, { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import api from '../../api/api'
+import api from 'api/api'
 import useReduceing from '../../Hook/useReducing'
 import ForgetPwdForm from './ForgetPwdForm'
 import LoginForm from './LoginForm'
@@ -53,7 +54,17 @@ const Entry = (): JSX.Element => {
                         </>
                     )
                 }
-
+                <Divider />
+                {/* <a
+                    className='btn btn-secondary'
+                    onClick={async () => {
+                        const res = await api.googleLogin()
+                        console.log(res.data)
+                        window.location.assign(res.data)
+                    }}
+                >
+                    google 登入
+                </a> */}
             </div>
         </>
     )

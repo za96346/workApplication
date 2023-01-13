@@ -26,7 +26,8 @@ class ApiControl extends apiAbs {
         weekendSetting: 'company/weekend/setting',
         waitReply: 'company/wait/reply',
         workTime: 'shift/workTime',
-        performance: 'pr/performance'
+        performance: 'pr/performance',
+        googleLogin: 'google/login'
     }
 
     constructor () {
@@ -695,6 +696,13 @@ class ApiControl extends apiAbs {
             body: v
         })
         store.dispatch(statusAction.onCreatePerformance(false))
+        return res
+    }
+
+    async googleLogin (): Promise<ResType<string>> {
+        const res = await this.GET<string>({
+            url: this.route.googleLogin
+        })
         return res
     }
 }
