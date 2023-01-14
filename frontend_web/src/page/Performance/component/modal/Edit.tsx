@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 import { Modal, Form, Input, InputNumber, DatePicker, Select } from 'antd'
-import { performanceType } from 'type'
+import { BanchType, performanceType } from 'type'
 import useReduceing from 'Hook/useReducing'
 import DescribeValue from '../DescribeValue'
 import dayjs from 'dayjs'
@@ -13,8 +13,16 @@ interface props {
     onClose: () => void
     onSave: ((v: performanceType) => void)
     type: '1' | '4' // 1 編輯,  4 新增
+    banchId: BanchType['Id']
 }
-const Edit = ({ open, value, onClose, onSave, type }: props): JSX.Element => {
+const Edit = ({
+    open,
+    value,
+    onClose,
+    onSave,
+    type,
+    banchId
+}: props): JSX.Element => {
     const form = useRef<performanceType>(value)
     const { user, company } = useReduceing()
     const disabled = user.selfData?.Permession === 2 ||
@@ -22,7 +30,9 @@ const Edit = ({ open, value, onClose, onSave, type }: props): JSX.Element => {
         value?.UserId === user.selfData?.UserId)
     useEffect(() => {
         api.getUserAll({
-            workState: ''
+            workState: 'all',
+            name: '',
+            banch: banchId
         })
     }, [])
     return (
@@ -44,8 +54,7 @@ const Edit = ({ open, value, onClose, onSave, type }: props): JSX.Element => {
                 onValuesChange={(v, allV) => {
                     form.current = {
                         ...allV,
-                        Year: allV.Year?.$y - 1911,
-                        BanchName: company.banch?.find((item) => item.Id === allV?.BanchId)?.BanchName
+                        Year: allV.Year?.$y - 1911
                     }
                 }}
                 className="row mt-4"
@@ -69,12 +78,10 @@ const Edit = ({ open, value, onClose, onSave, type }: props): JSX.Element => {
                                 <Select>
                                     {
                                         company.employee?.map((item, index) => (
-                                            item.UserId !== user.selfData.UserId &&
-                                            user.selfData.Permession === 1
-                                                ? <Select.Option key={index} value={item.UserId}>
-                                                    {item.UserName}
-                                                </Select.Option>
-                                                : <></>
+
+                                            <Select.Option key={index} value={item.UserId}>
+                                                {item.UserName}
+                                            </Select.Option>
                                         ))
                                     }
                                 </Select>

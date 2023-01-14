@@ -148,7 +148,14 @@ const Index = (): JSX.Element => {
             <Suspense fallback={<Spin />}>
                 {
                     (modal.type === '1' || modal.type === '4') && (
-                        <EditModal type={modal.type} onSave={onEditSave} onClose={onClose} value={modal.value} open={modal.open}/>
+                        <EditModal
+                            type={modal.type}
+                            onSave={onEditSave}
+                            onClose={onClose}
+                            value={modal.value}
+                            open={modal.open}
+                            banchId={convertBanchId}
+                        />
                     )
                 }
                 {

@@ -129,6 +129,12 @@ func UpdatePerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	updateStatus := false
 
 	if user.Permession == 100 {
+		banch := (*Mysql).SelectCompanyBanch(2, performance.BanchId)
+		banchName := performance.BanchName
+		if !methods.IsNotExited(banch) {
+			banchName = (*banch)[0].BanchName
+		}
+		performance.BanchName = banchName
 		updateStatus = (*Mysql).UpdatePerformance(
 			0,
 			&performance,

@@ -162,7 +162,9 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	// 判斷工作狀態
 	val := []response.User{}
 	for _, v := range data {
-		if workState == v.WorkState {
+		if (workState == "all") {
+			val = append(val, v)
+		} else if workState == v.WorkState {
 			val = append(val, v)
 		}
 	}
