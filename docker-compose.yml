@@ -10,7 +10,7 @@ services:
     restart: always
     stdin_open: true # docker run -i
     tty: true        # docker run -t
-    build: ./frontend_web/build/
+    build: ./frontend_web/
     volumes:
       - ./frontend_web/build:/usr/share/nginx/html
       - ./frontend_web/nginx.conf:/etc/nginx/nginx.conf
