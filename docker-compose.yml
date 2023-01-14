@@ -12,6 +12,7 @@ services:
       - CERTBOT_EMAIL=za96346@gmail.com
     volumes:
       - ./volume/letsencrypt:/etc/letsencrypt
+       - ./frontend_web/user_conf.d:/etc/nginx/user_conf.d
     stdin_open: true # docker run -i
     tty: true        # docker run -t
     build: ./frontend_web/build/
