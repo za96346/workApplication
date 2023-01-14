@@ -2,8 +2,9 @@ FROM nginx:1.22
 # RUN cat certificate.crt ca_bundle.crt >> certificate.crt
 RUN apt-get update -y
 RUN apt-get install certbot python3-certbot-nginx -y
-# RUN nginx -t
-# RUN certbot certonly --nginx --email za96346@gmail.com --agree-tos -d workhard.app
+RUN apt-get install expect -y
+RUN sh nginx.sh
+RUN nginx -t
 COPY . /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
 # COPY ./certificate.crt /etc/ssl/certificate.crt
