@@ -55,12 +55,14 @@ func SetRouter() *gin.Engine {
 	companyApi := apiServer.Group("/workApp/company")
 	shiftApi := apiServer.Group("/workApp/shift")
 	performanceApi := apiServer.Group("/workApp/pr")
+	google := apiServer.Group("/workApp/google")
 
 	route.User(userApi)
 	route.EntryRoute(entryApi)
 	route.Company(companyApi)
 	route.Shift(shiftApi)
 	route.Performance(performanceApi)
+	route.GoogleLoginRoute(google)
 
 	// start
 	apiServer.Run(":" + port)
