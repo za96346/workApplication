@@ -55,7 +55,7 @@ const Entry = (): JSX.Element => {
                     )
                 }
                 <Divider />
-                {/* <a
+                <a
                     className='btn btn-secondary'
                     onClick={async () => {
                         const res = await api.googleLogin()
@@ -64,7 +64,7 @@ const Entry = (): JSX.Element => {
                     }}
                 >
                     google 登入
-                </a> */}
+                </a>
             </div>
         </>
     )
