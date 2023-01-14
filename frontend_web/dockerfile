@@ -3,7 +3,7 @@ FROM nginx:1.22
 RUN apt-get update -y
 RUN apt-get install certbot python3-certbot-nginx -y
 RUN apt-get install expect -y
-# RUN apt-get install vim
+RUN apt-get install vim -y
 COPY nginx.sh .
 RUN sh nginx.sh
 COPY . /usr/share/nginx/html
