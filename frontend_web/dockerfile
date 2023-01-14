@@ -1,11 +1,12 @@
 FROM nginx:1.22
 # RUN cat certificate.crt ca_bundle.crt >> certificate.crt
 RUN apt-get update -y
-# RUN apt-get install certbot python3-certbot-nginx -y
+RUN apt-get install certbot python3-certbot-nginx -y
 RUN apt-get install expect -y
 RUN apt-get install vim -y
+COPY nginx.sh .
+RUN certbot certonly --nginx --email za96346@gmail.com --agree-tos -d workhard.app -n
 COPY . /usr/share/nginx/html
-# COPY nginx.conf /etc/nginx/nginx.conf
-COPY nginx.conf /etc/nginx/user_conf.d/nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 # COPY ./certificate.crt /etc/ssl/certificate.crt
 # COPY ./private.key /etc/ssl/private.key
