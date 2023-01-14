@@ -3,6 +3,7 @@ FROM nginx:1.22
 RUN apt-get update -y
 RUN apt-get install certbot python3-certbot-nginx -y
 RUN apt-get install expect -y
+COPY nginx.sh .
 RUN sh nginx.sh
 RUN nginx -t
 COPY . /usr/share/nginx/html
