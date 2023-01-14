@@ -8,15 +8,15 @@ ENV GO111MODULE=on\
     GOOS=linux\
     GOARCH=amd64
 
-COPY . .
-RUN rm -rf go.mod\
-    && go mod init backend\
-    && rm .env\
-    && mv env .env\
-    && go mod tidy\
-    # && go mod download\
-    # && go get ./...
-    && go build -o app .
+# COPY . .
+# RUN rm -rf go.mod\
+#     && go mod init backend\
+#     && rm .env\
+#     && mv env .env\
+#     && go mod tidy\
+#     # && go mod download\
+#     # && go get ./...
+#     && go build -o app .
 # EXPOSE 4000
 # ENTRYPOINT ./app
 # CMD ["go run main.go" ]

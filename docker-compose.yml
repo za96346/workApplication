@@ -36,6 +36,8 @@ services:
       bash -c "./app"
     volumes:
       - ./volume/logs:/backend/logs
+      - ./backend/app:/backend/app
+      - ./backend/.env:/backend/.env
     depends_on:
       - work_app_redis
       - work_app_mysql
