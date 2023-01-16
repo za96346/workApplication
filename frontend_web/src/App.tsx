@@ -15,7 +15,8 @@ import { store } from './reduxer/store'
 import statusAction from './reduxer/action/statusAction'
 import { Spin } from 'antd'
 import useReduceing from 'Hook/useReducing'
-import Word from 'page/Performance/component/Word'
+import PrintWord from 'page/Performance/component/PrintWord'
+import PrintList from 'page/Performance/component/PrintList'
 
 const Entry = lazy((): any => import('./page/Entry/EntryPage'))
 const Layout = lazy((): any => import('./page/Layout'))
@@ -76,7 +77,8 @@ const App = (): JSX.Element => {
                             <Route path='performance/:banchId' element={<PerformancePage />}/>
                         </Route>
                         <Route path='*' element={<ErrorPage/>} />
-                        <Route path='print' element={<Word />}/>
+                        <Route path='printWord' element={<PrintWord />}/>
+                        <Route path='printList' element={<PrintList />}/>
                     </Routes>
                 </Router>
             </Suspense>

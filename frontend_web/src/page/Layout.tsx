@@ -20,10 +20,10 @@ const Layout = (): JSX.Element => {
             navigate('/entry/login')
         }
     }, [user.token])
-    console.log('state => ', searchP.get('state'))
-    console.log('scope => ', searchP.get('scope'))
-    console.log('code => ', searchP.get('code'))
-    console.log('error => ', searchP.get('error'))
+    // console.log('state => ', searchP.get('state'))
+    // console.log('scope => ', searchP.get('scope'))
+    // console.log('code => ', searchP.get('code'))
+    // console.log('error => ', searchP.get('error'))
     useEffect(() => {
         setShow(false)
     }, [navigate])

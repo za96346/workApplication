@@ -4,7 +4,7 @@ import useReduceing from 'Hook/useReducing'
 import React, { useEffect, useState, useRef, ReactNode } from 'react'
 import { v4 } from 'uuid'
 
-const Word = (): JSX.Element => {
+const PrintWord = (): JSX.Element => {
     const { company } = useReduceing()
     const clientHeight1_ref = useRef(null) // px
     const clientHeight2_ref = useRef(null) // px
@@ -43,7 +43,7 @@ const Word = (): JSX.Element => {
         <>
             {
                 company.performance.map((value) => (
-                    <div key={v4()} className={window.styles.print_page}>
+                    <div translate='no' key={v4()} className={window.styles.print_page}>
                         <p style={{ fontSize: '8px' }}>臺中市私立鎮瀾兒童家園</p>
                         <div style={{ fontSize: '20px', justifyContent: 'center', border: 'none', marginBottom: '0.5cm' }}>工作督導月紀錄</div>
                         <div style={{ height: '1cm' }}>
@@ -148,4 +148,4 @@ const Word = (): JSX.Element => {
         </>
     )
 }
-export default Word
+export default PrintWord

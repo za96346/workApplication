@@ -1,7 +1,13 @@
 import type { ColumnsType } from 'antd/es/table'
+import { ReactNode } from 'react'
 import { performanceType } from 'type'
 
-export const columns: ColumnsType<performanceType> = [
+interface reWrite extends Omit<performanceType, 'Goal' | 'Directions'> {
+    Goal: ReactNode[]
+    Directions: ReactNode[]
+}
+
+export const columns: ColumnsType<reWrite> = [
     {
         key: 'UserName',
         title: '姓名',

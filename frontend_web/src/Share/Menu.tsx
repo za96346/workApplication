@@ -74,7 +74,7 @@ const App: React.FC = () => {
     const navigate = useNavigate()
 
     const onClick: MenuProps['onClick'] = e => {
-        console.log('click ', e)
+        // console.log('click ', e)
         setCurrent(e)
     }
 
@@ -87,7 +87,7 @@ const App: React.FC = () => {
 
     useEffect(() => {
         const [path1, path2] = current.keyPath
-        console.log(current)
+        // console.log(current)
         if (path1 === 'setting' || path2 === 'setting') {
             navigate(`setting/${current.key}`)
             return

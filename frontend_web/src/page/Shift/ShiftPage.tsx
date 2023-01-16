@@ -8,8 +8,7 @@ import EditTable from './EditTable'
 import PeopleStatus from './PeopleStatus'
 const ShiftPage = (): JSX.Element => {
     const { banchId } = useParams()
-    const { company, shiftEdit } = useReduceing()
-    const convertBanchId = parseInt(banchId.replace('a', ''))
+    const { company, shiftEdit, state } = useReduceing()
     const [status, setStatus] = useState({
         drawerOpen: false,
         currentTabs: 0
@@ -49,7 +48,7 @@ const ShiftPage = (): JSX.Element => {
                 }
             </Drawer>
             <div className={window.styles.shiftProcessBar}>
-                <h3>{company.banch.find((item) => item.Id === convertBanchId)?.BanchName || ''}</h3>
+                <h3>{company.banch.find((item) => item.Id === state.banchId)?.BanchName || ''}</h3>
                 <Steps current={shiftEdit.Status - 1}>
                     <Steps.Step title="開放編輯" description={`${shiftEdit.StartDay} ${shiftEdit.EndDay}`} />
                     <Steps.Step title="主管審核" subTitle="2022-11-10" description="部門主管確認班表無誤" />
@@ -63,13 +62,13 @@ const ShiftPage = (): JSX.Element => {
                 >
                     <Tabs.TabPane tab={'當前編輯'} key={0}>
                         <EditTable
-                            banchId={convertBanchId}
+                            banchId={state.banchId}
                             currentTabs={status.currentTabs}
                         />
                     </Tabs.TabPane>
                     <Tabs.TabPane tab={'歷史班表'} key={1}>
                         <EditTable
-                            banchId={convertBanchId}
+                            banchId={state.banchId}
                             currentTabs={status.currentTabs}
                         />
                     </Tabs.TabPane>

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import api from 'api/api'
+import React, { useState } from 'react'
+// import api from 'api/api'
 import useReduceing from 'Hook/useReducing'
 import Input from 'Share/Input'
 import { Button } from 'Share/Button'
@@ -71,10 +71,10 @@ const WorkTimeManagerPage = (): JSX.Element => {
     const onClose = (): void => {
         setOpen(false)
     }
-    useEffect(() => {
-        api.getWorkTime(2022, 6, null)
-    }, [])
-    console.log(company.workTime)
+    // useEffect(() => {
+    //     api.getWorkTime(2022, 6, null)
+    // }, [])
+    // console.log(company.workTime)
     return (
         <>
             <Modal
