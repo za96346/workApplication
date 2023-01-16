@@ -64,8 +64,8 @@ func(dbObj *DB) SelectPerformance(selectKey int, value... interface{}) *[]table.
 	return &carry
 }
 
-// 0 => admin => performanceId, companyCode
-// 1 => manager => performanceId, companyCode, performanceBanchId, performanceBanchName
+// 0 => admin => performanceId, companyCode, companyCode
+// 1 => manager => performanceId, companyCode, companyCode, performanceBanchId, performanceBanchName
 // 2 => personal => performanceId, userId
 func(dbObj *DB) UpdatePerformance(updateKey int, data *table.Performance, value ...interface{}) bool {
 	defer panichandler.Recover()

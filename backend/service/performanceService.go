@@ -140,6 +140,7 @@ func UpdatePerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 			&performance,
 			performance.PerformanceId,
 			company.CompanyCode,
+			company.CompanyCode,
 		)
 		// 主管更改不是自己的
 	} else if user.Permession == 1 &&
@@ -154,6 +155,7 @@ func UpdatePerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 			1,
 			&performance,
 			performance.PerformanceId,
+			company.CompanyCode,
 			company.CompanyCode,
 			user.Banch,
 			banchName,

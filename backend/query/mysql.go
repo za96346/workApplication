@@ -1154,6 +1154,8 @@ func addPerformance(){
 		update performance p
 		left join user u
 			on u.userId=p.userId
+		left join quitWorkUser qu
+			on qu.userId=p.userId
 		set
 			banchId=?,
 			goal=?,
@@ -1165,12 +1167,17 @@ func addPerformance(){
 			dayOffNotOnRule=?,
 			banchName=?,
 			p.lastModify=?
-		where p.performanceId=? and u.companyCode=?;
+		where
+			p.performanceId=?
+			and (qu.companyCode=?
+			or u.companyCode=?);
 	`
 	sqlQueryInstance.Performance.UpdateByManager = `
 		update performance p
 		left join user u
 			on u.userId=p.userId
+		left join quitWorkUser qu
+			on qu.userId=p.userId
 		set
 			banchId=?,
 			goal=?,
@@ -1182,7 +1189,11 @@ func addPerformance(){
 			dayOffNotOnRule=?,
 			banchName=?,
 			p.lastModify=?
-		where p.performanceId=? and u.companyCode=? and (p.banchId=? or p.banchName=?);
+		where
+			p.performanceId=?
+			and (qu.companyCode=?
+				or u.companyCode=?)
+			and (p.banchId=? or p.banchName=?);
 	`;
 	sqlQueryInstance.Performance.InsertAll = `
 		insert into performance (

@@ -192,9 +192,9 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 
 
 	// 當要被更改的人是公司負責人時
-	//就要去判斷是不是自己更改自己
-	//如果不是 則 回傳不能修改
-	//如果是 永遠把負責人的權限設為管理者
+	// 就要去判斷是不是自己更改自己
+	// 如果不是 則 回傳不能修改
+	// 如果是 永遠把負責人的權限設為管理者
 	// 以及把公司碼射為自己的公司
 	myUserData, myCompany, err := CheckUserAndCompany(props)
 	if err {return}
