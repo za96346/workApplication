@@ -24,7 +24,7 @@ const SearchBar = ({
     const onSearch = async (): Promise<void> => {
         // console.log(formData.current.range)
         await api.getPerformance({
-            banchId: state,
+            banchId: state.banchId,
             name: formData.current.name,
             startYear: formData.current.range[0]?.year() - 1911,
             startMonth: formData.current.range[0]?.month() + 1,

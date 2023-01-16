@@ -26,7 +26,7 @@ const useReduceing = (): props => {
         _persist
     }: RootState = useSelector((state: RootState) => state)
     // 參數
-    const { currentBanchId } = useParams()
+    const { banchId: currentBanchId } = useParams()
     const banchId = parseInt(currentBanchId?.replace('c', '')?.replace('b', '')?.replace('a', ''))
     return {
         company,
