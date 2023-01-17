@@ -1,9 +1,9 @@
 import Menu from 'Share/Menu'
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import useReduceing from 'Hook/useReducing'
 import { useBreakPoint } from 'Hook/useBreakPoint'
-import { Drawer } from 'antd'
+import { Drawer, Spin } from 'antd'
 import Header from 'Share/Header'
 
 const Layout = (): JSX.Element => {
@@ -31,7 +31,9 @@ const Layout = (): JSX.Element => {
     if (pathname.includes('entry')) {
         return (
             <div className={window.styles.entryLayOut}>
-                <Outlet />
+                <Suspense fallback={<Spin/>}>
+                    <Outlet />
+                </Suspense>
             </div>
         )
     }
@@ -51,7 +53,9 @@ const Layout = (): JSX.Element => {
                         : <Menu />
                 }
                 <div className={window.styles.rightBlock}>
-                    <Outlet />
+                    <Suspense fallback={<Spin/>}>
+                        <Outlet />
+                    </Suspense>
                 </div>
             </div>
         </>

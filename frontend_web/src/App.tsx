@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense, lazy } from 'react'
+import React, { useEffect, lazy } from 'react'
 
 import {
     BrowserRouter as Router,
@@ -17,9 +17,9 @@ import { Spin } from 'antd'
 import useReduceing from 'Hook/useReducing'
 import PrintWord from 'page/Performance/component/PrintWord'
 import PrintList from 'page/Performance/component/PrintList'
+import Layout from 'page/Layout'
 
 const Entry = lazy((): any => import('./page/Entry/EntryPage'))
-const Layout = lazy((): any => import('./page/Layout'))
 const HomePage = lazy((): any => import('./page/Home/HomePage'))
 const EmployeeManager = lazy((): any => import('./page/EmployeeManager/Index'))
 const ShiftPage = lazy((): any => import('./page/Shift/ShiftPage'))
@@ -52,36 +52,35 @@ const App = (): JSX.Element => {
                     </div>
                 )
             }
-            <Suspense fallback={<Spin/>}>
-                <Router>
-                    <Routes>
-                        <Route path='/' element={<Layout />}>
-                            <Route path='/' element={<Navigate to={'entry/login'} />}/>
-                            <Route path='entry/:path' element={<Entry />} />
+            <Router>
+                <Routes>
+                    <Route path='/' element={<Layout />}>
 
-                            <Route path='home' element={<HomePage />} />
+                        <Route path='/' element={<Navigate to={'entry/login'} />}/>
+                        <Route path='entry/:path' element={<Entry />} />
 
-                            <Route path='employeeManager' element={<EmployeeManager />} />
+                        <Route path='home' element={<HomePage />} />
 
-                            <Route path='shift/:banchId' element={<ShiftPage />} />
+                        <Route path='employeeManager' element={<EmployeeManager />} />
 
-                            <Route path='banchManager' element={<BanchManager />} />
-                            <Route path='sign' element={<SignPage/>}/>
-                            {/* <Route path='weekendSetting' element={<WeekendSettingPage />}/> */}
-                            <Route path='workTimeManager' element={<WorkTimeManagerPage />} />
+                        <Route path='shift/:banchId' element={<ShiftPage />} />
 
-                            <Route path='shiftSetting/:banchId' element={<ShiftSettingPage />} />
-                            <Route path='shiftSearch' element={<ShiftSearchPage />} />
+                        <Route path='banchManager' element={<BanchManager />} />
+                        <Route path='sign' element={<SignPage/>}/>
+                        {/* <Route path='weekendSetting' element={<WeekendSettingPage />}/> */}
+                        <Route path='workTimeManager' element={<WorkTimeManagerPage />} />
 
-                            <Route path='setting/:types' element={<SettingPage />} />
-                            <Route path='performance/:banchId' element={<PerformancePage />}/>
-                        </Route>
-                        <Route path='*' element={<ErrorPage/>} />
-                        <Route path='printWord' element={<PrintWord />}/>
-                        <Route path='printList' element={<PrintList />}/>
-                    </Routes>
-                </Router>
-            </Suspense>
+                        <Route path='shiftSetting/:banchId' element={<ShiftSettingPage />} />
+                        <Route path='shiftSearch' element={<ShiftSearchPage />} />
+
+                        <Route path='setting/:types' element={<SettingPage />} />
+                        <Route path='performance/:banchId' element={<PerformancePage />}/>
+                    </Route>
+                    <Route path='*' element={<ErrorPage/>} />
+                    <Route path='printWord' element={<PrintWord />}/>
+                    <Route path='printList' element={<PrintList />}/>
+                </Routes>
+            </Router>
         </>
 
     )
