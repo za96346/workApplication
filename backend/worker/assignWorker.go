@@ -167,6 +167,9 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 	case 45:
 		routeFunc = service.LoginGoogle
 		break
+	case 46:
+		routeFunc = service.CopyPerformance
+		break
 	default:
 		break;
 	}

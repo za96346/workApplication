@@ -261,3 +261,114 @@ func DeletePerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	})
 
 }
+
+// 複製功能
+func CopyPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+	performance := new([]table.PerformanceExtend)
+
+	request := new(struct {
+		PerformanceId int64 `json:"PerformanceId"`
+		IsResetGrade bool `json:"IsResetGrade"` // 重設 分數
+		IsResetDirections bool `json:"IsResetDirections"` // 重設績效描述
+	})
+	
+	if (*props).ShouldBindJSON(request) != nil {
+		props.JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+	user, _, err := CheckUserAndCompany(props)
+	if err {return}
+
+	// 依據權限選擇
+	if user.Permession == 2 {
+		performance = (*Mysql).SelectPerformance(
+			5,
+			request.PerformanceId,
+			user.UserId,
+			user.UserId,
+		)
+	} else if user.Permession == 1 {
+		myBanch := (*Mysql).SelectCompanyBanch(2, user.Banch)
+		if methods.IsNotExited(myBanch) {
+			props.JSON(http.StatusNotAcceptable, gin.H{
+				"message": StatusText().NotHaveBanch,
+			})
+			return
+		}
+		performance = (*Mysql).SelectPerformance(
+			4,
+			request.PerformanceId,
+			user.CompanyCode,
+			user.CompanyCode,
+			user.Banch,
+			(*myBanch)[0].BanchName,
+		)
+	} else if user.Permession == 100 {
+		performance = (*Mysql).SelectPerformance(
+			3,
+			request.PerformanceId,
+			user.CompanyCode,
+			user.CompanyCode,
+		)
+	}
+	
+	// 檢查是否有單筆的資料
+	if methods.IsNotExited(performance) {
+		props.JSON(http.StatusNotFound, gin.H{
+			"message": StatusText().NoData,
+		})
+		return
+	}
+	
+	// 設定新的資料
+	if request.IsResetGrade {
+		(*performance)[0].Attitude = 0
+		(*performance)[0].Efficiency = 0
+		(*performance)[0].Professional = 0
+		(*performance)[0].BeLate = 0
+		(*performance)[0].DayOffNotOnRule = 0
+	}
+	if request.IsResetDirections {
+		(*performance)[0].Directions = ""
+	}
+
+	if (*performance)[0].Month == 12 {
+		(*performance)[0].Year += 1
+		(*performance)[0].Month = 1
+	} else {
+		(*performance)[0].Month += 1
+	}
+
+	now := time.Now()
+	// 轉換 struct
+	newP := table.Performance {
+		UserId: (*performance)[0].UserId,
+		Year: (*performance)[0].Year,
+		Month: (*performance)[0].Month,
+		BanchId: (*performance)[0].BanchId,
+		Goal: (*performance)[0].Goal,
+		Attitude: (*performance)[0].Attitude,
+		Efficiency: (*performance)[0].Efficiency,
+		Professional: (*performance)[0].Professional,
+		Directions: (*performance)[0].Directions,
+		BeLate: (*performance)[0].BeLate,
+		DayOffNotOnRule: (*performance)[0].DayOffNotOnRule,
+		BanchName: (*performance)[0].BanchName,
+		CreateTime: now,
+		LastModify: now,
+	}
+
+	if res, _ := (*Mysql).InsertPerformance(&newP); !res {
+		props.JSON(http.StatusConflict, gin.H{
+			"message": StatusText().CopyFail,
+		})
+		return
+	}
+	props.JSON(http.StatusOK, gin.H{
+		"message": StatusText().CopySuccess,
+	})
+}

@@ -155,6 +155,9 @@ type performance struct {
 	SelectAllByAdmin string
 	SelectAllByManager string
 	SelectAllByPerson string
+	SelectSingleByAdmin string
+	SelectSingleByManager string
+	SelectSingleByPerson string
 	UpdateByAdmin string
 	UpdateByManager string
 	UpdateByPerson string
@@ -1060,6 +1063,60 @@ func addLog () {
 	;`;
 }
 func addPerformance(){
+	sqlQueryInstance.Performance.SelectSingleByAdmin = `
+		select
+			p.*,
+			ifnull(u.userName, ''),
+			ifnull(c.companyId, -1)
+		from performance as p
+		left join user u
+			on u.userId=p.userId
+		left join company c
+			on u.companyCode=c.companyCode
+		left join quitWorkUser qu
+			on qu.userId=p.userId
+		where
+			performanceId=?
+		and (u.companyCode=?
+			or qu.companyCode=?);
+	`
+	sqlQueryInstance.Performance.SelectSingleByManager = `
+		select
+			p.*,
+			ifnull(u.userName, ''),
+			ifnull(c.companyId, -1)
+		from performance as p
+		left join user u
+			on u.userId=p.userId
+		left join company c
+			on u.companyCode=c.companyCode
+		left join quitWorkUser qu
+			on qu.userId=p.userId
+		where
+			performanceId=?
+		and
+			(u.companyCode=?
+			or qu.companyCode=?)
+		and
+			(p.banchId=? or p.banchName=?);
+	`
+	sqlQueryInstance.Performance.SelectSingleByPerson = `
+		select
+			p.*,
+			ifnull(u.userName, ''),
+			ifnull(c.companyId, -1)
+		from performance as p
+		left join user u
+			on u.userId=p.userId
+		left join company c
+			on u.companyCode=c.companyCode
+		left join quitWorkUser qu
+			on qu.userId=p.userId
+		where
+			performanceId=?
+		and
+			u.userId=? or qu.userId=?;
+	`
 	sqlQueryInstance.Performance.SelectAllByAdmin = `
 		select
 			p.*,

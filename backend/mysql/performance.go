@@ -16,6 +16,9 @@ import (
 // 0 => admin, value => user companyCode string, quitworkuser companyCode,year int,month int
 // 1=> manager, value => user companyCode string, quitworkuser companyCode, banchId int64, banchName string,year int,month int
 // 2 => person, value => user userId int64 ,year int,month int
+// 3 => copy admin, value => performanceId int64, user companyCode string, quitworkuser companyCode
+// 4 => copy manage. value => performanceId int64, user companyCode string, quitworkuser companyCode, banchId int64, banchName string
+// 5 => copy person, value => performanceId int64, user userId int64, quitworkuser userId int64
 func(dbObj *DB) SelectPerformance(selectKey int, value... interface{}) *[]table.PerformanceExtend {
 	defer panichandler.Recover()
 	querys := ""
@@ -28,6 +31,15 @@ func(dbObj *DB) SelectPerformance(selectKey int, value... interface{}) *[]table.
 		break
 	case 2:
 		querys = (*query.MysqlSingleton()).Performance.SelectAllByPerson
+		break
+	case 3:
+		querys = (*query.MysqlSingleton()).Performance.SelectSingleByAdmin
+		break
+	case 4:
+		querys = (*query.MysqlSingleton()).Performance.SelectSingleByManager
+		break
+	case 5:
+		querys = (*query.MysqlSingleton()).Performance.SelectSingleByPerson
 		break
 	}
 	per := new(table.PerformanceExtend)

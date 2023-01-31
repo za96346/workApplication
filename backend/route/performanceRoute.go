@@ -15,5 +15,7 @@ func Performance(props *gin.RouterGroup) {
 		props.PUT("/performance", middleWare.Permession(100, 1), worker.AssignWorker(42))
 		props.DELETE("/performance", middleWare.Permession(100, 1), worker.AssignWorker(43))
 
+		// 複製
+		props.PUT("/performance/copy", middleWare.Permession(100, 1), worker.AssignWorker(46))
 	}
 }

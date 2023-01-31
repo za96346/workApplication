@@ -58,6 +58,8 @@ type statusText struct {
 	NoData string
 	WeekendIdNotRight string
 	CompanyIdNotRight string
+	CopySuccess string
+	CopyFail string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -110,6 +112,8 @@ func StatusText() *statusText {
 				NoData: "沒有資料",
 				WeekendIdNotRight: "weekendId 不正確",
 				CompanyIdNotRight: "公司id 不正確",
+				CopySuccess: "複製成功",
+				CopyFail: "複製失敗，可能有同筆資料",
 			}
 		}
 	}
