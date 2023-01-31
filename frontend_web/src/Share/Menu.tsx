@@ -121,6 +121,9 @@ const App: React.FC = () => {
         if (path1 === 'workTimeManager') {
             navigate('workTimeManager')
         }
+        if (path1 === 'yearPerformance') {
+            navigate('yearPerformance')
+        }
         // if (path1 === 'weekendSetting') {
         //     navigate('weekendSetting')
         // }

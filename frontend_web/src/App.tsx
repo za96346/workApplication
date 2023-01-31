@@ -31,6 +31,7 @@ const SettingPage = lazy((): any => import('./page/Setting/Index'))
 const ErrorPage = lazy((): any => import('./page/ErrorPage'))
 const WorkTimeManagerPage = lazy((): any => import('./page/WorkTImeManager/WorkTimeManagerPage'))
 const PerformancePage = lazy((): any => import('./page/Performance/Index'))
+const YearPerformance = lazy((): any => import('./page/YearPerformance/Index'))
 
 // global init f
 window.styles = stylees
@@ -75,6 +76,7 @@ const App = (): JSX.Element => {
 
                         <Route path='setting/:types' element={<SettingPage />} />
                         <Route path='performance/:banchId' element={<PerformancePage />}/>
+                        <Route path='yearPerformance' element={<YearPerformance />}/>
                     </Route>
                     <Route path='*' element={<ErrorPage/>} />
                     <Route path='printWord' element={<PrintWord />}/>

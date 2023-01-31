@@ -43,7 +43,7 @@ const SearchBar = ({
             <Divider />
             <Form onValuesChange={(v, allV) => { formData.current = allV }} className='row'>
                 <Form.Item label='範圍搜尋' name='range' className='col-md-4'>
-                    <DateSelect onChange={(v) => { }} />
+                    <DateSelect type='month' onChange={(v) => { }} />
                 </Form.Item>
                 <Form.Item label='姓名' name='name' className='col-md-4'>
                     <Input placeholder='輸入姓名'/>

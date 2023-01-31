@@ -4,8 +4,9 @@ import dayjs from 'dayjs'
 
 interface props {
     onChange: (v: dayjs.Dayjs[]) => void
+    type: 'year' | 'month'
 }
-const DateSelect = ({ onChange }: props): JSX.Element => {
+const DateSelect = ({ onChange, type = 'month' }: props): JSX.Element => {
     const [dates, setDates] = useState<any>(null)
     const [value, setValue] = useState<any>([dayjs(), dayjs()])
 
@@ -40,7 +41,7 @@ const DateSelect = ({ onChange }: props): JSX.Element => {
                 placeholder={['開始', '結束']}
                 onChange={(val) => setValue(val)}
                 onOpenChange={onOpenChange}
-                picker='month'
+                picker={type}
             />
         </>
     )

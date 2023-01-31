@@ -1,4 +1,4 @@
-import { BanchRuleType, BanchStyleType, BanchType, CompanyType, performanceType, UserType, WaitReplyType, WeekendSettingType, workTimeType } from '../../type'
+import { BanchRuleType, BanchStyleType, BanchType, CompanyType, performanceType, UserType, WaitReplyType, WeekendSettingType, workTimeType, yearPerformanceType } from '../../type'
 import { store } from '../store'
 import { action, companyType } from '../types'
 
@@ -94,6 +94,16 @@ class companyAction {
             payload: {
                 ...store.getState().company,
                 performance: performance || []
+            }
+        }
+    }
+
+    setYearPerformance (performance: yearPerformanceType[]): action {
+        return {
+            type: companyType.SET_YEAR_PERFORMANCE,
+            payload: {
+                ...store.getState().company,
+                yearPerformance: performance || []
             }
         }
     }

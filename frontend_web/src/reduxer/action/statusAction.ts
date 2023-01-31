@@ -1,5 +1,5 @@
-import { store } from "../store"
-import { action, statusType } from "../types"
+import { store } from '../store'
+import { action, statusType } from '../types'
 
 class statusAcion {
     constructor () {
@@ -334,6 +334,16 @@ class statusAcion {
             payload: {
                 ...store.getState().status,
                 onCopyPerformance: s
+            }
+        }
+    }
+
+    onFetchYearPerformance (s: boolean): action {
+        return {
+            type: s ? statusType.FETCH_YEAR_PERFORMANCE_ON : statusType.FETCH_YEAR_PERFORMANCE_OFF,
+            payload: {
+                ...store.getState().status,
+                onFetchYearPerformance: s
             }
         }
     }

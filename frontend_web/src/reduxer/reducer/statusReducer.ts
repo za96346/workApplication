@@ -13,6 +13,7 @@ const statusState = {
 
     onFetchUserAll: false,
     onUpdateUser: false,
+    onCreateUser: false,
 
     onFetchSelfData: false,
     onUpdateSelfData: false,
@@ -39,6 +40,8 @@ const statusState = {
     onUpdatePerformance: false,
     onDeletePerformance: false,
     onCreatePerformance: false,
+    onCopyPerformance: false,
+    onFetchYearPerformance: false,
 
     onFetchWorkTime: false
 }
@@ -56,6 +59,7 @@ export interface statusReducerType {
 
     onFetchUserAll: boolean
     onUpdateUser: boolean
+    onCreateUser: boolean
 
     onFetchSelfData: boolean
     onUpdateSelfData: boolean
@@ -82,6 +86,8 @@ export interface statusReducerType {
     onUpdatePerformance: boolean
     onDeletePerformance: boolean
     onCreatePerformance: boolean
+    onCopyPerformance: boolean
+    onFetchYearPerformance: boolean
 
     onFetchWorkTime: boolean
 }

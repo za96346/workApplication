@@ -205,3 +205,10 @@ export interface performanceType {
     UserName: string
     CompanyId: number
 }
+
+export interface yearPerformanceType {
+    UserId: number
+    Year: number
+    UserName: string
+    Avg: number
+}

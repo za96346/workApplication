@@ -1,6 +1,6 @@
 import apiAbs from './apiAbs'
 import axios from 'axios'
-import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, performanceType, RegisterType, ResMessage, ResType, SelfDataType, UserType, WaitReplyType, WeekendSettingType, workTimeType } from '../type'
+import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, performanceType, RegisterType, ResMessage, ResType, SelfDataType, UserType, WaitReplyType, WeekendSettingType, workTimeType, yearPerformanceType } from '../type'
 import userAction from '../reduxer/action/userAction'
 import { store } from '../reduxer/store'
 import { FullMessage } from '../method/notice'
@@ -9,6 +9,11 @@ import statusAction from '../reduxer/action/statusAction'
 import { clearAll } from '../reduxer/clearAll'
 
 type createUserType = Pick<SelfDataType, "Account" | 'Password' | 'UserName' | 'EmployeeNumber' | 'OnWorkDay' | 'Banch' | 'Permession'>
+interface yearPerformanceParamsType {
+    startYear: number
+    endYear: number
+    userName: string
+}
 
 class ApiControl extends apiAbs {
     baseUrl: string
@@ -30,6 +35,7 @@ class ApiControl extends apiAbs {
         workTime: 'shift/workTime',
         performance: 'pr/performance',
         performanceCopy: 'pr/performance/copy',
+        yearPerformance: 'pr/performance/year',
         googleLogin: 'google/login'
     }
 
@@ -726,6 +732,22 @@ class ApiControl extends apiAbs {
             }
         })
         store.dispatch(statusAction.onCopyPerformance(false))
+        return res
+    }
+
+    // 年度績效分數
+    async getYearPerformance (v: yearPerformanceParamsType): Promise<ResType<yearPerformanceType[]>> {
+        // console.log(v)
+        store.dispatch(statusAction.onFetchYearPerformance(true))
+        const res = await this.GET<yearPerformanceType[]>({
+            url: this.route.yearPerformance,
+            successShow: false,
+            params: v
+        })
+        if (res.status) {
+            store.dispatch(companyAction.setYearPerformance(res.data))
+        }
+        store.dispatch(statusAction.onFetchYearPerformance(false))
         return res
     }
 
