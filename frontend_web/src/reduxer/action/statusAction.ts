@@ -80,6 +80,16 @@ class statusAcion {
         }
     }
 
+    onCreateUser (s: boolean): action {
+        return {
+            type: s ? statusType.CREATE_USER_ON : statusType.CREATE_USER_OFF,
+            payload: {
+                ...store.getState().status,
+                onCreateUser: s
+            }
+        }
+    }
+
     // 自己資料
     onFetchSelfData (s: boolean): action {
         return {

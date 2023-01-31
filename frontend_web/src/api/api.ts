@@ -8,6 +8,8 @@ import companyAction from '../reduxer/action/companyAction'
 import statusAction from '../reduxer/action/statusAction'
 import { clearAll } from '../reduxer/clearAll'
 
+type createUserType = Pick<SelfDataType, "Account" | 'Password' | 'UserName' | 'EmployeeNumber' | 'OnWorkDay' | 'Banch' | 'Permession'>
+
 class ApiControl extends apiAbs {
     baseUrl: string
     protected readonly route = {
@@ -502,6 +504,18 @@ class ApiControl extends apiAbs {
             }
         })
         store.dispatch(statusAction.onUpdateUser(false))
+        return res
+    }
+
+    async createUser (user: createUserType): Promise<ResType<null>> {
+        store.dispatch(statusAction.onCreateUser(true))
+        const res = await this.PUT<null>({
+            url: this.route.userSingle,
+            body: {
+                ...user
+            }
+        })
+        store.dispatch(statusAction.onCreateUser(false))
         return res
     }
 

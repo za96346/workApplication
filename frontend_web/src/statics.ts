@@ -57,6 +57,11 @@ class statics {
             5: '五',
             6: '六'
         }
+
+    type = {
+        edit: 'edit',
+        create: 'create'
+    }
 }
 
 export default new statics()

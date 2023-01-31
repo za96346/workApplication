@@ -1,4 +1,4 @@
-import { AppstoreOutlined, EditFilled, ExportOutlined, FieldTimeOutlined, GoldOutlined, HomeOutlined, IdcardOutlined, InsertRowRightOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined, WalletOutlined } from '@ant-design/icons'
+import { AppstoreOutlined, CalendarOutlined, EditFilled, ExportOutlined, FieldTimeOutlined, GoldOutlined, HomeOutlined, IdcardOutlined, InsertRowRightOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SettingOutlined, WalletOutlined } from '@ant-design/icons'
 import { Button, MenuProps, Menu } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -52,6 +52,7 @@ const items = (banch: BanchType[], selfData: UserType): MenuItem[] => {
 
         getItem('班表設定', 'shiftSetting', <AppstoreOutlined />, b),
         getItem('績效評核', 'performance', <WalletOutlined />, c.length > 0 && c),
+        getItem('年度績效', 'yearPerformance', <CalendarOutlined />),
         getItem('員工管理', 'employeeManager', <IdcardOutlined />),
         getItem('部門管理', 'banchManager', <GoldOutlined />),
         getItem('時數管理', 'workTimeManager', <FieldTimeOutlined />),

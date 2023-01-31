@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { Table } from 'antd'
+import { Button, Table } from 'antd'
 
 import useReduceing from 'Hook/useReducing'
 import { column } from './method/column'
@@ -9,6 +9,7 @@ import statics from 'statics'
 import ModalEdit from './component/modal/Index'
 import { UserType } from 'type'
 import dateHandle from 'method/dateHandle'
+import ModalCreate from './component/modalCreate/Index'
 // import dateHandle from 'method/dateHandle'
 
 interface modalType {
@@ -26,8 +27,8 @@ const EmployeeManager = (): JSX.Element => {
     const onClose = (): void => {
         setModal((prev) => ({ ...prev, open: false, value: null }))
     }
-    const onOpen = (v: UserType): void => {
-        setModal((prev) => ({ ...prev, open: true, value: v }))
+    const onOpen = (v: UserType, type: string): void => {
+        setModal((prev) => ({ ...prev, open: true, value: v, type }))
     }
     const employee = useMemo(() => {
         return company.employee.map((item) => ({
@@ -36,15 +37,32 @@ const EmployeeManager = (): JSX.Element => {
             OnWorkDay: dateHandle.transferUtcFormat(item.OnWorkDay).substring(0, 10),
             action: (
                 <div>
-                    <Btn.Edit disabled={user.selfData.Permession !== 100} onClick={() => { onOpen(item) }} />
+                    <Btn.Edit disabled={user.selfData.Permession !== 100} onClick={() => { onOpen(item, statics.type.edit) }} />
                 </div>
             )
         }))
     }, [company.employee])
     return (
         <>
-            <ModalEdit data={modal.value} open={modal.open} onClose={onClose} />
-            <SearchBar reSearching={modal.open} />
+            {
+                modal.type === statics.type.edit && (
+                    <ModalEdit data={modal.value} open={modal.open} onClose={onClose} />
+                )
+            }
+            {
+                modal.type === statics.type.create && (
+                    <ModalCreate open={modal.open} onClose={onClose} />
+                )
+            }
+            <div className={window.styles.empManagerFilter}>
+                <Button
+                    onClick={() => {
+                        onOpen(null, statics.type.create)
+                    }}>
+                    新增員工
+                </Button>
+                <SearchBar reSearching={modal.open} />
+            </div>
             <Table
                 sticky={{ offsetHeader: -20 }}
                 columns={column}
