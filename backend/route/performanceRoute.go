@@ -17,5 +17,7 @@ func Performance(props *gin.RouterGroup) {
 
 		// 複製
 		props.PUT("/performance/copy", middleWare.Permession(100, 1), worker.AssignWorker(46))
+		// 年度 績效
+		props.GET("/performance/year", middleWare.Permession(100, 1, 2), worker.AssignWorker(48))
 	}
 }

@@ -372,3 +372,68 @@ func CopyPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 		"message": StatusText().CopySuccess,
 	})
 }
+
+// 年度績效
+func FetchYearPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+
+	// 拿取參數
+	startYear := (*props).Query("startYear")
+	endYear := (*props).Query("endYear")
+	userName := (*props).Query("userName")
+
+	user, _, err := CheckUserAndCompany(props)
+	if err {return}
+
+	res := new([]table.YearPerformance)
+	// 根據 權限選擇
+	if user.Permession == 100 {
+		res = (*Mysql).SelectYearPerformance(
+			0,
+			user.CompanyCode,
+			user.CompanyCode,
+			startYear,
+			endYear,
+			userName,
+			userName,
+			userName,
+		)
+	} else if user.Permession == 1 {
+		myBanch := (*Mysql).SelectCompanyBanch(2, user.Banch)
+		if methods.IsNotExited(myBanch) {
+			props.JSON(http.StatusNotAcceptable, gin.H{
+				"message": StatusText().NotHaveBanch,
+			})
+			return
+		}
+		res = (*Mysql).SelectYearPerformance(
+			1,
+			user.CompanyCode,
+			user.CompanyCode,
+			(*myBanch)[0].Id,
+			(*myBanch)[0].BanchName,
+			startYear,
+			endYear,
+			userName,
+			userName,
+			userName,
+		)
+	} else if user.Permession == 2 {
+		res = (*Mysql).SelectYearPerformance(
+			2,
+			user.CompanyCode,
+			user.CompanyCode,
+			user.UserId,
+			startYear,
+			endYear,
+			userName,
+			userName,
+			userName,
+		)
+	}
+	(*props).JSON(http.StatusOK, gin.H {
+		"message": "success",
+		"data": *res,
+	})
+}

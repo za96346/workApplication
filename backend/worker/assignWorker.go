@@ -173,6 +173,9 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 	case 47:
 		routeFunc = service.InsertUser
 		break
+	case 48:
+		routeFunc = service.FetchYearPerformance
+		break
 	default:
 		break;
 	}

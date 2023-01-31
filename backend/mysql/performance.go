@@ -204,3 +204,41 @@ func(dbObj *DB) InsertPerformance(data *table.Performance) (bool, int64) {
 	}
 	return true, id
 }
+
+// 0 => admin, value => user companyCode, qu companyCode, startYear, endYear, userName * 3
+// 1 => manage, value => user companyCode, qu companyCode, banchId, banchName, startYear, endYear, userName * 3
+// 2 => person, value => user companyCode, qu companyCode, userId, startYear, endYear, userName * 3
+func(dbObj *DB) SelectYearPerformance(selectKey int, value... interface{}) *[]table.YearPerformance {
+	defer panichandler.Recover()
+	querys := ""
+	switch selectKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).Performance.SelectYearPerformanceByAdmin
+		break
+	case 1:
+		querys = (*query.MysqlSingleton()).Performance.SelectYearPerformanceByManage
+		break
+	case 2:
+		querys = (*query.MysqlSingleton()).Performance.SelectYearPerformanceByPerson
+		break
+	}
+	per := new(table.YearPerformance)
+	carry := []table.YearPerformance{}
+	res, err := (*dbObj).MysqlDB.Query(querys, value...)
+	defer res.Close()
+	(*dbObj).checkErr(err)
+	for res.Next() {
+		err = res.Scan(
+			&per.UserId,
+			&per.Year,
+			&per.UserName,
+			&per.Avg,
+		)
+		(*dbObj).checkErr(err)
+		if err == nil {
+			carry = append(carry, *per)
+		}
+	}
+
+	return &carry
+}

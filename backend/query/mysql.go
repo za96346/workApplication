@@ -165,6 +165,9 @@ type performance struct {
 	DeleteByAdmin string
 	InsertByAdmin string
 	InsertByManager string
+	SelectYearPerformanceByAdmin string
+	SelectYearPerformanceByManage string
+	SelectYearPerformanceByPerson string
 }
 func MysqlSingleton() *sqlQuery {
 	queryMux = new(sync.Mutex)
@@ -1271,6 +1274,86 @@ func addPerformance(){
 		) values (
 			?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 		);
+	`
+	sqlQueryInstance.Performance.SelectYearPerformanceByAdmin = `
+		select
+			p.userId,
+			p.year,
+			ifnull(u.userName, ''),
+			round((sum(p.attitude) + sum(p.professional) + sum(p.efficiency)) / 3.6, 2)
+		from performance as p
+		left join user u
+			on u.userId=p.userId
+		left join companyBanch cb
+			on cb.id=p.banchId
+		left join company c
+			on u.companyCode=c.companyCode
+		left join quitWorkUser qu
+			on qu.userId=p.userId
+		where
+			(u.companyCode=?
+			or qu.companyCode=?)
+			and 
+				p.year>=?
+			and
+				p.year<=?
+			and u.userName=if(?='' or ?=null, u.userName, ?)
+			group by p.userId, p.year;
+	`
+	sqlQueryInstance.Performance.SelectYearPerformanceByManage = `
+		select
+			p.userId,
+			p.year,
+			ifnull(u.userName, ''),
+			round((sum(p.attitude) + sum(p.professional) + sum(p.efficiency)) / 3.6, 2)
+		from performance as p
+		left join user u
+			on u.userId=p.userId
+		left join companyBanch cb
+			on cb.id=p.banchId
+		left join company c
+			on u.companyCode=c.companyCode
+		left join quitWorkUser qu
+			on qu.userId=p.userId
+		where
+			(u.companyCode=?
+			or qu.companyCode=?)
+			and
+			(p.banchId=?
+				or p.banchName=?)
+			and 
+				p.year>=?
+			and
+				p.year<=?
+			and u.userName=if(?='' or ?=null, u.userName, ?)
+			group by p.userId, p.year;
+	`
+	sqlQueryInstance.Performance.SelectYearPerformanceByPerson = `
+		select
+			p.userId,
+			p.year,
+			ifnull(u.userName, ''),
+			round((sum(p.attitude) + sum(p.professional) + sum(p.efficiency)) / 3.6, 2)
+		from performance as p
+		left join user u
+			on u.userId=p.userId
+		left join companyBanch cb
+			on cb.id=p.banchId
+		left join company c
+			on u.companyCode=c.companyCode
+		left join quitWorkUser qu
+			on qu.userId=p.userId
+		where
+			(u.companyCode=?
+			or qu.companyCode=?)
+			and
+				p.userId=?
+			and 
+				p.year>=?
+			and
+				p.year<=?
+			and u.userName=if(?='' or ?=null, u.userName, ?)
+			group by p.userId, p.year;
 	`
 	sqlQueryInstance.Performance.DeleteByAdmin = `
 		delete p from performance p

@@ -25,6 +25,13 @@ type PerformanceExtend struct {
 	CompanyId int64 `json:"CompanyId"` // 公司編號
 }
 
+type YearPerformance struct {
+	UserId int64
+	Year int
+	UserName string
+	Avg float32
+}
+
 //使用者
 type UserTable struct {
 	UserId int64 `json:"UserId"`// 使用者的編號
