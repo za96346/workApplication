@@ -318,6 +318,16 @@ class statusAcion {
         }
     }
 
+    onCopyPerformance (s: boolean): action {
+        return {
+            type: s ? statusType.COPY_PERFORMANCE_ON : statusType.COPY_PERFORMANCE_OFF,
+            payload: {
+                ...store.getState().status,
+                onCopyPerformance: s
+            }
+        }
+    }
+
     // 清除
     clearStatusAll (): action {
         return {

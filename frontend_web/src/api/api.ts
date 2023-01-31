@@ -27,6 +27,7 @@ class ApiControl extends apiAbs {
         waitReply: 'company/wait/reply',
         workTime: 'shift/workTime',
         performance: 'pr/performance',
+        performanceCopy: 'pr/performance/copy',
         googleLogin: 'google/login'
     }
 
@@ -696,6 +697,21 @@ class ApiControl extends apiAbs {
             body: v
         })
         store.dispatch(statusAction.onCreatePerformance(false))
+        return res
+    }
+
+    // 績效複製
+    async copyPerformance (v: performanceType['PerformanceId']): Promise<ResType<null>> {
+        store.dispatch(statusAction.onCopyPerformance(true))
+        const res = await this.PUT<null>({
+            url: this.route.performanceCopy,
+            body: {
+                PerformanceId: v,
+                IsResetGrade: true, // 重設 分數
+                IsResetDirections: true // 重設績效描述
+            }
+        })
+        store.dispatch(statusAction.onCopyPerformance(false))
         return res
     }
 
