@@ -110,7 +110,7 @@ const Index = (): JSX.Element => {
     // 當編輯完 儲存時
     const onEditSave = async (v: performanceType): Promise<void> => {
         let res = null
-        if (!v.BanchId) {
+        if (!v.BanchId && user.selfData.Permession === 100) {
             FullMessage.error('請選擇部門')
             return
         }
