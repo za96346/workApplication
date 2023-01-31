@@ -170,6 +170,9 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 	case 46:
 		routeFunc = service.CopyPerformance
 		break
+	case 47:
+		routeFunc = service.InsertUser
+		break
 	default:
 		break;
 	}

@@ -247,6 +247,40 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	})
 }
 
+func InsertUser(props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+	now := time.Now()
+
+	// 檢查格式
+	requestUser := new(table.UserTable)
+	(*requestUser).Permession = 2 // 先預設權限
+	if (*props).ShouldBindJSON(requestUser) != nil {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().FormatError,
+		})
+		return
+	}
+
+	myUserData, _, err := CheckUserAndCompany(props)
+	if err {return}
+
+	(*requestUser).CreateTime = now
+	(*requestUser).LastModify = now
+	(*requestUser).CompanyCode = myUserData.CompanyCode
+
+	if res, _ := (*Mysql).InsertUser(requestUser); !res {
+		(*props).JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().InsertFail,
+		})
+		return
+	}
+	(*props).JSON(http.StatusOK, gin.H{
+		"message": StatusText().InsertSuccess,
+	})
+
+}
+
 func ChangePassword (props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer waitJob.Done()

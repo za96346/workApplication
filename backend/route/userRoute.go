@@ -21,5 +21,6 @@ func User(props *gin.RouterGroup) {
 			worker.AssignWorker(2),
 		)
 		props.GET("/all", middleWare.Permession(100, 1), worker.AssignWorker(7))
+		props.PUT("/single", middleWare.Permession(100), worker.AssignWorker(47))
 	}
 }
