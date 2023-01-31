@@ -65,7 +65,7 @@ const Edit = ({
                             <Form.Item name="Year" initialValue={dayjs()} className="col-6" label="年度">
                                 <DatePicker picker='year' placeholder="選擇年度"/>
                             </Form.Item>
-                            <Form.Item name="Month" initialValue={value?.Month} className="col-6" label="年度">
+                            <Form.Item name="Month" initialValue={value?.Month} className="col-6" label="月份">
                                 <Select>
                                     {
                                         new Array(12).fill('').map((item, index) => (
