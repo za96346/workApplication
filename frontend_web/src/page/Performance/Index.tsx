@@ -10,6 +10,7 @@ import { MenuItemType } from 'antd/es/menu/hooks/useItems'
 import { performanceType } from 'type'
 import SearchBar from './component/SearchBar'
 import { v4 } from 'uuid'
+import { FullMessage } from 'method/notice'
 
 const EditModal = lazy(async () => await import('./component/modal/Edit'))
 const ChangeBanchModal = lazy(async () => await import('./component/modal/ChangeBanch'))
@@ -109,6 +110,10 @@ const Index = (): JSX.Element => {
     // 當編輯完 儲存時
     const onEditSave = async (v: performanceType): Promise<void> => {
         let res = null
+        if (!v.BanchId) {
+            FullMessage.error('請選擇部門')
+            return
+        }
         if (modal.type === '4') {
             res = await api.createPerformance(v)
         } else {
