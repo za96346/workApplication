@@ -60,6 +60,7 @@ type statusText struct {
 	CompanyIdNotRight string
 	CopySuccess string
 	CopyFail string
+	AccountNotSafe string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -114,6 +115,7 @@ func StatusText() *statusText {
 				CompanyIdNotRight: "公司id 不正確",
 				CopySuccess: "複製成功",
 				CopyFail: "複製失敗，可能有同筆資料",
+				AccountNotSafe: "帳號小於五碼",
 			}
 		}
 	}

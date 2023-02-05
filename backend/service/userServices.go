@@ -221,12 +221,13 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		(*Mysql).DeleteQuitWorkUser(1, request.UserId, myCompany.CompanyCode)
 		companyCode = myCompany.CompanyCode
 	}
-	// 主管更新的話
-	if myUserData.Permession == 1 && request.Banch != myUserData.Banch {
-		(*props).JSON(http.StatusForbidden, gin.H{
-			"message": StatusText().OnlyCanUpDateYourBanch,
-		})
-		return
+
+	// 主管更新自己的話 權限
+	if myUserData.Permession == 1 && myUserData.UserId == request.UserId {
+		permession = 1
+		banch = myUserData.Banch
+	} else if myUserData.Permession == 1 {
+		permession = 2
 	}
 
 	user := table.UserTable{
@@ -281,6 +282,21 @@ func InsertUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		(*requestUser).Permession = 2
 	}
 
+	// 檢查帳號密碼
+	if len((*requestUser).Password) < 8 {
+		(*props).JSON(http.StatusUnprocessableEntity, gin.H{
+			"message": StatusText().PasswordNotSafe,
+		})
+		return
+	}
+	if len((*requestUser).Account) < 5 {
+		(*props).JSON(http.StatusUnprocessableEntity, gin.H{
+			"message": StatusText().AccountNotSafe,
+		})
+		return
+	}
+
+	// 新增 使用者
 	if res, _ := (*Mysql).InsertUser(requestUser); !res {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().InsertFail,
