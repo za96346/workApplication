@@ -221,7 +221,13 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		(*Mysql).DeleteQuitWorkUser(1, request.UserId, myCompany.CompanyCode)
 		companyCode = myCompany.CompanyCode
 	}
-	Log.Println("companyCode => ", companyCode)
+	// 主管更新的話
+	if myUserData.Permession == 1 && request.Banch != myUserData.Banch {
+		(*props).JSON(http.StatusForbidden, gin.H{
+			"message": StatusText().OnlyCanUpDateYourBanch,
+		})
+		return
+	}
 
 	user := table.UserTable{
 		CompanyCode: companyCode,

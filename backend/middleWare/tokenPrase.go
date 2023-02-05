@@ -32,7 +32,7 @@ func TokenPrase(props *gin.Context) {
 	// 判斷 token 是否過期
 	if !(*redis.Singleton()).IsTokenExited(tokenParams) {
 		(*props).AbortWithStatusJSON(http.StatusNotExtended, gin.H{
-			"message": "token Expire",
+			"message": "登入憑證過期 ， 請重新登入",
 		})
 		return
 	}
@@ -40,7 +40,7 @@ func TokenPrase(props *gin.Context) {
 	userInfo, err := handler.ParseToken(tokenParams)
 	if err != nil {
 		(*props).AbortWithStatusJSON(http.StatusNetworkAuthenticationRequired, gin.H{
-			"message": "not Allow",
+			"message": "登入憑證錯誤",
 		})
 		return
 	}
