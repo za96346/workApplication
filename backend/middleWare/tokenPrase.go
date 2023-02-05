@@ -13,7 +13,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/goinggo/mapstructure"
-	"backend/logger"
 
 )
 
@@ -64,14 +63,5 @@ func TokenPrase(props *gin.Context) {
 	(*props).Set("CompanyId", (*company).CompanyId)
 	(*props).Set("BossId", (*company).BossId)
 
-	// logrus.
-	Log := logger.Logger()
-	Log.Print("\n\n")
-	Log.Println("使用者id: ", user.UserId)
-	Log.Println("使用者姓名: ", user.UserName)
-	Log.Println("使用者權限: ", user.Permession)
-	Log.Println("使用者的公司id: ", company.CompanyId)
-	Log.Println("使用者的公司碼: ", company.CompanyCode)
-	Log.Print("\n\n")
 	(*props).Next()
 }

@@ -2,12 +2,16 @@ package worker
 
 import (
 	"backend/logger"
+	"backend/mysql"
 	"backend/panicHandler"
 	"backend/service"
+	"backend/table"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"sync"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -180,24 +184,46 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 		break;
 	}
 	return func (props *gin.Context)  {
-		for i := 0; i<10; i++ {
-			Log.Println("")
-		}
+		// 紀錄參數
+		params := "params => "
 		for i, v := range (*props).Request.URL.Query() {
-			Log.Println("參數 ", i, ": ", v)
+			if i != "token" {
+				params += fmt.Sprintf("%s : %s ,", i, v)	
+			}
 		}
 
-
+		// 紀錄 body
 		bd, _ = ioutil.ReadAll(props.Request.Body)
 		body := make(map[string]interface{})
 		json.Unmarshal(bd, &body)
+		bodyString := "body => "
 		for i, v := range body {
-			Log.Println("body ", i, ": ", v)
+			if i != "token" {
+				bodyString += fmt.Sprintf("%s : %s ,", i, v)
+			}
 		}
+		// 儲存回去
 		props.Request.Body = ioutil.NopCloser(bytes.NewBuffer(bd))
 
-		Log.Println("IP: ", (*props).Request.Header.Get("X-Forwarded-For"))
-		// Log.Printf("")
+		// 儲存進入資料庫
+		user, company, err := service.CheckUserAndCompany(props)
+		if err {return}
+		now := time.Now()
+		logStruct := table.Log{
+			UserId: user.UserId,
+			UserName: user.UserName,
+			CompanyId: company.CompanyId,
+			CompanyCode: company.CompanyCode,
+			Permession: user.Permession,
+			Ip: (*props).ClientIP(),
+			Params: params + bodyString,
+			Routes: (*props).Request.Method + (*props).Request.URL.Path,
+			CreateTime: now,
+			LastModify: now,
+		}
+		// 紀錄log
+		(*mysql.Singleton()).InsertLog(&logStruct)
+		// 分配
 		waitJob := new(sync.WaitGroup)
 		waitJob.Add(1)
 		(*props).Writer.Header().Set("Transfer-Encoding", "chunked")

@@ -269,6 +269,12 @@ func InsertUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	(*requestUser).LastModify = now
 	(*requestUser).CompanyCode = myUserData.CompanyCode
 
+	// 如果 是主管新增的話 要更改部門 以及 權限
+	if myUserData.Permession == 1 {
+		(*requestUser).Banch = myUserData.Banch
+		(*requestUser).Permession = 2
+	}
+
 	if res, _ := (*Mysql).InsertUser(requestUser); !res {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().InsertFail,

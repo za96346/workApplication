@@ -1055,13 +1055,24 @@ func addPaidVocation () {
 	sqlQueryInstance.PaidVocation.SelectAllByTime = `select * from paidVocation where year=?;`
 }
 func addLog () {
+	sqlQueryInstance.Log.SelectAll = `
+		select * from log where createTime>?;
+	`
 	sqlQueryInstance.Log.InsertAll = `
 		insert into log(
+			userId,
+			userName,
+			companyId,
+			companyCode,
+			permession,
+			routes,
+			ip,
+			params,
 			msg,
 			createTime,
 			lastModify
 		) values (
-			?,?,?
+			?,?,?,?,?,?,?,?,?,?,?
 		)
 	;`;
 }

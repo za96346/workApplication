@@ -251,9 +251,17 @@ type PaidVocation struct {
 // log
 type Log struct {
 	LogId int64
+	UserId int64
+	UserName string
+	CompanyId int64
+	CompanyCode string
+	Permession int
+	Routes string
+	Ip string
+	Params string
 	Msg string
-	CreateTime time.Time `json:"CreateTime"`//創建的時間
-	LastModify time.Time `json:"LastModify"`// 上次修改的時間
+	CreateTime time.Time
+	LastModify time.Time
 }
 
 type Performance struct {

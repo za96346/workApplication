@@ -17,10 +17,10 @@ func User(props *gin.RouterGroup) {
 		props.POST("/my", worker.AssignWorker(22))
 		props.GET("/single", worker.AssignWorker(0))
 		props.POST("/single",
-			middleWare.Permession(100),
+			middleWare.Permession(100, 1),
 			worker.AssignWorker(2),
 		)
 		props.GET("/all", middleWare.Permession(100, 1), worker.AssignWorker(7))
-		props.PUT("/single", middleWare.Permession(100), worker.AssignWorker(47))
+		props.PUT("/single", middleWare.Permession(100, 1), worker.AssignWorker(47))
 	}
 }
