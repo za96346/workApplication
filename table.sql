@@ -278,3 +278,19 @@ create table performance(
 );
 alter table performance add primary key(`userId`, `year`, `month`);
 alter table performance add foreign key(`userId`) references user(`userId`) on update cascade on delete cascade;
+
+# 紀錄
+create table log(
+	logId bigint not null unique auto_increment,
+	userId bigInt default -1,
+	userName varchar(50) default '',
+	companyId bigInt default -1,
+	companyCode varchar(50) default '',
+	permession int default 2,
+	routes varchar(100) default '',
+	ip varchar(100) default '',
+	params varchar(1000) default '',
+	msg varchar(1000) default '',
+	createTime timestamp default now(),
+	lastModify timestamp default now()
+);
