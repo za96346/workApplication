@@ -4,16 +4,22 @@ import StatusSelector from 'Share/StatusSelector'
 import PermessionSelector from 'Share/PermessionSelector'
 import BanchSelector from 'Share/BanchSelector'
 import api from 'api/api'
+import useReduceing from 'Hook/useReducing'
 
 interface props {
     open: boolean
     onClose: () => void
+    permissionEditable: boolean // 權限 欄位修改
+    banchEditable: boolean // 部門 欄位修改
 }
 const ModalCreate = ({
     open,
-    onClose
+    onClose,
+    permissionEditable = true,
+    banchEditable = true
 }: props): JSX.Element => {
     const formRef = useRef({})
+    const { user } = useReduceing()
     const onSave = async (): Promise<void> => {
         const res = await api.createUser({ ...formRef.current })
         if (res.status) {
@@ -47,13 +53,13 @@ const ModalCreate = ({
                     <StatusSelector />
                 </Form.Item>
                 <Form.Item name="Permession" initialValue={2} label="權限" className='col-md-6'>
-                    <PermessionSelector />
+                    <PermessionSelector disabled={!permissionEditable} />
                 </Form.Item>
                 <Form.Item name="OnWorkDay" label="到職日" className='col-md-6'>
                     <DatePicker />
                 </Form.Item>
-                <Form.Item name="Banch" label="部門" className='col-md-6'>
-                    <BanchSelector />
+                <Form.Item initialValue={user.selfData.Banch} name="Banch" label="部門" className='col-md-6'>
+                    <BanchSelector disabled={!banchEditable} />
                 </Form.Item>
             </Form>
         </Modal>

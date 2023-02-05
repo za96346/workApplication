@@ -11,11 +11,15 @@ interface props {
     open: boolean
     onClose: () => void
     data: UserType
+    permissionEditable: boolean // 權限 欄位修改
+    banchEditable: boolean // 部門 欄位修改
 }
 const ModalEdit = ({
     open,
     onClose,
-    data
+    data,
+    permissionEditable = true,
+    banchEditable = true
 }: props): JSX.Element => {
     const formRef = useRef({})
     const onSave = async (): Promise<void> => {
@@ -47,14 +51,19 @@ const ModalEdit = ({
                 <Form.Item name="WorkState" label="狀態" initialValue={data?.WorkState || 'on'} className='col-md-6'>
                     <StatusSelector />
                 </Form.Item>
-                <Form.Item name="Permession" initialValue={data?.Permession || 2} label="權限" className='col-md-6'>
-                    <PermessionSelector />
+                <Form.Item
+                    name="Permession"
+                    initialValue={data?.Permession || 2}
+                    label="權限"
+                    className='col-md-6'
+                >
+                    <PermessionSelector disabled={!permissionEditable} />
                 </Form.Item>
                 <Form.Item name="OnWorkDay" label="到職日" initialValue={dayjs(data?.OnWorkDay)} className='col-md-6'>
                     <DatePicker />
                 </Form.Item>
                 <Form.Item name="Banch" label="部門" initialValue={data?.Banch !== -1 && data?.Banch} className='col-md-6'>
-                    <BanchSelector />
+                    <BanchSelector disabled={!banchEditable} />
                 </Form.Item>
             </Form>
         </Modal>

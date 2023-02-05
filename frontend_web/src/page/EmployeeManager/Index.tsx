@@ -24,9 +24,18 @@ const EmployeeManager = (): JSX.Element => {
         type: '',
         value: null
     })
+    // 權限欄位是否可更改
+    const permissionEditable = user.selfData?.Permession === 100
+    // 部門欄位是否可更改
+    const banchEditable = user.selfData?.Permession === 100 ||
+        !(user.selfData.UserId === modal.value?.UserId)
+
+    // 關閉事件
     const onClose = (): void => {
         setModal((prev) => ({ ...prev, open: false, value: null }))
     }
+
+    // 打開事件
     const onOpen = (v: UserType, type: string): void => {
         setModal((prev) => ({ ...prev, open: true, value: v, type }))
     }
@@ -37,7 +46,9 @@ const EmployeeManager = (): JSX.Element => {
             OnWorkDay: dateHandle.transferUtcFormat(item.OnWorkDay).substring(0, 10),
             action: (
                 <div>
-                    <Btn.Edit disabled={user.selfData.Permession !== 100} onClick={() => { onOpen(item, statics.type.edit) }} />
+                    <Btn.Edit
+                        onClick={() => { onOpen(item, statics.type.edit) }}
+                    />
                 </div>
             )
         }))
@@ -46,12 +57,23 @@ const EmployeeManager = (): JSX.Element => {
         <>
             {
                 modal.type === statics.type.edit && (
-                    <ModalEdit data={modal.value} open={modal.open} onClose={onClose} />
+                    <ModalEdit
+                        data={modal.value}
+                        open={modal.open}
+                        onClose={onClose}
+                        permissionEditable={permissionEditable}
+                        banchEditable={banchEditable}
+                    />
                 )
             }
             {
                 modal.type === statics.type.create && (
-                    <ModalCreate open={modal.open} onClose={onClose} />
+                    <ModalCreate
+                        permissionEditable={permissionEditable}
+                        banchEditable={user.selfData?.Permession === 100}
+                        open={modal.open}
+                        onClose={onClose}
+                    />
                 )
             }
             <div className={window.styles.empManagerFilter}>

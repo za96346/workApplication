@@ -10,7 +10,12 @@ export const openNotification = (): void => {
         }
     })
 }
-
 export const FullMessage = (): void => {}
-FullMessage.success = (text: string) => message.success(text)
-FullMessage.error = (text: string) => message.error(text)
+FullMessage.success = (text: string) => message.success({
+    key: '1',
+    content: text
+})
+FullMessage.error = (text: string) => message.error({
+    key: '1',
+    content: text
+})

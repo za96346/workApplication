@@ -8,7 +8,7 @@ import companyAction from '../reduxer/action/companyAction'
 import statusAction from '../reduxer/action/statusAction'
 import { clearAll } from '../reduxer/clearAll'
 
-type createUserType = Pick<SelfDataType, "Account" | 'Password' | 'UserName' | 'EmployeeNumber' | 'OnWorkDay' | 'Banch' | 'Permession'>
+type createUserType = Pick<SelfDataType, 'Account' | 'Password' | 'UserName' | 'EmployeeNumber' | 'OnWorkDay' | 'Banch' | 'Permession'>
 interface yearPerformanceParamsType {
     startYear: number
     endYear: number
