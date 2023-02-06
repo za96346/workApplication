@@ -1056,7 +1056,7 @@ func addPaidVocation () {
 }
 func addLog () {
 	sqlQueryInstance.Log.SelectAll = `
-		select * from log where createTime>?;
+		select * from log where createTime>? && createTime<?;
 	`
 	sqlQueryInstance.Log.InsertAll = `
 		insert into log(
