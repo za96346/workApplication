@@ -61,7 +61,8 @@ type statusText struct {
 	CopySuccess string
 	CopyFail string
 	AccountNotSafe string
-	NoMonth string
+	NoMonthSelect string
+	NoYearSelect string
 }
 var statusTextInstance *statusText
 var statusTextMux = new(sync.Mutex)
@@ -117,7 +118,8 @@ func StatusText() *statusText {
 				CopySuccess: "複製成功",
 				CopyFail: "複製失敗，可能有同筆資料",
 				AccountNotSafe: "帳號小於五碼",
-				NoMonth: "請選擇正確月份",
+				NoMonthSelect: "請選擇正確月份",
+				NoYearSelect: "請選擇正確年份",
 			}
 		}
 	}

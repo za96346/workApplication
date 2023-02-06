@@ -212,17 +212,32 @@ func InsertPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	// 檢查 月份
 	if performance.Month < 1 || performance.Month > 12 {
 		props.JSON(http.StatusNotAcceptable, gin.H{
-			"message": StatusText().NoMonth,
+			"message": StatusText().NoMonthSelect,
 		})
 		return
 	}
 
+	// 檢查年份
+	if performance.Year == 0 {
+		props.JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().NoYearSelect,
+		})
+		return
+	}
+
+	// 如果為 主管 新增 強制把 資料部門改為 自己的部門
 	if user.Permession == 1 {
 		performance.BanchId = user.Banch
-		res := (*Mysql).SelectCompanyBanch(2, user.Banch)
-		if !methods.IsNotExited(res) {
-			performance.BanchName = (*res)[0].BanchName
-		}
+	}
+	// 巡找部門
+	findBanch := (*Mysql).SelectCompanyBanch(2, performance.BanchId)
+	if !methods.IsNotExited(findBanch) {
+		performance.BanchName = (*findBanch)[0].BanchName
+	} else {
+		props.JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().NotHaveBanch,
+		})
+		return
 	}
 	res, _ := (*Mysql).InsertPerformance(&performance)
 
