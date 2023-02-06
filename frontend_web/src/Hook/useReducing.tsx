@@ -14,6 +14,7 @@ interface props {
     _persist: any
     state: {
         banchId: number
+        banchName: string
     }
 }
 
@@ -28,6 +29,7 @@ const useReduceing = (): props => {
     // 參數
     const { banchId: currentBanchId } = useParams()
     const banchId = parseInt(currentBanchId?.replace('c', '')?.replace('b', '')?.replace('a', ''))
+    const banchName = company.banch?.find((item: { Id: number }) => item.Id === banchId)?.BanchName || ''
     return {
         company,
         user,
@@ -35,7 +37,8 @@ const useReduceing = (): props => {
         shiftEdit,
         _persist,
         state: {
-            banchId // 現在網頁參數的banchId
+            banchId, // 現在網頁參數的banchId
+            banchName
         }
     }
 }

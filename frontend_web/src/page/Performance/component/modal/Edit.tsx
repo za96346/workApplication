@@ -5,7 +5,6 @@ import useReduceing from 'Hook/useReducing'
 import DescribeValue from '../DescribeValue'
 import dayjs from 'dayjs'
 import api from 'api/api'
-import BanchSelector from 'Share/BanchSelector'
 
 interface props {
     open: boolean
@@ -86,13 +85,6 @@ const Edit = ({
                                     }
                                 </Select>
                             </Form.Item>
-                            {
-                                user.selfData.Permession === 100 && (
-                                    <Form.Item name="BanchId" className="col-md-6" label="部門">
-                                        <BanchSelector />
-                                    </Form.Item>
-                                )
-                            }
 
                         </>
                     )

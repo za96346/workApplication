@@ -209,6 +209,14 @@ func InsertPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
+	// 檢查 月份
+	if performance.Month < 1 || performance.Month > 12 {
+		props.JSON(http.StatusNotAcceptable, gin.H{
+			"message": StatusText().NoMonth,
+		})
+		return
+	}
+
 	if user.Permession == 1 {
 		performance.BanchId = user.Banch
 		res := (*Mysql).SelectCompanyBanch(2, user.Banch)

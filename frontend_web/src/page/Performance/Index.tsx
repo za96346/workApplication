@@ -110,12 +110,12 @@ const Index = (): JSX.Element => {
     // 當編輯完 儲存時
     const onEditSave = async (v: performanceType): Promise<void> => {
         let res = null
-        if (!v.BanchId && user.selfData.Permession === 100) {
+
+        if (modal.type === '4') {
+            res = await api.createPerformance({ ...v, BanchId: state.banchId, BanchName: state.banchName })
+        } else if (!v.BanchId) {
             FullMessage.error('請選擇部門')
             return
-        }
-        if (modal.type === '4') {
-            res = await api.createPerformance(v)
         } else {
             res = await api.updatePerformance(v)
         }

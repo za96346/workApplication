@@ -16,9 +16,12 @@ import (
 	// "time"
 
 	// "github.com/gin-contrib/cors"
+	// "backend/handler"
+	"backend/logger"
+	// "backend/taskTimer"
+
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"backend/logger"
 
 	// . "./middleWare/permessionMiddleWare"
 	"backend/middleWare"
@@ -41,6 +44,11 @@ func init() {
 
 func main() {
 	go socket.Conn()
+	// go tasktimer.AddTask(
+	// 	func() {
+	// 		handler.SendDailyInfo("za96346@gmail.com")
+	// 	},
+	// )
 	SetRouter()
 }
 

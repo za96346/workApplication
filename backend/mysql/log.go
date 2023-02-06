@@ -26,18 +26,18 @@ func(dbObj *DB) SelectLog(selectKey int, value... interface{}) *[]table.Log {
 	(*dbObj).checkErr(err)
 	for res.Next() {
 		err = res.Scan(
-			log.LogId,
-			log.UserId,
-			log.UserName,
-			log.CompanyId,
-			log.CompanyCode,
-			log.Permession,
-			log.Routes,
-			log.Ip,
-			log.Params,
-			log.Msg,
-			log.CreateTime,
-			log.LastModify,
+			&log.LogId,
+			&log.UserId,
+			&log.UserName,
+			&log.CompanyId,
+			&log.CompanyCode,
+			&log.Permession,
+			&log.Routes,
+			&log.Ip,
+			&log.Params,
+			&log.Msg,
+			&log.CreateTime,
+			&log.LastModify,
 		)
 		(*dbObj).checkErr(err)
 		if err == nil {
