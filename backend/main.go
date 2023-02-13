@@ -47,7 +47,7 @@ func main() {
 	go tasktimer.AddDailyTask(
 		func() {
 			handler.SendDailyInfo("za96346@gmail.com")
-			// handler.SendDailyInfo("za96346@gmail.com")
+			handler.SendDailyInfo("a00001@dajiama.org.tw")
 		},
 	)
 	SetRouter()

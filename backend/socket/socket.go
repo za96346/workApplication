@@ -7,6 +7,7 @@ import (
 	panichandler "backend/panicHandler"
 	"backend/redis"
 	"backend/response"
+	"backend/table"
 	"encoding/json"
 	"fmt"
 
@@ -27,7 +28,7 @@ var upgrader = websocket.Upgrader{
 	},
 } // use default options
  
-func socketHandler(w http.ResponseWriter, r *http.Request) {
+func shiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 	defer panichandler.Recover()
     // Upgrade our raw HTTP connection to a websocket based one
     conn, err := upgrader.Upgrade(w, r, nil)
@@ -81,12 +82,14 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	Singleton().Conn <- struct {
 			BanchId int64
-			CompanyId int64
+			User table.UserTable
 			Value response.Member
+			Company table.CompanyTable
 		}{
 			BanchId: conBanchId,
-			CompanyId: company.CompanyId,
+			User: user,
 			Value: v,
+			Company: company,
 	}
 	// 加入全域連線
 	Singleton().ConnLine[user.UserId] = conn
@@ -124,6 +127,8 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
+		// type 1 => 位置
+		// type 2 => 班表的資料
 		switch data.Types {
 		case 1:
 			// 我的位置
@@ -149,7 +154,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// send
-		Singleton().send(conBanchId, company.CompanyId)
+		Singleton().send(conBanchId, user, company)
 
     }
 
@@ -158,13 +163,13 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	(*redis.Singleton()).LeaveShiftRoom(conBanchId, user.UserId)
 
 	// send
-	Singleton().send(conBanchId, company.CompanyId)
+	Singleton().send(conBanchId, user, company)
 }
  
 func Conn() {
 	// rabbitMQ.Conn()
 	ip := os.Getenv("SOCKET_IP")
 	port := os.Getenv("SOCKET_PORT")
-    http.HandleFunc("/workAppSocket/shift", socketHandler)
+    http.HandleFunc("/workAppSocket/shift", shiftSocketHandler)
     Log.Fatal(http.ListenAndServe(ip + ":" + port, nil))
 }

@@ -5,6 +5,7 @@ import (
 	"backend/response"
 	"encoding/json"
 	"strconv"
+	"time"
 )
 
 func(dbObj *DB) EnterShiftRoom (banchId int64, value response.Member) {
@@ -43,16 +44,23 @@ func (dbObj *DB) InsertShiftData(banchId int64, value response.Shift) {
 
 	jsonData, _ := json.Marshal(value)
 	conBanchId := strconv.FormatInt(banchId, 10)
-	positionIdx := value.Date
+	positionIdx := value.Date + "__" + strconv.FormatInt(value.UserId,10)
 	(*dbObj).RedisOfShiftData.HSet(conBanchId, positionIdx, jsonData)
 }
 
-func (dbObj *DB) GetShiftData (banchId int64) *[]response.Shift {
+// 拿取 編輯 班表的資料
+func (dbObj *DB) GetShiftData (banchId int64, year int, month int) *[]response.Shift {
 	defer panichandler.Recover()
 	return forEach(
 		func() ([]string, error) {
 			return (*dbObj).RedisOfShiftData.HVals(strconv.FormatInt(banchId, 10)).Result()
 		},
-		func(v response.Shift) bool {return true},
+		func(v response.Shift) bool {
+			date, _ := time.Parse("2006-01-02", v.Date)
+			if date.Year() == year && int(date.Month()) == month {
+				return true
+			}
+			return false
+		},
 	)
 }

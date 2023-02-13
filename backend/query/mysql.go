@@ -390,7 +390,7 @@ func addUserQuery() {
 			on cb.id=u.banch
 		left join company c
 			on u.companyCode=c.companyCode
-		where u.banch=?;
+		where u.banch=? and u.companyCode=?;
 	`;
 }
 func addUserPreferenceQuery() {

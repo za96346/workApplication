@@ -5,12 +5,13 @@ import (
 	"time"
 )
 
-func GetNextMonthSE() (string, string) {
+// 開始 結束 開始年 開始月
+func GetNextMonthSE() (string, string, int, int) {
 	year, month, _ := time.Now().Date()
 	thisMonth := time.Date(year, month, 1, 0, 0, 0, 0, time.Local)
-	start := thisMonth.AddDate(0, 1, 0).Format("2006-01-02")
-	end := thisMonth.AddDate(0, 2, -1).Format("2006-01-02")
-	return start, end
+	start := thisMonth.AddDate(0, 1, 0)
+	end := thisMonth.AddDate(0, 2, -1)
+	return start.Format("2006-01-02"), end.Format("2006-01-02"), start.Year(), int(start.Month())
 }
 
 //  step 1 => 每個月的倒數第15天，開啟編輯
@@ -24,6 +25,7 @@ func CheckWhichStep () int {
 	_, _, lastDay := thisMonth.AddDate(0, 1, -1).Date()
 	diff := lastDay - day
 	fmt.Println("相差幾天 =>", diff)
+	return 2
 	// step 1
 	if diff > 5 && diff <= 15 {
 		return 1
