@@ -142,6 +142,9 @@ export interface ShiftEditType {
     Date: string
     UserId: number
 }
+export interface ShiftState {
+    disabledTable?: boolean
+}
 
 export interface ShiftSocketType {
     BanchId: number
@@ -153,6 +156,7 @@ export interface ShiftSocketType {
     Status: number // 1 開放編輯、 2 主管審核 3 確認發布 ,
     StartDay: string
     EndDay: string
+    State: ShiftState
 }
 
 export interface WeekendSettingType {

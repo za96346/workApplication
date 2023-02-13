@@ -3,12 +3,13 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { companyReducerType } from 'reduxer/reducer/companyReducer'
 import { userReducerType } from 'reduxer/reducer/userReducer'
 import { BanchStyleType, ShiftEditType } from 'type'
-import { Spin } from 'antd'
+import { Button, Spin } from 'antd'
 import useShiftEditSocket from 'Hook/useShiftEdit'
 import dateHandle from 'method/dateHandle'
 import { useDispatch } from 'react-redux'
 import companyAction from 'reduxer/action/companyAction'
 import statics from 'statics'
+import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 
 const useTableCache = (company: companyReducerType, banchId: number, user: userReducerType): {
     tb: React.ReactNode
@@ -16,6 +17,7 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
     close: Function
 } => {
     const dispatch = useDispatch()
+    const fullScreenHandle = useFullScreenHandle()
     const { connectionStatus, sendMessage, lastJsonMessage, close } = useShiftEditSocket(banchId, user?.token || '')
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [status, setStatus] = useState({
@@ -64,7 +66,8 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
             return <Spin tip={'進入編輯室中...'} />
         }
         return (
-            <>
+            <FullScreen handle={fullScreenHandle}>
+                <Button onClick={() => { fullScreenHandle.enter() }}>全螢幕</Button>
                 <div>排班日期：{lastJsonMessage?.StartDay}~{lastJsonMessage?.EndDay}</div>
                 <div className={`${window.styles.shiftTable}`}>
                     <table className='mb-5'>
@@ -146,7 +149,7 @@ const useTableCache = (company: companyReducerType, banchId: number, user: userR
                         }
                     </table>
                 </div>
-            </>
+            </FullScreen>
         )
     }, [company, lastJsonMessage, status.clickPos, connectionStatus])
 

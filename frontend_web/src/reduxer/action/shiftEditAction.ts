@@ -1,5 +1,4 @@
 import { ShiftSocketType } from '../../type'
-import { store } from '../store'
 import { action, shiftEditType } from '../types'
 
 class shiftEditAction {
@@ -8,10 +7,10 @@ class shiftEditAction {
     }
 
     setShiftEdit (shift: ShiftSocketType): action {
+        console.log(shift)
         return {
             type: shiftEditType.SET_SHIFT,
             payload: {
-                ...store.getState().shiftEdit,
                 ...shift
             }
         }
