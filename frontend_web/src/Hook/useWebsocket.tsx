@@ -10,7 +10,7 @@ interface Websocket {
 
 interface props {
     connectionStatus: string
-    sendMessage: Function
+    sendMessage: (v: string) => void
     lastJsonMessage: any
     socket: WebSocketLike
 }

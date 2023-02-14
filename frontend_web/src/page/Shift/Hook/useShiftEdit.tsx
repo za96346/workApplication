@@ -2,12 +2,12 @@
 import { message } from 'antd'
 import { useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
-import shiftEditAction from '../reduxer/action/shiftEditAction'
-import { OnlineUserType, ShiftSocketType } from '../type'
-import { useWebsocket } from './useWebsocket'
+import shiftEditAction from 'reduxer/action/shiftEditAction'
+import { OnlineUserType, ShiftSocketType } from '../../../type'
+import { useWebsocket } from 'Hook/useWebsocket'
 interface props {
     connectionStatus: string
-    sendMessage: Function
+    sendMessage: (v: string) => void
     close: Function
     lastJsonMessage: ShiftSocketType
 }

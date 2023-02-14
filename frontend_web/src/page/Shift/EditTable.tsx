@@ -1,9 +1,12 @@
-import { Result, Skeleton, Spin, Collapse } from 'antd'
-import { v4 as uuid } from 'uuid'
-import React, { useEffect } from 'react'
+import { Result, Skeleton, Spin, Collapse, Button } from 'antd'
+import React, { useEffect, useMemo } from 'react'
 import useReduceing from 'Hook/useReducing'
-import useTableCache from './TableCache'
 import { useNavigate } from 'react-router-dom'
+import { FullScreen, useFullScreenHandle } from 'react-full-screen'
+import Row from './component.tsx/Row'
+import dateHandle from 'method/dateHandle'
+import Head from './component.tsx/Head'
+import useShiftEditSocket from './Hook/useShiftEdit'
 
 interface EditTableProps {
     currentTabs: number
@@ -11,8 +14,22 @@ interface EditTableProps {
 }
 const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
     const navigate = useNavigate()
-    const { loading, user, company } = useReduceing()
-    const { tb, lonelyShift, close } = useTableCache(company, banchId, user)
+    const fullScreenHandle = useFullScreenHandle()
+    const { loading, user, company, shiftEdit } = useReduceing()
+    const { sendMessage, close } = useShiftEditSocket(banchId, user?.token || '')
+
+    // 日期
+    const dayArray = useMemo(() => {
+        const start = shiftEdit?.StartDay
+        const end = shiftEdit?.EndDay
+        const dayContainer = ['']
+        for (let i = 0; i < new Date(end).getDate(); i++) {
+            const res = dateHandle.addDays(start, i)
+            dayContainer.push(res)
+        }
+        return dayContainer
+    }, [shiftEdit?.StartDay, shiftEdit?.EndDay])
+
     useEffect(() => {
         if (currentTabs !== 0) {
             close()
@@ -33,17 +50,15 @@ const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
         <>
             {
                 currentTabs === 1 && (
-                    <>search bar</>
-                )
-            }
-            {
-                currentTabs === 1 && (
-                    <Result
-                        status="404"
-                        title="404"
-                        subTitle="找不到資料"
-                    // extra={<Button type="primary">Back Home</Button>}
-                    />
+                    <>
+                        search bar
+                        <Result
+                            status="404"
+                            title="404"
+                            subTitle="找不到資料"
+                        // extra={<Button type="primary">Back Home</Button>}
+                        />
+                    </>
                 )
             }
             {
@@ -69,21 +84,21 @@ const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
                         </Collapse>
 
                         {
-                            tb
+                            // connectionStatus !== 'Connecting' &&
+                            //     connectionStatus !== 'Open'
+                            // <Spin tip={'進入編輯室中...'} />
+                            <FullScreen handle={fullScreenHandle}>
+                                <Button onClick={() => { fullScreenHandle.enter() }}>全螢幕</Button>
+                                <div>排班日期：{shiftEdit?.StartDay}~{shiftEdit?.EndDay}</div>
+                                <div className={`${window.styles.shiftTable}`}>
+                                    <table className='mb-5'>
+                                        <Head dayArray={dayArray}/>
+                                        <Row sendMessage={sendMessage} dayArray={dayArray} />
+                                    </table>
+                                </div>
+                            </FullScreen>
+
                         }
-                        <div >
-                            {
-                                lonelyShift?.map((item) => {
-                                    return (
-                                        <span key={uuid()}>
-                                            上班: {item.OnShiftTime}<br/>
-                                            下班: {item.OffShiftTime}<br/>
-                                            休息: {item.RestTime}
-                                        </span>
-                                    )
-                                })
-                            }
-                        </div>
 
                     </>
                 )
