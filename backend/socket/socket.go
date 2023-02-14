@@ -75,6 +75,7 @@ func shiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 	v := response.Member{
 		UserName: user.UserName,
 		UserId: user.UserId,
+		Permission: user.Permession,
 		Pic: "",
 		Color: fmt.Sprintf("rgb(%d,%d,%d)", handler.Rand(0, 255), handler.Rand(0, 255), handler.Rand(0, 255)),
 		Online: 1,

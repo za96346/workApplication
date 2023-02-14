@@ -58,6 +58,7 @@ type ForgetPassword struct {
 type Member struct {
 	UserName string // 用戶名
 	UserId int64 // 使用者編號
+	Permission int // 權限
 	Pic string // 用戶的照片
 	Color string // 用戶的編輯顏色
 	Online int // 上線狀態

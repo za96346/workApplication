@@ -31,6 +31,9 @@ type Manager struct {
 	SendMsg chan Msg
 	ConnLine map[int64]*websocket.Conn
 }
+
+type MsgState map[string]any
+
 type Msg struct {
 	BanchId int64
 	OnlineUser []response.Member
@@ -41,7 +44,7 @@ type Msg struct {
 	Status int
 	StartDay string
 	EndDay string
-	State map[string]any
+	State MsgState
 }
 
 func Singleton () *Manager {
@@ -67,6 +70,18 @@ func Singleton () *Manager {
 	return instance
 }
 
+// 確認編輯狀態
+func (mg * Manager) CheckState (step int, permission int) *MsgState {
+	// 自己的編輯狀態
+	disabledTable := false
+	if step == 2 && permission == 2 {disabledTable = true}
+	if step == 3 {disabledTable = true}
+	state := MsgState{
+		"disabledTable": disabledTable,
+	}
+	return &state
+}
+
 func (mg *Manager) send (banchId int64, user table.UserTable, company table.CompanyTable) {
 	defer panichandler.Recover()
 	str, end, year, month := methods.GetNextMonthSE()
@@ -77,11 +92,6 @@ func (mg *Manager) send (banchId int64, user table.UserTable, company table.Comp
 	BanchStyle := (*mysql.Singleton()).SelectBanchStyle(2, banchId)
 	fmt.Print("開始結束", year, month)
 	currentStep := methods.CheckWhichStep()
-
-	// 自己的編輯狀態
-	disabledTable := false
-	if currentStep == 2 && user.Permession == 2 {disabledTable = true}
-	if currentStep == 3 {disabledTable = true}
 
 	// 整理 回傳的編輯使用者資料
 	editUserData := []response.User{}
@@ -97,6 +107,8 @@ func (mg *Manager) send (banchId int64, user table.UserTable, company table.Comp
 			WorkState: "on",
 		})
 	}
+
+	// 傳入 隊列
 	(*mg).SendMsg <- Msg{
 		BanchId: banchId,
 		EditUser: editUserData,
@@ -106,9 +118,6 @@ func (mg *Manager) send (banchId int64, user table.UserTable, company table.Comp
 		Status: currentStep, // 1 開放編輯、 2 主管審核 3 確認發布
 		StartDay: str,
 		EndDay: end,
-		State: map[string]any{
-			"disabledTable": disabledTable,
-		},
 	}
 }
 
@@ -135,6 +144,7 @@ func (mg *Manager) sendMsg () {
 		userAll := (redis.Singleton().GetShiftRoomUser(v.BanchId))
 		for _, user := range *userAll {
 			if (*mg).ConnLine[user.UserId] != nil {
+				v.State = *(*mg).CheckState(v.Status, user.Permission)
 				go (*mg).ConnLine[user.UserId].WriteJSON(v)
 			}
 		}
