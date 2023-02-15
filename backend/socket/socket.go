@@ -77,7 +77,7 @@ func shiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 		UserId: user.UserId,
 		Permission: user.Permession,
 		Pic: "",
-		Color: fmt.Sprintf("rgb(%d,%d,%d)", handler.Rand(0, 255), handler.Rand(0, 255), handler.Rand(0, 255)),
+		Color: fmt.Sprintf("rgba(%d,%d,%d, 0.3)", handler.Rand(0, 255), handler.Rand(0, 255), handler.Rand(0, 255)),
 		Online: 1,
 		Position: -1,
 	}
@@ -155,7 +155,7 @@ func shiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// send
-		Singleton().send(conBanchId, user, company)
+		Singleton().send(conBanchId, user, company, map[string]any{})
 
     }
 
@@ -164,7 +164,9 @@ func shiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 	(*redis.Singleton()).LeaveShiftRoom(conBanchId, user.UserId)
 
 	// send
-	Singleton().send(conBanchId, user, company)
+	Singleton().send(conBanchId, user, company, map[string]any{
+		"newLeaving": true,
+	})
 }
  
 func Conn() {

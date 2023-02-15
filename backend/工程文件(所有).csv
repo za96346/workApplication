@@ -1,0 +1,20 @@
+id,公司碼,使用者,路由,ip位置,參數,創建時間
+246,,,POST/workApp/entry/login,127.0.0.1,"params => body => Account : a00001 ,Password : L223609254 ,",2023-02-14 21:24:16 
+247,dajia_ma,余靜宜,GET/workApp/user/my,127.0.0.1,params => body => ,2023-02-14 21:24:16 
+248,dajia_ma,余靜宜,GET/workApp/company/banch/all,127.0.0.1,params => body => ,2023-02-14 21:24:16 
+249,dajia_ma,余靜宜,GET/workApp/company/info,127.0.0.1,"params => companyCode : [dajia_ma] ,body => ",2023-02-14 21:24:16 
+250,dajia_ma,余靜宜,GET/workApp/user/my,127.0.0.1,params => body => ,2023-02-14 21:24:16 
+251,dajia_ma,余靜宜,GET/workApp/company/info,127.0.0.1,"params => companyCode : [dajia_ma] ,body => ",2023-02-14 21:24:16 
+252,dajia_ma,余靜宜,GET/workApp/user/my,127.0.0.1,params => body => ,2023-02-14 21:24:16 
+253,dajia_ma,余靜宜,GET/workApp/company/banch/style,127.0.0.1,"params => banchId : [2] ,body => ",2023-02-14 21:24:24 
+254,dajia_ma,余靜宜,GET/workApp/company/banch/style,127.0.0.1,"params => banchId : [2] ,body => ",2023-02-14 21:24:24 
+255,dajia_ma,余靜宜,GET/workApp/company/banch/style,127.0.0.1,"params => banchId : [3] ,body => ",2023-02-14 21:24:29 
+256,dajia_ma,余靜宜,GET/workApp/company/banch/style,127.0.0.1,"params => banchId : [4] ,body => ",2023-02-14 21:24:32 
+257,dajia_ma,余靜宜,GET/workApp/company/banch/style,127.0.0.1,"params => banchId : [6] ,body => ",2023-02-14 21:24:34 
+258,,,POST/workApp/entry/login,127.0.0.1,"params => body => Account : a00012 ,Password : L100855309 ,",2023-02-14 21:52:11 
+259,dajia_ma,蔡景忠,GET/workApp/user/my,127.0.0.1,params => body => ,2023-02-14 21:52:11 
+260,dajia_ma,蔡景忠,GET/workApp/company/banch/all,127.0.0.1,params => body => ,2023-02-14 21:52:11 
+261,dajia_ma,蔡景忠,GET/workApp/user/my,127.0.0.1,params => body => ,2023-02-14 21:52:11 
+262,dajia_ma,蔡景忠,GET/workApp/company/info,127.0.0.1,"params => companyCode : [dajia_ma] ,body => ",2023-02-14 21:52:11 
+263,dajia_ma,蔡景忠,GET/workApp/user/my,127.0.0.1,params => body => ,2023-02-14 21:52:11 
+264,dajia_ma,蔡景忠,GET/workApp/company/info,127.0.0.1,"params => companyCode : [dajia_ma] ,body => ",2023-02-14 21:52:11 

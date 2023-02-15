@@ -36,15 +36,17 @@ type MsgState map[string]any
 
 type Msg struct {
 	BanchId int64
-	OnlineUser []response.Member
-	EditUser []response.User
-	ShiftData []response.Shift
-	BanchStyle []table.BanchStyle
-	WeekendSetting [] table.WeekendSetting
-	Status int
-	StartDay string
-	EndDay string
-	State MsgState
+	OnlineUser []response.Member // 上線的人
+	EditUser []response.User // 此部門的使用者
+	ShiftData []response.Shift // 班表的資料
+	BanchStyle []table.BanchStyle // 部門圖標
+	WeekendSetting [] table.WeekendSetting // 假日設定
+	Status int // 此編輯的進度
+	StartDay string // 此編輯開始日
+	EndDay string // 此編輯結束日
+	State MsgState // 每個人的前端各種 狀態
+	NewEntering string // 剛進入的資料
+	NewLeaving string // 剛出去的資料
 }
 
 func Singleton () *Manager {
@@ -82,7 +84,15 @@ func (mg * Manager) CheckState (step int, permission int) *MsgState {
 	return &state
 }
 
-func (mg *Manager) send (banchId int64, user table.UserTable, company table.CompanyTable) {
+// state["newEntering"] boolean
+// state["newLeaving"] boolean
+func (mg *Manager) send (
+	banchId int64,
+	user table.UserTable,
+	company table.CompanyTable,
+	state map[string]any,
+) {
+
 	defer panichandler.Recover()
 	str, end, year, month := methods.GetNextMonthSE()
 	// 發送訊息
@@ -108,6 +118,18 @@ func (mg *Manager) send (banchId int64, user table.UserTable, company table.Comp
 		})
 	}
 
+	// 是否是剛進房間
+	newEntering := ""
+	if state["newEntering"] == true {
+		newEntering = user.UserName
+	}
+
+	// 是否是剛出房間
+	newLeaving := ""
+	if state["newLeaving"] == true {
+		newLeaving = user.UserName
+	}
+
 	// 傳入 隊列
 	(*mg).SendMsg <- Msg{
 		BanchId: banchId,
@@ -118,6 +140,8 @@ func (mg *Manager) send (banchId int64, user table.UserTable, company table.Comp
 		Status: currentStep, // 1 開放編輯、 2 主管審核 3 確認發布
 		StartDay: str,
 		EndDay: end,
+		NewEntering: newEntering,
+		NewLeaving: newLeaving,
 	}
 }
 
@@ -134,7 +158,9 @@ func (mg *Manager) enterRoom () {
 	for v := range (*mg).Conn {
 		Log.Printf("\n使用者編號 %d 進入部門房間 %d\n", v.Value.UserId, v.BanchId)
 		(*redis.Singleton()).EnterShiftRoom(v.BanchId, v.Value)
-		(*mg).send(v.BanchId, v.User, v.Company)
+		(*mg).send(v.BanchId, v.User, v.Company, map[string]any {
+			"newEntering": true,
+		})
 	}
 }
 
