@@ -15,7 +15,7 @@ interface EditTableProps {
 const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
     const navigate = useNavigate()
     const fullScreenHandle = useFullScreenHandle()
-    const { loading, user, company, shiftEdit } = useReduceing()
+    const { loading, user, shiftEdit } = useReduceing()
     const { sendMessage, close } = useShiftEditSocket(banchId, user?.token || '')
 
     // 日期
@@ -69,7 +69,7 @@ const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
                             <Collapse.Panel header="圖標" key="1">
                                 <div className={window.styles.shiftSignBlock}>
                                     {
-                                        company.banchStyle?.map((item) => {
+                                        shiftEdit.BanchStyle?.map((item) => {
                                             return (
                                                 <div key={item.StyleId}>
                                                     <div>{item.TimeRangeName}</div>
@@ -90,12 +90,14 @@ const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
                             <FullScreen handle={fullScreenHandle}>
                                 <Button onClick={() => { fullScreenHandle.enter() }}>全螢幕</Button>
                                 <div>排班日期：{shiftEdit?.StartDay}~{shiftEdit?.EndDay}</div>
-                                <div className={`${window.styles.shiftTable}`}>
-                                    <table className='mb-5'>
+                                <table style={{ cursor: 'pointer' }} className='mb-5 table table-bordered table-hover table-striped table-responsive-md'>
+                                    <thead>
                                         <Head dayArray={dayArray}/>
+                                    </thead>
+                                    <tbody>
                                         <Row sendMessage={sendMessage} dayArray={dayArray} />
-                                    </table>
-                                </div>
+                                    </tbody>
+                                </table>
                             </FullScreen>
 
                         }

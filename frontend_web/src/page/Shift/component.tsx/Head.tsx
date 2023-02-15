@@ -11,21 +11,21 @@ const Head = ({
 }: props): JSX.Element => {
     const { shiftEdit } = useReduceing()
     return (
-        <thead>
+        <tr>
             {
                 dayArray.map((item, index) => {
                     const findWeekend = shiftEdit?.WeekendSetting?.find((weekend) => weekend?.Date === item)
                     return (
                         index === 0
-                            ? <td style={{ left: '1px' }} className={window.styles.stickyTd}>員工</td>
-                            : <td style={{ backgroundColor: findWeekend ? 'rgba(255, 0, 0, 0.4)' : 'white' }}>
+                            ? <td key={item} style={{ left: '1px' }} className={window.styles.stickyTd}>員工</td>
+                            : <td key={item} style={{ backgroundColor: findWeekend ? 'rgba(255, 0, 0, 0.4)' : 'white' }}>
                                 {item?.slice(8, 10)}<br/>
                                 {statics.days[new Date(item).getDay()]}
                             </td>
                     )
                 })
             }
-        </thead>
+        </tr>
     )
 }
 export default Head

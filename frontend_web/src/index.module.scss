@@ -28,6 +28,9 @@ body{
 	-ms-overflow-style: none;
 	scrollbar-width: none;
 }
+td {
+	padding: 0.2rem!important;
+}
 ::-webkit-scrollbar {
 	display: none;
 }
@@ -238,56 +241,41 @@ div {
 	margin: 20px auto;
 	@extend %whiteBoard;
 }
-.shiftTable {
-	width: 100%;
-	min-height: 100%;
-	height: fit-content;
-	overflow-x: scroll;
-	margin-bottom: 20px;
-	text-align: center;
-	>table {
 
-		width: 100%;
-		height: fit-content;
-	}
-	td, tr, thead {
-		border: 1px solid rgba(0, 0, 0, 0.2);
-		border-collapse: collapse;
-	}
-	.td {
-		max-height: 10px;
-		max-width: 10px;
-		min-width: 10px;
-		min-height: 10px;
-		position: relative;
-		&:hover {
-			cursor: pointer;
-		}
-	}
-	.downList {
-		display: flex;
-		position: absolute;
-		top: 100%;
-		font-size: 0.4rem;
-		z-index: 10;
-		>div {
-			flex: 1;
-			background-color: rgba(160, 160, 160, 0.4);
-			padding: 10px;
-			border-right: 0.5px solid gray;
-			&:hover {
-				cursor: pointer;
-			}
-		}
-	}
-}
 .stickyTd {
 	position: sticky;
 	z-index: 5;
 	padding: 5px;
 	background-color: white;
 	height: 10px;
-	width: 10px;
+	// width: 10px;
+	font-size: 0.1rem;
+}
+.td {
+	position: relative;
+	>span {
+		@extend %center;
+	}
+}
+.downList {
+	display: flex;
+	position: absolute;
+	top: 100%;
+	font-size: 0.4rem;
+	@extend %shadowNormal;
+	z-index: 10!important;
+	>div {
+		flex: 1;
+		background-color: rgba(255, 255, 255, 1);
+		padding: 10px;
+		transition: 1s;
+		&:hover {
+			transform: scale(1.5);
+			cursor: pointer;
+			background-color: rgba(155, 250, 164, 0.4);
+			font-size: 0.6rem;
+		}
+	}
 }
 
 .shiftSignBlock {

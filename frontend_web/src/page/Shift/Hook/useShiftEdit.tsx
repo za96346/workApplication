@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/prefer-includes */
 import { message } from 'antd'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import shiftEditAction from 'reduxer/action/shiftEditAction'
-import { OnlineUserType, ShiftSocketType } from '../../../type'
+import { ShiftSocketType } from '../../../type'
 import { useWebsocket } from 'Hook/useWebsocket'
 interface props {
     connectionStatus: string
@@ -13,7 +13,6 @@ interface props {
 }
 const useShiftEditSocket = (banchId: number, token: string): props => {
     const dispatch = useDispatch()
-    const record = useRef<OnlineUserType[]>([])
     const { connectionStatus, sendMessage, lastJsonMessage, socket } = useWebsocket({
         options: {
             onClose: (event: any) => {
@@ -30,23 +29,12 @@ const useShiftEditSocket = (banchId: number, token: string): props => {
     }
     useEffect(() => {
         dispatch(shiftEditAction.setShiftEdit(lastJsonMessage))
-        if (!record.current) return
-        // 找到新進的使用者
-        lastJsonMessage?.OnlineUser?.forEach((item) => {
-            const a = record.current.find((i) => i?.UserId === item?.UserId)
-            if (!a) {
-                message.info(`${item.UserName} 進入編輯室`)
-            }
-        })
-
-        record.current?.forEach((item) => {
-            const a = lastJsonMessage?.OnlineUser?.find((i) => i.UserId === item.UserId)
-            if (!a) {
-                message.info(`${item.UserName} 離開編輯室`)
-            }
-        })
-
-        record.current = lastJsonMessage?.OnlineUser || []
+        if (lastJsonMessage?.NewEntering?.length > 0) {
+            message.info(`${lastJsonMessage?.NewEntering} 進入編輯室`)
+        }
+        if (lastJsonMessage?.NewLeaving?.length > 0) {
+            message.info(`${lastJsonMessage?.NewLeaving} 離開編輯室`)
+        }
     }, [lastJsonMessage])
     // useEffect(() => {
     //     firstEnter.current = true

@@ -7,7 +7,7 @@ class shiftEditAction {
     }
 
     setShiftEdit (shift: ShiftSocketType): action {
-        console.log(shift)
+        // console.log(shift)
         return {
             type: shiftEditType.SET_SHIFT,
             payload: {
