@@ -1,3 +1,0 @@
-id,公司碼,使用者,路由,ip位置,參數,創建時間
-246,,,POST/workApp/entry/login,127.0.0.1,"params => body => Account : a00001 ,Password : L223609254 ,",2023-02-14 21:24:16 
-258,,,POST/workApp/entry/login,127.0.0.1,"params => body => Account : a00012 ,Password : L100855309 ,",2023-02-14 21:52:11 

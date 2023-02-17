@@ -1,3 +1,5 @@
 gin.log
 *.log
 .env
+*.csv
+env
