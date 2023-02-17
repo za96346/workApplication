@@ -4,8 +4,8 @@ package mysql
 //go get -u gorm.io/driver/mysql
 import (
 	// "runtime"
-	"backend/query"
-	"backend/table"
+	"backend/mysql/query"
+	"backend/mysql/table"
 
 	"backend/panicHandler"
 

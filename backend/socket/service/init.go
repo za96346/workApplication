@@ -1,25 +1,20 @@
-package socket
+package service
 
 import (
 	"backend/handler"
-	"backend/logger"
 	"backend/methods"
 	"backend/mysql"
 	panichandler "backend/panicHandler"
 	"backend/redis"
 	"backend/response"
-	"backend/table"
+	"backend/mysql/table"
 	"fmt"
-	"sync"
 
 	"github.com/goinggo/mapstructure"
 	"github.com/gorilla/websocket"
 )
 
-var lock = new(sync.Mutex)
 var instance *Manager
-var Redis = redis.Singleton()
-var Log = logger.Logger()
 
 type Manager struct {
 	Conn chan struct {
@@ -71,15 +66,25 @@ func Singleton () *Manager {
 	}
 	return instance
 }
-
+/*
+	step = 1,2,3,4
+	permission = 100, 1, 2
+*/
 // 確認編輯狀態
 func (mg * Manager) CheckState (step int, permission int) *MsgState {
 	// 自己的編輯狀態
 	disabledTable := false
-	if step == 2 && permission == 2 {disabledTable = true}
-	if step == 3 {disabledTable = true}
+	if step == 1 {disabledTable = true} // 尚未開放編輯
+	if step == 2 {disabledTable = false}
+	if step == 3 && permission != 1 {disabledTable = true}
+
+	// 是否顯示 提交按鈕
+	submitAble := false
+	if step == 3 && permission == 1 {submitAble = true}
+
 	state := MsgState{
 		"disabledTable": disabledTable,
+		"submitAble": submitAble,
 	}
 	return &state
 }

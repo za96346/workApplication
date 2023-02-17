@@ -5,7 +5,7 @@ package mysql
 import (
 
 	// "runtime"
-	"backend/query"
+	"backend/mysql/query"
 	"backend/response"
 
 	"backend/panicHandler"

@@ -2,7 +2,7 @@ package service
 
 import (
 	"backend/methods"
-	"backend/table"
+	"backend/mysql/table"
 	"net/http"
 	"strconv"
 	"sync"

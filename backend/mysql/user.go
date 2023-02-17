@@ -6,8 +6,8 @@ import (
 	"database/sql"
 
 	// "runtime"
-	"backend/query"
-	"backend/table"
+	"backend/mysql/query"
+	"backend/mysql/table"
 
 	"backend/panicHandler"
 

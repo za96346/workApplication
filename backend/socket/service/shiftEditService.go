@@ -1,4 +1,4 @@
-package socket
+package service
 
 import (
 	"backend/handler"
@@ -7,28 +7,16 @@ import (
 	panichandler "backend/panicHandler"
 	"backend/redis"
 	"backend/response"
-	"backend/table"
+	"backend/mysql/table"
 	"encoding/json"
 	"fmt"
 
 	"net/http"
-	"os"
-
-	// "time"
-
-	"github.com/gorilla/websocket"
 )
- 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-	// 解决跨域问题
-	CheckOrigin: func(r *http.Request) bool {
-		return true
-	},
-} // use default options
- 
-func shiftSocketHandler(w http.ResponseWriter, r *http.Request) {
+
+
+
+func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 	defer panichandler.Recover()
     // Upgrade our raw HTTP connection to a websocket based one
     conn, err := upgrader.Upgrade(w, r, nil)
@@ -117,7 +105,7 @@ func shiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		data := struct {
-			Types int
+			Types string // postion shift
 			Data struct {
 				response.Shift
 				MyPosition int
@@ -128,16 +116,17 @@ func shiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		// type 1 => 位置
-		// type 2 => 班表的資料
+		// type position => 位置
+		// type shift => 班表的資料
+		// type done => 完成編輯
 		switch data.Types {
-		case 1:
+		case "position":
 			// 我的位置
 			v.Position = data.Data.MyPosition
 			(*redis.Singleton()).EnterShiftRoom(conBanchId, v)
 			Log.Println("收到 position =>",  v.Position)
 			break
-		case 2:
+		case "shift":
 			// 插入 班表資料
 			shift := response.Shift {
 				UserId: data.Data.UserId,
@@ -150,6 +139,9 @@ func shiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 			(*redis.Singleton()).InsertShiftData(conBanchId, shift)
 			Log.Println("收到 shift =>", shift)
 			break
+		case "done":
+			
+			// (*redis.Singleton()).GetShiftData(conBanchId, )
 		default:
 			continue
 		}
@@ -167,12 +159,4 @@ func shiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 	Singleton().send(conBanchId, user, company, map[string]any{
 		"newLeaving": true,
 	})
-}
- 
-func Conn() {
-	// rabbitMQ.Conn()
-	ip := os.Getenv("SOCKET_IP")
-	port := os.Getenv("SOCKET_PORT")
-    http.HandleFunc("/workAppSocket/shift", shiftSocketHandler)
-    Log.Fatal(http.ListenAndServe(ip + ":" + port, nil))
 }

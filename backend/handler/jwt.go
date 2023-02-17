@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"backend/table"
+	"backend/mysql/table"
 	"fmt"
 	"os"
 

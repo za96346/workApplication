@@ -5,9 +5,8 @@ package mysql
 import (
 
 	// "runtime"
-	"backend/query"
-	"backend/table"
-
+	"backend/mysql/query"
+	"backend/mysql/table"
 	"backend/panicHandler"
 
 	_ "github.com/go-sql-driver/mysql"

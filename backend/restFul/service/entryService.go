@@ -4,7 +4,7 @@ import (
 	"backend/handler"
 	"backend/methods"
 	"backend/response"
-	"backend/table"
+	"backend/mysql/table"
 	"fmt"
 	"time"
 

@@ -10,7 +10,7 @@ import (
 
 	"backend/methods"
 	"backend/response"
-	"backend/table"
+	"backend/mysql/table"
 
 	"github.com/gin-gonic/gin"
 )

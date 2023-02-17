@@ -1,7 +1,7 @@
 package mysql
 
 import (
-	"backend/table"
+	"backend/mysql/table"
 	"fmt"
 	"strconv"
 	"time"

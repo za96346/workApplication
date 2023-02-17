@@ -3,7 +3,7 @@ package handler
 import (
 	panichandler "backend/panicHandler"
 	"backend/redis"
-	"backend/table"
+	"backend/mysql/table"
 	"encoding/csv"
 	"fmt"
 	"net/smtp"

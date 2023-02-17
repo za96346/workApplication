@@ -4,7 +4,7 @@ import (
 	"backend/mysql"
 	"backend/panicHandler"
 	"backend/redis"
-	"backend/table"
+	"backend/mysql/table"
 	"sync"
 
 	"github.com/gin-gonic/gin"

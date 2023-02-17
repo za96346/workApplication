@@ -3,7 +3,7 @@ package middleWare
 import (
 	"backend/handler"
 	panichandler "backend/panicHandler"
-	"backend/table"
+	"backend/mysql/table"
 
 	// "fmt"
 	// "log"

@@ -6,8 +6,8 @@ import (
 
 	// "runtime"
 	panichandler "backend/panicHandler"
-	"backend/query"
-	"backend/table"
+	"backend/mysql/query"
+	"backend/mysql/table"
 
 	_ "github.com/go-sql-driver/mysql"
 )
