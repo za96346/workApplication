@@ -1,5 +1,6 @@
 import useReduceing from 'Hook/useReducing'
 import React, { useCallback, useState } from 'react'
+import statics from 'statics'
 import { BanchStyleType } from 'type'
 
 interface props {
@@ -18,9 +19,10 @@ const Row = ({
 
     // 寄送位置
     const onClickSendPosition = (pos: number): void => {
+        if (shiftEdit?.State?.disabledTable) return // 擋掉不能編輯的
         setStatus((prev) => ({ ...prev, clickPos: pos }))
         sendMessage(JSON.stringify({
-            Types: 1,
+            Types: statics.shiftSocketEvent.position,
             Data: {
                 MyPosition: pos
             }
@@ -29,10 +31,10 @@ const Row = ({
 
     // 寄送編輯版表
     const onClickSendShift = (userId: number, date: string, it: BanchStyleType): void => {
-        console.log(date, it)
+        if (shiftEdit?.State?.disabledTable) return // 擋掉不能編輯的
         setStatus((prev) => ({ ...prev, clickPos: -1 }))
         sendMessage(JSON.stringify({
-            Types: 2,
+            Types: statics.shiftSocketEvent.shift,
             Data: {
                 UserId: userId,
                 Date: date,
@@ -69,7 +71,7 @@ const Row = ({
             {// 人的 列
                 shiftEdit?.EditUser?.map((user, idx) => {
                     return (
-                        <tr key={user.UserId}>
+                        <tr style={{ cursor: shiftEdit?.State?.disabledTable ? 'not-allowed' : 'pointer' }} key={user.UserId}>
                             {// 日期的 欄
                                 dayArray.map((day, index) => {
                                     const position = parseInt(`${idx * 31 + index}`)

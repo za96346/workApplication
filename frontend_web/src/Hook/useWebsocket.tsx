@@ -22,10 +22,9 @@ export const useWebsocket = ({ options, BASE_URL = DEFAULT_URL }: Websocket): pr
         reconnectAttempts: 10,
         reconnectInterval: 3000,
         onReconnectStop: (e) => console.log('==== websocket stop ====', e),
-        onClose: () => console.log('socket close')
-
-    // onOpen: () => {},
-    // onError: () => {},
+        onClose: () => console.log('socket close'),
+        onOpen: () => console.log('socket open'),
+        onError: (e) => { console.log(e) }
     })
     const socket = getWebSocket()
     const connectionStatus = {

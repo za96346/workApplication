@@ -62,6 +62,11 @@ class statics {
         edit: 'edit',
         create: 'create'
     }
+
+    shiftSocketEvent = {
+        position: 'position',
+        shift: 'shift'
+    }
 }
 
 export default new statics()

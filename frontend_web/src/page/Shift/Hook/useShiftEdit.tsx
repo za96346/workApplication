@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/prefer-includes */
-import { message } from 'antd'
+import { FullMessage } from 'method/notice'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import shiftEditAction from 'reduxer/action/shiftEditAction'
@@ -30,10 +30,10 @@ const useShiftEditSocket = (banchId: number, token: string): props => {
     useEffect(() => {
         dispatch(shiftEditAction.setShiftEdit(lastJsonMessage))
         if (lastJsonMessage?.NewEntering?.length > 0) {
-            message.info(`${lastJsonMessage?.NewEntering} 進入編輯室`)
+            FullMessage.info(`${lastJsonMessage?.NewEntering} 進入編輯室`)
         }
         if (lastJsonMessage?.NewLeaving?.length > 0) {
-            message.info(`${lastJsonMessage?.NewLeaving} 離開編輯室`)
+            FullMessage.info(`${lastJsonMessage?.NewLeaving} 離開編輯室`)
         }
     }, [lastJsonMessage])
     // useEffect(() => {

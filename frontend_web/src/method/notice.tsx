@@ -19,3 +19,7 @@ FullMessage.error = (text: string) => message.error({
     key: '1',
     content: text
 })
+FullMessage.info = (text: string) => message.info({
+    key: '1',
+    content: text
+})

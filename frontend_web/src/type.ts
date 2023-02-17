@@ -144,6 +144,7 @@ export interface ShiftEditType {
 }
 export interface ShiftState {
     disabledTable?: boolean
+    submitAble?: boolean
 }
 
 export interface ShiftSocketType {

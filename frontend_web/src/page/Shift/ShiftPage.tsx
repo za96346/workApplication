@@ -50,9 +50,9 @@ const ShiftPage = (): JSX.Element => {
             <div className={window.styles.shiftProcessBar}>
                 <h3>{company.banch.find((item) => item.Id === state.banchId)?.BanchName || ''}</h3>
                 <Steps current={shiftEdit.Status - 1}>
-                    <Steps.Step title="開放編輯" description={`${shiftEdit.StartDay} ${shiftEdit.EndDay}`} />
-                    <Steps.Step title="主管審核" subTitle="2022-11-10" description="部門主管確認班表無誤" />
-                    <Steps.Step title="確認發布" description="進行中..." />
+                    <Steps.Step title="尚未開放編輯" />
+                    <Steps.Step title="開放編輯" subTitle="" description={`${shiftEdit.StartDay} ～～ ${shiftEdit.EndDay}`} />
+                    <Steps.Step title="部門主管確認班表無誤" description="進行中..." />
                 </Steps>
             </div>
             <div className={window.styles.shiftEdit}>

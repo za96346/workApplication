@@ -16,7 +16,7 @@ const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
     const navigate = useNavigate()
     const fullScreenHandle = useFullScreenHandle()
     const { loading, user, shiftEdit } = useReduceing()
-    const { sendMessage, close } = useShiftEditSocket(banchId, user?.token || '')
+    const { sendMessage, close, connectionStatus } = useShiftEditSocket(banchId, user?.token || '')
 
     // 日期
     const dayArray = useMemo(() => {
@@ -31,12 +31,9 @@ const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
     }, [shiftEdit?.StartDay, shiftEdit?.EndDay])
 
     useEffect(() => {
-        if (currentTabs !== 0) {
+        return () => {
             close()
         }
-    }, [currentTabs])
-    useEffect(() => {
-        return () => close()
     }, [navigate])
     if (loading.onFetchBanchStyle || loading.onFetchUserAll) {
         return (
@@ -84,21 +81,26 @@ const EditTable = ({ banchId, currentTabs }: EditTableProps): JSX.Element => {
                         </Collapse>
 
                         {
-                            // connectionStatus !== 'Connecting' &&
-                            //     connectionStatus !== 'Open'
-                            // <Spin tip={'進入編輯室中...'} />
-                            <FullScreen handle={fullScreenHandle}>
-                                <Button onClick={() => { fullScreenHandle.enter() }}>全螢幕</Button>
-                                <div>排班日期：{shiftEdit?.StartDay}~{shiftEdit?.EndDay}</div>
-                                <table style={{ cursor: 'pointer' }} className='mb-5 table table-bordered table-hover table-striped table-responsive-md'>
-                                    <thead>
-                                        <Head dayArray={dayArray}/>
-                                    </thead>
-                                    <tbody>
-                                        <Row sendMessage={sendMessage} dayArray={dayArray} />
-                                    </tbody>
-                                </table>
-                            </FullScreen>
+                            connectionStatus !== 'Connecting' &&
+                            connectionStatus !== 'Open'
+                                ? <Spin tip={'進入編輯室中...'} />
+                                : <FullScreen handle={fullScreenHandle}>
+                                    <Button onClick={() => { fullScreenHandle.enter() }}>全螢幕</Button>
+                                    <div>排班日期：{shiftEdit?.StartDay}~{shiftEdit?.EndDay}</div>
+                                    <table style={{ cursor: 'pointer' }} className='mb-5 table table-bordered table-hover table-striped table-responsive-md'>
+                                        <thead>
+                                            <Head dayArray={dayArray}/>
+                                        </thead>
+                                        <tbody>
+                                            <Row sendMessage={sendMessage} dayArray={dayArray} />
+                                        </tbody>
+                                    </table>
+                                    {
+                                        shiftEdit?.State?.submitAble && (
+                                            <Button>確認無誤 ， 提交班表</Button>
+                                        )
+                                    }
+                                </FullScreen>
 
                         }
 
