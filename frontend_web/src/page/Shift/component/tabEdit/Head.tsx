@@ -7,7 +7,7 @@ interface props {
 }
 
 const Head = ({
-    dayArray
+    dayArray = []
 }: props): JSX.Element => {
     const { shiftEdit } = useReduceing()
     return (

@@ -65,7 +65,8 @@ class statics {
 
     shiftSocketEvent = {
         position: 'position',
-        shift: 'shift'
+        shift: 'shift',
+        done: 'done'
     }
 }
 

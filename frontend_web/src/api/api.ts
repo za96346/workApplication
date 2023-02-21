@@ -1,18 +1,24 @@
 import apiAbs from './apiAbs'
 import axios from 'axios'
-import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, performanceType, RegisterType, ResMessage, ResType, SelfDataType, UserType, WaitReplyType, WeekendSettingType, workTimeType, yearPerformanceType } from '../type'
+import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, performanceType, RegisterType, ResMessage, ResType, SelfDataType, shiftMonthType, UserType, WaitReplyType, WeekendSettingType, workTimeType, yearPerformanceType } from '../type'
 import userAction from '../reduxer/action/userAction'
 import { store } from '../reduxer/store'
 import { FullMessage } from '../method/notice'
 import companyAction from '../reduxer/action/companyAction'
 import statusAction from '../reduxer/action/statusAction'
 import { clearAll } from '../reduxer/clearAll'
+import shiftEditAction from 'reduxer/action/shiftEditAction'
 
 type createUserType = Pick<SelfDataType, 'Account' | 'Password' | 'UserName' | 'EmployeeNumber' | 'OnWorkDay' | 'Banch' | 'Permession'>
 interface yearPerformanceParamsType {
     startYear: number
     endYear: number
     userName: string
+}
+interface shiftMonthParamsType {
+    banch: number
+    year: number
+    month: number
 }
 
 class ApiControl extends apiAbs {
@@ -36,7 +42,8 @@ class ApiControl extends apiAbs {
         performance: 'pr/performance',
         performanceCopy: 'pr/performance/copy',
         yearPerformance: 'pr/performance/year',
-        googleLogin: 'google/login'
+        googleLogin: 'google/login',
+        shiftMonth: 'shift/month'
     }
 
     constructor () {
@@ -755,6 +762,22 @@ class ApiControl extends apiAbs {
         const res = await this.GET<string>({
             url: this.route.googleLogin
         })
+        return res
+    }
+
+    // 班表查詢
+    async getShiftMonth (v: shiftMonthParamsType): Promise<ResType<shiftMonthType[]>> {
+        // console.log(v)
+        store.dispatch(statusAction.onFetchShiftMonth(true))
+        const res = await this.GET<shiftMonthType[]>({
+            url: this.route.shiftMonth,
+            successShow: false,
+            params: v
+        })
+        if (res.status) {
+            store.dispatch(shiftEditAction.setShiftEdit(res as any))
+        }
+        store.dispatch(statusAction.onFetchShiftMonth(false))
         return res
     }
 }

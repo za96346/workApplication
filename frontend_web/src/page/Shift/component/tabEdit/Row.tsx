@@ -9,8 +9,8 @@ interface props {
 }
 
 const Row = ({
-    sendMessage,
-    dayArray
+    sendMessage = () => {},
+    dayArray = []
 }: props): JSX.Element => {
     const { shiftEdit } = useReduceing()
     const [status, setStatus] = useState({

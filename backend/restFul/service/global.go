@@ -216,3 +216,16 @@ func UserExtendToUserTable (props *table.UserExtend) *table.UserTable {
 
 // 	}
 // }
+
+// 陣列去重
+func RemoveDuplicate[T comparable, P comparable](addrs *[]T, checkFunc func(T) P) []T {
+    result := make([]T, 0, len(*addrs))
+    temp := map[P]struct{}{}
+    for _, item := range *addrs {
+        if _, ok := temp[checkFunc(item)]; !ok {
+            temp[checkFunc(item)] = struct{}{}
+            result = append(result, item)
+        }
+    }
+    return result
+}

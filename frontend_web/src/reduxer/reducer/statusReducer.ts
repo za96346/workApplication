@@ -43,54 +43,11 @@ const statusState = {
     onCopyPerformance: false,
     onFetchYearPerformance: false,
 
-    onFetchWorkTime: false
+    onFetchWorkTime: false,
+    onFetchShiftMonth: false
 }
 
-export interface statusReducerType {
-    onEntry: boolean
-
-    onFetchCompany: boolean
-    onUpdateCompany: boolean
-
-    onFetchBanch: boolean
-    onCreateBanch: boolean
-    onUpdateBanch: boolean
-    onDeleteBanch: boolean
-
-    onFetchUserAll: boolean
-    onUpdateUser: boolean
-    onCreateUser: boolean
-
-    onFetchSelfData: boolean
-    onUpdateSelfData: boolean
-
-    onFetchBanchStyle: boolean
-    onCreateBanchStyle: boolean
-    onUpdateBanchStyle: boolean
-    onDeleteBanchStyle: boolean
-
-    onFetchBanchRule: boolean
-    onCreateBanchRule: boolean
-    onUpdateBanchRule: boolean
-    onDeleteBanchRule: boolean
-
-    onFetchWeekendSetting: boolean
-    onCreateWeekendSetting: boolean
-    onDeleteWeekendSetting: boolean
-
-    onFetchWaitReply: boolean
-    onUpdateWaitReply: boolean
-    onCreateWaitReply: boolean
-
-    onFetchPerformance: boolean
-    onUpdatePerformance: boolean
-    onDeletePerformance: boolean
-    onCreatePerformance: boolean
-    onCopyPerformance: boolean
-    onFetchYearPerformance: boolean
-
-    onFetchWorkTime: boolean
-}
+export type statusReducerType = typeof statusState
 
 export const statusReducer = (state = statusState, action: action): any => {
     const a = Object.values(statusType).filter((item) => item === action.type)

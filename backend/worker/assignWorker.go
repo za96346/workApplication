@@ -180,6 +180,9 @@ func AssignWorker(routerMethod int) func(props *gin.Context) {
 	case 48:
 		routeFunc = service.FetchYearPerformance
 		break
+	case 49:
+		routeFunc = service.FetchMonthShift
+		break
 	default:
 		break;
 	}

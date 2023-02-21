@@ -1,23 +1,18 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { HolderOutlined } from '@ant-design/icons'
-import { Drawer, Spin, Steps, Tabs } from 'antd'
+import { Drawer, Steps, Tabs } from 'antd'
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
 import useReduceing from 'Hook/useReducing'
-import EditTable from './EditTable'
-import PeopleStatus from './PeopleStatus'
+import EditTable from './component/tabEdit/EditTable'
+import PeopleStatus from './component/PeopleStatus'
+import TabHistory from './component/tabHistory/Index'
+
 const ShiftPage = (): JSX.Element => {
-    const { banchId } = useParams()
     const { company, shiftEdit, state } = useReduceing()
     const [status, setStatus] = useState({
         drawerOpen: false,
         currentTabs: 0
     })
-    if (!banchId) {
-        return (
-            <Spin />
-        )
-    }
     return (
         <>
             {
@@ -57,22 +52,21 @@ const ShiftPage = (): JSX.Element => {
             </div>
             <div className={window.styles.shiftEdit}>
                 <Tabs
+                    items={[
+                        {
+                            key: '0',
+                            label: '當前編輯',
+                            children: <EditTable />
+                        },
+                        {
+                            key: '1',
+                            label: '歷史班表',
+                            children: <TabHistory />
+                        }
+                    ]}
                     destroyInactiveTabPane
                     onChange={(key) => setStatus((prev) => ({ ...prev, currentTabs: parseInt(key, 10) }))}
-                >
-                    <Tabs.TabPane tab={'當前編輯'} key={0}>
-                        <EditTable
-                            banchId={state.banchId}
-                            currentTabs={status.currentTabs}
-                        />
-                    </Tabs.TabPane>
-                    <Tabs.TabPane tab={'歷史班表'} key={1}>
-                        <EditTable
-                            banchId={state.banchId}
-                            currentTabs={status.currentTabs}
-                        />
-                    </Tabs.TabPane>
-                </Tabs>
+                />
             </div>
         </>
     )

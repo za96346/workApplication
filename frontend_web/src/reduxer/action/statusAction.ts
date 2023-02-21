@@ -348,6 +348,16 @@ class statusAcion {
         }
     }
 
+    onFetchShiftMonth (s: boolean): action {
+        return {
+            type: s ? statusType.FETCH_SHIFT_MONTH_ON : statusType.FETCH_SHIFT_MONTH_OFF,
+            payload: {
+                ...store.getState().status,
+                onFetchShiftMonth: s
+            }
+        }
+    }
+
     // 清除
     clearStatusAll (): action {
         return {

@@ -46,5 +46,11 @@ func Shift (props *gin.RouterGroup) {
 			middleWare.Permession(100),
 			worker.AssignWorker(39),
 		)
+
+		// 班表 查詢
+		props.GET("/month",
+			middleWare.Permession(100, 1, 2),
+			worker.AssignWorker(49),
+		)
 	}
 }

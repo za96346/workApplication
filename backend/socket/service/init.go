@@ -2,13 +2,12 @@ package service
 
 import (
 	"backend/handler"
-	"backend/methods"
+	"backend/socket/method"
 	"backend/mysql"
 	panichandler "backend/panicHandler"
 	"backend/redis"
 	"backend/response"
 	"backend/mysql/table"
-	"fmt"
 
 	"github.com/goinggo/mapstructure"
 	"github.com/gorilla/websocket"
@@ -91,6 +90,7 @@ func (mg * Manager) CheckState (step int, permission int) *MsgState {
 
 // state["newEntering"] boolean
 // state["newLeaving"] boolean
+// state["finished"] boolean
 func (mg *Manager) send (
 	banchId int64,
 	user table.UserTable,
@@ -99,14 +99,13 @@ func (mg *Manager) send (
 ) {
 
 	defer panichandler.Recover()
-	str, end, year, month := methods.GetNextMonthSE()
+	str, end, year, month := method.GetNextMonthSE()
 	// 發送訊息
 	onlineUsers := (*redis.Singleton()).GetShiftRoomUser(banchId)
 	EditUsers := (*mysql.Singleton()).SelectUser(4, banchId, user.CompanyCode)
 	ShiftData := (*redis.Singleton()).GetShiftData(banchId, year, month)
 	BanchStyle := (*mysql.Singleton()).SelectBanchStyle(2, banchId)
-	fmt.Print("開始結束", year, month)
-	currentStep := methods.CheckWhichStep()
+	currentStep := method.CheckWhichStep()
 
 	// 整理 回傳的編輯使用者資料
 	editUserData := []response.User{}
@@ -145,6 +144,9 @@ func (mg *Manager) send (
 		Status: currentStep, // 1 開放編輯、 2 主管審核 3 確認發布
 		StartDay: str,
 		EndDay: end,
+		State: map[string]any{
+			"finished": state["finished"],
+		},
 		NewEntering: newEntering,
 		NewLeaving: newLeaving,
 	}
@@ -175,7 +177,8 @@ func (mg *Manager) sendMsg () {
 		userAll := (redis.Singleton().GetShiftRoomUser(v.BanchId))
 		for _, user := range *userAll {
 			if (*mg).ConnLine[user.UserId] != nil {
-				v.State = *(*mg).CheckState(v.Status, user.Permission)
+				v.State["disabledTable"] = (*(*mg).CheckState(v.Status, user.Permission))["disabledTable"]
+				v.State["submitAble"] = (*(*mg).CheckState(v.Status, user.Permission))["submitAble"]
 				go (*mg).ConnLine[user.UserId].WriteJSON(v)
 			}
 		}

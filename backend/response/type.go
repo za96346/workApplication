@@ -73,5 +73,4 @@ type Shift struct {
 	RestTime string `json:"RestTime"` // 休息時間 ex: 01:00:00
 	OnShiftTime string  `json:"OnShiftTime"`// 開始上班時間 ex: 09:00:00
 	OffShiftTime string`json:"OffShiftTime"` //結束上班的時間 ex: 18:00:00
-
 }

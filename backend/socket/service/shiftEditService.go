@@ -4,12 +4,14 @@ import (
 	"backend/handler"
 	"backend/methods"
 	"backend/mysql"
+	"backend/mysql/table"
 	panichandler "backend/panicHandler"
 	"backend/redis"
 	"backend/response"
-	"backend/mysql/table"
+	"backend/socket/method"
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"net/http"
 )
@@ -124,7 +126,8 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 			// 我的位置
 			v.Position = data.Data.MyPosition
 			(*redis.Singleton()).EnterShiftRoom(conBanchId, v)
-			Log.Println("收到 position =>",  v.Position)
+			// send
+			Singleton().send(conBanchId, user, company, map[string]any{})
 			break
 		case "shift":
 			// 插入 班表資料
@@ -137,17 +140,45 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 				OffShiftTime: data.Data.OffShiftTime,
 			}
 			(*redis.Singleton()).InsertShiftData(conBanchId, shift)
-			Log.Println("收到 shift =>", shift)
+			// send
+			Singleton().send(conBanchId, user, company, map[string]any{})
 			break
 		case "done":
-			
-			// (*redis.Singleton()).GetShiftData(conBanchId, )
+			_, _, year, month := method.GetNextMonthSE()
+			if method.CheckWhichStep() == 3 {
+				shiftArr := (*redis.Singleton()).GetShiftData(conBanchId, year, month)
+				for _, v := range *shiftArr {
+					// 尋找 圖標
+					styleIcon := *(*mysql.Singleton()).SelectShift(1, v.BanchStyleId)
+					// 格式 時間
+					onDate, _ :=  time.Parse("2006-01-02 15:04:05", v.Date + " " + v.OnShiftTime)
+					offDate, _ :=  time.Parse("2006-01-02 15:04:05", v.Date + " " + v.OffShiftTime)
+					now := time.Now()
+
+					// 建立資料
+					shift := table.ShiftTable {
+						UserId: v.UserId,
+						BanchStyleId: v.BanchStyleId,
+						Icon: styleIcon[0].Icon,
+						Year: year,
+						Month: month,
+						OnShiftTime: onDate,
+						OffShiftTime: offDate,
+						RestTime: v.RestTime,
+						CreateTime: now,
+						LastModify: now,
+					}
+					(*mysql.Singleton()).InsertShift(&shift)
+				}
+			}
+			// send
+			Singleton().send(conBanchId, user, company, map[string]any{
+				"finished": true,
+			})
+			break
 		default:
 			continue
 		}
-
-		// send
-		Singleton().send(conBanchId, user, company, map[string]any{})
 
     }
 

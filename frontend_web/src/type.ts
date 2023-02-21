@@ -217,3 +217,28 @@ export interface yearPerformanceType {
     UserName: string
     Avg: number
 }
+
+export interface nullTime {
+    Time: string
+    Valid: boolean
+}
+
+export interface shiftMonthType {
+    ShiftId: number // 班表的編號
+    UserId: number // 使用者的編號
+    BanchStyleId: number // 班表樣式id
+    Year: number // 紀錄 年
+    Month: number // 紀錄 月
+    OnShiftTime: Date// 開始上班時間
+    OffShiftTime: Date // 結束上班的時間
+    RestTime: string // 休息時間
+    PunchIn: nullTime // 上班卡
+    PunchOut: nullTime// 下班卡
+    CreateTime: Date // 創建的時間
+    LastModify: Date // 上次修改的時間
+    SpecifyTag: string // 特別的備註
+    UserName: string // 使用者名稱
+    Permission: number // 權限
+    Banch: number // 部門編號
+    EmployeeNumber: string // 員工編號
+}

@@ -13,9 +13,9 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// 0 => all, value => nil
+// 0 => all, value =>u.banch, qu.banch, u.companyCOde, qu.companyCode, year, month
 //  1 => 班表id, value => int64
-func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftTable {
+func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftExtend {
 	defer panichandler.Recover()
 	querys := ""
 	switch selectKey {
@@ -30,8 +30,8 @@ func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftT
 		querys = (*query.MysqlSingleton()).Shift.SelectAll
 		break
 	}
-	shift := new(table.ShiftTable)
-	carry := []table.ShiftTable{}
+	shift := new(table.ShiftExtend)
+	carry := []table.ShiftExtend{}
 	res, err := (*dbObj).MysqlDB.Query(querys, value...)
 	defer res.Close()
 	(*dbObj).checkErr(err)
@@ -40,6 +40,8 @@ func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftT
 			&shift.ShiftId,
 			&shift.UserId,
 			&shift.BanchStyleId,
+			&shift.Year,
+			&shift.Month,
 			&shift.OnShiftTime,
 			&shift.OffShiftTime,
 			&shift.RestTime,
@@ -48,6 +50,10 @@ func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftT
 			&shift.SpecifyTag,
 			&shift.CreateTime,
 			&shift.LastModify,
+			&shift.UserName,
+			&shift.Permission,
+			&shift.Banch,
+			&shift.EmployeeNumber,
 		)
 		(*dbObj).checkErr(err)
 		if err == nil {
@@ -136,10 +142,14 @@ func(dbObj *DB) InsertShift(data *table.ShiftTable) (bool, int64) {
 	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).Shift.InsertAll)
 	defer stmt.Close()
 
+
 	(*dbObj).checkErr(err)
 	res, err := stmt.Exec(
 		(*data).UserId,
 		(*data).BanchStyleId,
+		(*data).Year,
+		(*data).Month,
+		(*data).Icon,
 		(*data).OnShiftTime,
 		(*data).OffShiftTime,
 		(*data).RestTime,
