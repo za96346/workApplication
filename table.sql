@@ -36,7 +36,7 @@ create table shift(
 	banchStyleId bigint default -1,
 	year int default -1,
 	month int default -1,
-	icon string varchar(100),
+	icon string varchar(100) default '',
 	onShiftTime timestamp,
 	offShiftTime timestamp,
 	restTime time,
@@ -56,7 +56,7 @@ create table shiftChange(
 	initiatorShiftId bigint,
 	requestedShiftId bigint,
 	reason varchar(200) default '',
-	caseProcess varchar(10) default '',
+	caseProcess varchar(10) default '',# ok, wait, manageCheck, reject
 	specifyTag varchar(50) default '',
 	createTime timestamp default now(),
 	lastModify timestamp default now()
@@ -84,7 +84,7 @@ alter table shiftOverTime add foreign key (shiftId) references shift(shiftId) on
 create table forgetPunch(
 	caseId bigint not null unique auto_increment,
 	shiftId bigint,
-	targetPunch varchar(3),
+	targetPunch varchar(3), # on off
 	reason varchar(200) default '',
 	caseProcess varchar(10) default '',
 	specifyTag varchar(50) default '',

@@ -68,6 +68,7 @@ type Member struct {
 type Shift struct {
 	UserId int64 `json:"UserId"` // 使用者的編號
 	// Position int `json:"Position"` // 位置
+	Icon string `json:"Icon"`
 	Date string `json:"Date"` // 每天 ex: 2022-02-22
 	BanchStyleId int64
 	RestTime string `json:"RestTime"` // 休息時間 ex: 01:00:00

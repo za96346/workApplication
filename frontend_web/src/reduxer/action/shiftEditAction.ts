@@ -15,5 +15,13 @@ class shiftEditAction {
             }
         }
     }
+
+    clearShiftEdit (): action {
+        // console.log(shift)
+        return {
+            type: shiftEditType.CLEAR_SHIFT_ALL,
+            payload: {}
+        }
+    }
 }
 export default new shiftEditAction()

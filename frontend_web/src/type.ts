@@ -137,6 +137,7 @@ export interface OnlineUserType {
 export interface ShiftEditType {
     OffShiftTime: string
     OnShiftTime: string
+    Icon: string
     RestTime: string
     BanchStyleId: number
     Date: string

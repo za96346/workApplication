@@ -42,6 +42,7 @@ func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftE
 			&shift.BanchStyleId,
 			&shift.Year,
 			&shift.Month,
+			&shift.Icon,
 			&shift.OnShiftTime,
 			&shift.OffShiftTime,
 			&shift.RestTime,
@@ -111,6 +112,7 @@ func(dbObj *DB) UpdateShift(updateKey int, data *table.ShiftTable, value ...inte
 		(*dbObj).containers.shift = append(
 			(*dbObj).containers.shift,
 			(*data).BanchStyleId,
+			(*data).Icon,
 			(*data).OnShiftTime,
 			(*data).OffShiftTime,
 			(*data).RestTime,

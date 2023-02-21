@@ -38,6 +38,7 @@ const Row = ({
             Data: {
                 UserId: userId,
                 Date: date,
+                Icon: it.Icon,
                 BanchStyleId: it.StyleId,
                 RestTime: it.RestTime,
                 OnShiftTime: it.OnShiftTime,
@@ -76,13 +77,10 @@ const Row = ({
                                 dayArray.map((day, index) => {
                                     const position = parseInt(`${idx * 31 + index}`)
                                     const bg = shiftEdit?.OnlineUser?.find((user) => user.Position === position)
-                                    const findIcon = shiftEdit?.ShiftData?.find((shift) =>
-                                        shift.Date === day &&
-                                                    shift.UserId === user.UserId
+                                    const findShift = shiftEdit?.ShiftData?.find((shift) =>
+                                        (shift.Date === day || shift?.OnShiftTime?.substring(0, 10) === day) &&
+                                            shift.UserId === user.UserId
                                     )
-                                    const icon = shiftEdit.BanchStyle?.find((icon) => {
-                                        return icon.StyleId === findIcon?.BanchStyleId
-                                    })
 
                                     const key = `${day}-${user.UserId}`
                                     // 渲染 使用者名字
@@ -109,7 +107,7 @@ const Row = ({
                                                 // 找到是當前點擊的位置
                                                 status.clickPos === position
                                                     ? iconOption(user.UserId, day)
-                                                    : <span>{icon?.Icon || ''}</span>
+                                                    : <span>{findShift?.Icon || ''}</span>
                                             }
                                         </td>
                                     )

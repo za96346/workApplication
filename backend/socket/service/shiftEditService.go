@@ -134,6 +134,7 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 			shift := response.Shift {
 				UserId: data.Data.UserId,
 				Date: data.Data.Date,
+				Icon: data.Data.Icon,
 				BanchStyleId: data.Data.BanchStyleId,
 				RestTime: data.Data.RestTime,
 				OnShiftTime: data.Data.OnShiftTime,
@@ -148,8 +149,8 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 			if method.CheckWhichStep() == 3 {
 				shiftArr := (*redis.Singleton()).GetShiftData(conBanchId, year, month)
 				for _, v := range *shiftArr {
-					// 尋找 圖標
-					styleIcon := *(*mysql.Singleton()).SelectShift(1, v.BanchStyleId)
+					// // 尋找 圖標
+					// styleIcon := *(*mysql.Singleton()).SelectShift(1, v.BanchStyleId)
 					// 格式 時間
 					onDate, _ :=  time.Parse("2006-01-02 15:04:05", v.Date + " " + v.OnShiftTime)
 					offDate, _ :=  time.Parse("2006-01-02 15:04:05", v.Date + " " + v.OffShiftTime)
@@ -159,7 +160,7 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 					shift := table.ShiftTable {
 						UserId: v.UserId,
 						BanchStyleId: v.BanchStyleId,
-						Icon: styleIcon[0].Icon,
+						Icon: v.Icon,
 						Year: year,
 						Month: month,
 						OnShiftTime: onDate,

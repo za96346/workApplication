@@ -1,3 +1,4 @@
+import { Table } from 'antd'
 import useReduceing from 'Hook/useReducing'
 import dateHandle from 'method/dateHandle'
 import React, { useMemo } from 'react'
@@ -31,6 +32,10 @@ const TabHistory = (): JSX.Element => {
                     <Row sendMessage={() => {}} dayArray={dayArray} />
                 </tbody>
             </table>
+            <Table
+                columns={[]}
+                dataSource={[]}
+            />
         </>
     )
 }
