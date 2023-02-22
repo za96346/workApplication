@@ -34,6 +34,7 @@ create table shift(
 	shiftId bigint not null AUTO_INCREMENT unique,
 	userId bigint,
 	banchStyleId bigint default -1,
+	banchId bigInt default -1,
 	year int default -1,
 	month int default -1,
 	icon string varchar(100) default '',
