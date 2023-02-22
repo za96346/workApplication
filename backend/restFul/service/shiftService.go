@@ -156,16 +156,14 @@ func FetchMonthShift (props *gin.Context, waitJob *sync.WaitGroup)  {
 	banch, _ := methods.AnyToInt64((*props).Query("banch"))
 
 	// 自己的資料
-	user, _, err := CheckUserAndCompany(props)
+	_, company, err := CheckUserAndCompany(props)
 	if err {return}
 
 	// 拿取資料
 	data := (*Mysql).SelectShift(
 		0,
 		banch,
-		banch,
-		user.CompanyCode,
-		user.CompanyCode,
+		company.CompanyId,
 		year,
 		month,
 	)

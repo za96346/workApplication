@@ -38,7 +38,7 @@ func FetchPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 
 	Log.Println("start, end",start, "--", end)
 
-	user, _, err := CheckUserAndCompany(props)
+	user, company, err := CheckUserAndCompany(props)
 	if err {return}
 
 	res := []table.PerformanceExtend{}
@@ -46,8 +46,7 @@ func FetchPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	if user.Permession == 100 && isBanchError != nil {
 		res = *(*Mysql).SelectPerformance(
 			0,
-			user.CompanyCode,
-			user.CompanyCode,
+			company.CompanyId,
 			start,
 			end,
 			name,
@@ -60,8 +59,7 @@ func FetchPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 		if !methods.IsNotExited(banch) {
 			res = *(*Mysql).SelectPerformance(
 				1,
-				user.CompanyCode,
-				user.CompanyCode,
+				company.CompanyId,
 				banchId,
 				(*banch)[0].BanchName,
 				start,
@@ -77,8 +75,7 @@ func FetchPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 		if !methods.IsNotExited(banch) {
 			res = *(*Mysql).SelectPerformance(
 				1,
-				user.CompanyCode,
-				user.CompanyCode,
+				company.CompanyId,
 				user.Banch,
 				(*banch)[0].BanchName,
 				start,
@@ -139,8 +136,7 @@ func UpdatePerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 			0,
 			&performance,
 			performance.PerformanceId,
-			company.CompanyCode,
-			company.CompanyCode,
+			company.CompanyId,
 		)
 		// 主管更改不是自己的
 	} else if user.Permession == 1 &&
@@ -155,8 +151,7 @@ func UpdatePerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 			1,
 			&performance,
 			performance.PerformanceId,
-			company.CompanyCode,
-			company.CompanyCode,
+			company.CompanyId,
 			user.Banch,
 			banchName,
 		)
@@ -303,7 +298,7 @@ func CopyPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
-	user, _, err := CheckUserAndCompany(props)
+	user, company, err := CheckUserAndCompany(props)
 	if err {return}
 
 	// 依據權限選擇
@@ -311,7 +306,6 @@ func CopyPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 		performance = (*Mysql).SelectPerformance(
 			5,
 			request.PerformanceId,
-			user.UserId,
 			user.UserId,
 		)
 	} else if user.Permession == 1 {
@@ -325,8 +319,7 @@ func CopyPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 		performance = (*Mysql).SelectPerformance(
 			4,
 			request.PerformanceId,
-			user.CompanyCode,
-			user.CompanyCode,
+			company.CompanyId,
 			user.Banch,
 			(*myBanch)[0].BanchName,
 		)
@@ -334,8 +327,7 @@ func CopyPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 		performance = (*Mysql).SelectPerformance(
 			3,
 			request.PerformanceId,
-			user.CompanyCode,
-			user.CompanyCode,
+			company.CompanyId,
 		)
 	}
 	
@@ -406,7 +398,7 @@ func FetchYearPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	endYear := (*props).Query("endYear")
 	userName := (*props).Query("userName")
 
-	user, _, err := CheckUserAndCompany(props)
+	user, company, err := CheckUserAndCompany(props)
 	if err {return}
 
 	res := new([]table.YearPerformance)
@@ -414,8 +406,7 @@ func FetchYearPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	if user.Permession == 100 {
 		res = (*Mysql).SelectYearPerformance(
 			0,
-			user.CompanyCode,
-			user.CompanyCode,
+			company.CompanyId,
 			startYear,
 			endYear,
 			userName,
@@ -432,8 +423,7 @@ func FetchYearPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 		}
 		res = (*Mysql).SelectYearPerformance(
 			1,
-			user.CompanyCode,
-			user.CompanyCode,
+			company.CompanyId,
 			(*myBanch)[0].Id,
 			(*myBanch)[0].BanchName,
 			startYear,
@@ -445,8 +435,6 @@ func FetchYearPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	} else if user.Permession == 2 {
 		res = (*Mysql).SelectYearPerformance(
 			2,
-			user.CompanyCode,
-			user.CompanyCode,
 			user.UserId,
 			startYear,
 			endYear,

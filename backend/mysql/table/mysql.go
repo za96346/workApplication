@@ -35,6 +35,23 @@ type ShiftExtend struct {
 	EmployeeNumber string // 員工編號
 }
 
+// 班表統計
+type ShiftTotal struct {
+	UserId int64 `json:"UserId"`
+	Year int `json:"Year"`
+	Month int `json:"Month"`
+	BanchId int64 `json:"BanchId"`
+	UserName string `json:"UserName"`
+	Permession int `json:"Permession"`
+	EmployeeNumber string `json:"EmployeeNumber"`
+	ChangeCocunt int `json:"ChangeCocunt"`
+	OverTimeCount int `json:"OverTimeCount"`
+	ForgetPunchCount int `json:"ForgetPunchCount"`
+	DayOffCount int `json:"DayOffCount"`
+	LateExcusedCount int `json:"LateExcusedCount"`
+	TotalHours int `json:"TotalHours"`
+}
+
 type YearPerformance struct {
 	UserId int64
 	Year int
@@ -74,6 +91,7 @@ type ShiftTable struct {
 	ShiftId int64 `json:"ShiftId"` // 班表的編號
 	UserId int64 `json:"UserId"` // 使用者的編號
 	BanchStyleId int64 `json:"BanchStyleId"` // 班表樣式id
+	BanchId int64 `json:"BanchId"` // 部門id
 	Year int `json:"Year"` // 紀錄 年
 	Month int `json:"Month"` // 紀錄 月
 	Icon string `json:"Icon"` // 圖標

@@ -13,8 +13,9 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// 0 => all, value =>u.banch, qu.banch, u.companyCOde, qu.companyCode, year, month
+// 0 => all, value =>banchId, companyId, year, month
 //  1 => 班表id, value => int64
+// 2=> 班表總共, value =>banchId, companyId, year, month
 func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftExtend {
 	defer panichandler.Recover()
 	querys := ""
@@ -40,6 +41,7 @@ func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftE
 			&shift.ShiftId,
 			&shift.UserId,
 			&shift.BanchStyleId,
+			&shift.BanchId,
 			&shift.Year,
 			&shift.Month,
 			&shift.Icon,
@@ -149,6 +151,7 @@ func(dbObj *DB) InsertShift(data *table.ShiftTable) (bool, int64) {
 	res, err := stmt.Exec(
 		(*data).UserId,
 		(*data).BanchStyleId,
+		(*data).BanchId,
 		(*data).Year,
 		(*data).Month,
 		(*data).Icon,

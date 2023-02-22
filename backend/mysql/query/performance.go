@@ -5,36 +5,30 @@ func AddPerformance(){
 		select
 			p.*,
 			ifnull(u.userName, ''),
-			ifnull(c.companyId, -1)
+			ifnull(cb.companyId, -1)
 		from performance as p
 		left join user u
 			on u.userId=p.userId
-		left join company c
-			on u.companyCode=c.companyCode
-		left join quitWorkUser qu
-			on qu.userId=p.userId
+		left join companyBanch cb
+			on cb.id=p.banchId
 		where
 			performanceId=?
-		and (u.companyCode=?
-			or qu.companyCode=?);
+		and cb.companyId=?;
 	`
 	sqlQueryInstance.Performance.SelectSingleByManager = `
 		select
 			p.*,
 			ifnull(u.userName, ''),
-			ifnull(c.companyId, -1)
+			ifnull(cb.companyId, -1)
 		from performance as p
 		left join user u
 			on u.userId=p.userId
-		left join company c
-			on u.companyCode=c.companyCode
-		left join quitWorkUser qu
-			on qu.userId=p.userId
+		left join companyBanch cb
+			on cb.id=p.banchId
 		where
 			performanceId=?
 		and
-			(u.companyCode=?
-			or qu.companyCode=?)
+			cb.companyId=?
 		and
 			(p.banchId=? or p.banchName=?);
 	`
@@ -42,36 +36,29 @@ func AddPerformance(){
 		select
 			p.*,
 			ifnull(u.userName, ''),
-			ifnull(c.companyId, -1)
-		from performance as p
-		left join user u
-			on u.userId=p.userId
-		left join company c
-			on u.companyCode=c.companyCode
-		left join quitWorkUser qu
-			on qu.userId=p.userId
-		where
-			performanceId=?
-		and
-			u.userId=? or qu.userId=?;
-	`
-	sqlQueryInstance.Performance.SelectAllByAdmin = `
-		select
-			p.*,
-			ifnull(u.userName, ''),
-			ifnull(c.companyId, -1)
+			ifnull(cb.companyId, -1)
 		from performance as p
 		left join user u
 			on u.userId=p.userId
 		left join companyBanch cb
 			on cb.id=p.banchId
-		left join company c
-			on u.companyCode=c.companyCode
-		left join quitWorkUser qu
-			on qu.userId=p.userId
 		where
-			(u.companyCode=?
-			or qu.companyCode=?)
+			performanceId=?
+		and
+			u.userId=?;
+	`
+	sqlQueryInstance.Performance.SelectAllByAdmin = `
+		select
+			p.*,
+			ifnull(u.userName, ''),
+			ifnull(cb.companyId, -1)
+		from performance as p
+		left join user u
+			on u.userId=p.userId
+		left join companyBanch cb
+			on cb.id=p.banchId
+		where
+			cb.companyId=?
 			and 
 				concat(
 					p.year,
@@ -89,22 +76,17 @@ func AddPerformance(){
 		select
 			p.*,
 			ifnull(u.userName, ''),
-			ifnull(c.companyId, -1)
+			ifnull(cb.companyId, -1)
 		from performance as p
 		left join user u
 			on u.userId=p.userId
 		left join companyBanch cb
 			on cb.id=p.banchId
-		left join company c
-			on u.companyCode=c.companyCode
-		left join quitWorkUser qu
-			on qu.userId=p.userId
 		where
-			(u.companyCode=?
-				or qu.companyCode=?)
+			cb.companyId=?
 			and (p.banchId=?
 				or p.banchName=?)
-				and 
+			and 
 				concat(
 					p.year,
 					if(p.month < 10, concat('0', p.month), p.month)
@@ -121,16 +103,12 @@ func AddPerformance(){
 		select
 			p.*,
 			ifnull(u.userName, ''),
-			ifnull(c.companyId, -1)
+			ifnull(cb.companyId, -1)
 		from performance as p
 		left join user u
 			on u.userId=p.userId
 		left join companyBanch cb
 			on cb.id=p.banchId
-		left join company c
-			on u.companyCode=c.companyCode
-		left join quitWorkUser qu
-			on qu.userId=p.userId
 		where
 			p.userId=? 
 			and 
@@ -149,8 +127,8 @@ func AddPerformance(){
 		update performance p
 		left join user u
 			on u.userId=p.userId
-		left join quitWorkUser qu
-			on qu.userId=p.userId
+		left join companyBanch cb
+			on cb.id=p.banchId
 		set
 			banchId=?,
 			goal=?,
@@ -160,19 +138,18 @@ func AddPerformance(){
 			directions=?,
 			beLate=?,
 			dayOffNotOnRule=?,
-			banchName=?,
+			p.banchName=?,
 			p.lastModify=?
 		where
 			p.performanceId=?
-			and (qu.companyCode=?
-			or u.companyCode=?);
+			and cb.companyId=?;
 	`
 	sqlQueryInstance.Performance.UpdateByManager = `
 		update performance p
 		left join user u
 			on u.userId=p.userId
-		left join quitWorkUser qu
-			on qu.userId=p.userId
+		left join companyBanch cb
+			on cb.id=p.banchId
 		set
 			banchId=?,
 			goal=?,
@@ -182,12 +159,11 @@ func AddPerformance(){
 			directions=?,
 			beLate=?,
 			dayOffNotOnRule=?,
-			banchName=?,
+			p.banchName=?,
 			p.lastModify=?
 		where
 			p.performanceId=?
-			and (qu.companyCode=?
-				or u.companyCode=?)
+			and cb.companyId=?
 			and (p.banchId=? or p.banchName=?);
 	`;
 	sqlQueryInstance.Performance.InsertAll = `
@@ -221,13 +197,8 @@ func AddPerformance(){
 			on u.userId=p.userId
 		left join companyBanch cb
 			on cb.id=p.banchId
-		left join company c
-			on u.companyCode=c.companyCode
-		left join quitWorkUser qu
-			on qu.userId=p.userId
 		where
-			(u.companyCode=?
-			or qu.companyCode=?)
+			cb.companyId=?
 			and 
 				p.year>=?
 			and
@@ -246,13 +217,8 @@ func AddPerformance(){
 			on u.userId=p.userId
 		left join companyBanch cb
 			on cb.id=p.banchId
-		left join company c
-			on u.companyCode=c.companyCode
-		left join quitWorkUser qu
-			on qu.userId=p.userId
 		where
-			(u.companyCode=?
-			or qu.companyCode=?)
+			cb.companyId=?
 			and
 			(p.banchId=?
 				or p.banchName=?)
@@ -272,16 +238,7 @@ func AddPerformance(){
 		from performance as p
 		left join user u
 			on u.userId=p.userId
-		left join companyBanch cb
-			on cb.id=p.banchId
-		left join company c
-			on u.companyCode=c.companyCode
-		left join quitWorkUser qu
-			on qu.userId=p.userId
 		where
-			(u.companyCode=?
-			or qu.companyCode=?)
-			and
 				p.userId=?
 			and 
 				p.year>=?

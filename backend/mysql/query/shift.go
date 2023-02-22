@@ -5,6 +5,7 @@ func AddShiftQuery() {
 	insert into shift(
 		userId,
 		banchStyleId,
+		banchId,
 		year,
 		month,
 		Icon,
@@ -17,7 +18,7 @@ func AddShiftQuery() {
 		createTime,
 		lastModify
 		) values(
-			?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+			?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
 	);`;
 	sqlQueryInstance.Shift.UpdateSingle = `
 	update shift
@@ -34,8 +35,28 @@ func AddShiftQuery() {
 	where shiftId=?;
 	`;
 
-	sqlQueryInstance.Shift.SelectSingleByUserId = `select * from shift where userId=?;`;
-	sqlQueryInstance.Shift.SelectSingleByShiftId = `select * from shift where shiftId=?;`;
+	sqlQueryInstance.Shift.SelectSingleByUserId = `
+		select
+			sf.*,
+			u.userName,
+			u.permession,
+			u.banch,
+			u.employeeNumber
+		from shift sf
+		left join user u
+			on u.userId=sf.userId
+		where sf.userId=?;`;
+	sqlQueryInstance.Shift.SelectSingleByShiftId = `
+		select
+			sf.*,
+			u.userName,
+			u.permession,
+			u.banch,
+			u.employeeNumber
+		from shift sf
+		left join user u
+			on u.userId=sf.userId
+		where shiftId=?;`;
 	sqlQueryInstance.Shift.SelectAll = `
 		select
 			sf.*,
@@ -46,12 +67,12 @@ func AddShiftQuery() {
 		from shift sf
 		left join user u
 			on u.userId=sf.userId
-		left join quitWorkUser qu
-			on qu.userId=sf.userId
+		left join companyBanch cb
+			on cb.id=sf.banchId
 		where
-			(u.banch=? or qu.banch=?)
+			sf.banchId=?
 		and 
-			(u.companyCode=? or qu.companyCode=?)
+			cb.companyId=?
 		and sf.year=?
 		and sf.month=?;
 	`;
@@ -59,21 +80,27 @@ func AddShiftQuery() {
 		select
 			sf.userId,
 			sf.year,
-            sf.month,
+			sf.month,
+			sf.banchId,
 			u.userName,
 			u.permession,
-			u.banch,
 			u.employeeNumber,
 			count(sc.caseProcess) as changeCocunt,
 			count(so.caseProcess) as overTimeCount,
 			count(fp.caseProcess) as forgetPunchCount,
 			count(dof.caseProcess) as dayOffCount,
-			count(led.caseProcess) as lateExcusedCount
+			count(led.caseProcess) as lateExcusedCount,
+			sum(
+				timestampdiff(
+					SECOND, sf.onShiftTime, sf.offShiftTime
+				)
+					- TIME_TO_SEC(sf.restTime)
+			) / 60 / 60 as hours
 		from shift as sf
 		left join user u
 			on u.userId=sf.userId
-		left join quitWorkUser qu
-			on qu.userId=sf.userId
+		left join companyBanch cb
+			on cb.id=sf.banchId
 		left join shiftChange sc
 			on (sf.shiftId=sc.initiatorShiftId
 			or sf.shiftId=sc.requestedShiftId)
@@ -91,12 +118,12 @@ func AddShiftQuery() {
 			on sf.shiftId=led.shiftId
 			and led.caseProcess='ok'
 		where
-			(u.banch=? or qu.banch=?)
+			sf.banchId=?
 		and 
-			(u.companyCode=? or qu.companyCode=?)
+			cb.companyId=?
 		and sf.year=?
 		and sf.month=?
-		group by sf.userId, sf.year, sf.month;
+		group by sf.userId, sf.year, sf.month, sf.banchId;
 	`
 	sqlQueryInstance.Shift.Delete = `delete from shift where shiftId = ?;`;
 }
