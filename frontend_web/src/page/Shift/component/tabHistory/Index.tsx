@@ -1,6 +1,7 @@
 import { Table } from 'antd'
 import useReduceing from 'Hook/useReducing'
 import dateHandle from 'method/dateHandle'
+import { tabHistoryColumns } from 'page/Shift/method/columns'
 import React, { useMemo } from 'react'
 import Head from '../tabEdit/Head'
 import Row from '../tabEdit/Row'
@@ -33,8 +34,8 @@ const TabHistory = (): JSX.Element => {
                 </tbody>
             </table>
             <Table
-                columns={[]}
-                dataSource={[]}
+                columns={tabHistoryColumns}
+                dataSource={shiftEdit.total}
             />
         </>
     )

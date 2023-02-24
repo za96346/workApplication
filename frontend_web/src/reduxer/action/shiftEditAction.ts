@@ -1,5 +1,6 @@
-import { ShiftSocketType } from '../../type'
+import { ShiftSocketType, shiftTotalType } from '../../type'
 import { action, shiftEditType } from '../types'
+import { store } from '../store'
 
 class shiftEditAction {
     constructor () {
@@ -11,7 +12,18 @@ class shiftEditAction {
         return {
             type: shiftEditType.SET_SHIFT,
             payload: {
+                ...store.getState().shiftEdit,
                 ...shift
+            }
+        }
+    }
+
+    setShiftTotal (data: shiftTotalType[]): action {
+        return {
+            type: shiftEditType.SET_SHIFT,
+            payload: {
+                ...store.getState().shiftEdit,
+                total: data || []
             }
         }
     }

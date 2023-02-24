@@ -52,5 +52,10 @@ func Shift (props *gin.RouterGroup) {
 			middleWare.Permession(100, 1, 2),
 			worker.AssignWorker(49),
 		)
+		// 班表 總計
+		props.GET("/total",
+			middleWare.Permession(100, 1, 2),
+			worker.AssignWorker(50),
+		)
 	}
 }

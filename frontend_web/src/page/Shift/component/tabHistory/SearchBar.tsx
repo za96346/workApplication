@@ -1,13 +1,19 @@
-import { Button, DatePicker, Form } from "antd"
-import api from "api/api"
-import useReduceing from "Hook/useReducing"
-import React, { useRef } from "react"
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+import { Button, DatePicker, Form } from 'antd'
+import api from 'api/api'
+import useReduceing from 'Hook/useReducing'
+import React, { useRef } from 'react'
 
-const SearchBar = () => {
-    const formRef = useRef({})
+const SearchBar = (): JSX.Element => {
+    const formRef = useRef<any>({})
     const { state } = useReduceing()
-    const onSearch = () => {
+    const onSearch = (): void => {
         api.getShiftMonth({
+            year: formRef.current?.range?.$y,
+            month: formRef.current?.range?.$M + 1,
+            banch: state.banchId
+        })
+        api.getShiftTotal({
             year: formRef.current?.range?.$y,
             month: formRef.current?.range?.$M + 1,
             banch: state.banchId

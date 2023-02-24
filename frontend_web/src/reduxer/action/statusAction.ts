@@ -358,6 +358,16 @@ class statusAcion {
         }
     }
 
+    onFetchShiftTotal (s: boolean): action {
+        return {
+            type: s ? statusType.FETCH_SHIFT_TOTAL_ON : statusType.FETCH_SHIFT_TOTAL_OFF,
+            payload: {
+                ...store.getState().status,
+                onFetchShiftTotal: s
+            }
+        }
+    }
+
     // 清除
     clearStatusAll (): action {
         return {

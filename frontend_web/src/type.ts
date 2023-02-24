@@ -243,3 +243,19 @@ export interface shiftMonthType {
     Banch: number // 部門編號
     EmployeeNumber: string // 員工編號
 }
+
+export interface shiftTotalType {
+    UserId: number
+    Year: number
+    Month: number
+    BanchId: number
+    UserName: string
+    Permession: number
+    EmployeeNumber: string
+    ChangeCocunt: number // 換班次數
+    OverTimeCount: number // 加班次數
+    ForgetPunchCount: number // 忘記打卡次數
+    DayOffCount: number // 請假次數
+    LateExcusedCount: number // 遲到次數
+    TotalHours: number // 總計時數
+}

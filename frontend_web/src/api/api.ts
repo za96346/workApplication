@@ -1,6 +1,6 @@
 import apiAbs from './apiAbs'
 import axios from 'axios'
-import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, performanceType, RegisterType, ResMessage, ResType, SelfDataType, shiftMonthType, UserType, WaitReplyType, WeekendSettingType, workTimeType, yearPerformanceType } from '../type'
+import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, performanceType, RegisterType, ResMessage, ResType, SelfDataType, shiftMonthType, shiftTotalType, UserType, WaitReplyType, WeekendSettingType, workTimeType, yearPerformanceType } from '../type'
 import userAction from '../reduxer/action/userAction'
 import { store } from '../reduxer/store'
 import { FullMessage } from '../method/notice'
@@ -43,7 +43,8 @@ class ApiControl extends apiAbs {
         performanceCopy: 'pr/performance/copy',
         yearPerformance: 'pr/performance/year',
         googleLogin: 'google/login',
-        shiftMonth: 'shift/month'
+        shiftMonth: 'shift/month',
+        shiftTotal: 'shift/total'
     }
 
     constructor () {
@@ -778,6 +779,22 @@ class ApiControl extends apiAbs {
             store.dispatch(shiftEditAction.setShiftEdit(res as any))
         }
         store.dispatch(statusAction.onFetchShiftMonth(false))
+        return res
+    }
+
+    // 班表統計
+    async getShiftTotal (v: shiftMonthParamsType): Promise<ResType<shiftTotalType[]>> {
+        // console.log(v)
+        store.dispatch(statusAction.onFetchShiftTotal(true))
+        const res = await this.GET<shiftTotalType[]>({
+            url: this.route.shiftTotal,
+            successShow: false,
+            params: v
+        })
+        if (res.status) {
+            store.dispatch(shiftEditAction.setShiftTotal(res.data))
+        }
+        store.dispatch(statusAction.onFetchShiftTotal(false))
         return res
     }
 }

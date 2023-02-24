@@ -66,6 +66,44 @@ func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftE
 	return &carry
 }
 
+// 0 => all, value =>banchId, companyId, year, month
+func(dbObj *DB) SelectShiftTotal(selectKey int, value... interface{}) *[]table.ShiftTotal {
+	defer panichandler.Recover()
+	querys := ""
+	switch selectKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).Shift.SelectTotal
+		break
+	}
+	shift := new(table.ShiftTotal)
+	carry := []table.ShiftTotal{}
+	res, err := (*dbObj).MysqlDB.Query(querys, value...)
+	defer res.Close()
+	(*dbObj).checkErr(err)
+	for res.Next() {
+		err = res.Scan(
+			&shift.UserId,
+			&shift.Year,
+			&shift.Month,
+			&shift.BanchId,
+			&shift.UserName,
+			&shift.Permession,
+			&shift.EmployeeNumber,
+			&shift.ChangeCocunt,
+			&shift.OverTimeCount,
+			&shift.ForgetPunchCount,
+			&shift.DayOffCount,
+			&shift.LateExcusedCount,
+			&shift.TotalHours,
+		)
+		(*dbObj).checkErr(err)
+		if err == nil {
+			carry = append(carry, *shift)
+		}
+	}
+	return &carry
+}
+
 // 班表的唯一id (關聯資料表	shiftovertime shiftchange forgetpunch lateexcused dayoff 都上鎖)
 func(dbObj *DB) DeleteShift(deleteKey int, shiftId interface{}) bool {
 	defer panichandler.Recover()

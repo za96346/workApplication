@@ -24,7 +24,7 @@ func CheckWhichStep () int {
 	_, _, lastDay := thisMonth.AddDate(0, 1, -1).Date()
 	diff := lastDay - day
 	// fmt.Println("相差幾天 =>", diff)
-	return 3
+	return 2
 	// step 1
 	if diff > 5 && diff <= 15 {
 		return 1

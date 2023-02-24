@@ -192,3 +192,32 @@ func FetchMonthShift (props *gin.Context, waitJob *sync.WaitGroup)  {
 		"message": StatusText().FindSuccess,
 	})
 }
+
+// 班表總計
+func FetchTotalShift(props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+
+	// 年度 月份 部門
+	year, _ := strconv.Atoi((*props).Query("year"))
+	month, _ := strconv.Atoi((*props).Query("month"))
+	banch, _ := methods.AnyToInt64((*props).Query("banch"))
+
+	// 自己的資料
+	_, company, err := CheckUserAndCompany(props)
+	if err {return}
+
+	// 找尋
+	data := (*Mysql).SelectShiftTotal(
+		0,
+		banch,
+		company.CompanyId,
+		year,
+		month,
+	)
+	(*props).JSON(http.StatusOK, gin.H{
+		"data": *data,
+		"message": StatusText().FindSuccess,
+	})
+	
+}

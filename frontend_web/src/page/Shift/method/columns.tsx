@@ -5,23 +5,33 @@ export const tabHistoryColumns = [
         dataIndex: 'UserName'
     },
     {
-        title: '姓名',
-        key: '0',
-        dataIndex: 'UserName'
+        title: '換班',
+        key: '1',
+        dataIndex: 'ChangeCocunt'
     },
     {
-        title: '姓名',
-        key: '0',
-        dataIndex: 'UserName'
+        title: '加班',
+        key: '2',
+        dataIndex: 'OverTimeCount'
     },
     {
-        title: '姓名',
-        key: '0',
-        dataIndex: 'UserName'
+        title: '忘記打卡',
+        key: '3',
+        dataIndex: 'ForgetPunchCount'
     },
     {
-        title: '姓名',
-        key: '0',
-        dataIndex: 'UserName'
+        title: '請假',
+        key: '4',
+        dataIndex: 'DayOffCount'
+    },
+    {
+        title: '遲到',
+        key: '4',
+        dataIndex: 'LateExcusedCount'
+    },
+    {
+        title: '總工時',
+        key: '4',
+        dataIndex: 'TotalHours'
     }
 ]

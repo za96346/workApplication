@@ -49,7 +49,7 @@ type ShiftTotal struct {
 	ForgetPunchCount int `json:"ForgetPunchCount"`
 	DayOffCount int `json:"DayOffCount"`
 	LateExcusedCount int `json:"LateExcusedCount"`
-	TotalHours int `json:"TotalHours"`
+	TotalHours float32 `json:"TotalHours"`
 }
 
 type YearPerformance struct {
