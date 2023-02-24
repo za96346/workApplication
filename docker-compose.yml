@@ -56,7 +56,7 @@ services:
     # expose:
     #   - 6379
     ports:
-      - 6379
+      - "6379:6379"
     command: redis-server /usr/local/etc/redis/redis.conf # command 表示啟動容器後預備執行的動作
     networks:
       workAppNet:
