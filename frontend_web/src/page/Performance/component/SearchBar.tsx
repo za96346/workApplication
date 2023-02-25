@@ -22,7 +22,7 @@ const SearchBar = ({
 
     // 送出收尋
     const onSearch = async (): Promise<void> => {
-        // console.log(formData.current.range)
+        console.log(formData.current.range)
         await api.getPerformance({
             banchId: state.banchId,
             name: formData.current.name,

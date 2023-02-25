@@ -69,6 +69,7 @@ func AddPerformance(){
 					p.year,
 					if(p.month < 10, concat('0', p.month), p.month)
 				) <= ?
+			and u.permession=1
 			and u.userName=if(?='' or ?=null, u.userName, ?)
 			order by p.year asc, p.month asc;
 	`;

@@ -36,7 +36,7 @@ const items = (banch: BanchType[], selfData: UserType): MenuItem[] => {
             accr.push(getItem(item.BanchName, `c${item.Id}`))
         }
         return accr
-    }, [])
+    }, [selfData.Permession === 100 && getItem('主管', 'c-200')])
     if (selfData.CompanyCode === '') {
         return (
             [

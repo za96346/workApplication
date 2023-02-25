@@ -262,13 +262,17 @@ div {
 	position: absolute;
 	top: 100%;
 	font-size: 0.4rem;
+	min-width: 100px;
 	@extend %shadowNormal;
 	z-index: 10!important;
+	flex-wrap: wrap;
 	>div {
 		flex: 1;
 		background-color: rgba(255, 255, 255, 1);
 		padding: 10px;
 		transition: 1s;
+		min-width: 25px;
+		max-width: 25px;
 		&:hover {
 			transform: scale(1.5);
 			cursor: pointer;
