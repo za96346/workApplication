@@ -23,7 +23,7 @@ const Edit = ({
     banchId
 }: props): JSX.Element => {
     const form = useRef<performanceType>(value)
-    const { user, company } = useReduceing()
+    const { user, company, state } = useReduceing()
     const disabled = user.selfData?.Permession === 2 ||
         (user.selfData?.Permession === 1 &&
         value?.UserId === user.selfData?.UserId)
@@ -31,7 +31,8 @@ const Edit = ({
         api.getUserAll({
             workState: 'on',
             name: '',
-            banch: banchId
+            banch: banchId,
+            takeManage: state.banchId === -200 && 'Y'
         })
     }, [])
     return (

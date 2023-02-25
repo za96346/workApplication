@@ -11,6 +11,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// take manage  is admin taking the managers' data
+
 func FetchPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
@@ -22,6 +24,7 @@ func FetchPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	name := (*props).Query("name")
 	banchIdProps := (*props).Query("banchId")
 	workState := (*props).Query("workState")
+	takeManage := (*props).Query("takeManage") // "Y"
 
 
 	banchId, isBanchError := methods.AnyToInt64(banchIdProps)
@@ -43,7 +46,7 @@ func FetchPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 
 	res := []table.PerformanceExtend{}
 	// 管理元 沒帶 banchId
-	if user.Permession == 100 && isBanchError != nil {
+	if user.Permession == 100 && (isBanchError != nil || takeManage == "Y") {
 		res = *(*Mysql).SelectPerformance(
 			0,
 			company.CompanyId,
@@ -224,6 +227,7 @@ func InsertPerformance(props *gin.Context, waitJob *sync.WaitGroup) {
 	if user.Permession == 1 {
 		performance.BanchId = user.Banch
 	}
+
 	// 巡找部門
 	findBanch := (*Mysql).SelectCompanyBanch(2, performance.BanchId)
 	if !methods.IsNotExited(findBanch) {

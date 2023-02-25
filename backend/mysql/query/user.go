@@ -66,6 +66,8 @@ func AddUserQuery() {
 			(u.companyCode=? or q.companyCode=?)
 			and
 			u.userName=if(?='' or ?=null, u.userName, ?)
+			and
+			u.permession=if(?='Y', 1, u.permession)
 		;
 	`
 	sqlQueryInstance.User.SelectAllByManager = `

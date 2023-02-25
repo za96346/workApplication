@@ -15,6 +15,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// take manage  is admin taking the managers' data
+
 func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
@@ -125,13 +127,15 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	workState := (*props).Query("workState")
 	name := (*props).Query("name")
 	banch, isBanchError := methods.AnyToInt64((*props).Query("banch"))
+	takeManage := (*props).Query("takeManage") // "Y"
 
 	user, company, err := CheckUserAndCompany(props)
 	if err {return}
 
 	data := []response.User{}
 	// 管理員 沒帶部門查詢
-	if user.Permession == 100 && isBanchError != nil {
+	if user.Permession == 100 &&
+		(isBanchError != nil || takeManage == "Y"){
 		data = *((*Mysql).SelectAllUser(
 			0,
 			company.CompanyCode,
@@ -139,6 +143,7 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 			name,
 			name,
 			name,
+			takeManage,
 		))
 	// 主管查詢 或是 管理員 有帶部門查詢
 	} else if user.Permession == 1 ||

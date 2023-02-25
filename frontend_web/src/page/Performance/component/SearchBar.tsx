@@ -30,7 +30,8 @@ const SearchBar = ({
             startMonth: formData.current.range[0]?.month() + 1,
             endYear: formData.current.range[1]?.year() - 1911,
             endMonth: formData.current.range[1]?.month() + 1,
-            workState: formData.current.workState || 'on'
+            workState: formData.current.workState || 'on',
+            takeManage: state.banchId === -200 && 'Y'
         })
     }
     reFetchRef.current = onSearch
