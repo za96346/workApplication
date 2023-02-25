@@ -19,10 +19,6 @@ const ShiftSettingPage = (): JSX.Element => {
                     <div style={{ marginBottom: '20px', fontSize: '1.2rem' }}>{banch?.BanchName}</div>
                     <BanchStyle banchId={state.banchId} />
                 </Tabs.TabPane>
-                {/* <Tabs.TabPane tab="排班規則" key={1}>
-                    <div style={{ marginBottom: '20px', fontSize: '1.2rem' }}>{banch?.BanchName}</div>
-                    <BanchRule banchId={banchIdNumber} />
-                </Tabs.TabPane> */}
             </Tabs>
         </>
     )

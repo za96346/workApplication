@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react'
 import api from 'api/api'
 import Btn from 'Share/Btn'
 import useReduceing from 'Hook/useReducing'
-import dateHandle from 'method/dateHandle'
 import { BanchStyleType, ResType, ShiftSettingListType } from 'type'
 import EditForm from './EditForm'
 
@@ -48,15 +47,19 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
     }
 
     const onFinish = async (v: any, types: 0 | 1): Promise<void> => {
-        console.log(v, status.currentListIdx)
+        // 格式化時間
+        const onShiftTime = v?.OnShiftTime?.format('HH:mm:ss') || null
+        const offShiftTime = v?.OffShiftTime?.format('HH:mm:ss') || null
+        const restTime = v?.RestTime?.format('HH:mm:ss') || null
+
         let res: ResType<BanchStyleType>
         if (types === 0) {
             res = await api.createBanchStyle(
                 {
                     ...v,
-                    OnShiftTime: dateHandle.dateFormatToTime(v.OnShiftTime._d),
-                    OffShiftTime: dateHandle.dateFormatToTime(v.OffShiftTime._d),
-                    RestTime: dateHandle.dateFormatToTime(v.RestTime._d),
+                    OnShiftTime: onShiftTime,
+                    OffShiftTime: offShiftTime,
+                    RestTime: restTime,
                     BanchId: banchId
                 }
             )
@@ -64,9 +67,9 @@ const BanchStyle = ({ banchId }: props): JSX.Element => {
             res = await api.updateBanchStyle(
                 {
                     ...v,
-                    OnShiftTime: dateHandle.dateFormatToTime(v.OnShiftTime._d),
-                    OffShiftTime: dateHandle.dateFormatToTime(v.OffShiftTime._d),
-                    RestTime: dateHandle.dateFormatToTime(v.RestTime._d),
+                    OnShiftTime: onShiftTime,
+                    OffShiftTime: offShiftTime,
+                    RestTime: restTime,
                     StyleId: status.currentListIdx
                 }
             )

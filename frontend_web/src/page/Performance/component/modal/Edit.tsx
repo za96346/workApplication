@@ -29,7 +29,7 @@ const Edit = ({
         value?.UserId === user.selfData?.UserId)
     useEffect(() => {
         api.getUserAll({
-            workState: 'all',
+            workState: 'on',
             name: '',
             banch: banchId
         })
@@ -77,7 +77,6 @@ const Edit = ({
                                 <Select>
                                     {
                                         company.employee?.map((item, index) => (
-
                                             <Select.Option key={index} value={item.UserId}>
                                                 {item.UserName}
                                             </Select.Option>
