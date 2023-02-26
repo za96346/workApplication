@@ -196,7 +196,7 @@ func UserExtendToUserTable (props *table.UserExtend) *table.UserTable {
 		UserId: (*props).UserId,
 		CompanyCode: (*props).CompanyCode,
 		Account: (*props).Account,
-		Password: (*props).Password,
+		Password: "",
 		UserName: (*props).UserName,
 		EmployeeNumber: (*props).EmployeeNumber,
 		OnWorkDay: (*props).OnWorkDay,
