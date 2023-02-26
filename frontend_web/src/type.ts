@@ -42,6 +42,7 @@ export interface BanchType {
     BanchShiftStyle: string
     CreateTime: string | Date
     LastModify: string | Date
+    UserTotal: number
 }
 
 export interface UserType {

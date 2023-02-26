@@ -29,13 +29,12 @@ export const dataSource = (
     onDelete: Function
 ): any =>
     v.map((item) => {
-        const res = emp?.filter((i) => i.Banch === item.Id)?.length || 0
         return {
             ...item,
             action: <>
                 <Btn.Edit onClick={() => { onEdit(item) }} />
                 <Btn.Delete onClick={() => { onDelete(item) }} />
             </>,
-            count: res
+            count: item.UserTotal
         }
     })
