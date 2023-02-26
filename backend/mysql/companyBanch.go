@@ -35,9 +35,6 @@ func(dbObj *DB) SelectCompanyBanch(selectKey int, value... interface{}) *[]table
 	case 3:
 		querys = (*query.MysqlSingleton()).CompanyBanch.SelectByCompanyCodeAndBanchID
 		break
-	default:
-		querys = (*query.MysqlSingleton()).CompanyBanch.SelectAll
-		break
 	}
 	companyBanch := new(table.CompanyBanchTable)
 	carry := []table.CompanyBanchTable{}
@@ -52,6 +49,7 @@ func(dbObj *DB) SelectCompanyBanch(selectKey int, value... interface{}) *[]table
 			&companyBanch.BanchShiftStyle,
 			&companyBanch.CreateTime,
 			&companyBanch.LastModify,
+			&companyBanch.UserTotal,
 		)
 		(*dbObj).checkErr(err)
 		if err == nil {

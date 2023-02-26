@@ -189,6 +189,7 @@ type CompanyBanchTable struct {
 	BanchShiftStyle string `json:"BanchShiftStyle"` // 部門班表樣式
 	CreateTime time.Time `json:"CreateTime"`//創建的時間
 	LastModify time.Time `json:"LastModify"`// 上次修改的時間
+	UserTotal int // 總人數
 }
 
 //部門班表的樣式

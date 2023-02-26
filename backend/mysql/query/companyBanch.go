@@ -36,10 +36,45 @@ func AddCompanyBanchQuery() {
 	where b.id=? and c.companyCode=?;
 	`
 	sqlQueryInstance.CompanyBanch.SelectByCompanyCodeAndBanchID = `
-		select * from companyBanch where id=? and companyId=?;
+		select
+			cb.*
+			count(u.userId) as userTotal
+		from companyBanch as cb
+		left join user u
+			on u.banch=cb.id
+		where id=? and companyId=?;
 	`
-	sqlQueryInstance.CompanyBanch.SelectAll = `select * from companyBanch`;
+	sqlQueryInstance.CompanyBanch.SelectAll = `
+		select
+			cb.*
+			count(u.userId) as userTotal
+		from companyBanch as cb
+		left join user u
+			on u.banch=cb.id 
+		from companyBanch`;
 	sqlQueryInstance.CompanyBanch.Delete = `delete from companyBanch where id = ?;`;
-	sqlQueryInstance.CompanyBanch.SelectSingleByCompanyId = `select * from companyBanch where companyId = ?;`
-	sqlQueryInstance.CompanyBanch.SelectSingleById = `select * from companyBanch where id = ?;`
+	sqlQueryInstance.CompanyBanch.SelectSingleByCompanyId = `
+		select
+			cb.*,
+			count(u.userId) as userTotal
+		from companyBanch as cb
+		left join user u
+		on u.banch=cb.id
+		where 
+			u.companyCode=(
+				select
+					companyCode
+				from company as c
+				where c.companyId=?
+			)
+		group by cb.id;
+	`
+	sqlQueryInstance.CompanyBanch.SelectSingleById = `
+		select
+			cb.*
+			count(u.userId) as userTotal
+		from companyBanch as cb
+		left join user u
+			on u.banch=cb.id
+		from companyBanch where id = ?;`
 }
