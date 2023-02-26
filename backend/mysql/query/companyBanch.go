@@ -42,7 +42,8 @@ func AddCompanyBanchQuery() {
 		from companyBanch as cb
 		left join user u
 			on u.banch=cb.id
-		where id=? and companyId=?;
+		where cb.id=? and cb.companyId=?
+		group by cb.id;
 	`
 	sqlQueryInstance.CompanyBanch.SelectAll = `
 		select
@@ -50,8 +51,8 @@ func AddCompanyBanchQuery() {
 			count(u.userId) as userTotal
 		from companyBanch as cb
 		left join user u
-			on u.banch=cb.id 
-		from companyBanch`;
+			on u.banch=cb.id
+		group by cb.id;`;
 	sqlQueryInstance.CompanyBanch.Delete = `delete from companyBanch where id = ?;`;
 	sqlQueryInstance.CompanyBanch.SelectSingleByCompanyId = `
 		select
@@ -76,5 +77,7 @@ func AddCompanyBanchQuery() {
 		from companyBanch as cb
 		left join user u
 			on u.banch=cb.id
-		from companyBanch where id = ?;`
+		where cb.id = ?
+		group by cb.id;
+	`
 }
