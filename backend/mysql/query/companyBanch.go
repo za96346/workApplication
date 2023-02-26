@@ -37,7 +37,7 @@ func AddCompanyBanchQuery() {
 	`
 	sqlQueryInstance.CompanyBanch.SelectByCompanyCodeAndBanchID = `
 		select
-			cb.*
+			cb.*,
 			count(u.userId) as userTotal
 		from companyBanch as cb
 		left join user u
@@ -46,7 +46,7 @@ func AddCompanyBanchQuery() {
 	`
 	sqlQueryInstance.CompanyBanch.SelectAll = `
 		select
-			cb.*
+			cb.*,
 			count(u.userId) as userTotal
 		from companyBanch as cb
 		left join user u
@@ -71,7 +71,7 @@ func AddCompanyBanchQuery() {
 	`
 	sqlQueryInstance.CompanyBanch.SelectSingleById = `
 		select
-			cb.*
+			cb.*,
 			count(u.userId) as userTotal
 		from companyBanch as cb
 		left join user u
