@@ -61,7 +61,7 @@ func AddCompanyBanchQuery() {
 		from companyBanch as cb
 		left join user u
 		on u.banch=cb.id
-		where 
+		and 
 			u.companyCode=(
 				select
 					companyCode
