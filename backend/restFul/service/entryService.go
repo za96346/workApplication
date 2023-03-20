@@ -22,6 +22,7 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 	reqBody := new(struct {
 		Account string
 		Password string
+		IsAccountSystem bool
 	})
 
 	// 檢查格式
@@ -31,6 +32,7 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
+
 	// 檢查帳號是否存在
 	res := (*Mysql).SelectUser(2, (*reqBody).Account)
 	if methods.IsNotExited(res) {
@@ -39,8 +41,9 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
+
 	// 檢查帳號密碼是否正確
-	if (*res)[0].Account != (reqBody).Account || (*res)[0].Password != (reqBody).Password {
+	if (*res)[0].Account != (*reqBody).Account || (*res)[0].Password != (*reqBody).Password {
 		//登入失敗
 		(*props).JSON(http.StatusBadRequest, gin.H{
 			"message": StatusText().AccountOrPasswordError,
@@ -54,6 +57,16 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 		company = append(company, *new(table.CompanyTable))
 	} else {
 		company = (*findCompany)
+	}
+
+	// 檢查是否為 accountSystem
+	if reqBody.IsAccountSystem == true {
+		if (*res)[0].Banch != 4 && (*res)[0].Permession != 100 {
+			(*props).JSON(http.StatusBadRequest, gin.H{
+				"message": StatusText().AccountOrPasswordError,
+			})
+			return
+		}
 	}
 
 	//登入成功
@@ -193,5 +206,6 @@ func CheckAccess(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer (*waitJob).Done()
 	props.JSON(http.StatusAccepted, gin.H{
 		"message": "身份認證成功",
+		"data": true,
 	})
 }
