@@ -89,6 +89,10 @@ const EmployeeManager = (): JSX.Element => {
                 sticky={{ offsetHeader: -20 }}
                 columns={column}
                 dataSource={employee}
+                scroll={{
+                    scrollToFirstRowOnChange: true,
+                    x: 1000
+                }}
             />
         </>
     )

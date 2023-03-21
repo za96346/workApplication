@@ -12,13 +12,15 @@ export const columns: ColumnsType<reWrite> = [
         key: 'UserName',
         title: '姓名',
         dataIndex: 'UserName',
-        width: '80px'
+        width: '80px',
+        fixed: 'left'
     },
     {
         key: 'Year',
         title: '年份',
         dataIndex: 'Year',
-        width: '60px'
+        width: '60px',
+        fixed: 'left'
     },
     {
         key: 'Month',
@@ -30,14 +32,15 @@ export const columns: ColumnsType<reWrite> = [
         key: 'BanchName',
         title: '組別',
         dataIndex: 'BanchName',
-        width: '90px',
-        responsive: ['md']
+        width: '90px'
+        // responsive: ['md']
     },
     {
         key: 'Goal',
         title: '年度目標',
         dataIndex: 'Goal',
-        responsive: ['md']
+        width: '250px'
+        // responsive: ['md']
     },
     {
         key: 'Attitude',
@@ -61,21 +64,22 @@ export const columns: ColumnsType<reWrite> = [
         key: 'BeLate',
         title: '遲到/早退',
         dataIndex: 'BeLate',
-        width: '50px',
-        responsive: ['md']
+        width: '50px'
+        // responsive: ['md']
     },
     {
         key: 'DayOffNotOnRule',
         title: '未依規定請假',
         dataIndex: 'DayOffNotOnRule',
-        width: '50px',
-        responsive: ['md']
+        width: '50px'
+        // responsive: ['md']
     },
     {
         key: 'Directions',
         title: '績效描述',
         dataIndex: 'Directions',
-        responsive: ['md']
+        width: '250px'
+        // responsive: ['md']
     },
     {
         key: 'action',

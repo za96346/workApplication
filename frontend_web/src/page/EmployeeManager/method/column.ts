@@ -3,17 +3,21 @@ interface init {
     dataIndex: string
     title: string
     key: string
+    fixed?: any
+    width?: any
 }
 export const column: init[] = [
+    {
+        dataIndex: 'UserName',
+        title: '姓名',
+        key: 'UserName',
+        fixed: 'left',
+        width: '80px'
+    },
     {
         dataIndex: 'EmployeeNumber',
         title: '員工編號',
         key: 'EmployeeNumber'
-    },
-    {
-        dataIndex: 'UserName',
-        title: '姓名',
-        key: 'UserName'
     },
     {
         dataIndex: 'BanchName',

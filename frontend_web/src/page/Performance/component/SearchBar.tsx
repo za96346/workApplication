@@ -58,13 +58,6 @@ const SearchBar = ({
                     </Button>
                 </div>
             </Form>
-            <Divider />
-            <Button onClick={() => { window.open('/printWord', '績效評核', 'height=800,width=800') }}>
-                    列印表單
-            </Button>
-            <Button onClick={() => { window.open('/printList', '績效評核', 'height=800,width=800') }}>
-                    列印清單
-            </Button>
         </>
     )
 }

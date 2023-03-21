@@ -216,17 +216,29 @@ const Index = (): JSX.Element => {
                 >
                     新增
                 </Button>
+                <Button onClick={() => { window.open('/printWord', '績效評核', 'height=800,width=800') }}>
+                    列印表單
+                </Button>
+                <Button onClick={() => { window.open('/printList', '績效評核', 'height=800,width=800') }}>
+                    列印清單
+                </Button>
                 <SearchBar reFetchRef={reFetchRef} />
             </div>
-
             <Table
                 sticky={{ offsetHeader: -20 }}
                 style={{
                     fontSize: '0.5rem'
+                    // width: 'fit-content'
                 }}
+                size='small'
                 dataSource={performance}
                 columns={columns}
+                scroll={{
+                    scrollToFirstRowOnChange: true,
+                    x: 1000
+                }}
             />
+
         </>
     )
 }
