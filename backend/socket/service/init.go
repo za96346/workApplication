@@ -2,12 +2,12 @@ package service
 
 import (
 	"backend/handler"
-	"backend/socket/method"
 	"backend/mysql"
+	"backend/mysql/table"
 	panichandler "backend/panicHandler"
 	"backend/redis"
 	"backend/response"
-	"backend/mysql/table"
+	"backend/socket/method"
 
 	"github.com/goinggo/mapstructure"
 	"github.com/gorilla/websocket"
@@ -70,7 +70,7 @@ func Singleton () *Manager {
 	permission = 100, 1, 2
 */
 // 確認編輯狀態
-func (mg * Manager) CheckState (step int, permission int) *MsgState {
+func (mg * Manager) CheckState (step int, permission int) MsgState {
 	// 自己的編輯狀態
 	disabledTable := false
 	if step == 1 {disabledTable = true} // 尚未開放編輯
@@ -80,12 +80,11 @@ func (mg * Manager) CheckState (step int, permission int) *MsgState {
 	// 是否顯示 提交按鈕
 	submitAble := false
 	if step == 3 && permission == 1 {submitAble = true}
-
 	state := MsgState{
 		"disabledTable": disabledTable,
 		"submitAble": submitAble,
 	}
-	return &state
+	return state
 }
 
 // state["newEntering"] boolean
@@ -174,11 +173,13 @@ func (mg *Manager) enterRoom () {
 func (mg *Manager) sendMsg () {
 	defer panichandler.Recover()
 	for v := range (*mg).SendMsg {
-		userAll := (redis.Singleton().GetShiftRoomUser(v.BanchId))
+		userAll := (redis.Singleton().GetShiftRoomUser(v.BanchId)) // 獲取 該聊天室 成員
 		for _, user := range *userAll {
 			if (*mg).ConnLine[user.UserId] != nil {
-				v.State["disabledTable"] = (*(*mg).CheckState(v.Status, user.Permission))["disabledTable"]
-				v.State["submitAble"] = (*(*mg).CheckState(v.Status, user.Permission))["submitAble"]
+				getCheckState := (*mg).CheckState(v.Status, user.Permission) // 根據 權限 獲取 前端 操作 狀態
+				v.State["disabledTable"] = getCheckState["disabledTable"]
+				v.State["submitAble"] = getCheckState["submitAble"]
+				v.State["permission"] = (*mg).ConnLine
 				go (*mg).ConnLine[user.UserId].WriteJSON(v)
 			}
 		}

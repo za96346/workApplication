@@ -22,7 +22,7 @@ import Layout from 'page/Layout'
 const Entry = lazy((): any => import('./page/Entry/EntryPage'))
 const HomePage = lazy((): any => import('./page/Home/HomePage'))
 const EmployeeManager = lazy((): any => import('./page/EmployeeManager/Index'))
-const ShiftPage = lazy((): any => import('./page/Shift/ShiftPage'))
+const ShiftPage = lazy((): any => import('./page/Shift/Index'))
 const BanchManager = lazy((): any => import('./page/BanchManager/BanchManager'))
 const SignPage = lazy((): any => import('./page/Sign/Sign'))
 const ShiftSettingPage = lazy((): any => import('./page/shiftSetting/ShiftSettingPage'))
@@ -39,7 +39,7 @@ window.styles = stylees
 const App = (): JSX.Element => {
     const { loading } = useReduceing()
     // console.log('process env =>', process.env)
-    const hasLoading = Object.values(loading).filter((i) => i === true).length > 0
+    const hasLoading = Object.values(loading).filter((i) => i).length > 0
     useEffect(() => {
         // 每次 重整 reset 狀態
         store.dispatch(statusAction.clearStatusAll())

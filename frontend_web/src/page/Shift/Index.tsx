@@ -7,7 +7,7 @@ import EditTable from './component/tabEdit/EditTable'
 import PeopleStatus from './component/PeopleStatus'
 import TabHistory from './component/tabHistory/Index'
 
-const ShiftPage = (): JSX.Element => {
+const Index = (): JSX.Element => {
     const { company, shiftEdit, state } = useReduceing()
     const [status, setStatus] = useState({
         drawerOpen: false,
@@ -71,4 +71,4 @@ const ShiftPage = (): JSX.Element => {
         </>
     )
 }
-export default ShiftPage
+export default Index
