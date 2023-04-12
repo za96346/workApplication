@@ -8,31 +8,43 @@ import (
 )
 
 type RealConnT[T any] struct {
-	Key string
-	Conn *websocket.Conn
-	OtherProps T
+	RoomKey string // 房間id
+	Conn *websocket.Conn // 連線實例
+	OtherProps T // 連線值
 }
 
 type RealMsgT[T any] struct {
-	RoomKey string
-	OtherProps T
+	RoomKey string // 房間id
+	OtherProps T // 訊息值
 }
 
 type Socket[ConnT any, MsgT any] struct {
 	connQuene chan RealConnT[ConnT]  // 連線隊列
 	msgQuene (chan RealMsgT[MsgT]) // 發送訊息對列 訊息
 	connInstanceCollection map[string]*websocket.Conn // 儲存 每個連線資料
-	EnterRoomCallBack func(RealConnT[ConnT]) // 進入 room 資訊的紀錄 回乎
-	SendMessageCallBack func(RealMsgT[MsgT], func(ConnId string)) // 發送消息 callBack
+	EnterRoomCallBack func(ConnT, string) // 進入 room 資訊的紀錄 回乎
+	SendMessageCallBack func(MsgT, string, func(string, any)) // 發送消息 callBack
 }
 
 // 建構事
-func(sk *Socket[ConnT, MsgT]) Contruct(workMount int) {
+func Instance[ConnT any, MsgT any](workMount int) *Socket[ConnT, MsgT] {
 	defer panichandler.Recover()
-	(*sk).msgQuene = make(chan RealMsgT[MsgT])
-	(*sk).connInstanceCollection = make(map[string]*websocket.Conn)
-	(*sk).connQuene = make(chan RealConnT[ConnT])
-	(*sk).worker(workMount)
+	socket := new(Socket[ConnT, MsgT])
+
+	// 出使化
+	(*socket).msgQuene = make(chan RealMsgT[MsgT])
+	(*socket).connInstanceCollection = make(map[string]*websocket.Conn)
+	(*socket).connQuene = make(chan RealConnT[ConnT])
+	(*socket).worker(workMount)
+	(*socket).EnterRoomCallBack = func(rct ConnT, connKey string) {
+		fmt.Println("請指派 進入房間的 call back")
+	}
+	(*socket).SendMessageCallBack = func(mt MsgT, s string, f func(ConnId string,  Msg any)) {
+		fmt.Println("請指派 傳送訊息的 call back")
+	}
+
+	//
+	return socket
 }
 
 // buffer pool
@@ -49,7 +61,7 @@ func(sk *Socket[ConnT, MsgT]) worker(workMount int) {
 func (sk *Socket[ConnT, MsgT]) listenConnQuene () {
 	defer panichandler.Recover()
 	for v := range (*sk).connQuene {
-		(*sk).EnterRoomCallBack(v) // 執行room callback
+		(*sk).EnterRoomCallBack(v.OtherProps, v.RoomKey) // 執行room callback
 	}
 }
 
@@ -57,21 +69,25 @@ func (sk *Socket[ConnT, MsgT]) listenConnQuene () {
 func (sk *Socket[ConnT, MsgT]) listenMsgQuene () {
 	defer panichandler.Recover()
 	for v := range (*sk).msgQuene {
-		fmt.Println("發送的訊息", v)
-		(*sk).SendMessageCallBack(v, func (ConnId string)  {
+		// fmt.Println("發送的訊息", v.OtherProps)
+		(*sk).SendMessageCallBack(v.OtherProps, v.RoomKey, func (ConnId string, Msg any)  {
 			if (*sk).connInstanceCollection[ConnId] != nil {
-				go (*sk).connInstanceCollection[ConnId].WriteJSON(v)
+				(*sk).connInstanceCollection[ConnId].WriteJSON(Msg)
 			}
-				
 		})
 	}
 }
 
 // 進入房間
-func (sk *Socket[ConnT, MsgT]) EnterRoom (connId string, conn *websocket.Conn, otherProps ConnT) {
+func (sk *Socket[ConnT, MsgT]) EnterRoom (
+	connId string, // 連線id
+	conn *websocket.Conn, // 連線實力
+	otherProps ConnT, // 連線 值
+	Roomkey string, // 房間key
+) {
 	// 放入隊列
 	(*sk).connQuene <- RealConnT[ConnT]{
-		Key: connId,
+		RoomKey: Roomkey,
 		Conn: conn,
 		OtherProps: otherProps,
 	}
@@ -81,10 +97,14 @@ func (sk *Socket[ConnT, MsgT]) EnterRoom (connId string, conn *websocket.Conn, o
 // 離開房間
 func (sk *Socket[ConnT, MsgT]) LeaveRoom (connId string) {
 	// 
-	delete(sk.connInstanceCollection, connId)
+	// (*sk).connInstanceCollection[connId].Close()
+	delete((*sk).connInstanceCollection, connId)
 }
 
 // 發送消息
-func (sk *Socket[ConnT, MsgT]) SendMessage (message RealMsgT[MsgT]) {
-	(*sk).msgQuene <- message
+func (sk *Socket[ConnT, MsgT]) SendMessage (message MsgT, RoomKey string) {
+	(*sk).msgQuene <- RealMsgT[MsgT] {
+		RoomKey: RoomKey,
+		OtherProps: message,
+	}
 }
