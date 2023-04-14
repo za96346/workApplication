@@ -60,14 +60,9 @@ func AddCompanyBanchQuery() {
 			count(u.userId) as userTotal
 		from companyBanch as cb
 		left join user u
-		on u.banch=cb.id
-		and 
-			u.companyCode=(
-				select
-					companyCode
-				from company as c
-				where c.companyId=?
-			)
+		on cb.id=u.banch
+		where
+			cb.companyId=?
 		group by cb.id;
 	`
 	sqlQueryInstance.CompanyBanch.SelectSingleById = `
