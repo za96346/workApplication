@@ -19,8 +19,15 @@ const Head = ({
                         index === 0
                             ? <td key={item} style={{ left: '1px' }} className={window.styles.stickyTd}>員工</td>
                             : <td key={item} style={{ backgroundColor: findWeekend ? 'rgba(255, 0, 0, 0.4)' : 'white' }}>
-                                {item?.slice(8, 10)}<br/>
-                                {statics.days[new Date(item).getDay()]}
+                                {
+                                    item === '總時數'
+                                        ? '總時數'
+                                        : (<>
+                                            {item?.slice(8, 10)}<br/>
+                                            {statics.days[new Date(item).getDay()]}
+                                        </>)
+                                }
+
                             </td>
                     )
                 })

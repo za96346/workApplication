@@ -2,6 +2,7 @@ package service
 
 import (
 	"backend/handler"
+	"backend/handler/shiftEdit"
 	"backend/methods"
 	"backend/mysql"
 	"backend/mysql/table"
@@ -48,6 +49,8 @@ type MessageType struct {
 	NewEntering string // 剛進入的資料
 	NewLeaving string // 剛出去的資料
 	LauchPerson table.UserTable // 此訊息的發起人
+	RowsShiftTotal map[int64]float64 //列的總計
+	ColumnsShiftTotal map[string]float64 // 欄的總計
 }
 
 // 接收到的資料
@@ -269,6 +272,9 @@ func sendMsgHandler(
 	BanchStyle := (*mysql.Singleton()).SelectBanchStyle(2, banchId) // 部門圖標
 	currentStep := method.CheckWhichStep() // 當前的編輯狀態
 
+	rowsShiftTotal, columnsShiftTotal := shiftEdit.ShiftTotal(ShiftData)
+	fmt.Println(*rowsShiftTotal)
+
 	// 整理 回傳的編輯使用者資料
 	editUserData := []response.User{}
 	for _, v := range *EditUsers {
@@ -311,6 +317,8 @@ func sendMsgHandler(
 		NewEntering: newEntering,
 		NewLeaving: newLeaving,
 		LauchPerson: user,
+		RowsShiftTotal: *rowsShiftTotal,
+		ColumnsShiftTotal: *columnsShiftTotal,
 	}
 	shiftSocket.SendMessage(msg, "any")
 }

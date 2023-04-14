@@ -18,6 +18,7 @@ import useReduceing from 'Hook/useReducing'
 import PrintWord from 'page/Performance/component/PrintWord'
 import PrintList from 'page/Performance/component/PrintList'
 import Layout from 'page/Layout'
+import ParticlesPage from 'Share/ParticlesPage'
 
 const Entry = lazy((): any => import('./page/Entry/EntryPage'))
 const HomePage = lazy((): any => import('./page/Home/HomePage'))
@@ -46,6 +47,7 @@ const App = (): JSX.Element => {
     }, [])
     return (
         <>
+            <ParticlesPage />
             {
                 hasLoading && (
                     <div className={window.styles.spinner}>

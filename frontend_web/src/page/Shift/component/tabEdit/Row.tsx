@@ -67,10 +67,14 @@ const Row = ({
 
         </div>
     }, [shiftEdit.BanchStyle])
+
     return (
         <>
             {// 人的 列
-                shiftEdit?.EditUser?.map((user, idx) => {
+                [
+                    ...shiftEdit?.EditUser,
+                    { UserId: -999, UserName: '總時數' }
+                ]?.map((user, idx) => {
                     return (
                         <tr style={{ cursor: shiftEdit?.State?.disabledTable ? 'not-allowed' : 'pointer' }} key={user.UserId}>
                             {// 日期的 欄
@@ -98,17 +102,34 @@ const Row = ({
                                         <td
                                             className={window.styles.td}
                                             key={key}
-                                            onClickCapture={() => onClickSendPosition(position)}
+                                            onClickCapture={() => {
+                                                // 這邊要擋掉總時數 欄列
+                                                if (user.UserId !== -999 && day !== '總時數') {
+                                                    onClickSendPosition(position)
+                                                }
+                                            }}
                                             style={{
                                                 backgroundColor: bg ? bg.Color : 'white'
                                             }}
                                         >
                                             {
-                                                // 找到是當前點擊的位置
-                                                status.clickPos === position
-                                                    ? iconOption(user.UserId, day)
-                                                    : <span>{findShift?.Icon || ''}</span>
+                                                day === '總時數'
+                                                    ? (
+                                                        <>
+                                                            {shiftEdit?.RowsShiftTotal?.[user.UserId] || 0}
+                                                        </>
+                                                    )
+                                                    : user.UserId === -999
+                                                        ? (
+                                                            <>
+                                                                {shiftEdit?.ColumnsShiftTotal?.[day] || 0}
+                                                            </>
+                                                        )
+                                                        : status.clickPos === position // 找到是當前點擊的位置
+                                                            ? iconOption(user.UserId, day)
+                                                            : <span>{findShift?.Icon || ''}</span>
                                             }
+
                                         </td>
                                     )
                                 })

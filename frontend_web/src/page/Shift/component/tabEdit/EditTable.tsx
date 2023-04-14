@@ -24,7 +24,7 @@ const EditTable = (): JSX.Element => {
             const res = dateHandle.addDays(start, i)
             dayContainer.push(res)
         }
-        return dayContainer
+        return [...dayContainer, '總時數']
     }, [shiftEdit?.StartDay, shiftEdit?.EndDay])
 
     // 寄送確認編輯
@@ -49,7 +49,6 @@ const EditTable = (): JSX.Element => {
     }
     return (
         <>
-
             <Collapse ghost className='mb-4' defaultActiveKey={['1']} onChange={() => {}}>
                 <Collapse.Panel header="圖標" key="1">
                     <div className={window.styles.shiftSignBlock}>
@@ -70,7 +69,7 @@ const EditTable = (): JSX.Element => {
 
             {
                 connectionStatus !== 'Connecting' &&
-                            connectionStatus !== 'Open'
+                    connectionStatus !== 'Open'
                     ? <Spin tip={'進入編輯室中...'} />
                     : <FullScreen handle={fullScreenHandle}>
                         <Button onClick={() => { fullScreenHandle.enter() }}>全螢幕</Button>

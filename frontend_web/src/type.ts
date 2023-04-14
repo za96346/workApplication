@@ -160,6 +160,13 @@ export interface ShiftSocketType {
     StartDay: string
     EndDay: string
     State: ShiftState
+    RowsShiftTotal: Array<{
+        [key: number]: number
+    }>
+    ColumnsShiftTotal: Array<{
+        [key: string]: number
+    }>
+    LauchPerson: UserType
 }
 
 export interface WeekendSettingType {
