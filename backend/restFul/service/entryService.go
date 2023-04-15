@@ -3,8 +3,8 @@ package service
 import (
 	"backend/handler"
 	"backend/methods"
-	"backend/response"
 	"backend/mysql/table"
+	"backend/response"
 	"fmt"
 	"time"
 
@@ -20,8 +20,8 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 	reqBody := new(struct {
-		Account string
-		Password string
+		Account         string
+		Password        string
 		IsAccountSystem bool
 	})
 
@@ -70,19 +70,19 @@ func Login(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	//登入成功
-	tk := handler.Token {
-		User: *UserExtendToUserTable(&(*res)[0]),
+	tk := handler.Token{
+		User:    *(*res)[0].ToUserTable(),
 		Company: company[0],
 	}
 
 	(*Redis).InsertToken(tk.GetLoginToken())
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().LoginSuccess,
-		"data": tk.GetLoginToken(),
+		"data":    tk.GetLoginToken(),
 	})
-	
+
 }
-func Register(props *gin.Context, waitJob *sync.WaitGroup){
+func Register(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 	now := time.Now()
@@ -90,7 +90,7 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 	registeForm := &response.Register{}
 	err1 := (*props).ShouldBindBodyWith(&registeForm, binding.JSON)
 	// 檢查格式
-	if err1 != nil  {
+	if err1 != nil {
 		(*props).JSON(http.StatusExpectationFailed, gin.H{
 			"message": StatusText().RegisterFailNotAcceptDataFormat,
 		})
@@ -149,18 +149,18 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 	// 新增使用者
 
 	user := &table.UserTable{
-		Account: (*registeForm).Account,
-		Password: (*registeForm).Password,
-		CompanyCode: (*registeForm).CompanyCode,
-		UserName: (*registeForm).UserName,
+		Account:        (*registeForm).Account,
+		Password:       (*registeForm).Password,
+		CompanyCode:    (*registeForm).CompanyCode,
+		UserName:       (*registeForm).UserName,
 		EmployeeNumber: "",
-		Permession: 2,
-		Banch: -1,
-		MonthSalary: 0,
+		Permession:     2,
+		Banch:          -1,
+		MonthSalary:    0,
 		PartTimeSalary: 0,
-		OnWorkDay: now,
-		CreateTime: now,
-		LastModify: now,
+		OnWorkDay:      now,
+		CreateTime:     now,
+		LastModify:     now,
 	}
 	status, _ := (*Mysql).InsertUser(user)
 	if !status {
@@ -170,7 +170,6 @@ func Register(props *gin.Context, waitJob *sync.WaitGroup){
 		})
 		return
 	}
-
 
 	// 註冊成功 把captcha 刪掉
 	(*Redis).DeleteCaptcha((*registeForm).Account)
@@ -206,6 +205,6 @@ func CheckAccess(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer (*waitJob).Done()
 	props.JSON(http.StatusAccepted, gin.H{
 		"message": "身份認證成功",
-		"data": true,
+		"data":    true,
 	})
 }

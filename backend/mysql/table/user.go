@@ -5,13 +5,6 @@ import (
 
 )
 
-type UserExtend struct {
-	UserTable
-	BanchName string `json:"BanchName"` // 公司部們名稱
-	CompanyName string `json:"CompanyName"` // 公司名稱
-	CompanyId int64 `json:"CompanyId"` // 公司編號
-}
-
 //使用者
 type UserTable struct {
 	UserId int64 `json:"UserId"`// 使用者的編號
@@ -27,4 +20,31 @@ type UserTable struct {
 	PartTimeSalary int `json:"PartTimeSalary"` // 時薪
 	CreateTime time.Time `json:"CreateTime"`//創建的時間
 	LastModify time.Time `json:"LastModify"`// 上次修改的時間
+}
+
+type UserExtend struct {
+	UserTable
+	BanchName string `json:"BanchName"` // 公司部們名稱
+	CompanyName string `json:"CompanyName"` // 公司名稱
+	CompanyId int64 `json:"CompanyId"` // 公司編號
+}
+
+func(uE *UserExtend) ToUserTable() *UserTable {
+	user := UserTable{
+		UserId: (*uE).UserId,
+		CompanyCode: (*uE).CompanyCode,
+		Account: (*uE).Account,
+		Password: "",
+		UserName: (*uE).UserName,
+		EmployeeNumber: (*uE).EmployeeNumber,
+		OnWorkDay: (*uE).OnWorkDay,
+		Banch: (*uE).Banch,
+		Permession: (*uE).Permession,
+		MonthSalary: (*uE).MonthSalary,
+		PartTimeSalary: (*uE).PartTimeSalary,
+		CreateTime: (*uE).CreateTime,
+		LastModify: (*uE).LastModify,
+	}
+
+	return &user
 }

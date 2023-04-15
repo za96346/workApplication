@@ -15,30 +15,34 @@ func FetchBanchAll(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 	_, company, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	res := (*Mysql).SelectCompanyBanch(1, company.CompanyId)
-	(*props).JSON(http.StatusOK, gin.H {
-		"data": (*res),
+	(*props).JSON(http.StatusOK, gin.H{
+		"data":    (*res),
 		"message": StatusText().FindSuccess,
 	})
-	
+
 }
 
 func InsertBanch(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 	now := time.Now()
-	banch := table.CompanyBanchTable {}
+	banch := table.CompanyBanchTable{}
 	if (*props).ShouldBindJSON(&banch) != nil {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().FormatError,
 		})
 		return
-	} 
+	}
 
 	_, company, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	banch.LastModify = now
 	banch.CompanyId = company.CompanyId
@@ -59,11 +63,11 @@ func InsertBanch(props *gin.Context, waitJob *sync.WaitGroup) {
 	})
 }
 
-func UpdateBanch (props *gin.Context, waitJob *sync.WaitGroup) {
+func UpdateBanch(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 	now := time.Now()
-	banch := table.CompanyBanchTable {}
+	banch := table.CompanyBanchTable{}
 	if (*props).ShouldBindJSON(&banch) != nil {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().FormatError,
@@ -71,7 +75,9 @@ func UpdateBanch (props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 	_, company, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	banch.LastModify = now
 	banch.CompanyId = company.CompanyId
@@ -104,7 +110,9 @@ func DeleteBanch(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	_, company, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	if !(*Mysql).DeleteCompanyBanch(1, convertBanchId, company.CompanyCode) {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
@@ -122,7 +130,7 @@ func DeleteBanch(props *gin.Context, waitJob *sync.WaitGroup) {
 func FetchBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
-	// 檢查 banch id 
+	// 檢查 banch id
 	banchId := (*props).Query("banchId")
 	convertBanchId, err1 := methods.AnyToInt64(banchId)
 	if err1 != nil {
@@ -133,13 +141,15 @@ func FetchBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	_, company, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	// 部門合法
 	res := (*Mysql).SelectBanchStyle(3, convertBanchId, company.CompanyCode)
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().FindSuccess,
-		"data": res,
+		"data":    res,
 	})
 }
 
@@ -160,7 +170,9 @@ func UpdateBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	user, company, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	// 最高權限 更新
 	if user.Permession == 100 {
@@ -175,7 +187,7 @@ func UpdateBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	// 主管權限 更新
 	if user.Permession == 1 {
 		// 只能更新自己的部門
-		if  user.Banch != banchStyle.BanchId {
+		if user.Banch != banchStyle.BanchId {
 			(*props).JSON(http.StatusNotAcceptable, gin.H{
 				"message": StatusText().OnlyCanUpDateYourBanch,
 			})
@@ -212,7 +224,9 @@ func InsertBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	user, company, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	if methods.IsNotExited(
 		(*Mysql).SelectCompanyBanch(3, banchStyle.BanchId, company.CompanyId),
@@ -222,11 +236,10 @@ func InsertBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
-	
 
 	// 最高權限 更新
 	if user.Permession == 100 {
-		if  v, _ := (*Mysql).InsertBanchStyle(&banchStyle); !v {
+		if v, _ := (*Mysql).InsertBanchStyle(&banchStyle); !v {
 			(*props).JSON(http.StatusNotAcceptable, gin.H{
 				"message": StatusText().InsertFail,
 			})
@@ -248,7 +261,6 @@ func InsertBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 			return
 		}
 	}
-
 
 	// 新增成功
 	(*props).JSON(http.StatusOK, gin.H{
@@ -279,7 +291,9 @@ func DeleteBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	user, company, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	//最高權限刪除
 	if user.Permession == 100 {
@@ -288,7 +302,7 @@ func DeleteBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 				"message": StatusText().DeleteFail,
 			})
 			return
-		} 
+		}
 	}
 
 	// 主管權限刪除
@@ -315,7 +329,7 @@ func DeleteBanchStyle(props *gin.Context, waitJob *sync.WaitGroup) {
 }
 
 // company info
-func FetchCompany (props *gin.Context, waitJob *sync.WaitGroup) {
+func FetchCompany(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 	company := &[]table.CompanyTable{}
@@ -331,11 +345,11 @@ func FetchCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().FindSuccess,
-		"data": *company,
+		"data":    *company,
 	})
 }
 
-func UpdateCompany (props *gin.Context, waitJob *sync.WaitGroup) {
+func UpdateCompany(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 
@@ -349,7 +363,9 @@ func UpdateCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 	request.LastModify = time.Now()
 
 	user, company, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	// 判斷是不是公司負責人
 	if company.BossId != user.UserId {
@@ -378,12 +394,14 @@ func UpdateCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 
 }
 
-func InsertCompany (props *gin.Context, waitJob *sync.WaitGroup) {
+func InsertCompany(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 
 	me, _, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	company := table.CompanyTable{}
 	if (*props).ShouldBindJSON(&company) != nil {
@@ -407,7 +425,7 @@ func InsertCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 	company.BossId = me.UserId
 	company.CreateTime = now
 	company.LastModify = now
-	
+
 	if v, _ := (*Mysql).InsertCompany(&company); !v {
 		(*props).JSON(http.StatusNotAcceptable, gin.H{
 			"message": StatusText().InsertFail,
@@ -421,7 +439,6 @@ func InsertCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 	me.CompanyCode = company.CompanyCode
 	me.LastModify = now
 
-
 	if !(*Mysql).UpdateUser(2, &me) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": "更新負責人資料失敗",
@@ -434,18 +451,19 @@ func InsertCompany (props *gin.Context, waitJob *sync.WaitGroup) {
 	})
 }
 
-func FetchWaitReply (props *gin.Context, waitJob *sync.WaitGroup) {
+func FetchWaitReply(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 
 	user, company, err := CheckUserAndCompany(props)
-	if err {return}
-
+	if err {
+		return
+	}
 
 	if user.Permession == 100 {
 		waitCompanyReply := (*Mysql).SelectWaitCompanyReply(5, company.CompanyId)
 		props.JSON(http.StatusOK, gin.H{
-			"data": *waitCompanyReply,
+			"data":    *waitCompanyReply,
 			"message": StatusText().FindSuccess,
 		})
 	} else {
@@ -455,13 +473,13 @@ func FetchWaitReply (props *gin.Context, waitJob *sync.WaitGroup) {
 			(*waitCompanyReply)[0].UserName = user.UserName
 		}
 		props.JSON(http.StatusOK, gin.H{
-			"data": *waitCompanyReply,
+			"data":    *waitCompanyReply,
 			"message": StatusText().FindSuccess,
 		})
 	}
 }
 
-func UpdateWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
+func UpdateWaitCompanyReply(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 
@@ -475,7 +493,9 @@ func UpdateWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	_, company, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	waitCompanyReply := (*Mysql).SelectWaitCompanyReply(1, request.WaitId)
 	if methods.IsNotExited(waitCompanyReply) {
@@ -509,7 +529,7 @@ func UpdateWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
 			return
 		}
 		(*targetUser)[0].CompanyCode = company.CompanyCode
-		if !(*Mysql).UpdateUser(0, UserExtendToUserTable(&(*targetUser)[0])) {
+		if !(*Mysql).UpdateUser(0, (*targetUser)[0].ToUserTable()) {
 			(*props).JSON(http.StatusForbidden, gin.H{
 				"message": StatusText().UpdateFail,
 			})
@@ -523,7 +543,7 @@ func UpdateWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
 
 }
 
-func InsertWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
+func InsertWaitCompanyReply(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 	now := time.Now()
@@ -538,7 +558,9 @@ func InsertWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	user, _, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	findCompany := (*Mysql).SelectCompany(2, request.CompanyCode)
 	if methods.IsNotExited(findCompany) {
@@ -549,10 +571,10 @@ func InsertWaitCompanyReply (props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	waitCompanyReply := table.WaitCompanyReply{
-		UserId: user.UserId,
-		CompanyId: (*findCompany)[0].CompanyId,
+		UserId:     user.UserId,
+		CompanyId:  (*findCompany)[0].CompanyId,
 		SpecifyTag: "您好我叫" + user.UserName,
-		IsAccept: 1,
+		IsAccept:   1,
 		CreateTime: now,
 		LastModify: now,
 	}

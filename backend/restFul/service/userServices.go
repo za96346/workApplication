@@ -9,8 +9,8 @@ import (
 	// "strconv"
 
 	"backend/methods"
-	"backend/response"
 	"backend/mysql/table"
+	"backend/response"
 
 	"github.com/gin-gonic/gin"
 )
@@ -40,19 +40,19 @@ func FindSingleUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	data := []response.User{}
 
 	data = append(data, response.User{
-		UserId: (*res)[0].UserId,
-		CompanyCode: (*res)[0].CompanyCode,
-		OnWorkDay: (*res)[0].OnWorkDay,
+		UserId:         (*res)[0].UserId,
+		CompanyCode:    (*res)[0].CompanyCode,
+		OnWorkDay:      (*res)[0].OnWorkDay,
 		EmployeeNumber: (*res)[0].EmployeeNumber,
-		UserName: (*res)[0].UserName,
-		Banch: (*res)[0].Banch,
-		Permession: (*res)[0].Permession,
-		WorkState: "on",// 者個要去離職表找
+		UserName:       (*res)[0].UserName,
+		Banch:          (*res)[0].Banch,
+		Permession:     (*res)[0].Permession,
+		WorkState:      "on", // 者個要去離職表找
 	})
 	// 尋找資料
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().FindSuccess,
-		"data": data,
+		"data":    data,
 	})
 }
 
@@ -61,14 +61,16 @@ func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer (*waitJob).Done()
 
 	user, _, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	// 尋找資料
 	res := (*Mysql).SelectUser(1, user.UserId)
 	if methods.IsNotExited(res) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().userDataNotFound,
-			"data": *res,
+			"data":    *res,
 		})
 		return
 	}
@@ -78,17 +80,19 @@ func FindMine(props *gin.Context, waitJob *sync.WaitGroup) {
 	// 找到資料
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().FindSuccess,
-		"data": *res,
+		"data":    *res,
 	})
 
 }
 
-func UpdateMine (props *gin.Context, waitJob *sync.WaitGroup) {
+func UpdateMine(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer (*waitJob).Done()
 
 	me, _, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	user := table.UserTable{}
 	if (*props).ShouldBindJSON(&user) != nil {
@@ -105,11 +109,11 @@ func UpdateMine (props *gin.Context, waitJob *sync.WaitGroup) {
 		})
 		return
 	}
-	
+
 	(*mineUserData)[0].UserName = user.UserName
 	(*mineUserData)[0].LastModify = time.Now()
 
-	if !(*Mysql).UpdateUser(0, UserExtendToUserTable(&(*mineUserData)[0])) {
+	if !(*Mysql).UpdateUser(0, (*mineUserData)[0].ToUserTable()) {
 		(*props).JSON(http.StatusNotFound, gin.H{
 			"message": StatusText().UpdateFail,
 		})
@@ -130,12 +134,14 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	takeManage := (*props).Query("takeManage") // "Y"
 
 	user, company, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	data := []response.User{}
 	// 管理員 沒帶部門查詢
 	if user.Permession == 100 &&
-		(isBanchError != nil || takeManage == "Y"){
+		(isBanchError != nil || takeManage == "Y") {
 		data = *((*Mysql).SelectAllUser(
 			0,
 			company.CompanyCode,
@@ -145,7 +151,7 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 			name,
 			takeManage,
 		))
-	// 主管查詢 或是 管理員 有帶部門查詢
+		// 主管查詢 或是 管理員 有帶部門查詢
 	} else if user.Permession == 1 ||
 		(user.Permession == 100 && isBanchError == nil) {
 		b := user.Banch
@@ -167,17 +173,16 @@ func GetAllUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	// 判斷工作狀態
 	val := []response.User{}
 	for _, v := range data {
-		if (workState == "all") {
+		if workState == "all" {
 			val = append(val, v)
 		} else if workState == v.WorkState {
 			val = append(val, v)
 		}
 	}
 
-
 	(*props).JSON(http.StatusOK, gin.H{
 		"message": StatusText().FindSuccess,
-		"data": val,
+		"data":    val,
 	})
 }
 
@@ -194,15 +199,15 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 		return
 	}
 
-
-
 	// 當要被更改的人是公司負責人時
 	// 就要去判斷是不是自己更改自己
 	// 如果不是 則 回傳不能修改
 	// 如果是 永遠把負責人的權限設為管理者
 	// 以及把公司碼射為自己的公司
 	myUserData, myCompany, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	permession := request.Permession
 	companyCode := myCompany.CompanyCode
@@ -236,15 +241,15 @@ func UpdateUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	user := table.UserTable{
-		CompanyCode: companyCode,
+		CompanyCode:    companyCode,
 		EmployeeNumber: request.EmployeeNumber,
-		OnWorkDay: request.OnWorkDay,
-		Banch: banch,
-		Permession: permession,
-		LastModify: now,
-		MonthSalary: 0,
+		OnWorkDay:      request.OnWorkDay,
+		Banch:          banch,
+		Permession:     permession,
+		LastModify:     now,
+		MonthSalary:    0,
 		PartTimeSalary: 0,
-		UserId: request.UserId,
+		UserId:         request.UserId,
 	}
 
 	res := (*Mysql).UpdateUser(1, &user, myCompany.CompanyCode)
@@ -275,7 +280,9 @@ func InsertUser(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	myUserData, _, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	(*requestUser).CreateTime = now
 	(*requestUser).LastModify = now
@@ -314,7 +321,7 @@ func InsertUser(props *gin.Context, waitJob *sync.WaitGroup) {
 
 }
 
-func ChangePassword (props *gin.Context, waitJob *sync.WaitGroup) {
+func ChangePassword(props *gin.Context, waitJob *sync.WaitGroup) {
 	defer panicHandle()
 	defer waitJob.Done()
 
@@ -328,7 +335,9 @@ func ChangePassword (props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	user, _, err := CheckUserAndCompany(props)
-	if err {return}
+	if err {
+		return
+	}
 
 	// get user
 	res := (*Mysql).SelectUser(1, user.UserId)
@@ -373,7 +382,7 @@ func ChangePassword (props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	(*res)[0].Password = changePwd.NewPassword
-	status := (*Mysql).UpdateUser(0, UserExtendToUserTable(&(*res)[0]))
+	status := (*Mysql).UpdateUser(0, (*res)[0].ToUserTable())
 	if !status {
 		(*props).JSON(http.StatusUnprocessableEntity, gin.H{
 			"message": StatusText().UpdateFail,
@@ -386,7 +395,7 @@ func ChangePassword (props *gin.Context, waitJob *sync.WaitGroup) {
 		"message": StatusText().UpdateSuccess,
 	})
 	return
-	
+
 }
 
 func ForgetPassword(props *gin.Context, waitJob *sync.WaitGroup) {
@@ -437,7 +446,7 @@ func ForgetPassword(props *gin.Context, waitJob *sync.WaitGroup) {
 	}
 
 	(*res)[0].Password = forgetPwd.NewPassword
-	status := (*Mysql).UpdateUser(0, UserExtendToUserTable(&(*res)[0]))
+	status := (*Mysql).UpdateUser(0, (*res)[0].ToUserTable())
 	if !status {
 		(*props).JSON(http.StatusUnprocessableEntity, gin.H{
 			"message": StatusText().UpdateFail,
