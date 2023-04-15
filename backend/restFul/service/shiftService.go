@@ -221,3 +221,21 @@ func FetchTotalShift(props *gin.Context, waitJob *sync.WaitGroup) {
 	})
 	
 }
+
+// 班表歷程
+func FetchShiftHistory(props *gin.Context, waitJob *sync.WaitGroup) {
+	defer panicHandle()
+	defer (*waitJob).Done()
+
+	// 年度 月份 部門
+	year, _ := strconv.Atoi((*props).Query("year"))
+	month, _ := strconv.Atoi((*props).Query("month"))
+	banch, _ := methods.AnyToInt64((*props).Query("banch"))
+
+	data := (*Mysql).SelectShiftEditLog(0, banch, year, month)
+
+	(*props).JSON(http.StatusOK, gin.H{
+		"data": *data,
+		"message": StatusText().FindSuccess,
+	})
+}

@@ -28,6 +28,7 @@ type sqlQuery struct {
 	PaidVocation paidVocation
 	Log log
 	Performance performance
+	ShiftEditLog shiftEditLog
 }
 type queryCommonColumn struct {
 	InsertAll string
@@ -150,6 +151,12 @@ type paidVocation struct {
 type log struct {
 	queryCommonColumn
 }
+
+type shiftEditLog struct {
+	queryCommonColumn
+	SelectByBanchId string
+}
+
 type performance struct {
 	queryCommonColumn
 	SelectAllByAdmin string
@@ -195,6 +202,7 @@ func MysqlSingleton() *sqlQuery {
 			AddPaidVocation()
 			AddLog()
 			AddPerformance()
+			AddShiftEditLogQuery()
 			return sqlQueryInstance
 		}
 	}

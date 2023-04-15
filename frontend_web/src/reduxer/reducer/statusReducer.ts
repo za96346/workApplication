@@ -46,7 +46,8 @@ const statusState = {
     onFetchWorkTime: false,
     onFetchShiftMonth: false,
 
-    onFetchShiftTotal: false
+    onFetchShiftTotal: false,
+    onFetchShiftHistory: false
 }
 
 export type statusReducerType = typeof statusState

@@ -64,3 +64,9 @@ func (dbObj *DB) GetShiftData (banchId int64, year int, month int) *[]response.S
 		},
 	)
 }
+
+// 刪除 單一 部門 所有 班表資料
+func (dbObj *DB) DeleteShiftData (banchId int64) {
+	defer panichandler.Recover()
+	(*dbObj).RedisOfShiftData.Del(strconv.FormatInt(banchId, 10)).Result()
+}

@@ -39,6 +39,7 @@ type DB struct {
 	workTime *sync.RWMutex
 	paidVocation *sync.RWMutex
 	performanceMux *sync.RWMutex
+	shiftEditLogMux *sync.RWMutex
 	MysqlDB *sql.DB // 要先使用連線方法後才能使用這個
 	containers
 }
@@ -89,6 +90,7 @@ func Singleton() *DB {
 				workTime: new(sync.RWMutex),
 				paidVocation: new(sync.RWMutex),
 				performanceMux: new(sync.RWMutex),
+				shiftEditLogMux: new(sync.RWMutex),
 			}
 			(*dbInstance).Conn()
 		}

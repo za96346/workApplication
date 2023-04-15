@@ -2,6 +2,7 @@ package service
 
 import (
 	"backend/logger"
+	"backend/mysql"
 	"backend/redis"
 	"net/http"
 
@@ -22,3 +23,4 @@ var upgrader = websocket.Upgrader{
 var lock = new(sync.Mutex)
 var Redis = redis.Singleton()
 var Log = logger.Logger()
+var Mysql = mysql.Singleton()

@@ -368,6 +368,16 @@ class statusAcion {
         }
     }
 
+    onFetchShiftHistory (s: boolean): action {
+        return {
+            type: s ? statusType.FETCH_SHIFT_HISTORY_ON : statusType.FETCH_SHIFT_HISTORY_OFF,
+            payload: {
+                ...store.getState().status,
+                onFetchShiftHistory: s
+            }
+        }
+    }
+
     // 清除
     clearStatusAll (): action {
         return {

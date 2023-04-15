@@ -57,5 +57,8 @@ func Shift (props *gin.RouterGroup) {
 			middleWare.Permession(100, 1, 2),
 			worker.AssignWorker(50),
 		)
+
+		// 班表歷程
+		props.GET("/history", worker.AssignWorker(51))
 	}
 }

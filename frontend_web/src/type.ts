@@ -147,6 +147,8 @@ export interface ShiftEditType {
 export interface ShiftState {
     disabledTable?: boolean
     submitAble?: boolean
+    finished?: boolean
+    errorMsg?: string
 }
 
 export interface ShiftSocketType {
@@ -167,6 +169,8 @@ export interface ShiftSocketType {
         [key: string]: number
     }>
     LauchPerson: UserType
+    NewEntering?: string
+    NewLeaving?: string
 }
 
 export interface WeekendSettingType {
@@ -266,4 +270,14 @@ export interface shiftTotalType {
     DayOffCount: number // 請假次數
     LateExcusedCount: number // 遲到次數
     TotalHours: number // 總計時數
+}
+
+export interface shiftHistoryType {
+    LogId: number
+    Year: number
+    Month: number
+    BanchId: number
+    Msg: string
+    CreateTime: Date
+    LastModify: Date
 }

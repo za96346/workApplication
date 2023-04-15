@@ -35,6 +35,9 @@ const useShiftEditSocket = (banchId: number, token: string): props => {
         if (lastJsonMessage?.NewLeaving?.length > 0) {
             FullMessage.info(`${lastJsonMessage?.NewLeaving} 離開編輯室`)
         }
+        if (lastJsonMessage?.State?.errorMsg?.length > 0) {
+            FullMessage.error(lastJsonMessage?.State?.errorMsg || '')
+        }
     }, [lastJsonMessage])
     useEffect(() => {
         return () => {

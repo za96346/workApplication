@@ -1,5 +1,5 @@
 
-import { ShiftSocketType, shiftTotalType } from '../../type'
+import { shiftHistoryType, ShiftSocketType, shiftTotalType } from '../../type'
 import { action, shiftEditType } from '../types'
 
 const shiftState = {
@@ -12,11 +12,13 @@ const shiftState = {
     Status: 1, // 1 開放編輯、 2 主管審核 3 確認發布 ,
     StartDay: '',
     EndDay: '',
-    total: []
+    total: [],
+    history: []
 }
 
 export interface shiftReducerType extends ShiftSocketType {
     total: shiftTotalType[]
+    history: shiftHistoryType[]
 }
 
 export const shiftEditReducer = (state = shiftState, action: action): any => {

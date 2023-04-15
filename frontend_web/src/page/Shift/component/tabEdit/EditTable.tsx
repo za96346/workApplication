@@ -1,4 +1,5 @@
 import { Skeleton, Spin, Collapse, Button } from 'antd'
+import List from 'rc-virtual-list'
 import React, { useEffect, useMemo } from 'react'
 import useReduceing from 'Hook/useReducing'
 import { useNavigate } from 'react-router-dom'
@@ -8,6 +9,8 @@ import dateHandle from 'method/dateHandle'
 import Head from './Head'
 import useShiftEditSocket from '../../Hook/useShiftEdit'
 import statics from 'statics'
+import api from 'api/api'
+import moment from 'moment'
 
 const EditTable = (): JSX.Element => {
     const navigate = useNavigate()
@@ -49,8 +52,44 @@ const EditTable = (): JSX.Element => {
     }
     return (
         <>
-            <Collapse ghost className='mb-4' defaultActiveKey={['1']} onChange={() => {}}>
-                <Collapse.Panel header="圖標" key="1">
+            <Collapse
+                ghost
+                className='mb-4'
+                defaultActiveKey={['2']}
+                onChange={(v) => {
+                    if (v.includes('1')) {
+                        api.getShiftHistory({
+                            banch: state.banchId,
+                            year: 2023,
+                            month: 5
+                        })
+                    }
+                }}
+            >
+                <Collapse.Panel header="編輯歷程" key="1">
+                    <List
+                        itemKey={''}
+                        height={200}
+                        itemHeight={30}
+                        data={shiftEdit?.history || []}
+                        className="list-group"
+                    >
+                        {
+                            (item) => (
+                                <div className='list-group-item list-group-item-action flex-column align-items-start' key={item.LogId}>
+                                    <div className="d-flex w-100 justify-content-between">
+                                        <span>{item?.Msg || ''}</span>
+                                        <small className="text-muted">
+                                            {moment(item?.LastModify).utcOffset(0).format('YYYY-MM-DD HH:mm').toString()}
+                                        </small>
+                                    </div>
+
+                                </div>
+                            )
+                        }
+                    </List>
+                </Collapse.Panel>
+                <Collapse.Panel header="圖標" key="2">
                     <div className={window.styles.shiftSignBlock}>
                         {
                             shiftEdit.BanchStyle?.map((item) => {

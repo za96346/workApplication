@@ -1,6 +1,25 @@
 import apiAbs from './apiAbs'
 import axios from 'axios'
-import { BanchRuleType, BanchStyleType, BanchType, CompanyType, LoginType, performanceType, RegisterType, ResMessage, ResType, SelfDataType, shiftMonthType, shiftTotalType, UserType, WaitReplyType, WeekendSettingType, workTimeType, yearPerformanceType } from '../type'
+import {
+    BanchRuleType,
+    BanchStyleType,
+    BanchType,
+    CompanyType,
+    LoginType,
+    performanceType,
+    RegisterType,
+    ResMessage,
+    ResType,
+    SelfDataType,
+    shiftMonthType,
+    shiftTotalType,
+    UserType,
+    WaitReplyType,
+    WeekendSettingType,
+    workTimeType,
+    yearPerformanceType,
+    shiftHistoryType
+} from '../type'
 import userAction from '../reduxer/action/userAction'
 import { store } from '../reduxer/store'
 import { FullMessage } from '../method/notice'
@@ -44,7 +63,8 @@ class ApiControl extends apiAbs {
         yearPerformance: 'pr/performance/year',
         googleLogin: 'google/login',
         shiftMonth: 'shift/month',
-        shiftTotal: 'shift/total'
+        shiftTotal: 'shift/total',
+        shiftHistory: 'shift/history'
     }
 
     constructor () {
@@ -795,6 +815,21 @@ class ApiControl extends apiAbs {
             store.dispatch(shiftEditAction.setShiftTotal(res.data))
         }
         store.dispatch(statusAction.onFetchShiftTotal(false))
+        return res
+    }
+
+    // 班表歷程
+    async getShiftHistory (v: shiftMonthParamsType): Promise<ResType<shiftHistoryType[]>> {
+        store.dispatch(statusAction.onFetchShiftHistory(true))
+        const res = await this.GET<shiftHistoryType[]>({
+            url: this.route.shiftHistory,
+            successShow: false,
+            params: v
+        })
+        if (res.status) {
+            store.dispatch(shiftEditAction.setShiftHistory(res.data))
+        }
+        store.dispatch(statusAction.onFetchShiftHistory(false))
         return res
     }
 }

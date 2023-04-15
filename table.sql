@@ -298,3 +298,14 @@ create table log(
 	createTime timestamp default now(),
 	lastModify timestamp default now()
 );
+
+# 編輯 班表歷程
+create table shiftEditLog (
+	logId bigint not null unique auto_increment,
+	year int,
+	month int,
+	banchId bigInt default -1,
+	msg varchar(1000) default '',
+	createTime timestamp default now(),
+	lastModify timestamp default now()
+);

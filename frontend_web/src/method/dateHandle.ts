@@ -160,6 +160,12 @@ class DateHandle implements DateHandleInterface {
     diffYears (startDate: DateOrString, endDate: DateOrString): any {
         return moment(endDate).diff(moment(startDate), 'years')
     }
+
+    diff (date1: Date, date2: Date): any {
+        const diffTime = Math.abs(date2 as any - (date1 as any))
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+        return diffDays
+    }
 }
 
 export default new DateHandle()

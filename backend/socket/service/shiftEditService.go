@@ -4,14 +4,11 @@ import (
 	"backend/handler"
 	"backend/handler/shiftEdit"
 	"backend/methods"
-	"backend/mysql"
 	"backend/mysql/table"
 	panichandler "backend/panicHandler"
 	"fmt"
 	"strconv"
 	"time"
-
-	"backend/redis"
 	"backend/response"
 
 	// "backend/socket/method"
@@ -67,7 +64,7 @@ var shiftSocket = abstract.Instance[ConnType, MessageType](5)
 
 func init()  {
 	shiftSocket.EnterRoomCallBack = func(v ConnType, roomKey string) {
-		(*redis.Singleton()).EnterShiftRoom(v.BanchId, v.Value)
+		(*Redis).EnterShiftRoom(v.BanchId, v.Value)
 		sendMsgHandler(v.BanchId, v.User, v.Company, map[string]any{
 			"newEntering": true,
 		})
@@ -77,10 +74,13 @@ func init()  {
 		roomKey string,
 		sendMsg func(ConnId string, Msg any),
 	) {
-		userAll := (redis.Singleton().GetShiftRoomUser(v.BanchId)) // 獲取 該聊天室 成員
+		userAll := (Redis.GetShiftRoomUser(v.BanchId)) // 獲取 該聊天室 成員
 		// fmt.Print("users => ", len(*(userAll)))
 		// fmt.Print("roomId => ", v.BanchId)
 		for _, user := range *userAll {
+			if user.UserId != v.LauchPerson.UserId {
+				v.State["errorMsg"] = ""
+			}
 			getCheckState := CheckState(v.Status, user.Permission) // 根據 權限 獲取 前端 操作 狀態
 			v.State["disabledTable"] = getCheckState["disabledTable"]
 			v.State["submitAble"] = getCheckState["submitAble"]
@@ -115,7 +115,7 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 檢查公司部門
-	companyBanch := (*mysql.Singleton()).SelectCompanyBanch(1, company.CompanyId)
+	companyBanch := (*Mysql).SelectCompanyBanch(1, company.CompanyId)
 	if methods.IsNotExited(companyBanch) {
 		Log.Print("公司查無部門")
 		return
@@ -156,12 +156,13 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 		"any",
 	)
 
+	logMsg := ""
 
     // The event loop
     for {
 		// // 重設 token 過期時間
-		// (*redis.Singleton()).ResetExpireTime(token[0])
-
+		// (*Redis).ResetExpireTime(token[0])
+		_, _, year, month := method.GetNextMonthSE()
 		// // 接收訊息
         _, receivedMsg, err := conn.ReadMessage()
         if err != nil {
@@ -187,7 +188,7 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 		case "position":
 			// 我的位置
 			newRoomMember.Position = data.Data.MyPosition
-			(*redis.Singleton()).EnterShiftRoom(conBanchId, newRoomMember)
+			(*Redis).EnterShiftRoom(conBanchId, newRoomMember)
 			// send
 			sendMsgHandler(conBanchId, user, company, map[string]any{})
 			break
@@ -202,14 +203,23 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 				OnShiftTime: data.Data.OnShiftTime,
 				OffShiftTime: data.Data.OffShiftTime,
 			}
-			(*redis.Singleton()).InsertShiftData(conBanchId, shift)
+
+			(*Redis).InsertShiftData(conBanchId, shift)
+			// 這邊要記錄log
+			go func ()  {
+				findUser := (*Mysql).SelectUser(1, shift.UserId)
+				if !methods.IsNotExited(findUser) {
+					logMsg = fmt.Sprintln(user.UserName, "新增了 ", (*findUser)[0].UserName, "  ", shift.Date, "  ", shift.Icon)
+				}
+			}()
 			// send
 			sendMsgHandler(conBanchId, user, company, map[string]any{})
 			break
 		case "done":
-			_, _, year, month := method.GetNextMonthSE()
 			if method.CheckWhichStep() == 3 {
-				shiftArr := (*redis.Singleton()).GetShiftData(conBanchId, year, month)
+				shiftArr := (*Redis).GetShiftData(conBanchId, year, month)
+				insertResult := true
+				transaction, _ := (*Mysql).MysqlDB.Begin()
 				for _, v := range *shiftArr {
 					// 格式 時間
 					onDate, _ :=  time.Parse("2006-01-02 15:04:05", v.Date + " " + v.OnShiftTime)
@@ -230,23 +240,54 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 						CreateTime: now,
 						LastModify: now,
 					}
-					(*mysql.Singleton()).InsertShift(&shift)
+					insertResult, _ = (*Mysql).InsertShift(&shift)
+					if !insertResult {
+						break
+					}
+				}
+
+				// 如果新增失敗
+				if !insertResult {
+					fmt.Println("rollBack")
+					transaction.Rollback()
+
+					// 紀錄log
+					logMsg = fmt.Sprintln(user.UserName, "  ",year, "-", month, "班表資料 提交 失敗")
+
+					// send failed
+					sendMsgHandler(conBanchId, user, company, map[string]any{
+						"finished": true,
+						"errorMsg": "執行失敗",
+					})
+					continue
+				} else {
+					// 紀錄log
+					logMsg = fmt.Sprintln(user.UserName, "  ",year, "-", month, "班表資料 提交 成功")
+					transaction.Commit()
+					(*Redis).DeleteShiftData(conBanchId)
+					// send finished
+					sendMsgHandler(conBanchId, user, company, map[string]any{
+						"finished": true,
+					})
 				}
 			}
-			// send
-			sendMsgHandler(conBanchId, user, company, map[string]any{
-				"finished": true,
-			})
 			break
 		default:
 			continue
 		}
-
+		if (data.Types != "position") {
+			go (*Mysql).InsertShiftEditLog(&table.ShiftEditLog{
+				BanchId: conBanchId,
+				Year: year,
+				Month: month,
+				Msg: logMsg,
+			})	
+		}
     }
 	shiftSocket.LeaveRoom("1")
 
 	// // 離開房間
-	(*redis.Singleton()).LeaveShiftRoom(conBanchId, user.UserId)
+	(*Redis).LeaveShiftRoom(conBanchId, user.UserId)
 
 	// // send
 	sendMsgHandler(conBanchId, user, company, map[string]any{
@@ -266,10 +307,10 @@ func sendMsgHandler(
 	defer panichandler.Recover()
 	str, end, year, month := method.GetNextMonthSE()
 	// 發送訊息
-	onlineUsers := (*redis.Singleton()).GetShiftRoomUser(banchId) // 線上使用者資料
-	EditUsers := (*mysql.Singleton()).SelectUser(4, banchId, user.CompanyCode) // 被編輯的使用者
-	ShiftData := (*redis.Singleton()).GetShiftData(banchId, year, month) // 當前的班表資料
-	BanchStyle := (*mysql.Singleton()).SelectBanchStyle(2, banchId) // 部門圖標
+	onlineUsers := (*Redis).GetShiftRoomUser(banchId) // 線上使用者資料
+	EditUsers := (*Mysql).SelectUser(4, banchId, user.CompanyCode) // 被編輯的使用者
+	ShiftData := (*Redis).GetShiftData(banchId, year, month) // 當前的班表資料
+	BanchStyle := (*Mysql).SelectBanchStyle(2, banchId) // 部門圖標
 	currentStep := method.CheckWhichStep() // 當前的編輯狀態
 
 	rowsShiftTotal, columnsShiftTotal := shiftEdit.ShiftTotal(ShiftData)
@@ -294,12 +335,24 @@ func sendMsgHandler(
 	newEntering := ""
 	if state["newEntering"] == true {
 		newEntering = user.UserName
+		(*Mysql).InsertShiftEditLog(&table.ShiftEditLog{
+			BanchId: banchId,
+			Year: year,
+			Month: month,
+			Msg: user.UserName + " " + "進入房間",
+		})	
 	}
 
 	// 是否是剛出房間
 	newLeaving := ""
 	if state["newLeaving"] == true {
 		newLeaving = user.UserName
+		(*Mysql).InsertShiftEditLog(&table.ShiftEditLog{
+			BanchId: banchId,
+			Year: year,
+			Month: month,
+			Msg: user.UserName + " " + "離開房間",
+		})	
 	}
 
 	msg := MessageType{
@@ -311,9 +364,7 @@ func sendMsgHandler(
 		Status: currentStep, // 1 開放編輯、 2 主管審核 3 確認發布
 		StartDay: str,
 		EndDay: end,
-		State: map[string]any{
-			"finished": state["finished"],
-		},
+		State: state,
 		NewEntering: newEntering,
 		NewLeaving: newLeaving,
 		LauchPerson: user,
