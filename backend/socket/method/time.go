@@ -24,7 +24,7 @@ func CheckWhichStep (banchId int64) int {
 
 	thisMonth := time.Date(year, month, 1, 0, 0, 0, 0, time.Local)
 	_, _, lastDay := thisMonth.AddDate(0, 1, -1).Date()
-	diff := lastDay - day - 10
+	diff := lastDay - day
 	// fmt.Println("相差幾天 =>", diff)
 
 	// 這邊要去檢查 redis room status
