@@ -1,6 +1,7 @@
 package service
 
 import (
+	// "backend/handler/shiftEdit"
 	"backend/methods"
 	"backend/mysql/table"
 	"fmt"
@@ -177,6 +178,8 @@ func FetchMonthShift (props *gin.Context, waitJob *sync.WaitGroup)  {
 	y, m, _ := ftime.Date()
 	thisMonth := time.Date(y, m, 1, 0, 0, 0, 0, time.Local)
 	end := thisMonth.AddDate(0, 1, -1)
+
+	// rowsShiftTotal, columnsShiftTotal := shiftEdit.ShiftTotal(data)
 
 	(*props).JSON(http.StatusOK, gin.H{
 		"ShiftData": *data,

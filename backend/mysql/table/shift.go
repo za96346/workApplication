@@ -3,9 +3,7 @@ package table
 import (
 	"database/sql"
 	"time"
-
 )
-
 
 //班表
 type ShiftTable struct {

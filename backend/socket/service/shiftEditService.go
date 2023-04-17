@@ -6,10 +6,10 @@ import (
 	"backend/methods"
 	"backend/mysql/table"
 	panichandler "backend/panicHandler"
+	"backend/response"
 	"fmt"
 	"strconv"
 	"time"
-	"backend/response"
 
 	// "backend/socket/method"
 	"encoding/json"
@@ -59,6 +59,11 @@ type ReceivedMsgType struct {
 	}
 }
 
+// 聊天室 的狀態
+type RoomStatus struct {
+	LastFinishedYearMonth string
+}
+
 // 實例化 shift socket
 var shiftSocket = abstract.Instance[ConnType, MessageType](5)
 
@@ -78,13 +83,17 @@ func init()  {
 		// fmt.Print("users => ", len(*(userAll)))
 		// fmt.Print("roomId => ", v.BanchId)
 		for _, user := range *userAll {
+
+			// 這是只有 自己是發起人才要傳送 錯誤訊息
 			if user.UserId != v.LauchPerson.UserId {
 				v.State["errorMsg"] = ""
 			}
-			getCheckState := CheckState(v.Status, user.Permission) // 根據 權限 獲取 前端 操作 狀態
+
+			// 根據 權限 獲取 前端 操作 狀態
+			getCheckState := CheckState(v.Status, user.Permission, user.BanchId, v.BanchId)
 			v.State["disabledTable"] = getCheckState["disabledTable"]
 			v.State["submitAble"] = getCheckState["submitAble"]
-			// fmt.Println("checkState", getCheckState)
+
 			sendMsg(strconv.FormatInt(user.UserId, 10), v)
 		}
 	};
@@ -137,6 +146,7 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 	newRoomMember := response.Member{
 		UserName: user.UserName,
 		UserId: user.UserId,
+		BanchId: user.Banch,
 		Permission: user.Permession,
 		Pic: "",
 		Color: fmt.Sprintf("rgba(%d,%d,%d, 0.3)", handler.Rand(0, 255), handler.Rand(0, 255), handler.Rand(0, 255)),
@@ -216,7 +226,7 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 			sendMsgHandler(conBanchId, user, company, map[string]any{})
 			break
 		case "done":
-			if method.CheckWhichStep() == 3 {
+			if method.CheckWhichStep(conBanchId) == 3 {
 				shiftArr := (*Redis).GetShiftData(conBanchId, year, month)
 				insertResult := true
 				transaction, _ := (*Mysql).MysqlDB.Begin()
@@ -264,7 +274,11 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 					// 紀錄log
 					logMsg = fmt.Sprintln(user.UserName, "  ",year, "-", month, "班表資料 提交 成功")
 					transaction.Commit()
+					// 快取資料庫操作
 					(*Redis).DeleteShiftData(conBanchId)
+					(*Redis).InsertShiftRoomStatus(conBanchId, RoomStatus{
+						LastFinishedYearMonth: fmt.Sprintln(year, "/", month),
+					})
 					// send finished
 					sendMsgHandler(conBanchId, user, company, map[string]any{
 						"finished": true,
@@ -311,10 +325,10 @@ func sendMsgHandler(
 	EditUsers := (*Mysql).SelectUser(4, banchId, user.CompanyCode) // 被編輯的使用者
 	ShiftData := (*Redis).GetShiftData(banchId, year, month) // 當前的班表資料
 	BanchStyle := (*Mysql).SelectBanchStyle(2, banchId) // 部門圖標
-	currentStep := method.CheckWhichStep() // 當前的編輯狀態
+	currentStep := method.CheckWhichStep(banchId) // 當前的編輯狀態
 
 	rowsShiftTotal, columnsShiftTotal := shiftEdit.ShiftTotal(ShiftData)
-	fmt.Println(*rowsShiftTotal)
+	// fmt.Println(*rowsShiftTotal)
 
 	// 整理 回傳的編輯使用者資料
 	editUserData := []response.User{}
@@ -361,7 +375,7 @@ func sendMsgHandler(
 		OnlineUser: *onlineUsers,
 		ShiftData: *ShiftData,
 		BanchStyle: *BanchStyle,
-		Status: currentStep, // 1 開放編輯、 2 主管審核 3 確認發布
+		Status: currentStep, // 1 開放編輯、 2 主管審核 3 確認發布 4. 等待 編輯
 		StartDay: str,
 		EndDay: end,
 		State: state,
@@ -380,16 +394,17 @@ func sendMsgHandler(
 	permission = 100, 1, 2
 */
 // 確認編輯狀態
-func CheckState (step int, permission int) MsgState {
+func CheckState (step int, permission int, selfBanchId int64, roomBanchId int64) MsgState {
 	// 自己的編輯狀態
 	disabledTable := false
 	if step == 1 {disabledTable = true} // 尚未開放編輯
 	if step == 2 {disabledTable = false}
-	if step == 3 && permission != 1 {disabledTable = true}
+	if step == 3 && permission != 1 {disabledTable = true} // 只有 主管可以編輯
+	if step == 4 {disabledTable = true}
 
 	// 是否顯示 提交按鈕
 	submitAble := false
-	if step == 3 && permission == 1 {
+	if step == 3 && permission == 1 && (roomBanchId == selfBanchId) {
 		submitAble = true
 	}
 	state := MsgState{

@@ -70,3 +70,22 @@ func (dbObj *DB) DeleteShiftData (banchId int64) {
 	defer panichandler.Recover()
 	(*dbObj).RedisOfShiftData.Del(strconv.FormatInt(banchId, 10)).Result()
 }
+
+// 紀錄 房間的狀態
+// 1. 本月資料是否已經送出
+func (dbObj *DB) InsertShiftRoomStatus(banchId int64, value any) {
+	defer panichandler.Recover()
+	jsonData, _ := json.Marshal(value)
+	conBanchId := strconv.FormatInt(banchId, 10) + "-roomStatus"
+	(*dbObj).RedisOfShiftSocket.HSet(conBanchId, "status", jsonData)
+}
+
+func (dbObj *DB) GetShiftRoomStatus(banchId int64) *map[string]any {
+	defer panichandler.Recover()
+	conBanchId := strconv.FormatInt(banchId, 10) + "-roomStatus"
+	v, _ := (*dbObj).RedisOfShiftSocket.HGet(conBanchId, "status").Result()
+
+	rooStatus := new(map[string]any)
+	json.Unmarshal([]byte(v), rooStatus)
+	return rooStatus
+}

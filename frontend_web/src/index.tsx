@@ -7,6 +7,7 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { persisStore, store } from './reduxer/store'
 import { ConfigProvider } from 'antd'
 import Locale from 'antd/es/locale/zh_TW'
+import '@vteam_components/cloud/dist/style'
 // npm i -D @types/node-sass
 // npm i -D node-sass
 

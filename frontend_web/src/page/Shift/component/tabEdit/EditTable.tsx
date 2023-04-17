@@ -10,6 +10,7 @@ import Head from './Head'
 import useShiftEditSocket from '../../Hook/useShiftEdit'
 import statics from 'statics'
 import api from 'api/api'
+import { Dialog } from '@vteam_components/cloud'
 import moment from 'moment'
 
 const EditTable = (): JSX.Element => {
@@ -32,9 +33,13 @@ const EditTable = (): JSX.Element => {
 
     // 寄送確認編輯
     const onClickSubmit = (): void => {
-        sendMessage(JSON.stringify({
-            Types: statics.shiftSocketEvent.done
-        }))
+        Dialog.warning({
+            text: '請確認 是否 提交班表，提交後無法重新編輯。'
+        }).then(() => {
+            sendMessage(JSON.stringify({
+                Types: statics.shiftSocketEvent.done
+            }))
+        })
     }
 
     useEffect(() => {
@@ -69,7 +74,7 @@ const EditTable = (): JSX.Element => {
                 <Collapse.Panel header="編輯歷程" key="1">
                     <List
                         itemKey={''}
-                        height={200}
+                        height={400}
                         itemHeight={30}
                         data={shiftEdit?.history || []}
                         className="list-group"

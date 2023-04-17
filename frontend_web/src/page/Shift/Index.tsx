@@ -48,6 +48,7 @@ const Index = (): JSX.Element => {
                     <Steps.Step title="尚未開放編輯" />
                     <Steps.Step title="開放編輯" subTitle="" description={`${shiftEdit.StartDay} ～～ ${shiftEdit.EndDay}`} />
                     <Steps.Step title="部門主管確認班表無誤" description="進行中..." />
+                    <Steps.Step title="編輯完成" description="" status={shiftEdit.Status === 4 ? 'finish' : 'wait' } />
                 </Steps>
             </div>
             <div className={window.styles.shiftEdit}>
