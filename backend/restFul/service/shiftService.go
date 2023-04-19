@@ -179,7 +179,8 @@ func FetchMonthShift (props *gin.Context, waitJob *sync.WaitGroup)  {
 	thisMonth := time.Date(y, m, 1, 0, 0, 0, 0, time.Local)
 	end := thisMonth.AddDate(0, 1, -1)
 
-	// rowsShiftTotal, columnsShiftTotal := shiftEdit.ShiftTotal(data)
+	rowShiftTotal := (*Mysql).SelectShiftRowTotal(0, banch, company.CompanyId, year, month)
+	columnShiftTotal := (*Mysql).SelectShiftColumnTotal(0, banch, company.CompanyId, year, month)
 
 	(*props).JSON(http.StatusOK, gin.H{
 		"ShiftData": *data,
@@ -193,6 +194,8 @@ func FetchMonthShift (props *gin.Context, waitJob *sync.WaitGroup)  {
 		"StartDay": thisMonth.Format("2006-01-02"),
 		"EndDay": end.Format("2006-01-02"),
 		"message": StatusText().FindSuccess,
+		"RowsShiftTotal": *rowShiftTotal, //列的總計
+		"ColumnsShiftTotal": *columnShiftTotal, // 欄的總計
 	})
 }
 

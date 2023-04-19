@@ -48,3 +48,14 @@ type ShiftTotal struct {
 	LateExcusedCount int `json:"LateExcusedCount"`
 	TotalHours float32 `json:"TotalHours"`
 }
+// 班表 對人的 總計
+type ShiftRowTotal struct {
+	UserId int64
+	Hours float32
+}
+
+// 班表 對列的 總計
+type ShiftColumnsTotal struct {
+	Date string
+	Hours float32
+}

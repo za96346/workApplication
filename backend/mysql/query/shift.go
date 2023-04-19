@@ -125,5 +125,57 @@ func AddShiftQuery() {
 		and sf.month=?
 		group by sf.userId, sf.year, sf.month, sf.banchId;
 	`
+	// 列 指的是 對人 總計
+	sqlQueryInstance.Shift.SelectRowTotal = `
+		select
+			sf.userId,
+			round(
+				sum(
+					timestampdiff(
+						SECOND, sf.onShiftTime, sf.offShiftTime
+					)
+					- TIME_TO_SEC(sf.restTime)
+				) / 60 / 60,
+				2
+			) as hours
+		from shift as sf
+		left join user u
+			on u.userId=sf.userId
+		left join companyBanch cb
+			on cb.id=sf.banchId
+		where
+			sf.banchId=?
+		and 
+			cb.companyId=?
+		and sf.year=?
+		and sf.month=?
+		group by sf.userId;
+	`
+	// 欄 指的是 對日期 總計
+	sqlQueryInstance.Shift.SelectColumnTotal = `
+		select
+			date_format(sf.onShiftTime, '%Y-%m-%d') as dates,
+			round(
+				sum(
+					timestampdiff(
+						SECOND, sf.onShiftTime, sf.offShiftTime
+					)
+					- TIME_TO_SEC(sf.restTime)
+				) / 60 / 60,
+				2
+			) as hours
+		from shift as sf
+		left join user u
+			on u.userId=sf.userId
+		left join companyBanch cb
+			on cb.id=sf.banchId
+		where
+			sf.banchId=?
+		and 
+			cb.companyId=?
+		and sf.year=?
+		and sf.month=?
+		group by dates;
+	`
 	sqlQueryInstance.Shift.Delete = `delete from shift where shiftId = ?;`;
 }

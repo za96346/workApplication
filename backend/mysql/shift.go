@@ -15,7 +15,6 @@ import (
 
 // 0 => all, value =>banchId, companyId, year, month
 //  1 => 班表id, value => int64
-// 2=> 班表總共, value =>banchId, companyId, year, month
 func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftExtend {
 	defer panichandler.Recover()
 	querys := ""
@@ -66,6 +65,71 @@ func(dbObj *DB) SelectShift(selectKey int, value... interface{}) *[]table.ShiftE
 	return &carry
 }
 
+
+//  0 => 班表 對人 row 不與另六張合計 單獨shift 總計, value =>banchId, companyId, year, month
+func(dbObj *DB) SelectShiftRowTotal(selectKey int, value... interface{}) *map[int64]float32 {
+	defer panichandler.Recover()
+	querys := ""
+	switch selectKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).Shift.SelectRowTotal
+		break
+	default:
+		querys = (*query.MysqlSingleton()).Shift.SelectAll
+		break
+	}
+	shift := new(table.ShiftRowTotal)
+	carry := []table.ShiftRowTotal{}
+	returnObj := map[int64]float32{} // 回傳的 obj
+	res, err := (*dbObj).MysqlDB.Query(querys, value...)
+	defer res.Close()
+	(*dbObj).checkErr(err)
+	for res.Next() {
+		err = res.Scan(
+			&shift.UserId,
+			&shift.Hours,
+		)
+		(*dbObj).checkErr(err)
+		if err == nil {
+			carry = append(carry, *shift)
+			returnObj[(*shift).UserId] = (*shift).Hours
+		}
+	}
+	return &returnObj
+}
+
+//  0 => 班表 對日期 column 不與另六張合計 單獨shift 總計, value =>banchId, companyId, year, month
+func(dbObj *DB) SelectShiftColumnTotal(selectKey int, value... interface{}) *map[string]float32 {
+	defer panichandler.Recover()
+	querys := ""
+	switch selectKey {
+	case 0:
+		querys = (*query.MysqlSingleton()).Shift.SelectColumnTotal
+		break
+	default:
+		querys = (*query.MysqlSingleton()).Shift.SelectAll
+		break
+	}
+	shift := new(table.ShiftColumnsTotal)
+	carry := []table.ShiftColumnsTotal{}
+	returnObj := map[string]float32{} // 回傳的 obj
+	res, err := (*dbObj).MysqlDB.Query(querys, value...)
+	defer res.Close()
+	(*dbObj).checkErr(err)
+	for res.Next() {
+		err = res.Scan(
+			&shift.Date,
+			&shift.Hours,
+		)
+		(*dbObj).checkErr(err)
+		if err == nil {
+			carry = append(carry, *shift)
+			returnObj[(*shift).Date] = (*shift).Hours
+		}
+	}
+	return &returnObj
+}
+
 // 0 => all, value =>banchId, companyId, year, month
 func(dbObj *DB) SelectShiftTotal(selectKey int, value... interface{}) *[]table.ShiftTotal {
 	defer panichandler.Recover()
@@ -110,21 +174,6 @@ func(dbObj *DB) DeleteShift(deleteKey int, shiftId interface{}) bool {
 
 	(*dbObj).shiftMux.Lock()
 	defer (*dbObj).shiftMux.Unlock()
-
-	(*dbObj).shiftChangeMux.Lock()
-	defer (*dbObj).shiftChangeMux.Unlock()
-
-	(*dbObj).shiftOverTimeMux.Lock()
-	defer (*dbObj).shiftOverTimeMux.Unlock()
-
-	(*dbObj).forgetPunchMux.Lock()
-	defer (*dbObj).forgetPunchMux.Unlock()
-
-	(*dbObj).lateExcusedMux.Lock()
-	defer (*dbObj).lateExcusedMux.Unlock()
-
-	(*dbObj).dayOffMux.Lock()
-	defer (*dbObj).dayOffMux.Unlock()
 
 	stmt, err := (*dbObj).MysqlDB.Prepare((*query.MysqlSingleton()).Shift.Delete)
 	defer stmt.Close()

@@ -74,6 +74,8 @@ type shiftQuery struct {
 	SelectSingleByUserId string
 	SelectSingleByShiftId string
 	SelectTotal string
+	SelectRowTotal string
+	SelectColumnTotal string
 }
 type shiftChangeQuery struct {
 	queryCommonColumn
