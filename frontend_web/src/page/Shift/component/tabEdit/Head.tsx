@@ -1,15 +1,14 @@
 import useReduceing from 'Hook/useReducing'
 import React from 'react'
 import statics from 'statics'
+import useShiftBasic from 'page/Shift/Hook/useShiftBasic'
 
-interface props {
-    dayArray: any[]
-}
-
-const Head = ({
-    dayArray = []
-}: props): JSX.Element => {
+const Head = (): JSX.Element => {
     const { shiftEdit } = useReduceing()
+    const {
+        dayArray
+    } = useShiftBasic()
+
     return (
         <tr>
             {

@@ -2,20 +2,23 @@ import useReduceing from 'Hook/useReducing'
 import React, { useCallback, useState } from 'react'
 import statics from 'statics'
 import { BanchStyleType } from 'type'
+import useShiftBasic from 'page/Shift/Hook/useShiftBasic'
 
 interface props {
     sendMessage: (v: string) => void
-    dayArray: any[]
 }
 
 const Row = ({
-    sendMessage = () => {},
-    dayArray = []
+    sendMessage = () => {}
 }: props): JSX.Element => {
     const { shiftEdit } = useReduceing()
     const [status, setStatus] = useState({
         clickPos: -1 // date
     })
+
+    const {
+        dayArray
+    } = useShiftBasic()
 
     // 寄送位置
     const onClickSendPosition = (pos: number): void => {
@@ -67,7 +70,6 @@ const Row = ({
 
         </div>
     }, [shiftEdit.BanchStyle])
-
     return (
         <>
             {// 人的 列
@@ -90,7 +92,14 @@ const Row = ({
                                     // 渲染 使用者名字
                                     if (index === 0) {
                                         return (
-                                            <td key={key} style={{ left: '1px' }} className={window.styles.stickyTd}>
+                                            <td
+                                                key={key}
+                                                style={{
+                                                    left: '1px',
+                                                    minWidth: '60px'
+                                                }}
+                                                className={window.styles.stickyTd}
+                                            >
                                                 {
                                                     user.UserName
                                                 }

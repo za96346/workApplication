@@ -17,6 +17,7 @@ import { Spin } from 'antd'
 import useReduceing from 'Hook/useReducing'
 import PrintWord from 'page/Performance/component/PrintWord'
 import PrintList from 'page/Performance/component/PrintList'
+import PrintShift from 'page/Shift/component/tabHistory/PrintShift'
 import Layout from 'page/Layout'
 import ParticlesPage from 'Share/ParticlesPage'
 
@@ -81,8 +82,12 @@ const App = (): JSX.Element => {
                         <Route path='yearPerformance' element={<YearPerformance />}/>
                     </Route>
                     <Route path='*' element={<ErrorPage/>} />
+                    {/* 這個是 performance printer route */}
                     <Route path='printWord' element={<PrintWord />}/>
                     <Route path='printList' element={<PrintList />}/>
+
+                    {/* 這是 shift printer route */}
+                    <Route path='print/shift' element={<PrintShift />}/>
                 </Routes>
             </Router>
         </>
