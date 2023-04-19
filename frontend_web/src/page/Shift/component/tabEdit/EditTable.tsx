@@ -104,7 +104,7 @@ const EditTable = (): JSX.Element => {
                     : <FullScreen handle={fullScreenHandle}>
                         <Button onClick={() => { fullScreenHandle.enter() }}>全螢幕</Button>
                         <div>排班日期：{shiftEdit?.StartDay}~{shiftEdit?.EndDay}</div>
-                        <ShiftTable />
+                        <ShiftTable sendMessage={sendMessage} />
                         {
                             shiftEdit?.State?.submitAble && (
                                 <Button onClick={onClickSubmit}>確認無誤 ， 提交班表</Button>
