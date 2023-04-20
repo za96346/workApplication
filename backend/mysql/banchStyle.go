@@ -51,6 +51,7 @@ func(dbObj *DB) SelectBanchStyle(selectKey int, value... interface{}) *[]table.B
 			&banchStyle.TimeRangeName,
 			&banchStyle.OnShiftTime,
 			&banchStyle.OffShiftTime,
+			&banchStyle.DelFlag,
 			&banchStyle.CreateTime,
 			&banchStyle.LastModify,
 		)

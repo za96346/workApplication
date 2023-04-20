@@ -161,6 +161,7 @@ create table banchStyle(
 	timeRangeName varchar(20) default '',
 	onShiftTime time,
 	offShiftTime time,
+	delFlag varchar(1) default 'N'
 	createTime timestamp default now(),
 	lastModify timestamp default now()
 );

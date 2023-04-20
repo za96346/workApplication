@@ -34,6 +34,7 @@ func AddBanchStyleQuery() {
 		on cb.companyId=c.companyId
 	where
 		bs.banchId=?
+	and bs.delFlag="N"
 	and
 		c.companyCode=?;
 	`
@@ -53,15 +54,30 @@ func AddBanchStyleQuery() {
 		where bs.styleId=? and c.companyCode=?;
 	`
 	sqlQueryInstance.BanchStyle.DeleteByCompanyCode = `
-		delete bs from banchStyle bs
+		update banchStyle bs
 		left join companyBanch cb
 			on cb.id=bs.banchId
 		left join company c
 			on cb.companyId=c.companyId
+		set
+			bs.delFlag="Y"
 		where bs.styleId=? and c.companyCode=?;
 	`
-	sqlQueryInstance.BanchStyle.SelectSingleByStyleId = `select * from banchStyle where styleId = ?;`;
-	sqlQueryInstance.BanchStyle.SelectAll = `select * from banchStyle;`;
-	sqlQueryInstance.BanchStyle.Delete = `delete from banchStyle where styleId=?;`;
-	sqlQueryInstance.BanchStyle.SelectAllByBanchId = `select * from banchStyle where banchId = ?;`;
+	sqlQueryInstance.BanchStyle.SelectSingleByStyleId = `
+		select * from banchStyle
+		where styleId = ?
+		and delFlag="N";
+	`;
+	sqlQueryInstance.BanchStyle.SelectAll = `select * from banchStyle where delFlag="N";`;
+	sqlQueryInstance.BanchStyle.Delete = `
+		update banchStyle
+		set
+			bs.delFlag="Y"
+		where styleId=?;
+	`;
+	sqlQueryInstance.BanchStyle.SelectAllByBanchId = `
+		select * from banchStyle
+		where banchId = ?
+		and delFlag="N";
+	`;
 }

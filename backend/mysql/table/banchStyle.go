@@ -14,6 +14,7 @@ type BanchStyle struct {
 	TimeRangeName string `json:"TimeRangeName"` // 時段名稱
 	OnShiftTime string  `json:"OnShiftTime"`// 開始上班時間
 	OffShiftTime string `json:"OffShiftTime"` //結束上班的時間
+	DelFlag string `json:"DelFlag"` // 刪除旗標
 	CreateTime time.Time `json:"CreateTime"`//創建的時間
 	LastModify time.Time `json:"LastModify"`// 上次修改的時間
 }
