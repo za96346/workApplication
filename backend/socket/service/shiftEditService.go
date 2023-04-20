@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"strconv"
 	"time"
-
+	"backend/mysql/query"
 	// "backend/socket/method"
 	"encoding/json"
 	// "fmt"
@@ -225,12 +225,45 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 			// send
 			sendMsgHandler(conBanchId, user, company, map[string]any{})
 			break
+		// 主管完成編輯
 		case "done":
-			if method.CheckWhichStep(conBanchId) == 3 {
+			if method.CheckWhichStep(conBanchId) == 3 && user.Permession == 1 {
+				// 部門圖標 處理轉換成map
+				BanchStyle := map[int64]table.BanchStyle{} 
+				for _, v := range *(*Mysql).SelectBanchStyle(2, conBanchId) {
+					BanchStyle[v.StyleId] = v
+				}
+
+				// 被編輯的使用者 處理轉換成map
+				EditUsers := map[int64]table.UserExtend{} 
+				for _, v := range *(*Mysql).SelectUser(4, conBanchId, user.CompanyCode) {
+					EditUsers[v.UserId] = v
+				}
+
+
 				shiftArr := (*Redis).GetShiftData(conBanchId, year, month)
-				insertResult := true
+				insertResult := true // 新增結果
+				insertMsg := "" // 新增訊息
 				transaction, _ := (*Mysql).MysqlDB.Begin()
 				for _, v := range *shiftArr {
+					// 這邊要去判斷當前的 icon 有沒有 與 資料庫的 icon 相等
+					mysqlShiftData := BanchStyle[v.BanchStyleId]
+					if (mysqlShiftData.OnShiftTime != v.OnShiftTime ||
+						mysqlShiftData.OffShiftTime != v.OffShiftTime ||
+						mysqlShiftData.RestTime != v.RestTime) {
+
+						insertResult = false
+						insertMsg = fmt.Sprintln(v.Icon, " 與資料庫記錄資料不相等") 
+						break
+					}
+
+					// 這邊要去判斷被編輯的人 有沒有在此部門
+					if _, ok := EditUsers[v.UserId]; !ok {
+						insertResult = false
+						insertMsg = fmt.Sprintln("使用者id ", v.UserId, " 請確認是否在此部門") 
+						break
+					}
+
 					// 格式 時間
 					onDate, _ :=  time.Parse("2006-01-02 15:04:05", v.Date + " " + v.OnShiftTime)
 					offDate, _ :=  time.Parse("2006-01-02 15:04:05", v.Date + " " + v.OffShiftTime)
@@ -250,8 +283,24 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 						CreateTime: now,
 						LastModify: now,
 					}
-					insertResult, _ = (*Mysql).InsertShift(&shift)
-					if !insertResult {
+					stmt, err := transaction.Prepare((*query.MysqlSingleton()).Shift.InsertAll)
+					_, err = stmt.Exec(
+						shift.UserId,
+						shift.BanchStyleId,
+						shift.BanchId,
+						shift.Year,
+						shift.Month,
+						shift.Icon,
+						shift.OnShiftTime,
+						shift.OffShiftTime,
+						shift.RestTime,
+						shift.PunchIn,
+						shift.PunchOut,
+						shift.SpecifyTag,
+						shift.CreateTime,
+						shift.LastModify,
+					)
+					if !insertResult || err != nil {
 						break
 					}
 				}
@@ -262,14 +311,13 @@ func ShiftSocketHandler(w http.ResponseWriter, r *http.Request) {
 					transaction.Rollback()
 
 					// 紀錄log
-					logMsg = fmt.Sprintln(user.UserName, "  ",year, "-", month, "班表資料 提交 失敗")
+					logMsg = fmt.Sprintln(user.UserName, "  ",year, "-", month, "班表資料 提交 失敗", insertMsg)
 
 					// send failed
 					sendMsgHandler(conBanchId, user, company, map[string]any{
 						"finished": true,
-						"errorMsg": "執行失敗",
+						"errorMsg": "執行失敗，" + insertMsg,
 					})
-					continue
 				} else {
 					// 紀錄log
 					logMsg = fmt.Sprintln(user.UserName, "  ",year, "-", month, "班表資料 提交 成功")
@@ -320,12 +368,46 @@ func sendMsgHandler(
 ) {
 	defer panichandler.Recover()
 	str, end, year, month := method.GetNextMonthSE()
+
 	// 發送訊息
 	onlineUsers := (*Redis).GetShiftRoomUser(banchId) // 線上使用者資料
 	EditUsers := (*Mysql).SelectUser(4, banchId, user.CompanyCode) // 被編輯的使用者
 	ShiftData := (*Redis).GetShiftData(banchId, year, month) // 當前的班表資料
 	BanchStyle := (*Mysql).SelectBanchStyle(2, banchId) // 部門圖標
 	currentStep := method.CheckWhichStep(banchId) // 當前的編輯狀態
+ 
+	// 這邊的話 每次發送都要去跟資料庫比對
+	BanchStyleMap := map[int64]table.BanchStyle{} 
+	for _, v := range *BanchStyle {
+		BanchStyleMap[v.StyleId] = v
+	}
+
+	EditUsersMap := map[int64]table.UserExtend{} 
+	for _, v := range *EditUsers {
+		EditUsersMap[v.UserId] = v
+	}
+
+	for _, v := range *ShiftData {
+		mysqlShiftData, bsOk := BanchStyleMap[v.BanchStyleId]
+		_, euOk := EditUsersMap[v.UserId]
+
+		// 移除 redis 不在的 班表
+		if !bsOk || !euOk {
+			(*Redis).DeleteSingleShiftData(banchId, v)
+		// 要更新 redis 被更改 的 mysql 的 班表
+		} else if (mysqlShiftData.OnShiftTime != v.OnShiftTime ||
+			mysqlShiftData.OffShiftTime != v.OffShiftTime ||
+			mysqlShiftData.RestTime != v.RestTime) {
+
+				v.OnShiftTime = mysqlShiftData.OnShiftTime
+				v.OffShiftTime = mysqlShiftData.OffShiftTime
+				v.RestTime = mysqlShiftData.RestTime
+
+				(*Redis).InsertShiftData(banchId, v)
+		}
+	}
+
+	ShiftData = (*Redis).GetShiftData(banchId, year, month) // 當前的班表資料
 
 	rowsShiftTotal, columnsShiftTotal := shiftEdit.ShiftTotal(ShiftData)
 	// fmt.Println(*rowsShiftTotal)

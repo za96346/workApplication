@@ -32,6 +32,7 @@ func CheckWhichStep (banchId int64) int {
 	v := (*redis.Singleton()).GetShiftRoomStatus(banchId)
 	fullDate := fmt.Sprintln(startYear, "/", startMonth)
 
+	// return 3
 	// step 1
 	if diff > 5 && diff <= 15 {
 		return 2

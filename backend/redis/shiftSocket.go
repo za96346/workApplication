@@ -71,6 +71,13 @@ func (dbObj *DB) DeleteShiftData (banchId int64) {
 	(*dbObj).RedisOfShiftData.Del(strconv.FormatInt(banchId, 10)).Result()
 }
 
+// 刪除 單一 部門 的 單一比 班表資料
+func (dbObj *DB) DeleteSingleShiftData (banchId int64, value response.Shift) {
+	defer panichandler.Recover()
+	positionIdx := value.Date + "__" + strconv.FormatInt(value.UserId,10)
+	(*dbObj).RedisOfShiftData.HDel(strconv.FormatInt(banchId, 10), positionIdx).Result()
+}
+
 // 紀錄 房間的狀態
 // 1. 本月資料是否已經送出
 func (dbObj *DB) InsertShiftRoomStatus(banchId int64, value any) {
