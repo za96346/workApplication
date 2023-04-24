@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package rpcEntryService;
+
+option go_package ="../RPC_Build";
+service EntryServer {
+    rpc Login (LoginRequest) returns (LoginResponse){}
+}
+
+message LoginRequest {
+    // string Account = "";
+}
+
+message LoginResponse {
+
+}
