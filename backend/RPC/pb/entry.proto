@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package rpcEntryService;
+// package pb;
 
-option go_package ="../RPC_Build";
-service EntryServer {
+option go_package ="./servicePb";
+service Entry {
     rpc Login (LoginRequest) returns (LoginResponse){}
 }
 
