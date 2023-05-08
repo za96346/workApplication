@@ -1,19 +1,19 @@
 package RPC
 
-import (
-	"backend/RPC/pb/servicePb"
+// import (
+// 	"backend/RPC/pb/servicePb"
 
-	"google.golang.org/grpc"
-)
+// 	"google.golang.org/grpc"
+// )
 
 // command protoc --go_out=:. *.proto
 
-type server struct {
-	servicePb.UnimplementedPokerServer
- }
+// type server struct {
+// 	servicePb.UnimplementedPokerServer
+//  }
 
-func SetUp () {
-	grpcServer := grpc.NewServer()
-	servicePb.RegisterGreeterServer(grpcServer, servicePb.LoginRequest)
-	v := servicePb.LoginRequest
-}
+// func SetUp () {
+// 	grpcServer := grpc.NewServer()
+// 	servicePb.RegisterGreeterServer(grpcServer, servicePb.LoginRequest)
+// 	v := servicePb.LoginRequest
+// }
