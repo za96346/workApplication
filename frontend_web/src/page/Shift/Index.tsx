@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { HolderOutlined } from '@ant-design/icons'
-import { Drawer, Steps, Tabs } from 'antd'
+import { Drawer, Tabs } from 'antd'
 import React, { useState } from 'react'
 import useReduceing from 'Hook/useReducing'
 import EditTable from './component/tabEdit/EditTable'
@@ -8,7 +8,7 @@ import PeopleStatus from './component/PeopleStatus'
 import TabHistory from './component/tabHistory/Index'
 
 const Index = (): JSX.Element => {
-    const { company, shiftEdit, state } = useReduceing()
+    const { shiftEdit } = useReduceing()
     const [status, setStatus] = useState({
         drawerOpen: false,
         currentTabs: 0
@@ -42,15 +42,6 @@ const Index = (): JSX.Element => {
                     })
                 }
             </Drawer>
-            <div className={window.styles.shiftProcessBar}>
-                <h3>{company.banch.find((item) => item.Id === state.banchId)?.BanchName || ''}</h3>
-                <Steps current={shiftEdit.Status - 1}>
-                    <Steps.Step title="尚未開放編輯" />
-                    <Steps.Step title="開放編輯" subTitle="" description={`${shiftEdit.StartDay} ～～ ${shiftEdit.EndDay}`} />
-                    <Steps.Step title="部門主管確認班表無誤" description="進行中..." />
-                    <Steps.Step title="編輯完成" description="" status={shiftEdit.Status === 4 ? 'finish' : 'wait' } />
-                </Steps>
-            </div>
             <div className={window.styles.shiftEdit}>
                 <Tabs
                     items={[

@@ -1,4 +1,4 @@
-import { Skeleton, Spin, Collapse, Button } from 'antd'
+import { Skeleton, Spin, Collapse, Button, Steps } from 'antd'
 import List from 'rc-virtual-list'
 import React, { useEffect } from 'react'
 import useReduceing from 'Hook/useReducing'
@@ -14,7 +14,7 @@ import ShiftTable from '../ShiftTable'
 const EditTable = (): JSX.Element => {
     const navigate = useNavigate()
     const fullScreenHandle = useFullScreenHandle()
-    const { loading, user, shiftEdit, state } = useReduceing()
+    const { loading, user, shiftEdit, state, company } = useReduceing()
     const { sendMessage, close, connectionStatus } = useShiftEditSocket(state.banchId, user?.token || '')
 
     // 寄送確認編輯
@@ -43,6 +43,15 @@ const EditTable = (): JSX.Element => {
     }
     return (
         <>
+            <div className={window.styles.shiftProcessBar}>
+                <h3>{company.banch.find((item) => item.Id === state.banchId)?.BanchName || ''}</h3>
+                <Steps current={shiftEdit.Status - 1}>
+                    <Steps.Step title="尚未開放編輯" />
+                    <Steps.Step title="開放編輯" subTitle="" description={`${shiftEdit.StartDay} ～～ ${shiftEdit.EndDay}`} />
+                    <Steps.Step title="部門主管確認班表無誤" description="進行中..." />
+                    <Steps.Step title="編輯完成" description="" status={shiftEdit.Status === 4 ? 'finish' : 'wait' } />
+                </Steps>
+            </div>
             <Collapse
                 ghost
                 className='mb-4'
