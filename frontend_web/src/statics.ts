@@ -75,10 +75,10 @@ class statics {
         assignEdit: '指定編輯'
     }
 
-    scope ={
+    scope = {
         global: '全部',
         self: '自己',
-        exceptManage: '除主管外',
+        exceptManage: '除主管外'
     }
 }
 
