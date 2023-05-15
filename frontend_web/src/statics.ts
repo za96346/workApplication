@@ -68,6 +68,18 @@ class statics {
         shift: 'shift',
         done: 'done'
     }
+
+    shiftSettingObj = {
+        coEdit: '共同編輯',
+        sortEdit: '順序編輯',
+        assignEdit: '指定編輯'
+    }
+
+    scope ={
+        global: '全部',
+        self: '自己',
+        exceptManage: '除主管外',
+    }
 }
 
 export default new statics()

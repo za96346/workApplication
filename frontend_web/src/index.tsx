@@ -24,14 +24,11 @@ import '@vteam_components/cloud/dist/style.js'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
-    <React.StrictMode>
-        <ConfigProvider locale={Locale}>
-            <Provider store={store}>
-                <PersistGate loading={null} persistor={persisStore}>
-                    <App />
-                </PersistGate>
-            </Provider>
-        </ConfigProvider>
-
-    </React.StrictMode>
+    <ConfigProvider locale={Locale}>
+        <Provider store={store}>
+            <PersistGate loading={null} persistor={persisStore}>
+                <App />
+            </PersistGate>
+        </Provider>
+    </ConfigProvider>
 )
