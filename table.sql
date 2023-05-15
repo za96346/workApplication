@@ -310,3 +310,13 @@ create table shiftEditLog (
 	createTime timestamp default now(),
 	lastModify timestamp default now()
 );
+
+# 班表設定
+create table shiftSetting (
+	settingId bigint not null unique auto_increment,
+	banchId bigInt default -1,
+	sortEmp varchar(1000) default '[]',
+	config varchar(1000) default '{}',
+	createTime timestamp default now(),
+	lastModify timestamp default now()
+);
