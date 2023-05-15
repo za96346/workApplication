@@ -1,18 +1,18 @@
-import React, { useEffect } from "react";
-import { Form, List, listType, SelectUI } from "@vteam_components/cloud";
-import { Avatar, Divider } from "antd";
-import api from "api/api";
-import useReduceing from "Hook/useReducing";
-import { UserType } from "type";
-import statics from 'statics';
+import React, { useEffect } from "react"
+import { Form, List, listType, SelectUI } from "@vteam_components/cloud"
+import { Avatar, Divider } from "antd"
+import api from "api/api"
+import useReduceing from "Hook/useReducing"
+import { UserType } from "type"
+import statics from 'statics'
 
 const Index = (): JSX.Element => {
     const { state, company } = useReduceing()
     useEffect(() => {
         api.getUserAll({
             workState: 'on',
-            banch: state.banchId 
-        });
+            banch: state.banchId
+        })
     }, [state?.banchId])
     return (
         <>
@@ -48,11 +48,12 @@ const Index = (): JSX.Element => {
                         <Form.Status>
                             {
                                 ({ fieldValue }) => (fieldValue?.editMode === 'sortEdit' || fieldValue?.editMode === 'assignEdit') && (
-                                        <>
-                                            <Divider>員工排序 (拖曳編輯)</Divider><List dataSource={(company?.employee || []) as unknown as Array<UserType & { id: string; }>}>
+                                    <>
+                                        <Divider>員工排序 (拖曳編輯)</Divider>
+                                        <List dataSource={(company?.employee || []) as unknown as Array<UserType & { id: string }>}>
                                             <div className="list-group w-100">
                                                 <List.RenderRow>
-                                                    {({ childrenDIVProps, item, index }: listType.itemChildProps & { item: UserType; }) => (
+                                                    {({ childrenDIVProps, item, index }: listType.itemChildProps & { item: UserType }) => (
                                                         <SelectUI.Item
                                                             itemKey={item?.id}
                                                             multipleChecked={false}
@@ -97,4 +98,4 @@ const Index = (): JSX.Element => {
         </>
     )
 }
-export default Index;
+export default Index
