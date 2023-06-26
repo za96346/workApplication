@@ -1,9 +1,9 @@
-import React, { useEffect } from "react"
-import { Form, List, listType, SelectUI } from "@vteam_components/cloud"
-import { Avatar, Divider } from "antd"
-import api from "api/api"
-import useReduceing from "Hook/useReducing"
-import { UserType } from "type"
+import React, { useEffect } from 'react'
+import { Form, List, listType, SelectUI } from '@vteam_components/cloud'
+import { Avatar, Divider } from 'antd'
+import api from 'api/api'
+import useReduceing from 'Hook/useReducing'
+import { UserType } from 'type'
 import statics from 'statics'
 
 const Index = (): JSX.Element => {
