@@ -1,0 +1,6 @@
+/* 更新 分數 都變為100分計算 原本資料*10 */
+SET SQL_SAFE_UPDATES=0;
+update workapplication.performance
+set attitude=attitude*10,
+	efficiency=efficiency*10,
+    professional=professional*10;

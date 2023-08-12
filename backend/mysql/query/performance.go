@@ -192,7 +192,7 @@ func AddPerformance(){
 			p.userId,
 			p.year,
 			ifnull(u.userName, ''),
-			round((sum(p.attitude) + sum(p.professional) + sum(p.efficiency)) / 3.6, 2)
+			round((sum(p.attitude) + sum(p.professional) + sum(p.efficiency)) / 36, 2)
 		from performance as p
 		left join user u
 			on u.userId=p.userId
@@ -212,7 +212,7 @@ func AddPerformance(){
 			p.userId,
 			p.year,
 			ifnull(u.userName, ''),
-			round((sum(p.attitude) + sum(p.professional) + sum(p.efficiency)) / 3.6, 2)
+			round((sum(p.attitude) + sum(p.professional) + sum(p.efficiency)) / 36, 2)
 		from performance as p
 		left join user u
 			on u.userId=p.userId
@@ -235,7 +235,7 @@ func AddPerformance(){
 			p.userId,
 			p.year,
 			ifnull(u.userName, ''),
-			round((sum(p.attitude) + sum(p.professional) + sum(p.efficiency)) / 3.6, 2)
+			round((sum(p.attitude) + sum(p.professional) + sum(p.efficiency)) / 36, 2)
 		from performance as p
 		left join user u
 			on u.userId=p.userId
