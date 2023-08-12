@@ -93,13 +93,13 @@ const Edit = ({
                     <Input.TextArea autoSize placeholder="輸入年度目標"/>
                 </Form.Item>
                 <Form.Item name="Attitude" initialValue={value?.Attitude || 0} className="col-4" label="態度">
-                    <InputNumber disabled={disabled} min={0} max={10} placeholder="態度"/>
+                    <InputNumber disabled={disabled} min={0} max={100} placeholder="態度"/>
                 </Form.Item>
                 <Form.Item name="Efficiency" initialValue={value?.Efficiency || 0} className="col-4" label="效率">
-                    <InputNumber disabled={disabled} min={0} max={10} placeholder="效率"/>
+                    <InputNumber disabled={disabled} min={0} max={100} placeholder="效率"/>
                 </Form.Item>
                 <Form.Item name="Professional" initialValue={value?.Professional || 0} className="col-4" label="專業">
-                    <InputNumber disabled={disabled} min={0} max={10} placeholder="專業"/>
+                    <InputNumber disabled={disabled} min={0} max={100} placeholder="專業"/>
                 </Form.Item>
                 <Form.Item name="BeLate" initialValue={value?.BeLate || 0} className="col-6" label="遲到/早退">
                     <InputNumber disabled={disabled} min={0} max={100} placeholder="次數"/>

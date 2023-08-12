@@ -11,7 +11,7 @@
     "@types/node": "^18.7.13",
     "@types/styled-components": "^5.1.26",
     "@types/uuid": "^8.3.4",
-    "@vteam_components/cloud": "^2.10.17",
+    "@vteam_components/cloud": "2.13.6",
     "antd": "^5.1.0",
     "bootstrap": "^5.2.3",
     "D": "^1.0.0",

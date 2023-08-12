@@ -29,14 +29,6 @@ const Index = (): JSX.Element => {
                     defaultValue={'coEdit'}
                     onChange={() => {}}
                 />
-                <Form.Select
-                    className="col-md-6"
-                    name="editScope"
-                    datas={statics.scope}
-                    title="編輯範圍"
-                    defaultValue={'self'}
-                    onChange={() => {}}
-                />
 
                 {/* 排序 */}
                 <SelectUI onChange={(v) => { console.log(v) }}>
@@ -60,23 +52,35 @@ const Index = (): JSX.Element => {
                                                             defaultValue={0}
                                                         >
                                                             {(v) => (
-                                                                <a
-                                                                    onClick={v?.onClick}
-                                                                    {...childrenDIVProps}
-                                                                    className={`
+                                                                <Form.Group name={`${item?.UserId}`}>
+                                                                    <a
+                                                                        onClick={v?.onClick}
+                                                                        {...childrenDIVProps}
+                                                                        className={`
                                                                         list-group-item
                                                                         list-group-item-action
                                                                         d-flex
                                                                         mb-2
                                                                         ${v?.isChecked(item?.id) ? 'bg-danger' : ''}
                                                                     `}
-                                                                >
-                                                                    <Avatar style={{ fontSize: '0.5rem' }} icon={v?.isChecked(item?.id) ? '禁止' : index + 1} />
-                                                                    <span className="mx-3">
+                                                                    >
+                                                                        <Avatar style={{ fontSize: '0.5rem' }} icon={v?.isChecked(item?.id) ? '禁止' : index + 1} />
+                                                                        <span className="mx-3">
                                                                         姓名 : {item?.UserName || ''}<br />
                                                                         順位 : {index + 1}
-                                                                    </span>
-                                                                </a>
+                                                                        </span>
+                                                                        <div style={{ width: '150px' }}>
+                                                                            <Form.Select
+                                                                                className="col-md-6"
+                                                                                name="editScope"
+                                                                                datas={statics.scope}
+                                                                                title="編輯範圍"
+                                                                                defaultValue={'self'}
+                                                                                onChange={() => {}}
+                                                                            />
+                                                                        </div>
+                                                                    </a>
+                                                                </Form.Group>
                                                             )}
                                                         </SelectUI.Item>
                                                     )}
