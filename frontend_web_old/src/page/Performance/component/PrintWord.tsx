@@ -72,7 +72,7 @@ const PrintWord = (): JSX.Element => {
                         <div
                             ref={clientHeight2_ref}
                             style={{ minHeight: '4.5cm', height: 'fit-content' }}>
-                            <div className={window.styles.print_page_column_one}>前月績效</div>
+                            <div className={window.styles.print_page_column_one}>當月績效</div>
                             <div className={window.styles.print_page_column_two}>
                                             專業績效:{value?.Professional || 0}&nbsp;    行政效率:{value?.Efficiency || 0}&nbsp;    工作態度:{value?.Attitude || 0}<br/>
                                             出勤狀況&nbsp;&nbsp;&nbsp;遲到:{value?.BeLate || 0}&nbsp;    未依規定請假:{value?.DayOffNotOnRule || 0}<br/>
