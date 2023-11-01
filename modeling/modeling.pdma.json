@@ -4,7 +4,7 @@
   "avatar": "",
   "version": "4.6.1",
   "createdTime": "2023-7-29 21:06:30",
-  "updatedTime": "2023-10-31 23:13:44",
+  "updatedTime": "2023-11-1 14:31:39",
   "dbConns": [],
   "profile": {
     "default": {
@@ -10144,11 +10144,11 @@
   "dbConn": [
     {
       "defKey": "B2CB6BF9-3591-48B6-B432-3B75676BCBDF",
-      "defName": "rootWorkapp",
+      "defName": "new_workApp",
       "type": "29D1CE08-4C35-4D2D-AAA9-23D93305B52E",
       "properties": {
         "driver_class_name": "com.mysql.cj.jdbc.Driver",
-        "url": "jdbc:mysql://127.0.0.1:3306/workApplication?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC",
+        "url": "jdbc:mysql://127.0.0.1:3306/new_workApp?characterEncoding=UTF-8&useSSL=false&useUnicode=true&serverTimezone=UTC",
         "password": "siou0722",
         "username": "root"
       }
