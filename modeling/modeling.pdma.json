@@ -2,9 +2,9 @@
   "name": "modeling",
   "describe": "modeling",
   "avatar": "",
-  "version": "4.6.3",
+  "version": "4.6.1",
   "createdTime": "2023-7-29 21:06:30",
-  "updatedTime": "2023-11-2 19:36:40",
+  "updatedTime": "2023-11-3 23:02:04",
   "dbConns": [],
   "profile": {
     "default": {
@@ -626,8 +626,8 @@
           "defName": "公司id",
           "comment": "",
           "domain": "",
-          "type": "VARCHAR",
-          "len": 50,
+          "type": "INT",
+          "len": "",
           "scale": "",
           "primaryKey": true,
           "notNull": true,
@@ -1917,6 +1917,23 @@
           "extProps": {},
           "domain": "9092C4E0-1A54-4859-ABBB-5B62DBC27573",
           "id": "7E4AE18B-2854-4BD3-8D02-D4F58B3F3326"
+        },
+        {
+          "defKey": "scopeBanch",
+          "defName": "可操作部門範圍 ( 部門ID[] )",
+          "comment": "",
+          "type": "TEXT",
+          "len": "",
+          "scale": "",
+          "primaryKey": false,
+          "notNull": false,
+          "autoIncrement": false,
+          "defaultValue": "",
+          "hideInGraph": false,
+          "refDict": "",
+          "extProps": {},
+          "domain": "",
+          "id": "4C1DC326-CF5D-4AE8-94D0-7B418788B52D"
         },
         {
           "defKey": "scopeRole",

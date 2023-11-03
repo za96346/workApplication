@@ -17,7 +17,7 @@ import "time"
 // class:HongMouer.HIS.Models.User
 // version:2023-10-01 13:06
 type User struct {
-    CompanyId        string       `gorm:"column:companyId;primaryKey" json:"CompanyId"`    //type:string       comment:公司id                version:2023-10-02 14:15
+    CompanyId        int       `gorm:"column:companyId;primaryKey" json:"CompanyId"`    //type:string       comment:公司id                version:2023-10-02 14:15
     UserId           int         `gorm:"column:userId;primaryKey" json:"UserId"`          //type:*int         comment:使用者id              version:2023-10-02 14:15
     RoleId           int         `gorm:"column:roleId" json:"RoleId"`                     //type:*int         comment:使用者套用的角色id    version:2023-10-02 14:15
     BanchId          int         `gorm:"column:banchId" json:"BanchId"`                   //type:*int         comment:部門id                version:2023-10-02 14:15

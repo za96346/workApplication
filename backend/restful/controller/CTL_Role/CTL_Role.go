@@ -2,25 +2,19 @@ package CTL_Role
 
 import (
 	"backend/Model"
+	"encoding/json"
 	"net/http"
-	"strconv"
 	"time"
 
-	"github.com/gin-contrib/sessions"
+	"backend/method"
+
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
-// 錯誤處理
-func ErrorHandle(Request *gin.Context, TX *gorm.DB, MSG string) {
-	Request.JSON(
-		http.StatusForbidden,
-		gin.H {
-			"message": "[角色]--" + MSG,
-		},
-	)
-	TX.Rollback()
+var ErrorInstance = &method.ErrorStruct{
+	MessageTitle: "[CTL_Role 角色]--",
 }
+
 
 func checkRequest() {
 	
@@ -28,8 +22,12 @@ func checkRequest() {
 
 // 獲取公司角色
 func Get(Request *gin.Context) {
+	// session
+	session := method.SessionStruct{}
+	if session.SessionHandler(Request) != nil {return}
+
 	data := new([]Model.Role)
-	Model.DB.Find(data)
+	Model.DB.Where("companyId = ?", session.CompanyId).Where("deleteFlag = ?", "N").Find(data)
 
 	Request.JSON(
 		http.StatusOK,
@@ -46,9 +44,9 @@ func GetSingle(Request *gin.Context) {
 	rolePermission := &[]Model.RoleStruct{}
 	rolePermissionMap := map[string](map[string][]int){}
 
-	session := sessions.Default(Request)
-
-	companySID, _ := strconv.Atoi(session.Get("companySID").(string))
+	// session
+	session := method.SessionStruct{}
+	if session.SessionHandler(Request) != nil {return}
 
 	// 請求處理
 	reqBody := new(struct {
@@ -56,13 +54,13 @@ func GetSingle(Request *gin.Context) {
 	})
 
 	if Request.ShouldBindJSON(&reqBody) != nil {
-		ErrorHandle(Request, Model.DB.Begin(), "Request Data 格式不正確")
+		ErrorInstance.ErrorHandler(Request, "Request Data 格式不正確")
 		return
 	}
 
 	// 查詢DB
-	Model.DB.Where("companyId = ?", companySID).Where("roleId = ?", reqBody.RoleId).First(roleData)
-	Model.DB.Where("companyId = ?", companySID).Where("roleId = ?", reqBody.RoleId).Find(rolePermission)
+	Model.DB.Where("companyId = ?", session.CompanyId).Where("roleId = ?", reqBody.RoleId).Where("deleteFlag = ?", "N").First(roleData)
+	Model.DB.Where("companyId = ?", session.CompanyId).Where("roleId = ?", reqBody.RoleId).Find(rolePermission)
 
 	for _, v := range *rolePermission {
 		if rolePermissionMap[v.FuncCode] == nil {
@@ -86,9 +84,10 @@ func GetSingle(Request *gin.Context) {
 // 更新角色結構
 func Update(Request *gin.Context) {
 	TX := Model.DB.Begin()
-	session := sessions.Default(Request)
 
-	companySID, _ := strconv.Atoi(session.Get("companySID").(string))
+	session := method.SessionStruct{}
+	if session.SessionHandler(Request) != nil {return}
+
 
 	// 請求處理
 	reqBody := new(struct {
@@ -99,16 +98,20 @@ func Update(Request *gin.Context) {
 		/**
 			Data = {
 				[funcCode]: {
-					[itemCode]: []RoleId
+					[itemCode]: {
+						scopeBanch: []BanchId, 
+						scopeRole: []RoleId
+					}
 				}
 			}
 		*/
-		Data map[string](map[string][]int)
+		Data map[string](map[string](map[string][]int))
 
 	})
 
 	if Request.ShouldBindJSON(&reqBody) != nil {
-		ErrorHandle(Request, TX, "Request Data 格式不正確")
+		ErrorInstance.ErrorHandler(Request, "Request Data 格式不正確")
+		TX.Rollback()
 		return
 	}
 
@@ -122,8 +125,8 @@ func Update(Request *gin.Context) {
 	// 更新 或 新增 role table
 	if reqBody.Type == "add" {
 		var MaxCount int64
-		TX.Model(&Model.Role{}).Where("companyId = ?", companySID).Count(&MaxCount)
-		updateRoleQuery["companyId"] = companySID
+		TX.Model(&Model.Role{}).Where("companyId = ?", session.CompanyId).Count(&MaxCount)
+		updateRoleQuery["companyId"] = session.CompanyId
 		updateRoleQuery["roleId"] = MaxCount + 1
 
 		TX.Model(&Model.Role{}).Create(&updateRoleQuery)
@@ -131,7 +134,7 @@ func Update(Request *gin.Context) {
 		
 		TX.Model(&Model.Role{}).Where(
 			"companyId = ?",
-			companySID,
+			session.CompanyId,
 		).Where(
 			"roleId = ?",
 			reqBody.RoleId,
@@ -141,7 +144,7 @@ func Update(Request *gin.Context) {
 	// 先把 此role structure 的資料 刪除
 	TX.Where(
 		"companyId = ?",
-		companySID,
+		session.CompanyId,
 	).Where(
 		"roleId = ?",
 		reqBody.RoleId,
@@ -149,18 +152,22 @@ func Update(Request *gin.Context) {
 
 	// 在 寫入 新的 進入 db
 	for funcCode, itemObject := range reqBody.Data {
-		for itemCode, _ := range itemObject {
+		for itemCode, scopeObject := range itemObject {
+			scopeBanch, _:= json.Marshal(scopeObject["scopeBanch"])
+			scopeRole, _:= json.Marshal(scopeObject["scopeRole"])
 			updateData := &Model.RoleStruct{
-				CompanyId: companySID,
+				CompanyId: session.CompanyId,
 				RoleId: reqBody.RoleId,
 				FuncCode: funcCode,
 				ItemCode: itemCode,
-				ScopeRole: "[]",
+				ScopeBanch: string(scopeBanch),
+				ScopeRole: string(scopeRole),
 				CreateTime: time.Now(),
 				LastModify: time.Now(),
 			}
 			if TX.Create(updateData).Error != nil {
-				ErrorHandle(Request, TX, "新增失敗")
+				ErrorInstance.ErrorHandler(Request, "新增失敗")
+				TX.Rollback()
 				return
 			}
 			
@@ -176,17 +183,44 @@ func Update(Request *gin.Context) {
 	)
 }
 
+// 刪除角色
 func Delete(Request *gin.Context) {
 	TX := Model.DB.Begin()
-	session := sessions.Default(Request)
 
-	TX.Delete(&)
+	session := method.SessionStruct{}
+	if session.SessionHandler(Request) != nil {return}
+
+	// 請求處理
+	reqBody := new(struct {
+		RoleId int
+	})
+
+	if Request.ShouldBindJSON(&reqBody) != nil {
+		ErrorInstance.ErrorHandler(Request, "Request Data 格式不正確")
+		TX.Rollback()
+		return
+	}
+
+	// 要更新的欄位
+	updateRoleQuery := map[string]interface{}{
+		"deleteFlag": "Y",
+		"deleteTime": time.Now(),
+		"lastModify": time.Now(),
+	}
+
+	TX.Model(&Model.Role{}).Where(
+		"companyId = ?",
+		0,
+	).Where(
+		"roleId = ?",
+		reqBody.RoleId,
+	).Updates(&updateRoleQuery)
 
 	TX.Commit()
 	Request.JSON(
 		http.StatusOK,
 		gin.H {
-			"message": "更新成功",
+			"message": "刪除成功",
 		},
 	)
 }
