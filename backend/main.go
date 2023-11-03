@@ -5,13 +5,15 @@ import (
 	"path/filepath"
 
 	"github.com/joho/godotenv"
+	"backend/Model"
 )
 
 
 func main() {
+	
 	if godotenv.Load(filepath.Join("./", ".env")) != nil {
 		panic("error loading .env file")
 	}
-
-	restFul.SetApiServer()
+	Model.SetUp()
+	restFul.SetUp()
 }

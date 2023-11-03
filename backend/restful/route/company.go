@@ -4,13 +4,14 @@ import (
 	// "strconv"
 
 	"backend/middleware"
-	"backend/restful/controller/CTL_User"
+	"backend/restful/controller/CTL_Company"
 
 	"github.com/gin-gonic/gin"
 )
-func User(props *gin.RouterGroup) {
+
+func Company(props *gin.RouterGroup) {
 	props.Use(middleware.Permission)
 	{
-		props.GET("/my", CTL_User.GetMine)
+		props.GET("/my", CTL_Company.Get)
 	}
 }

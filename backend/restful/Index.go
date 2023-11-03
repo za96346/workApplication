@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"backend/middleware"
-	"backend/restFul/route"
+	"backend/restFul/Route"
 
 	"github.com/gin-gonic/gin"
 
@@ -16,7 +16,7 @@ import (
 )
 
 // 設定 http server
-func SetApiServer() *gin.Engine {
+func SetUp() *gin.Engine {
 	port := os.Getenv("PORT")
 	apiServer := gin.Default()
 
@@ -33,9 +33,12 @@ func SetApiServer() *gin.Engine {
 
 	// route group
 	userApi := apiServer.Group("/workApp/user")
-	
+	roleApi := apiServer.Group("/workApp/role")
+	companyApi := apiServer.Group("/workApp/company")
 
-	route.User(userApi)
+	Route.User(userApi)
+	Route.Role(roleApi)
+	Route.Company(companyApi)
 
 	// start
 	apiServer.Run(":" + port)
