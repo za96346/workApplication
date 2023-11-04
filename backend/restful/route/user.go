@@ -12,5 +12,6 @@ func User(props *gin.RouterGroup) {
 	props.Use(middleware.Permission)
 	{
 		props.GET("/my", CTL_User.GetMine)
+		props.GET("/", CTL_User.Get)
 	}
 }

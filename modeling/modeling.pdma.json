@@ -4,7 +4,7 @@
   "avatar": "",
   "version": "4.6.1",
   "createdTime": "2023-7-29 21:06:30",
-  "updatedTime": "2023-11-4 13:02:31",
+  "updatedTime": "2023-11-4 17:17:10",
   "dbConns": [],
   "profile": {
     "default": {
@@ -2463,7 +2463,7 @@
     },
     {
       "id": "37DAD091-02E2-4DA9-AAA2-C774F27921F1",
-      "defKey": "companybanch",
+      "defKey": "company_banch",
       "defName": "公司部門",
       "comment": "",
       "properties": {},
@@ -2473,7 +2473,7 @@
           "defName": "公司Id",
           "comment": "",
           "domain": "",
-          "type": "BIGINT",
+          "type": "INT",
           "len": "",
           "scale": "",
           "primaryKey": true,
@@ -2500,7 +2500,7 @@
           "defName": "部門id",
           "comment": "",
           "domain": "",
-          "type": "BIGINT",
+          "type": "INT",
           "len": "",
           "scale": "",
           "primaryKey": true,
@@ -2550,19 +2550,20 @@
           "uiHint": "642D2E0A-8846-4549-BE56-8C0473F26EDE"
         },
         {
-          "defKey": "banchShiftStyle",
-          "defName": "部門班表樣式",
+          "defKey": "deleteFlag",
+          "defName": "刪除旗標 ( N, Y )",
           "comment": "",
-          "domain": "",
-          "type": "VARCHAR",
-          "len": 200,
+          "type": "CHAR",
+          "len": 1,
           "scale": "",
           "primaryKey": false,
           "notNull": false,
           "autoIncrement": false,
-          "defaultValue": "",
+          "defaultValue": "'N'",
           "hideInGraph": false,
           "refDict": "",
+          "extProps": {},
+          "notes": {},
           "attr1": "",
           "attr2": "",
           "attr3": "",
@@ -2572,22 +2573,46 @@
           "attr7": "",
           "attr8": "",
           "attr9": "",
-          "id": "8E028B8E-606B-4BCD-B4C8-0105F9714607",
+          "id": "4D9F1889-2882-411C-8270-D86FF642CBCD"
+        },
+        {
+          "defKey": "deleteTime",
+          "defName": "刪除時間",
+          "comment": "",
+          "type": "DATETIME",
+          "len": "",
+          "scale": "",
+          "primaryKey": false,
+          "notNull": false,
+          "autoIncrement": false,
+          "defaultValue": "",
+          "hideInGraph": false,
+          "refDict": "",
           "extProps": {},
-          "uiHint": "642D2E0A-8846-4549-BE56-8C0473F26EDE"
+          "notes": {},
+          "attr1": "",
+          "attr2": "",
+          "attr3": "",
+          "attr4": "",
+          "attr5": "",
+          "attr6": "",
+          "attr7": "",
+          "attr8": "",
+          "attr9": "",
+          "id": "E89DA754-2998-4CCA-9184-F02EBEF01971"
         },
         {
           "defKey": "createTime",
           "defName": "創建時間",
           "comment": "",
           "domain": "",
-          "type": "TIMESTAMP",
+          "type": "DATETIME",
           "len": "",
           "scale": "",
           "primaryKey": false,
           "notNull": false,
           "autoIncrement": false,
-          "defaultValue": "'CURRENT_TIMESTAMP'",
+          "defaultValue": "CURRENT_TIMESTAMP",
           "hideInGraph": false,
           "refDict": "",
           "attr1": "",
@@ -2608,13 +2633,13 @@
           "defName": "最後更新時間",
           "comment": "",
           "domain": "",
-          "type": "TIMESTAMP",
+          "type": "DATETIME",
           "len": "",
           "scale": "",
           "primaryKey": false,
           "notNull": false,
           "autoIncrement": false,
-          "defaultValue": "'CURRENT_TIMESTAMP'",
+          "defaultValue": "CURRENT_TIMESTAMP",
           "hideInGraph": false,
           "refDict": "",
           "attr1": "",
@@ -2637,13 +2662,7 @@
           "unique": true,
           "defName": null,
           "comment": "",
-          "fields": [
-            {
-              "ascOrDesc": "A",
-              "id": null,
-              "fieldDefKey": "id"
-            }
-          ],
+          "fields": [],
           "id": null
         }
       ],
@@ -3515,7 +3534,7 @@
     {
       "id": "7A0E1A59-67BA-4385-BDAD-6FAFA59B36AD",
       "defKey": "log",
-      "defName": "",
+      "defName": "Log紀錄",
       "comment": "",
       "properties": {},
       "fields": [
@@ -3943,7 +3962,8 @@
           "hideInGraph": true
         }
       ],
-      "correlations": []
+      "correlations": [],
+      "notes": {}
     },
     {
       "id": "9E875F88-518C-4964-82E5-C18297A869D6",

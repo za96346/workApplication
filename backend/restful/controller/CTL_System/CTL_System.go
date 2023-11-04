@@ -33,6 +33,15 @@ func GetAuth(Request *gin.Context) {
 
 	// 拿取功能項目表
 	Model.DB.
+		Where(
+			"funcCode in (?)",
+			Model.DB.
+				Model(&Model.RoleStruct{}).
+				Distinct().
+				Select("funcCode").
+				Where("companyId = ?", session.CompanyId).
+				Where("roleId = ?", session.RoleId),
+		).
 		Find(functionItem)
 
     // 整理權限的資料結構
@@ -65,13 +74,20 @@ func GetAuth(Request *gin.Context) {
 		}
 	}
 
+	// 權限寫入 session
+	permissionToJson, _ := json.Marshal(permission)
+	(*session.Instance).Set("permission", string(permissionToJson))
+
+
+	(*session.Instance).Save()
+
 	Request.JSON(
 		http.StatusOK,
 		gin.H {
 			"message": "成功",
 			"data": map[string]interface{} {
-				"session": *session,
-				"menu": "",
+				"session": session,
+				"menu": *functionItem,
 				"permission": *permission,
 			},
 		},
