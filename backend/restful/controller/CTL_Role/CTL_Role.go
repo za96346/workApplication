@@ -27,7 +27,10 @@ func Get(Request *gin.Context) {
 	if session.SessionHandler(Request) != nil {return}
 
 	data := new([]Model.Role)
-	Model.DB.Where("companyId = ?", session.CompanyId).Where("deleteFlag = ?", "N").Find(data)
+	Model.DB.
+		Where("companyId = ?", session.CompanyId).
+		Where("deleteFlag = ?", "N").
+		Find(data)
 
 	Request.JSON(
 		http.StatusOK,
@@ -59,8 +62,16 @@ func GetSingle(Request *gin.Context) {
 	}
 
 	// 查詢DB
-	Model.DB.Where("companyId = ?", session.CompanyId).Where("roleId = ?", reqBody.RoleId).Where("deleteFlag = ?", "N").First(roleData)
-	Model.DB.Where("companyId = ?", session.CompanyId).Where("roleId = ?", reqBody.RoleId).Find(rolePermission)
+	Model.DB.
+		Where("companyId = ?", session.CompanyId).
+		Where("roleId = ?", reqBody.RoleId).
+		Where("deleteFlag = ?", "N").
+		First(roleData)
+
+	Model.DB.
+		Where("companyId = ?", session.CompanyId).
+		Where("roleId = ?", reqBody.RoleId).
+		Find(rolePermission)
 
 	for _, v := range *rolePermission {
 		if rolePermissionMap[v.FuncCode] == nil {
@@ -99,13 +110,13 @@ func Update(Request *gin.Context) {
 			Data = {
 				[funcCode]: {
 					[itemCode]: {
-						scopeBanch: []BanchId, 
-						scopeRole: []RoleId
+						scopeBanch: []BanchId | all | self, 
+						scopeRole: []RoleId | all | self,
 					}
 				}
 			}
 		*/
-		Data map[string](map[string](map[string][]int))
+		Data map[string](map[string](map[string]interface{}))
 
 	})
 
@@ -125,43 +136,57 @@ func Update(Request *gin.Context) {
 	// 更新 或 新增 role table
 	if reqBody.Type == "add" {
 		var MaxCount int64
-		TX.Model(&Model.Role{}).Where("companyId = ?", session.CompanyId).Count(&MaxCount)
+		TX.Model(&Model.Role{}).
+			Where("companyId = ?", session.CompanyId).
+			Count(&MaxCount)
 		updateRoleQuery["companyId"] = session.CompanyId
 		updateRoleQuery["roleId"] = MaxCount + 1
 
 		TX.Model(&Model.Role{}).Create(&updateRoleQuery)
 	} else {
 		
-		TX.Model(&Model.Role{}).Where(
-			"companyId = ?",
-			session.CompanyId,
-		).Where(
-			"roleId = ?",
-			reqBody.RoleId,
-		).Updates(&updateRoleQuery)
+		TX.Model(&Model.Role{}).
+			Where("companyId = ?", session.CompanyId).
+			Where("roleId = ?", reqBody.RoleId).
+			Updates(&updateRoleQuery)
 	}
 
 	// 先把 此role structure 的資料 刪除
-	TX.Where(
-		"companyId = ?",
-		session.CompanyId,
-	).Where(
-		"roleId = ?",
-		reqBody.RoleId,
-	).Delete(&Model.RoleStruct{})
+	TX.
+		Where("companyId = ?", session.CompanyId).
+		Where("roleId = ?", reqBody.RoleId).
+		Delete(&Model.RoleStruct{})
 
 	// 在 寫入 新的 進入 db
 	for funcCode, itemObject := range reqBody.Data {
 		for itemCode, scopeObject := range itemObject {
-			scopeBanch, _:= json.Marshal(scopeObject["scopeBanch"])
-			scopeRole, _:= json.Marshal(scopeObject["scopeRole"])
+
+			// 可編輯部門範圍
+			scopeBanch := ""
+			if scopeObject["scopeBanch"] == "all" || scopeObject["scopeBanch"] == "self" {
+				scopeBanch = scopeObject["scopeBanch"].(string)
+			} else {
+				scopeBanchByte, _ := json.Marshal(scopeObject["scopeBanch"])
+				scopeBanch = string(scopeBanchByte)
+			}
+
+			// 可編輯角色範圍
+			scopeRole := ""
+			if scopeObject["scopeRole"] == "all" || scopeObject["scopeRole"] == "self" {
+				scopeRole = scopeObject["scopeRole"].(string)
+			} else {
+				scopeRoleByte, _ :=json.Marshal(scopeObject["scopeRole"])
+				scopeRole = string(scopeRoleByte)
+			}
+
+
 			updateData := &Model.RoleStruct{
 				CompanyId: session.CompanyId,
 				RoleId: reqBody.RoleId,
 				FuncCode: funcCode,
 				ItemCode: itemCode,
-				ScopeBanch: string(scopeBanch),
-				ScopeRole: string(scopeRole),
+				ScopeBanch: scopeBanch,
+				ScopeRole: scopeRole,
 				CreateTime: time.Now(),
 				LastModify: time.Now(),
 			}
@@ -208,13 +233,10 @@ func Delete(Request *gin.Context) {
 		"lastModify": time.Now(),
 	}
 
-	TX.Model(&Model.Role{}).Where(
-		"companyId = ?",
-		0,
-	).Where(
-		"roleId = ?",
-		reqBody.RoleId,
-	).Updates(&updateRoleQuery)
+	TX.Model(&Model.Role{}).
+		Where("companyId = ?", 0).
+		Where("roleId = ?", reqBody.RoleId).
+		Updates(&updateRoleQuery)
 
 	TX.Commit()
 	Request.JSON(
