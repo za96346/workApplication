@@ -22,9 +22,12 @@ func checkRequest() {
 
 // 獲取公司角色
 func Get(Request *gin.Context) {
-	// session
-	session := method.SessionStruct{}
-	if session.SessionHandler(Request) != nil {return}
+	// 權限驗證
+	session := method.SessionStruct{
+		Request: Request,
+		ReqBodyValidation: false,
+	}
+	if session.SessionHandler() != nil {return}
 
 	data := new([]Model.Role)
 	Model.DB.
@@ -47,19 +50,18 @@ func GetSingle(Request *gin.Context) {
 	rolePermission := &[]Model.RoleStruct{}
 	rolePermissionMap := map[string](map[string][]int){}
 
-	// session
-	session := method.SessionStruct{}
-	if session.SessionHandler(Request) != nil {return}
-
 	// 請求處理
 	reqBody := new(struct {
-		RoleId int
+		RoleId int `json:"RoleId" binding:"required"`
 	})
 
-	if Request.ShouldBindJSON(&reqBody) != nil {
-		ErrorInstance.ErrorHandler(Request, "Request Data 格式不正確")
-		return
+	// 權限驗證
+	session := method.SessionStruct{
+		Request: Request,
+		ReqBodyValidation: true,
+		ReqBodyStruct: reqBody,
 	}
+	if session.SessionHandler() != nil {return}
 
 	// 查詢DB
 	Model.DB.
@@ -96,16 +98,12 @@ func GetSingle(Request *gin.Context) {
 func Update(Request *gin.Context) {
 	TX := Model.DB.Begin()
 
-	session := method.SessionStruct{}
-	if session.SessionHandler(Request) != nil {return}
-
-
 	// 請求處理
 	reqBody := new(struct {
-		RoleId int
-		RoleName string
-		StopFlag string
-		Type string
+		RoleId int `json:"RoleId" binding:"required"`
+		RoleName string `json:"RoleName" binding:"required"`
+		StopFlag string `json:"StopFlag" binding:"required"`
+		Type string `json:"Type" binding:"required"`
 		/**
 			Data = {
 				[funcCode]: {
@@ -116,12 +114,17 @@ func Update(Request *gin.Context) {
 				}
 			}
 		*/
-		Data map[string](map[string](map[string]interface{}))
+		Data map[string](map[string](map[string]interface{})) `json:"Data" binding:"required"`
 
 	})
 
-	if Request.ShouldBindJSON(&reqBody) != nil {
-		ErrorInstance.ErrorHandler(Request, "Request Data 格式不正確")
+	// 權限驗證
+	session := method.SessionStruct{
+		Request: Request,
+		ReqBodyValidation: true,
+		ReqBodyStruct: reqBody,
+	}
+	if session.SessionHandler() != nil {
 		TX.Rollback()
 		return
 	}
@@ -157,6 +160,8 @@ func Update(Request *gin.Context) {
 		Where("roleId = ?", reqBody.RoleId).
 		Delete(&Model.RoleStruct{})
 
+	now := time.Now()
+
 	// 在 寫入 新的 進入 db
 	for funcCode, itemObject := range reqBody.Data {
 		for itemCode, scopeObject := range itemObject {
@@ -180,6 +185,7 @@ func Update(Request *gin.Context) {
 			}
 
 
+
 			updateData := &Model.RoleStruct{
 				CompanyId: session.CompanyId,
 				RoleId: reqBody.RoleId,
@@ -187,8 +193,8 @@ func Update(Request *gin.Context) {
 				ItemCode: itemCode,
 				ScopeBanch: scopeBanch,
 				ScopeRole: scopeRole,
-				CreateTime: time.Now(),
-				LastModify: time.Now(),
+				CreateTime: &now,
+				LastModify: &now,
 			}
 			if TX.Create(updateData).Error != nil {
 				ErrorInstance.ErrorHandler(Request, "新增失敗")
@@ -212,16 +218,18 @@ func Update(Request *gin.Context) {
 func Delete(Request *gin.Context) {
 	TX := Model.DB.Begin()
 
-	session := method.SessionStruct{}
-	if session.SessionHandler(Request) != nil {return}
-
 	// 請求處理
 	reqBody := new(struct {
-		RoleId int
+		RoleId int `json:"UserId" binding:"required"`
 	})
 
-	if Request.ShouldBindJSON(&reqBody) != nil {
-		ErrorInstance.ErrorHandler(Request, "Request Data 格式不正確")
+	// 權限驗證
+	session := method.SessionStruct{
+		Request: Request,
+		ReqBodyValidation: true,
+		ReqBodyStruct: reqBody,
+	}
+	if session.SessionHandler() != nil {
 		TX.Rollback()
 		return
 	}

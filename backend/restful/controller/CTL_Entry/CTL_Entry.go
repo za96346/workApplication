@@ -54,7 +54,7 @@ func Login(Request *gin.Context) {
 	session.Set("userId", strconv.Itoa((*user).UserId))
 	session.Set("companyId", strconv.Itoa((*user).CompanyId))
 	session.Set("roleId", strconv.Itoa((*user).RoleId))
-	session.Set("banchId", strconv.Itoa((*user).BanchId))
+	session.Set("banchId", strconv.Itoa(*(*user).BanchId))
 	session.Set("userName", (*user).UserName)
 	session.Set("employeeNumber", (*user).EmployeeNumber)
 

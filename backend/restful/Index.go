@@ -37,12 +37,14 @@ func SetUp() *gin.Engine {
 	companyApi := apiServer.Group("/workApp/company")
 	entryApi := apiServer.Group("/workApp/entry")
 	systemApi := apiServer.Group("/workApp/system")
+	banchApi := apiServer.Group("/workApp/banch")
 
 	Route.User(userApi)
 	Route.Role(roleApi)
 	Route.Company(companyApi)
 	Route.Entry(entryApi)
 	Route.System(systemApi)
+	Route.Banch(banchApi)
 
 	// start
 	apiServer.Run(":" + port)

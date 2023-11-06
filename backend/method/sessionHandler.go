@@ -17,6 +17,7 @@ var ErrorInstance = &ErrorStruct{
 
 type SessionStruct struct {
 	Instance *sessions.Session
+	Request *gin.Context
 	CompanyId int // 公司id
 	IsLogin bool // 是否成功登入 "Y" | "N"
 	UserId int
@@ -42,24 +43,32 @@ type SessionStruct struct {
 	CurrentPermissionScopeBanch []int // 當前的 scope banch
 	CurrentPermissionScopeRole []int // 當前的 scope role
 	PermissionValidation bool // 是否開啟 權限驗證
+
+	IsCurrentScopeBanchAll bool // scope banch 是否是 all (給add 看的)
+	IsCurrentScopeRoleAll bool // scope role 是否是 all (給add 看的)
+
+	/*
+		請求
+	*/
+	ReqBodyValidation bool // 是否開啟 請求 json binding 驗證
+	ReqBodyStruct interface{} // 請求結構 ( please give it as a pointer. )
 }
 
-func ConvertSliceToInt(in []any) (out []int) {
-    out = make([]int, 0, len(in))
-    for _, v := range in {
-        out = append(out, int(v.(float64)))
-    }
-    return
-}
 
-func(instance *SessionStruct) SessionHandler(Request *gin.Context) error {
-	session := sessions.Default(Request)
+
+/*
+	session 基本處理
+*/
+func(instance *SessionStruct) SessionHandler() error {
+	session := sessions.Default((*instance).Request)
 	session.Set("companyId", "0")
+	(*instance).IsCurrentScopeBanchAll = false
+	(*instance).IsCurrentScopeRoleAll = false
 
 	// 公司 id
 	companyId, err := strconv.Atoi(session.Get("companyId").(string))
 	if err != nil {
-		ErrorInstance.ErrorHandler(Request, "公司id Error")
+		ErrorInstance.ErrorHandler((*instance).Request, "公司id Error")
 		return err
 	}
 
@@ -70,21 +79,21 @@ func(instance *SessionStruct) SessionHandler(Request *gin.Context) error {
 	// 使用者id
 	userId, err := strconv.Atoi(session.Get("userId").(string))
 	if err != nil {
-		ErrorInstance.ErrorHandler(Request, "使用者id Error")
+		ErrorInstance.ErrorHandler((*instance).Request, "使用者id Error")
 		return err
 	}
 
 	//角色id
 	roleId, err := strconv.Atoi(session.Get("roleId").(string))
 	if err != nil {
-		ErrorInstance.ErrorHandler(Request, "使用者角色id Error")
+		ErrorInstance.ErrorHandler((*instance).Request, "使用者角色id Error")
 		return err
 	}
 
 	// 部門id
 	banchId, err := strconv.Atoi(session.Get("banchId").(string))
 	if err != nil {
-		ErrorInstance.ErrorHandler(Request, "使用者部門id Error")
+		ErrorInstance.ErrorHandler((*instance).Request, "使用者部門id Error")
 		return err
 	}
 
@@ -106,7 +115,7 @@ func(instance *SessionStruct) SessionHandler(Request *gin.Context) error {
 		if !OK && (*instance).PermissionValidation {
 			errMSG := fmt.Sprintf("權限驗證失敗--[funcCode: '%s'][itemCode: '%s']", funcCode, itemCode)
 			ErrorInstance.ErrorHandler(
-				Request,
+				(*instance).Request,
 				errMSG,
 			)
 			return errors.New(errMSG)
@@ -121,6 +130,9 @@ func(instance *SessionStruct) SessionHandler(Request *gin.Context) error {
 				Where("deleteFlag = ?", "N").
 				Find(&Model.Role{}).
 				Pluck("roleId", &scopeRole)
+
+			// 設定 is current scope role all
+			(*instance).IsCurrentScopeRoleAll = true
 		} else if permission["scopeRole"] == "self" {
 			scopeRole = append(scopeRole, roleId)
 		} else if permission["scopeRole"] != nil {
@@ -147,6 +159,9 @@ func(instance *SessionStruct) SessionHandler(Request *gin.Context) error {
 				Where("deleteFlag = ?", "N").
 				Find(&Model.CompanyBanch{}).
 				Pluck("banchId", &scopeBanch)
+			
+			// 設定 is current scope banch all
+			(*instance).IsCurrentScopeBanchAll = true
 		} else if permission["scopeBanch"] == "self" {
 			scopeBanch = append(scopeBanch, banchId)
 		} else if permission["scopeBanch"] != nil {
@@ -170,6 +185,19 @@ func(instance *SessionStruct) SessionHandler(Request *gin.Context) error {
 		(*instance).CurrentPermissionScopeRole = scopeRole
 	}
 
+	// 請求資料驗證
+	if (*instance).ReqBodyValidation {
+		bindError := (*instance).Request.ShouldBindJSON((*instance).ReqBodyStruct)
+	
+		if bindError != nil {
+			ErrorInstance.ErrorHandler(
+				(*instance).Request,
+				fmt.Sprintf("Request Data 格式不正確 %s", bindError),
+			)
+			return bindError
+		}	
+	}
+
 	// 綁定物件
 	(*instance).CompanyId = companyId
 	(*instance).IsLogin = isLogin
@@ -179,6 +207,33 @@ func(instance *SessionStruct) SessionHandler(Request *gin.Context) error {
 	(*instance).UserName = userName
 	(*instance).EmployeeNumber = employeeNumber
 	(*instance).Instance = &session
+
+	return nil
+}
+
+// 檢查可編輯的 部門範圍
+func(instance *SessionStruct) CheckScopeBanchValidation(banchId int) error {
+	// 檢查是否可以加入此部門
+	if exists, _ := InArray(
+		(*instance).CurrentPermissionScopeBanch,
+		banchId);
+		!exists {
+		ErrorInstance.ErrorHandler((*instance).Request, "無法插入此部門，尚無權限")
+		return errors.New("CheckScopeBanchValidation error.")
+	}
+	return nil
+}
+
+// 檢查可編輯的 角色範圍
+func(instance *SessionStruct) CheckScopeRoleValidation(roleId int) error {
+	// 檢查是否可以加入此角色
+	if exists, _ := InArray(
+		(*instance).CurrentPermissionScopeRole,
+		roleId);
+		!exists {
+		ErrorInstance.ErrorHandler((*instance).Request, "無法插入此角色，尚無權限")
+		return errors.New("CheckScopeRoleValidation error.")
+	}
 
 	return nil
 }

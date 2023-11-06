@@ -2,6 +2,7 @@ package CTL_System
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"backend/Model"
@@ -16,8 +17,11 @@ var ErrorInstance = &method.ErrorStruct{
 
 // 獲取權限
 func GetAuth(Request *gin.Context) {
-	session := &method.SessionStruct{}
-	if session.SessionHandler(Request) != nil {return}
+	session := &method.SessionStruct{
+		Request: Request,
+		ReqBodyValidation: false,
+	}
+	if session.SessionHandler() != nil {return}
 
 	RoleStruct := &[]Model.RoleStruct{}
 	functionItem := &[]Model.FunctionItem{}
@@ -54,7 +58,7 @@ func GetAuth(Request *gin.Context) {
 		if (*permission)[value.FuncCode][value.ItemCode] == nil {
 			(*permission)[value.FuncCode][value.ItemCode] = make(map[string]interface{})
 		}
-		
+
 		// 可編輯角色範圍 json decode
 		if value.ScopeRole != "all" && value.ScopeRole != "self" {
 			var scopeRole []int
@@ -63,7 +67,7 @@ func GetAuth(Request *gin.Context) {
 		} else {
 			(*permission)[value.FuncCode][value.ItemCode]["scopeRole"] = value.ScopeRole
 		}
-		
+
 		// 可編輯部門範圍 json decode
 		if value.ScopeBanch != "all" && value.ScopeBanch != "self" {
 			var scopeBanch []int
@@ -73,11 +77,10 @@ func GetAuth(Request *gin.Context) {
 			(*permission)[value.FuncCode][value.ItemCode]["scopeBanch"] = value.ScopeBanch
 		}
 	}
-
+	fmt.Printf("error1")
 	// 權限寫入 session
 	permissionToJson, _ := json.Marshal(permission)
 	(*session.Instance).Set("permission", string(permissionToJson))
-
 
 	(*session.Instance).Save()
 
@@ -86,10 +89,19 @@ func GetAuth(Request *gin.Context) {
 		gin.H {
 			"message": "成功",
 			"data": map[string]interface{} {
-				"session": session,
 				"menu": *functionItem,
 				"permission": *permission,
+				
+				"session-BanchId": session.BanchId,
+				"session-RoleId": session.RoleId,
+				"session-UserId": session.UserId,
+				"session-CompanyId": session.CompanyId,
+				"session-IsLogin": session.IsLogin,
+				"session-UserName": session.UserName,
+				"session-EmployeeNumber": session.EmployeeNumber,
+				"session-Permission": session.Permission,
 			},
 		},
 	)
+
 }

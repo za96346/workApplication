@@ -13,5 +13,8 @@ func User(props *gin.RouterGroup) {
 	{
 		props.GET("/my", CTL_User.GetMine)
 		props.GET("/", CTL_User.Get)
+		props.PUT("/", CTL_User.Add)
+		props.POST("/", CTL_User.Edit)
+		props.DELETE("/", CTL_User.Delete)
 	}
 }

@@ -12,6 +12,7 @@ import (
 func Company(props *gin.RouterGroup) {
 	props.Use(middleware.Permission)
 	{
-		props.GET("/my", CTL_Company.Get)
+		props.GET("/", CTL_Company.Get)
+		props.POST("/", CTL_Company.Edit)
 	}
 }
