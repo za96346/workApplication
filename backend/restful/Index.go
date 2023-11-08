@@ -38,6 +38,7 @@ func SetUp() *gin.Engine {
 	entryApi := apiServer.Group("/workApp/entry")
 	systemApi := apiServer.Group("/workApp/system")
 	banchApi := apiServer.Group("/workApp/banch")
+	performanceApi := apiServer.Group("/workApp/performance")
 
 	Route.User(userApi)
 	Route.Role(roleApi)
@@ -45,6 +46,7 @@ func SetUp() *gin.Engine {
 	Route.Entry(entryApi)
 	Route.System(systemApi)
 	Route.Banch(banchApi)
+	Route.Performance(performanceApi)
 
 	// start
 	apiServer.Run(":" + port)
