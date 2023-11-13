@@ -47,6 +47,7 @@ const showErrorDialog = async (error): Promise<void> => {
 // 請求前攔截器
 instance.interceptors.request.use(
     async (config) => {
+        console.log('config => ', config)
         return config
     },
     async (error) => {
@@ -124,7 +125,14 @@ class apiAbstract {
             showLoaderOnConfirm: true,
             ...v,
             preConfirm: async () => {
-                return await instance?.[v?.method]<T>(v?.url, v?.data)
+                return await instance?.[v?.method]<T>(
+                    v?.url,
+                    v?.method === 'delete'
+                        ? {
+                            data: v?.data
+                        }
+                        : v?.data
+                )
             }
         }).then((response): T => {
             void MySwal.AlertMessage({

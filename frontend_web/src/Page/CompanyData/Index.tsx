@@ -2,7 +2,7 @@ import { Form, Input } from 'antd'
 import api from 'api/Index'
 
 import { useAppSelector } from 'hook/redux'
-import usePermission from 'hook/usePermission'
+import { usePermission } from 'hook/usePermission'
 import React, { useEffect } from 'react'
 import Btn from 'shared/Button'
 import { funcCode } from 'types/system'

@@ -1,14 +1,8 @@
 import { funcCode } from 'types/system'
 import { useAppSelector } from './redux'
+import { usePermissionProps } from './types'
 
-interface returnType {
-    isEditable: boolean
-    isDeleteable: boolean
-    isInquirable: boolean
-    isAddable: boolean
-}
-
-const usePermission = ({ funcCode }: { funcCode: funcCode }): returnType => {
+const usePermission = ({ funcCode }: { funcCode: funcCode }): usePermissionProps.returnType => {
     const permission = useAppSelector((v) => v?.system?.auth?.permission?.[funcCode])
 
     return {
@@ -18,4 +12,7 @@ const usePermission = ({ funcCode }: { funcCode: funcCode }): returnType => {
         isAddable: 'add' in permission
     }
 }
-export default usePermission
+export {
+    usePermission,
+    type usePermissionProps as usePermissionTypes
+}

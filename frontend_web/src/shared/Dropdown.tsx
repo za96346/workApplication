@@ -1,21 +1,36 @@
 import React from 'react'
-import { DownOutlined } from '@ant-design/icons'
-import { Space, Dropdown as AntdDropdown, MenuProps } from 'antd'
+import { Space, Dropdown as AntdDropdown, MenuProps, Typography } from 'antd'
+import { modalType } from 'static'
 
 interface props {
-    menu: MenuProps['items']
+    menu?: MenuProps['items']
+    onSelect?: (v: modalType) => void
 }
 
-const Dropdown = ({ menu = [] }: props): JSX.Element => {
+const Dropdown = ({ menu = [], onSelect }: props): JSX.Element => {
     return (
-        <AntdDropdown menu={{ items: menu }}>
-            <a onClick={(e) => e.preventDefault()}>
+        <AntdDropdown
+            menu={{
+                items: menu,
+                onSelect: (v) => { onSelect(v?.key as modalType) },
+                selectable: true,
+                selectedKeys: []
+            }}
+            trigger={['click']}
+        >
+            <Typography.Link
+                onClick={(e) => {
+                    e.stopPropagation()
+                }}
+            >
                 <Space>
-                    . . .
-                    <DownOutlined />
+                • • •
                 </Space>
-            </a>
+            </Typography.Link>
         </AntdDropdown>
     )
 }
 export default Dropdown
+export {
+    type props as DropdownProps
+}

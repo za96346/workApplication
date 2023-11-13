@@ -34,8 +34,18 @@ declare namespace useCallBackStateProps {
     )
 }
 
+declare namespace usePermissionProps {
+    interface returnType {
+        isEditable: boolean
+        isDeleteable: boolean
+        isInquirable: boolean
+        isAddable: boolean
+    }
+}
+
 export {
-    useBreakPointProps,
-    useWindowSizeProps,
-    useCallBackStateProps
+    type useBreakPointProps,
+    type useWindowSizeProps,
+    type useCallBackStateProps,
+    type usePermissionProps
 }

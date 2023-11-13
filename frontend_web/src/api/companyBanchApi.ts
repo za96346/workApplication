@@ -2,9 +2,17 @@ import apiAbstract from './apiAbstract'
 import { companyBanchReducerType } from 'reducer/reducer/companyBanchReducer'
 
 declare namespace params {
-    interface update {
+    interface add {
         BanchName: string
+    }
 
+    interface deleted {
+        BanchId: number
+    }
+
+    interface edit {
+        BanchName: string
+        BanchId: number
     }
 }
 
@@ -20,11 +28,27 @@ class companyBanchApi extends apiAbstract {
         })
     }
 
-    async add (v: params.update): Promise<null> {
+    async add (v: params.add): Promise<null> {
         return await this.PUT<null>({
             url: this.route,
             data: v,
             check_text: '確認新增？'
+        })
+    }
+
+    async delete (v: params.deleted): Promise<null> {
+        return await this.DELETE<null>({
+            url: this.route,
+            data: v,
+            check_text: '確認刪除？'
+        })
+    }
+
+    async edit (v: params.edit): Promise<null> {
+        return await this.POST<null>({
+            url: this.route,
+            data: v,
+            check_text: '確認儲存？'
         })
     }
 }
