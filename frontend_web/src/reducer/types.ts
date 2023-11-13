@@ -6,3 +6,17 @@ export interface action {
 export const loadingType = {
     SET_LOADING: 'SET_LOADING'
 }
+
+export const systemType = {
+    SET_AUTH: 'SET_AUTH',
+    SET_SIDEBAR: 'SET_SIDEBAR'
+}
+
+export const userType = {
+    SET_MINE: 'SET_MINE',
+    SET_EMPLOYEE: 'SET_EMPLOYEE'
+}
+
+export const companyType = {
+    SET_MINE: 'SET_MINE'
+}

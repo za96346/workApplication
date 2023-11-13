@@ -25,10 +25,14 @@ func SetUp() *gin.Engine {
 		[]byte("secret11111"),
 	)
 
+	// store.Options(sessions.Options{
+	// 	HttpOnly: true,
+	// })
+
 	apiServer.Use(
+		middleware.CORS(),
 		sessions.Sessions("workapp_session", store),
 		middleware.RateLimit(time.Second, 100, 100),
-		middleware.CORS,
 	)
 
 	// route group

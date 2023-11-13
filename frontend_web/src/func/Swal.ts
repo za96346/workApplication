@@ -12,6 +12,7 @@ class MySwalAbs {
 
     constructor () {
         this.MySwal = withReactContent(Swal)
+        this.wrapChildren = (v) => v
         this.canBeTransToJSXKey = [
             'title',
             'html',
@@ -38,7 +39,7 @@ class MySwalAbs {
     public async AlertMessage<T>(
         o: SweetAlertOptions<any, any>
     ): Promise<SweetAlertResult<T>> {
-        return this.MySwal.fire({
+        return await this.MySwal.fire({
             icon: 'warning',
             customClass: o.customClass,
             confirmButtonText: '確認',
@@ -55,7 +56,7 @@ class MySwalAbs {
     public async checkMessage<T>(
         o: SweetAlertOptions<any, any>
     ): Promise<SweetAlertResult<T>> {
-        return this.MySwal.fire({
+        return await this.MySwal.fire({
             icon: 'question',
             showLoaderOnConfirm: true,
             showCancelButton: true,

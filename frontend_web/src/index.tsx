@@ -7,10 +7,13 @@ import { ConfigProvider } from 'antd'
 import Locale from 'antd/es/locale/zh_TW'
 import RouteIndex from 'Route'
 
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './index.scss'
+
 const root = ReactDOM.createRoot(document.getElementById('root') as NonNullable<Element>)
 root.render(
     <ConfigProvider locale={Locale}>
-        <Provider store={store} children={''}>
+        <Provider store={store}>
             <RouteIndex />
         </Provider>
     </ConfigProvider>

@@ -34,7 +34,9 @@
         "@typescript-eslint/restrict-template-expressions": "off",
         "@typescript-eslint/consistent-type-assertions": "off",
         "@typescript-eslint/no-floating-promises": "warn",
-        "import/no-absolute-path": "off"
+        "import/no-absolute-path": "off",
+        "react/jsx-uses-react": "error",
+        "@typescript-eslint/no-namespace": "off"
     },
     "settings": {
         "typescript": {

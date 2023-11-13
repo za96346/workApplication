@@ -1,6 +1,6 @@
 import { type action, loadingType } from '../types'
 
-class statusAcion {
+class loadingAction {
     onLoading (s: boolean): action {
         return {
             type: loadingType.SET_LOADING,
@@ -10,4 +10,4 @@ class statusAcion {
         }
     }
 }
-export default new statusAcion()
+export default new loadingAction()

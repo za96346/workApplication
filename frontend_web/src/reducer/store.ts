@@ -7,12 +7,29 @@ import {
     combineReducers,
     applyMiddleware
 } from 'redux'
-import { loadingReducer } from './reducer/loadingReducer'
+import { loadingReducer, loadingReducerType } from './reducer/loadingReducer'
+import { systemReducer, systemReducerType } from './reducer/systemReducer'
+import { userReducer, userReducerType } from './reducer/userReducer'
+import loadingAction from './action/loadingAction'
+import systemAction from './action/systemAction'
+import userAction from './action/userAction'
+import { companyReducer, companyReducerType } from './reducer/companyReducer'
+import companyAction from './action/companyAction'
 
-export const allAction = {
-    loading: loadingReducer
+export const allReducer = {
+    loading: loadingReducer,
+    system: systemReducer,
+    user: userReducer,
+    company: companyReducer
 }
-export const reducer = combineReducers(allAction)
+export const allAction = {
+    loading: loadingAction,
+    system: systemAction,
+    user: userAction,
+    company: companyAction
+}
+
+export const reducer = combineReducers(allReducer)
 
 // 持久化根reducers
 const persistedReducer = persistReducer({
@@ -28,4 +45,10 @@ export const store = createStore(
     composeWithDevTools(applyMiddleware(...[thunk]))
 )
 export const persisStore = persistStore(store)
-export type RootState = ReturnType<typeof store.getState>
+export interface RootState {
+    loading: loadingReducerType
+    system: systemReducerType
+    user: userReducerType
+    company: companyReducerType
+}
+export type AppDispatch = typeof store.dispatch
