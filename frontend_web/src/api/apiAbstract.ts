@@ -135,15 +135,15 @@ class apiAbstract {
         })
     }
 
-    public async POST<T extends any>(v: formRequestParams): Promise<T> {
+    protected async POST<T extends any>(v: formRequestParams): Promise<T> {
         return await this.ConfirmRequest({ ...v, method: 'post' })
     }
 
-    public async PUT<T extends any>(v: formRequestParams): Promise<T> {
+    protected async PUT<T extends any>(v: formRequestParams): Promise<T> {
         return await this.ConfirmRequest({ ...v, method: 'put' })
     }
 
-    public async DELETE<T extends any>(v: formRequestParams): Promise<T> {
+    protected async DELETE<T extends any>(v: formRequestParams): Promise<T> {
         return await this.ConfirmRequest({ ...v, method: 'delete' })
     }
 
@@ -151,7 +151,7 @@ class apiAbstract {
     /**
      * @T 是 回傳類型
     */
-    public async GET <T extends any>(v: dataRequestParams): Promise<T> {
+    protected async GET <T extends any>(v: dataRequestParams): Promise<T> {
         return await instance.get<T>(
             v?.url, {
                 params: v?.data

@@ -20,3 +20,7 @@ export const userType = {
 export const companyType = {
     SET_MINE: 'SET_MINE'
 }
+
+export const companyBanchType = {
+    SET_ALL: 'SET_ALL'
+}

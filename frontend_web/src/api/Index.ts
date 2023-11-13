@@ -1,12 +1,21 @@
-import userApi from './userApi'
-import entryApi from './entryApi'
-import systemApi from './systemApi'
-import companyApi from './companyApi'
+import userApi, { userApiParams } from './userApi'
+import entryApi, { entryApiParams } from './entryApi'
+import systemApi, { systemApiParams } from './systemApi'
+import companyApi, { companyApiParams } from './companyApi'
+import companyBanchApi, { companyBanchApiParams } from './companyBanchApi'
 
 const api = {
     entry: entryApi,
     system: systemApi,
     user: userApi,
-    company: companyApi
+    company: companyApi,
+    companyBanch: companyBanchApi
 }
 export default api
+export {
+    type userApiParams,
+    type entryApiParams,
+    type companyApiParams,
+    type companyBanchApiParams,
+    type systemApiParams
+}

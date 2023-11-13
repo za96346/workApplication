@@ -2,6 +2,9 @@ import systemAction from 'reducer/action/systemAction'
 import apiAbstract from './apiAbstract'
 import systemTypes from 'types/system'
 
+declare namespace params {
+}
+
 class systemApi extends apiAbstract {
     private readonly route = 'workApp/system/auth'
 
@@ -15,3 +18,6 @@ class systemApi extends apiAbstract {
     }
 }
 export default new systemApi()
+export {
+    type params as systemApiParams
+}

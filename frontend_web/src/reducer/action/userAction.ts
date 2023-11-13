@@ -1,8 +1,8 @@
-import userTypes from 'types/user'
 import { type action, userType } from '../types'
+import { userReducerType } from 'reducer/reducer/userReducer'
 
 class userAction {
-    setMine (v: userTypes.TABLE): action {
+    setMine (v: userReducerType['mine']): action {
         return {
             type: userType.SET_MINE,
             payload: {
@@ -11,7 +11,7 @@ class userAction {
         }
     }
 
-    setEmployee (v: userTypes.TABLE[]): action {
+    setEmployee (v: userReducerType['employee']): action {
         return {
             type: userType.SET_EMPLOYEE,
             payload: {

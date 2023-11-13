@@ -15,18 +15,22 @@ import systemAction from './action/systemAction'
 import userAction from './action/userAction'
 import { companyReducer, companyReducerType } from './reducer/companyReducer'
 import companyAction from './action/companyAction'
+import { companyBanchReducer, companyBanchReducerType } from './reducer/companyBanchReducer'
+import companyBanchAction from './action/companyBanchAction'
 
 export const allReducer = {
     loading: loadingReducer,
     system: systemReducer,
     user: userReducer,
-    company: companyReducer
+    company: companyReducer,
+    companyBanch: companyBanchReducer
 }
 export const allAction = {
     loading: loadingAction,
     system: systemAction,
     user: userAction,
-    company: companyAction
+    company: companyAction,
+    companyBanch: companyBanchAction
 }
 
 export const reducer = combineReducers(allReducer)
@@ -50,5 +54,6 @@ export interface RootState {
     system: systemReducerType
     user: userReducerType
     company: companyReducerType
+    companyBanch: companyBanchReducerType
 }
 export type AppDispatch = typeof store.dispatch

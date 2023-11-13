@@ -22,7 +22,7 @@
       "Hoc/*": ["Hoc/*"],
       "asserts/*": ["asserts/*"],
       "type": ["type"],
-      "static": ["statics"],
+      "static": ["static"],
     },
     "plugins": [
       // Transform paths in output .js files

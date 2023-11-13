@@ -25,9 +25,9 @@ const columns = [
         title: '到職日'
     },
     {
-        dataIndex: '',
-        key: '',
-        title: ''
+        dataIndex: 'action',
+        key: 'action',
+        title: '更多'
     }
 ]
 export default columns

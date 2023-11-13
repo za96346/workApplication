@@ -1,5 +1,5 @@
 import { Button, Form } from 'antd'
-import type { FormInstance } from 'antd'
+import type { ButtonProps, FormInstance } from 'antd'
 import React from 'react'
 
 const Btn = {
@@ -25,7 +25,34 @@ const Btn = {
                 {text}
             </Button>
         )
-    }
+    },
+    Add: (attr: ButtonProps) => (
+        <Button
+            type="primary"
+            htmlType="button"
+            {...attr}
+        >
+            新增
+        </Button>
+    ),
+    Save: (attr: ButtonProps) => (
+        <Button
+            type="primary"
+            htmlType="submit"
+            {...attr}
+        >
+            儲存
+        </Button>
+    ),
+    Cancel: (attr: ButtonProps) => (
+        <Button
+            type="primary"
+            htmlType="button"
+            {...attr}
+        >
+            取消
+        </Button>
+    )
 }
 
 export default Btn

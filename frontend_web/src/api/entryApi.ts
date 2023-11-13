@@ -21,5 +21,5 @@ class entryApi extends apiAbstract {
 }
 export default new entryApi()
 export {
-    params as entryApiParams
+    type params as entryApiParams
 }

@@ -37,6 +37,7 @@
     "tsparticles": "^2.9.3",
     "tsparticles-engine": "^2.9.3",
     "typescript-transform-paths": "^3.4.4",
+    "usehooks-ts": "^2.9.1",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"
   },
