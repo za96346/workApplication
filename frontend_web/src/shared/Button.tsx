@@ -52,6 +52,15 @@ const Btn = {
         >
             取消
         </Button>
+    ),
+    Close: (attr: ButtonProps) => (
+        <Button
+            type="primary"
+            htmlType="button"
+            {...attr}
+        >
+            關閉
+        </Button>
     )
 }
 

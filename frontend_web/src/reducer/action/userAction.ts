@@ -4,7 +4,7 @@ import { userReducerType } from 'reducer/reducer/userReducer'
 class userAction {
     setMine (v: userReducerType['mine']): action {
         return {
-            type: userType.SET_MINE,
+            type: userType.SET_USER_MINE,
             payload: {
                 mine: v
             }

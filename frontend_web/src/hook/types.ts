@@ -1,3 +1,5 @@
+import Session from 'func/Session'
+
 declare namespace useBreakPointProps {
     type WidthPropsType = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'sxl'
     interface props {
@@ -43,9 +45,24 @@ declare namespace usePermissionProps {
     }
 }
 
+declare namespace useSessionProps {
+    interface returnProps<T> {
+        session: () => ReturnType<Session<T>['get']>
+        setSession: Session<T>['set']
+        backward: Session<T>['backward']
+        forward: Session<T>['forward']
+        reset: Session<T>['reset']
+    }
+    interface InstanceReturnProps<T> {
+        Provider: React.FunctionComponent<{ children: any }>
+        Instance: Session<T>
+    }
+}
+
 export {
     type useBreakPointProps,
     type useWindowSizeProps,
     type useCallBackStateProps,
-    type usePermissionProps
+    type usePermissionProps,
+    type useSessionProps
 }

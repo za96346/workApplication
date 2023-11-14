@@ -1,5 +1,5 @@
 /* eslint-disable prefer-promise-reject-errors */
-import axios from 'axios'
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { type SweetAlertOptions } from 'sweetalert2'
 // import { reducer } from '@vteam_components/redux'
 import { store, allAction } from 'reducer/store'
@@ -7,6 +7,7 @@ import { store, allAction } from 'reducer/store'
 // 這個 global 一定要引入 不然此api build 時候會讀不到 actionT and storeT
 // import '@vteam_components/redux/global'
 import { MySwal } from '../func/Swal'
+import { v4 } from 'uuid'
 
 // type
 interface responseParams<T> {
@@ -30,6 +31,9 @@ interface formRequestParams extends dataRequestParams, SweetAlertOptions {
     method?: 'put' | 'post' | 'delete' | 'get'
 }
 
+type axiosRequestConfig = AxiosRequestConfig & { id: string }
+type axiosResponse = AxiosResponse<any, any> & { config: { id: string } }
+
 // instance
 const instance = axios.create({
     withCredentials: true,
@@ -46,12 +50,13 @@ const showErrorDialog = async (error): Promise<void> => {
 
 // 請求前攔截器
 instance.interceptors.request.use(
-    async (config) => {
-        console.log('config => ', config)
+    async (config: axiosRequestConfig) => {
+        config.id = v4()
+        store.dispatch(allAction.loading.onLoading({ [config.id]: true }))
         return config
     },
     async (error) => {
-        // this.loading('onLoading', false)
+        store.dispatch(allAction.loading.onLoading({ [error.config.id]: false }))
         void showErrorDialog(error)
         return await Promise.reject()
     }
@@ -59,12 +64,12 @@ instance.interceptors.request.use(
 
 // 回傳攔截器
 instance.interceptors.response.use(
-    (response): any => {
-        // this.loading('onLoading', false)
+    (response: axiosResponse): any => {
+        store.dispatch(allAction.loading.onLoading({ [response.config.id]: false }))
         return response?.data
     },
     async (error) => {
-        // this.loading('onLoading', false)
+        store.dispatch(allAction.loading.onLoading({ [error.config.id]: false }))
         void showErrorDialog(error)
         return await Promise.reject()
     }
@@ -161,9 +166,11 @@ class apiAbstract {
     */
     protected async GET <T extends any>(v: dataRequestParams): Promise<T> {
         return await instance.get<T>(
-            v?.url, {
+            v?.url,
+            {
                 params: v?.data
-            }).then((v) => v?.data)
+            }
+        ).then((v) => v?.data)
     }
 }
 

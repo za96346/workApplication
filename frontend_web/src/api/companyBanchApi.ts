@@ -51,6 +51,15 @@ class companyBanchApi extends apiAbstract {
             check_text: '確認儲存？'
         })
     }
+
+    async getSelector (): Promise<companyBanchReducerType['selector']> {
+        return await this.GET<companyBanchReducerType['selector']>({
+            url: this.route + 'selector'
+        }).then((res) => {
+            this.store.dispatch(this.action.companyBanch.setSelector(res))
+            return res
+        })
+    }
 }
 export default new companyBanchApi()
 export {

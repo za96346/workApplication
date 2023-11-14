@@ -37,3 +37,43 @@
     align-items: center;
     justify-content: center;
 }
+
+/** 樹形 控件 **/
+.tree_view {
+    font-size: 16px;
+    position: relative;
+    z-index: 0;
+    /* max-height: 25em; */
+    /* overflow: auto; */
+    line-height: 2.0;
+    transition: 0.2s;
+    .children{
+        padding-left: 1.5em;
+        position: relative;
+        overflow: hidden;
+        width: fit-content;
+        .node {
+            position: relative;
+            width: fit-content;
+            &::before {
+                content: "";
+                display: block;
+                width: 1em;
+                height: 9999px;
+                border-left: thin solid #999;
+                border-bottom: thin solid #999;
+                position: absolute;
+                left: -1em;
+                bottom: 0.85em;
+                z-index: -1;
+            }
+        }
+    }
+    .node {
+        width: fit-content;
+    }
+    .func-scroll {
+        overflow-x: auto;
+        overflow-y: visible;
+    }
+}

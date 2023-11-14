@@ -3,13 +3,15 @@ import entryApi, { entryApiParams } from './entryApi'
 import systemApi, { systemApiParams } from './systemApi'
 import companyApi, { companyApiParams } from './companyApi'
 import companyBanchApi, { companyBanchApiParams } from './companyBanchApi'
+import roleApi, { roleApiParams } from './roleApi'
 
 const api = {
     entry: entryApi,
     system: systemApi,
     user: userApi,
     company: companyApi,
-    companyBanch: companyBanchApi
+    companyBanch: companyBanchApi,
+    role: roleApi
 }
 export default api
 export {
@@ -17,5 +19,6 @@ export {
     type entryApiParams,
     type companyApiParams,
     type companyBanchApiParams,
-    type systemApiParams
+    type systemApiParams,
+    type roleApiParams
 }

@@ -4,7 +4,7 @@ import { companyReducerType } from 'reducer/reducer/companyReducer'
 class companyAction {
     setMine (v: companyReducerType['mine']): action {
         return {
-            type: companyType.SET_MINE,
+            type: companyType.SET_COMPANY_MINE,
             payload: {
                 mine: v
             }

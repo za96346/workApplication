@@ -19,5 +19,14 @@ class systemAction {
             }
         }
     }
+
+    setFunc (v: systemReducerType['func']): action {
+        return {
+            type: systemType.SET_FUNC,
+            payload: {
+                func: v
+            }
+        }
+    }
 }
 export default new systemAction()

@@ -22,6 +22,7 @@ import Shift from 'Page/Shift/Index'
 import ShiftSetting from 'Page/ShiftSetting/Index'
 import YearPerformance from 'Page/YearPerformance/Index'
 import Login from 'Page/Login/Index'
+import { Loading } from 'shared/Loading/Index'
 
 // page func
 const pageFuncCodePair = {
@@ -44,6 +45,7 @@ const RouteIndex = (): JSX.Element => {
     }, [])
     return (
         <Router>
+            <Loading />
             <Routes>
                 <Route path='/' element={<Layout />}>
                     <Route path='entry/login' element={<Login />} />
