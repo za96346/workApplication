@@ -15,6 +15,7 @@ func Role(props *gin.RouterGroup) {
 		props.GET("/", CTL_Role.Get)
 		props.POST("/", CTL_Role.Update)
 		props.GET("/single", CTL_Role.GetSingle)
-		props.DELETE("", CTL_Role.Delete)
+		props.DELETE("/", CTL_Role.Delete)
+		props.GET("/selector", CTL_Role.GetSelector)
 	}
 }

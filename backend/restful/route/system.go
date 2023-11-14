@@ -10,4 +10,5 @@ import (
 
 func System(props *gin.RouterGroup) {
 	props.GET("/auth", CTL_System.GetAuth)
+	props.GET("/func", CTL_System.GetFunctionItem)
 }

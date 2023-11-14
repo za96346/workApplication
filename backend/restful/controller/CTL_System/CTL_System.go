@@ -105,3 +105,27 @@ func GetAuth(Request *gin.Context) {
 	)
 
 }
+
+func GetFunctionItem(Request *gin.Context) {
+	// 拿取功能項目表
+	functionItem := &[]Model.FunctionItem{}
+	Model.DB.Find(functionItem)
+
+	// 拿取操作項目表
+	operationItem := &[]Model.OperationItem{}
+	Model.DB.Find(operationItem)
+
+	// 整理 return data
+	result := make(map[string]interface{})
+
+	result["functionItem"] = *functionItem
+	result["operationItem"] = *operationItem
+
+	Request.JSON(
+		http.StatusOK,
+		gin.H {
+			"message": "成功",
+			"data": result,
+		},
+	)
+}

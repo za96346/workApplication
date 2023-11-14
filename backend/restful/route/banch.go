@@ -16,5 +16,7 @@ func Banch(props *gin.RouterGroup) {
 		props.POST("/", CTL_Banch.Edit)
 		props.PUT("/", CTL_Banch.Add)
 		props.DELETE("/", CTL_Banch.Delete)
+
+		props.GET("/selector", CTL_Banch.GetSelector)
 	}
 }

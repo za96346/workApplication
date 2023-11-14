@@ -160,3 +160,27 @@ func Delete(Request *gin.Context) {
 		},
 	)
 }
+
+func GetSelector(Request *gin.Context) {
+	// 權限驗證
+	session := &method.SessionStruct{
+		Request: Request,
+		ReqBodyValidation: false,
+		PermissionValidation: false,
+	}
+	if session.SessionHandler() != nil {return}
+
+	// 獲取部門
+	var targetData []Model.CompanyBanch
+	Model.DB.
+		Where("companyId = ?", session.CompanyId).
+		Find(&targetData)
+
+	Request.JSON(
+		http.StatusOK,
+		gin.H {
+			"message": "成功",
+			"data": targetData,
+		},
+	)
+}

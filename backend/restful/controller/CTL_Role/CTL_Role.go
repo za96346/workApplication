@@ -48,7 +48,7 @@ func Get(Request *gin.Context) {
 func GetSingle(Request *gin.Context) {
 	roleData := &Model.Role{}
 	rolePermission := &[]Model.RoleStruct{}
-	rolePermissionMap := map[string](map[string][]int){}
+	rolePermissionMap := map[string](map[string]map[string]interface{}){}
 
 	// 請求處理
 	reqBody := new(struct {
@@ -58,8 +58,8 @@ func GetSingle(Request *gin.Context) {
 	// 權限驗證
 	session := method.SessionStruct{
 		Request: Request,
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
+		ReqParamsValidation: true,
+		ReqParamsStruct: reqBody,
 	}
 	if session.SessionHandler() != nil {return}
 
@@ -77,9 +77,29 @@ func GetSingle(Request *gin.Context) {
 
 	for _, v := range *rolePermission {
 		if rolePermissionMap[v.FuncCode] == nil {
-			rolePermissionMap[v.FuncCode] = make(map[string][]int)
+			rolePermissionMap[v.FuncCode] = make(map[string]map[string]interface{})
 		}
-		rolePermissionMap[v.FuncCode][v.ItemCode] = []int{}
+		if rolePermissionMap[v.FuncCode][v.ItemCode] == nil {
+			rolePermissionMap[v.FuncCode][v.ItemCode] = make(map[string]interface{})
+		}
+
+		// handle scope banch
+		if v.ScopeBanch != "all" && v.ScopeBanch != "self" {
+			var scopeBanch []int
+			json.Unmarshal([]byte(v.ScopeBanch), &scopeBanch)
+			rolePermissionMap[v.FuncCode][v.ItemCode]["scopeBanch"] = scopeBanch
+		} else {
+			rolePermissionMap[v.FuncCode][v.ItemCode]["scopeBanch"] = v.ScopeBanch
+		}
+
+		// handle scope role
+		if v.ScopeRole != "all" && v.ScopeRole != "self" {
+			var scopeRole []int
+			json.Unmarshal([]byte(v.ScopeRole), &scopeRole)
+			rolePermissionMap[v.FuncCode][v.ItemCode]["scopeRole"] = scopeRole
+		} else {
+			rolePermissionMap[v.FuncCode][v.ItemCode]["scopeRole"] = v.ScopeRole
+		}
 	}
 
 	Request.JSON(
@@ -251,6 +271,30 @@ func Delete(Request *gin.Context) {
 		http.StatusOK,
 		gin.H {
 			"message": "刪除成功",
+		},
+	)
+}
+
+func GetSelector(Request *gin.Context) {
+	// 權限驗證
+	session := &method.SessionStruct{
+		Request: Request,
+		ReqBodyValidation: false,
+		PermissionValidation: false,
+	}
+	if session.SessionHandler() != nil {return}
+
+	// 獲取部門
+	var targetData []Model.Role
+	Model.DB.
+		Where("companyId = ?", session.CompanyId).
+		Find(&targetData)
+
+	Request.JSON(
+		http.StatusOK,
+		gin.H {
+			"message": "成功",
+			"data": targetData,
 		},
 	)
 }

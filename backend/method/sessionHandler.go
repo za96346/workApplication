@@ -48,10 +48,16 @@ type SessionStruct struct {
 	IsCurrentScopeRoleAll bool // scope role 是否是 all (給add 看的)
 
 	/*
-		請求
+		請求body
 	*/
 	ReqBodyValidation bool // 是否開啟 請求 json binding 驗證
 	ReqBodyStruct interface{} // 請求結構 ( please give it as a pointer. )
+
+	/*
+		請求params query string
+	*/
+	ReqParamsValidation bool // 是否開啟 請求 json binding 驗證
+	ReqParamsStruct interface{} // 請求結構 ( please give it as a pointer. )
 }
 
 
@@ -185,7 +191,7 @@ func(instance *SessionStruct) SessionHandler() error {
 		(*instance).CurrentPermissionScopeRole = scopeRole
 	}
 
-	// 請求資料驗證
+	// 請求資料驗證 body
 	if (*instance).ReqBodyValidation {
 		bindError := (*instance).Request.ShouldBindJSON((*instance).ReqBodyStruct)
 	
@@ -193,6 +199,19 @@ func(instance *SessionStruct) SessionHandler() error {
 			ErrorInstance.ErrorHandler(
 				(*instance).Request,
 				fmt.Sprintf("Request Data 格式不正確 %s", bindError),
+			)
+			return bindError
+		}	
+	}
+
+	// 請求資料驗證 params
+	if (*instance).ReqParamsValidation {
+		bindError := (*instance).Request.BindQuery((*instance).ReqParamsStruct)
+	
+		if bindError != nil {
+			ErrorInstance.ErrorHandler(
+				(*instance).Request,
+				fmt.Sprintf("Request Params 格式不正確 %s", bindError),
 			)
 			return bindError
 		}	
