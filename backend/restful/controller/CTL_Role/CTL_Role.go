@@ -180,7 +180,6 @@ func Update(Request *gin.Context) {
 	reqBody := new(struct {
 		RoleId int `json:"RoleId" binding:"required"`
 		RoleName string `json:"RoleName" binding:"required"`
-		StopFlag string `json:"StopFlag" binding:"required"`
 		/**
 			Data = {
 				[funcCode]: {
@@ -213,7 +212,7 @@ func Update(Request *gin.Context) {
 		RoleId: reqBody.RoleId,
 		CompanyId: session.CompanyId,
 		RoleName: reqBody.RoleName,
-		StopFlag: reqBody.StopFlag,
+		StopFlag: "N",
 		DeleteFlag: "N",
 		LastModify: &now,
 	}
@@ -254,7 +253,6 @@ func Add(Request *gin.Context) {
 	// 請求處理
 	reqBody := new(struct {
 		RoleName string `json:"RoleName" binding:"required"`
-		StopFlag string `json:"StopFlag" binding:"required"`
 		/**
 			Data = {
 				[funcCode]: {
