@@ -10,7 +10,7 @@ declare namespace params {
         BanchId: number
     }
 
-    interface edit {
+    interface update {
         BanchName: string
         BanchId: number
     }
@@ -32,7 +32,7 @@ class companyBanchApi extends apiAbstract {
         return await this.PUT<null>({
             url: this.route,
             data: v,
-            check_text: '確認新增？'
+            check_text: this.checkTitle.confirmAdd
         })
     }
 
@@ -40,15 +40,15 @@ class companyBanchApi extends apiAbstract {
         return await this.DELETE<null>({
             url: this.route,
             data: v,
-            check_text: '確認刪除？'
+            check_text: this.checkTitle.confirmDelete
         })
     }
 
-    async edit (v: params.edit): Promise<null> {
+    async update (v: params.update): Promise<null> {
         return await this.POST<null>({
             url: this.route,
             data: v,
-            check_text: '確認儲存？'
+            check_text: this.checkTitle.confirmUpdate
         })
     }
 

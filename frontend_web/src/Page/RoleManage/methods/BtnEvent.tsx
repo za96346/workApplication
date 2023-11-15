@@ -3,6 +3,7 @@ import ModalEdit from '../components/modalEdit/Index'
 import { modalType } from 'static'
 import Session from './session'
 import roleTypes from 'types/role'
+import { store } from 'reducer/store'
 
 const BtnEvent = ({ type, value }: BtnEventParams<roleTypes.TABLE>): void => {
     const onClose = (): void => {
@@ -10,6 +11,7 @@ const BtnEvent = ({ type, value }: BtnEventParams<roleTypes.TABLE>): void => {
         void api.role.get()
     }
     const onOpen = (): void => {
+        Session.Instance.set(store.getState()?.role?.single?.Permission || {})
         ModalEdit.open({
             type,
             data: value,
@@ -22,14 +24,12 @@ const BtnEvent = ({ type, value }: BtnEventParams<roleTypes.TABLE>): void => {
                             void api.role.update({
                                 Data: { ...permission },
                                 RoleId: value.RoleId,
-                                RoleName: fields.RoleName,
-                                StopFlag: 'N'
+                                RoleName: fields.RoleName
                             }).then(onClose)
                         } else if (type === modalType.add) {
                             void api.role.add({
                                 Data: { ...permission },
-                                RoleName: fields.RoleName,
-                                StopFlag: 'N'
+                                RoleName: fields.RoleName
                             }).then(onClose)
                         }
                     })

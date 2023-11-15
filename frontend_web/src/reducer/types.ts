@@ -30,5 +30,6 @@ export const companyBanchType = {
 export const roleType = {
     SET_ROLE_ALL: 'SET_ROLE_ALL',
     SET_ROLE_SINGLE: 'SET_ROLE_SINGLE',
+    CLEAR_ROLE_SINGLE: 'CLEAR_ROLE_SINGLE',
     SET_ROLE_SELECTOR: 'SET_ROLE_SELECTOR'
 }

@@ -5,7 +5,6 @@ import { Divider } from 'antd'
 import modal from 'shared/Modal/types'
 
 import { useSession } from 'hook/useSession'
-import { v4 } from 'uuid'
 import systemTypes from 'types/system'
 import RadioGroup from './components/RadioGroup'
 
@@ -34,7 +33,7 @@ const ModalDetail = ({ modalInfo }: props): JSX.Element => {
                         ?.map((item) => {
                             const operationItem = findOperationItem(item)
                             return (
-                                <React.Fragment key={v4()}>
+                                <React.Fragment key={operationItem.OperationCode}>
                                     <div className='col-5'>
                                         {operationItem?.OperationName}：
                                     </div>

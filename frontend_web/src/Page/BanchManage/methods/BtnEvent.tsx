@@ -21,7 +21,7 @@ const BtnEvent = ({ type, value }: BtnEventParams<companyBanchTypes.TABLE>): voi
             void form.validateFields()
                 .then(() => {
                     if (type === modalType.edit) {
-                        void api.companyBanch.edit({
+                        void api.companyBanch.update({
                             ...fields,
                             BanchId: value?.BanchId
                         })

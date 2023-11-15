@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Checkbox } from 'antd'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 import type { CheckboxValueType } from 'antd/es/checkbox/Group'
@@ -17,7 +17,7 @@ const Row = ({
     functionItem: systemTypes.functionItemTable
     operationItemArray: systemTypes.operationItemTable[]
 }): JSX.Element => {
-    const { setSession } = useSession<systemTypes.auth['permission']>({})
+    const { setSession, session } = useSession<systemTypes.auth['permission']>({})
     const [checkedList, setCheckedList] = useState<CheckboxValueType[]>(defaultCheckedList)
 
     const checkAll = operationItemArray.length === checkedList.length
@@ -29,6 +29,8 @@ const Row = ({
 
     // 單一勾選
     const onChange = (list: CheckboxValueType[]): void => {
+        const currentSession = session()?.[functionItem?.funcCode] || {}
+
         /**
          * 轉變 list 中文變英文
          * [func code]: {
@@ -40,10 +42,18 @@ const Row = ({
         */
         const transListName = list.reduce((accr, item) => {
             const op = operationItemArray?.find((i) => i?.OperationName === item)
-            accr[op.OperationCode] = {
-                scopeBanch: 'all',
-                scopeRole: 'all'
+
+            // 如果有舊有的資料就拿舊的
+            if (op?.OperationCode in currentSession) {
+                accr[op.OperationCode] = currentSession[op.OperationCode]
+            } else {
+                // 預設都是 全部
+                accr[op.OperationCode] = {
+                    scopeBanch: 'all',
+                    scopeRole: 'all'
+                }
             }
+
             return accr
         }, {})
 
@@ -70,6 +80,18 @@ const Row = ({
         }))
         setCheckedList(e.target.checked ? option : [])
     }
+
+    // 預設值
+    useEffect(() => {
+        const operationCode = Object.keys(session()?.[functionItem?.funcCode] || {})
+
+        const transListName = operationCode.map((item) => {
+            const op = operationItemArray?.find((i) => i?.OperationCode === item)
+            return op.OperationName
+        })
+
+        setCheckedList(transListName)
+    }, [session()?.[functionItem?.funcCode]])
 
     return (
         <div className='row col-12 my-2'>

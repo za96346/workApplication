@@ -71,7 +71,15 @@ const RadioGroup = (
             </Radio.Group>
             {
                 Array.isArray(currentValue?.scopeBanch) && (
-                    <BanchSelector defaultValue={[]} subComponents='tag' />
+                    <BanchSelector
+                        defaultValue={currentValue?.scopeBanch || []}
+                        subComponents='tag'
+                        onChange={(v) => {
+                            setCurrentSession({
+                                scopeBanch: v?.map((item) => item?.BanchId)
+                            })
+                        }}
+                    />
                 )
             }
 
@@ -92,7 +100,7 @@ const RadioGroup = (
             {
                 Array.isArray(currentValue?.scopeRole) && (
                     <RoleSelector
-                        defaultValue={[]}
+                        defaultValue={currentValue?.scopeRole || []}
                         subComponents='tag'
                         onChange={(v) => {
                             setCurrentSession({

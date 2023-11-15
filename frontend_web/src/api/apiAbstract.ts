@@ -90,7 +90,11 @@ class apiAbstract {
     // api type
     public type: Record<string, any>
 
-    protected checkTitle: Record<string, any>
+    protected checkTitle = {
+        confirmUpdate: '確定修改？',
+        confirmAdd: '確定新增？',
+        confirmDelete: '確認刪除？'
+    }
 
     protected loadingAction = allAction.loading
 

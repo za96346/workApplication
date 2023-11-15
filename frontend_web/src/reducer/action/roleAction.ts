@@ -28,5 +28,14 @@ class roleAction {
             }
         }
     }
+
+    clearSingle (): action {
+        return {
+            type: roleType.CLEAR_ROLE_SINGLE,
+            payload: {
+                single: {}
+            }
+        }
+    }
 }
 export default new roleAction()

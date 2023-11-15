@@ -37,7 +37,16 @@ export const allAction = {
     role: roleAction
 }
 
-export const reducer = combineReducers(allReducer)
+export interface RootState {
+    loading: loadingReducerType
+    system: systemReducerType
+    user: userReducerType
+    company: companyReducerType
+    companyBanch: companyBanchReducerType
+    role: roleReducerType
+}
+
+export const reducer = combineReducers<RootState>(allReducer)
 
 // 持久化根reducers
 const persistedReducer = persistReducer({
@@ -53,12 +62,5 @@ export const store = createStore(
     composeWithDevTools(applyMiddleware(...[thunk]))
 )
 export const persisStore = persistStore(store)
-export interface RootState {
-    loading: loadingReducerType
-    system: systemReducerType
-    user: userReducerType
-    company: companyReducerType
-    companyBanch: companyBanchReducerType
-    role: roleReducerType
-}
+
 export type AppDispatch = typeof store.dispatch

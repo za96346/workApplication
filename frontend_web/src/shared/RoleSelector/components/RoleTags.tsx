@@ -7,7 +7,10 @@ interface props {
     setSelected: any
 }
 
-const RoleTags = ({ selected, setSelected }: props): JSX.Element => {
+const RoleTags = ({
+    selected,
+    setSelected
+}: props): JSX.Element => {
     return (
         <Space wrap>
             {

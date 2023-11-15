@@ -5,10 +5,11 @@ import RoleTags from './components/RoleTags'
 import { v4 } from 'uuid'
 import api from 'api/Index'
 import roleTypes from 'types/role'
+import { useAppSelector } from 'hook/redux'
 
 interface props {
     subComponents: 'tag' | 'table'
-    defaultValue?: roleTypes.TABLE[]
+    defaultValue?: number[] // role id []
     onChange?: (v: roleTypes.TABLE[]) => void
 }
 
@@ -17,17 +18,19 @@ const Index = ({
     defaultValue = [],
     onChange = () => {}
 }: props): JSX.Element => {
-    const [selected, setSelected] = useState<roleTypes.TABLE[]>(defaultValue)
+    const selector = useAppSelector((v) => v?.role.selector)
+    const defaultValueFilter = selector?.filter((item) => defaultValue?.includes(item?.RoleId))
+    const [selected, setSelected] = useState<roleTypes.TABLE[]>(defaultValueFilter || [])
 
     const ModalComponent = useMemo(() => ModalEdit({ id: v4() }), [])
 
     useEffect(() => {
-        onChange(selected)
-    }, [selected])
-
-    useEffect(() => {
         void api.role.getSelector()
     }, [])
+
+    useEffect(() => {
+        onChange(selected)
+    }, [selected])
     return (
         <>
             <ModalComponent />
@@ -40,6 +43,7 @@ const Index = ({
                 )
             }
             <Button
+                style={{ width: '100px' }}
                 onClick={() => {
                     ModalComponent.open({
                         defaultValue: selected?.map((i) => i?.RoleId),
