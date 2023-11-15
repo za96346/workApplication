@@ -34,14 +34,26 @@ func (r *Role) TableName() string {
 }
 
 // 拿取新的 role id ( max count + 1 )
-func (r *Role) GetNewRoleID(companyId int) int {
+func (r *Role) GetNewRoleID() int {
     var MaxCount int64
     DB.Model(&Role{}).
-        Where("companyId = ?", companyId).
+        Where("companyId = ?", (*r).CompanyId).
         Count(&MaxCount)
     
     (*r).RoleId = int(MaxCount) + 1
-    (*r).CompanyId = companyId
 
     return int(MaxCount) + 1
+}
+
+// 查詢是否有重複role name
+func (r *Role) IsRoleNameDuplicated() bool {
+    var MaxCount int64
+    DB.Model(&Role{}).
+        Where("companyId = ?", (*r).CompanyId).
+        Where("roleName = ?", (*r).RoleName).
+        Where("roleId != ?", (*r).RoleId).
+        Where("deleteFlag = ?", "N").
+        Count(&MaxCount)
+
+    return int(MaxCount) > 0
 }

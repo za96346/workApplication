@@ -3,12 +3,14 @@ package CTL_Role
 import (
 	"backend/Model"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
 	"backend/method"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 var ErrorInstance = &method.ErrorStruct{
@@ -18,6 +20,62 @@ var ErrorInstance = &method.ErrorStruct{
 
 func checkRequest() {
 	
+}
+
+func handleRoleStruct(
+	TX *gorm.DB,
+	Request *gin.Context,
+	session *method.SessionStruct,
+	roleId int,
+	data map[string](map[string](map[string]interface{})),
+) error {
+	now := time.Now()
+	// 先把 此role structure 的資料 刪除
+	TX.
+		Where("companyId = ?", session.CompanyId).
+		Where("roleId = ?", roleId).
+		Delete(&Model.RoleStruct{})
+
+	// 在 寫入 新的 進入 db
+	for funcCode, itemObject := range data {
+		for itemCode, scopeObject := range itemObject {
+
+			// 可編輯部門範圍
+			scopeBanch := ""
+			if scopeObject["scopeBanch"] == "all" || scopeObject["scopeBanch"] == "self" {
+				scopeBanch = scopeObject["scopeBanch"].(string)
+			} else {
+				scopeBanchByte, _ := json.Marshal(scopeObject["scopeBanch"])
+				scopeBanch = string(scopeBanchByte)
+			}
+
+			// 可編輯角色範圍
+			scopeRole := ""
+			if scopeObject["scopeRole"] == "all" || scopeObject["scopeRole"] == "self" {
+				scopeRole = scopeObject["scopeRole"].(string)
+			} else {
+				scopeRoleByte, _ :=json.Marshal(scopeObject["scopeRole"])
+				scopeRole = string(scopeRoleByte)
+			}
+
+			updateData := &Model.RoleStruct{
+				CompanyId: session.CompanyId,
+				RoleId: roleId,
+				FuncCode: funcCode,
+				ItemCode: itemCode,
+				ScopeBanch: scopeBanch,
+				ScopeRole: scopeRole,
+				CreateTime: &now,
+				LastModify: &now,
+			}
+			if TX.Create(updateData).Error != nil {
+				ErrorInstance.ErrorHandler(Request, "role struct 新增失敗")
+				TX.Rollback()
+				return errors.New("error")
+			}
+		}
+	}
+	return nil
 }
 
 // 獲取公司角色
@@ -123,7 +181,6 @@ func Update(Request *gin.Context) {
 		RoleId int `json:"RoleId" binding:"required"`
 		RoleName string `json:"RoleName" binding:"required"`
 		StopFlag string `json:"StopFlag" binding:"required"`
-		Type string `json:"Type" binding:"required"`
 		/**
 			Data = {
 				[funcCode]: {
@@ -149,81 +206,37 @@ func Update(Request *gin.Context) {
 		return
 	}
 
-	// 要更新的欄位
-	updateRoleQuery := map[string]interface{}{
-		"roleName": reqBody.RoleName,
-		"stopFlag": reqBody.StopFlag,
-		"lastModify": time.Now(),
+	now := time.Now()
+
+	// 檢查欄位
+	roleModal := Model.Role{
+		RoleId: reqBody.RoleId,
+		CompanyId: session.CompanyId,
+		RoleName: reqBody.RoleName,
+		StopFlag: reqBody.StopFlag,
+		DeleteFlag: "N",
+		LastModify: &now,
 	}
 
-	// 更新 或 新增 role table
-	if reqBody.Type == "add" {
-		var MaxCount int64
-		TX.Model(&Model.Role{}).
-			Where("companyId = ?", session.CompanyId).
-			Count(&MaxCount)
-		updateRoleQuery["companyId"] = session.CompanyId
-		updateRoleQuery["roleId"] = MaxCount + 1
-
-		TX.Model(&Model.Role{}).Create(&updateRoleQuery)
-	} else {
-		
-		TX.Model(&Model.Role{}).
-			Where("companyId = ?", session.CompanyId).
-			Where("roleId = ?", reqBody.RoleId).
-			Updates(&updateRoleQuery)
+	if roleModal.IsRoleNameDuplicated() {
+		ErrorInstance.ErrorHandler(Request, "角色名稱重複")
+		return
 	}
 
-	// 先把 此role structure 的資料 刪除
+	// 更新 role table
 	TX.
 		Where("companyId = ?", session.CompanyId).
 		Where("roleId = ?", reqBody.RoleId).
-		Delete(&Model.RoleStruct{})
+		Updates(&roleModal)
 
-	now := time.Now()
-
-	// 在 寫入 新的 進入 db
-	for funcCode, itemObject := range reqBody.Data {
-		for itemCode, scopeObject := range itemObject {
-
-			// 可編輯部門範圍
-			scopeBanch := ""
-			if scopeObject["scopeBanch"] == "all" || scopeObject["scopeBanch"] == "self" {
-				scopeBanch = scopeObject["scopeBanch"].(string)
-			} else {
-				scopeBanchByte, _ := json.Marshal(scopeObject["scopeBanch"])
-				scopeBanch = string(scopeBanchByte)
-			}
-
-			// 可編輯角色範圍
-			scopeRole := ""
-			if scopeObject["scopeRole"] == "all" || scopeObject["scopeRole"] == "self" {
-				scopeRole = scopeObject["scopeRole"].(string)
-			} else {
-				scopeRoleByte, _ :=json.Marshal(scopeObject["scopeRole"])
-				scopeRole = string(scopeRoleByte)
-			}
-
-
-
-			updateData := &Model.RoleStruct{
-				CompanyId: session.CompanyId,
-				RoleId: reqBody.RoleId,
-				FuncCode: funcCode,
-				ItemCode: itemCode,
-				ScopeBanch: scopeBanch,
-				ScopeRole: scopeRole,
-				CreateTime: &now,
-				LastModify: &now,
-			}
-			if TX.Create(updateData).Error != nil {
-				ErrorInstance.ErrorHandler(Request, "新增失敗")
-				TX.Rollback()
-				return
-			}
-			
-		}
-	}
+	// 處理 role struct
+	handleRoleStruct(
+		TX,
+		Request,
+		&session,
+		reqBody.RoleId,
+		reqBody.Data,
+	)
 
 	TX.Commit()
 	Request.JSON(
@@ -233,6 +246,81 @@ func Update(Request *gin.Context) {
 		},
 	)
 }
+
+// 更新角色結構
+func Add(Request *gin.Context) {
+	TX := Model.DB.Begin()
+
+	// 請求處理
+	reqBody := new(struct {
+		RoleName string `json:"RoleName" binding:"required"`
+		StopFlag string `json:"StopFlag" binding:"required"`
+		/**
+			Data = {
+				[funcCode]: {
+					[itemCode]: {
+						scopeBanch: []BanchId | all | self, 
+						scopeRole: []RoleId | all | self,
+					}
+				}
+			}
+		*/
+		Data map[string](map[string](map[string]interface{})) `json:"Data" binding:"required"`
+
+	})
+
+	// 權限驗證
+	session := method.SessionStruct{
+		Request: Request,
+		ReqBodyValidation: true,
+		ReqBodyStruct: reqBody,
+	}
+	if session.SessionHandler() != nil {
+		TX.Rollback()
+		return
+	}
+
+	now := time.Now()
+
+	// 檢查欄位
+	roleModal := Model.Role{
+		CompanyId: session.CompanyId,
+		RoleName: reqBody.RoleName,
+		StopFlag: "N",
+		DeleteFlag: "N",
+		LastModify: &now,
+		CreateTime: &now,
+	}
+
+	// 獲取 新 role id
+	roleModal.GetNewRoleID()
+
+	if roleModal.IsRoleNameDuplicated() {
+		ErrorInstance.ErrorHandler(Request, "角色名稱重複")
+		return
+	}
+
+	// 新增 role table
+	TX.Model(&Model.Role{}).Create(&roleModal)
+
+	// 處理 role struct
+	handleRoleStruct(
+		TX,
+		Request,
+		&session,
+		roleModal.RoleId,
+		reqBody.Data,
+	)
+
+	TX.Commit()
+	Request.JSON(
+		http.StatusOK,
+		gin.H {
+			"message": "新增成功",
+		},
+	)
+}
+
 
 // 刪除角色
 func Delete(Request *gin.Context) {
