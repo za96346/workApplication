@@ -1,7 +1,6 @@
 import { Table } from 'antd'
-import api from 'api/Index'
 import { useAppSelector } from 'hook/redux'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { Modal } from 'shared/Modal/Index'
 import columns from '../method/columns'
 import modal from 'shared/Modal/types'
@@ -9,6 +8,7 @@ import Btn from 'shared/Button'
 
 interface modalInfo {
     onSave: (v: any) => void
+    defaultValue: number[]
 }
 
 interface props {
@@ -16,6 +16,7 @@ interface props {
 }
 
 const RoleSelector = ({ modalInfo }: props): JSX.Element => {
+    const dataRef = useRef([])
     const selector = useAppSelector((v) => v?.role?.selector)
 
     const dataSource = useMemo(() => {
@@ -30,16 +31,32 @@ const RoleSelector = ({ modalInfo }: props): JSX.Element => {
         }))
     }, [selector])
 
+    // 設定預設值
     useEffect(() => {
-        void api.role.getSelector()
-    }, [])
+        dataRef.current = dataSource?.filter((item) => (
+            modalInfo
+                ?.defaultValue
+                ?.includes(item?.RoleId)
+        ))
+    }, [modalInfo?.defaultValue])
     return (
         <>
             <Table
                 dataSource={dataSource}
                 columns={columns}
                 rowSelection={{
-                    type: 'checkbox'
+                    type: 'checkbox',
+                    defaultSelectedRowKeys: modalInfo?.defaultValue || [],
+                    onSelect: (v, isSelected) => {
+                        if (isSelected) {
+                            dataRef.current.push(v)
+                        } else {
+                            dataRef.current = dataRef.current
+                                ?.filter((item) => (
+                                    item?.RoleId !== v?.RoleId
+                                ))
+                        }
+                    }
                 }}
             />
             <Modal.Footer>
@@ -53,7 +70,7 @@ const RoleSelector = ({ modalInfo }: props): JSX.Element => {
                             />
                             <Btn.Save
                                 onClick={() => {
-                                    // modalInfo.onSave(form)
+                                    modalInfo.onSave(dataRef.current)
                                 }}
                             />
                         </>

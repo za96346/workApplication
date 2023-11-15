@@ -40,6 +40,7 @@ const Index = (): JSX.Element => {
         void api.role.get()
         void api.system.func()
         void api.companyBanch.getSelector()
+        void api.role.getSelector()
     }, [])
     return (
         <>

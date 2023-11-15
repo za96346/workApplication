@@ -18,11 +18,20 @@ const BtnEvent = ({ type, value }: BtnEventParams<roleTypes.TABLE>): void => {
                 const fields = form.getFieldsValue()
                 void form.validateFields()
                     .then(() => {
-                        // if (type === modalType.edit) {
-                        // } else if (type === modalType.add) {
-                        // }
-                        onClose()
-                        console.log('permission', {...permission})
+                        if (type === modalType.edit) {
+                            void api.role.update({
+                                Data: { ...permission },
+                                RoleId: value.RoleId,
+                                RoleName: fields.RoleName,
+                                StopFlag: 'N'
+                            }).then(onClose)
+                        } else if (type === modalType.add) {
+                            void api.role.add({
+                                Data: { ...permission },
+                                RoleName: fields.RoleName,
+                                StopFlag: 'N'
+                            }).then(onClose)
+                        }
                     })
             }
         })

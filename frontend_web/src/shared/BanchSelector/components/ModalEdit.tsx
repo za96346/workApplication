@@ -31,6 +31,7 @@ const BanchSelector = ({ modalInfo }: props): JSX.Element => {
         }))
     }, [selector])
 
+    // 設定預設值
     useEffect(() => {
         dataRef.current = dataSource?.filter((item) => (
             modalInfo

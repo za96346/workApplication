@@ -10,15 +10,15 @@ const RadioGroup = (
         operationItem: systemTypes.operationItemTable
         functionItem: systemTypes.functionItemTable
     }): JSX.Element => {
-    const { session, setSession } = useSession({})
+    const { session, setSession } = useSession<systemTypes.auth['permission']>({})
 
     // 此元件session 的值
     const currentValue = session()
         ?.[functionItem.funcCode]
         ?.[operationItem?.OperationCode]
 
-    // 部門勾選
-    const onBanchScopeChange = (e: RadioChangeEvent): void => {
+    // 當前的 session位置
+    const setCurrentSession = (v: Partial<systemTypes.permission>): void => {
         setSession((prev) => ({
             ...prev,
             [functionItem.funcCode]: {
@@ -30,33 +30,28 @@ const RadioGroup = (
                             ?.[operationItem?.OperationCode] ||
                         {}
                     ),
-                    scopeBanch: e.target.value === 'customize'
-                        ? []
-                        : e.target.value
+                    ...v
                 }
             }
         }))
     }
 
+    // 部門勾選
+    const onBanchScopeChange = (e: RadioChangeEvent): void => {
+        setCurrentSession({
+            scopeBanch: e.target.value === 'customize'
+                ? []
+                : e.target.value
+        })
+    }
+
     // 角色勾選
     const onRoleScopeChange = (e: RadioChangeEvent): void => {
-        setSession((prev) => ({
-            ...prev,
-            [functionItem.funcCode]: {
-                ...(prev?.[functionItem.funcCode] || {}),
-                [operationItem?.OperationCode]: {
-                    ...(
-                        prev
-                            ?.[functionItem.funcCode]
-                            ?.[operationItem?.OperationCode] ||
-                        {}
-                    ),
-                    scopeRole: e.target.value === 'customize'
-                        ? []
-                        : e.target.value
-                }
-            }
-        }))
+        setCurrentSession({
+            scopeRole: e.target.value === 'customize'
+                ? []
+                : e.target.value
+        })
     }
     return (
         <>
@@ -96,7 +91,15 @@ const RadioGroup = (
             </Radio.Group>
             {
                 Array.isArray(currentValue?.scopeRole) && (
-                    <RoleSelector subComponents='tag' />
+                    <RoleSelector
+                        defaultValue={[]}
+                        subComponents='tag'
+                        onChange={(v) => {
+                            setCurrentSession({
+                                scopeRole: v?.map((item) => item?.RoleId)
+                            })
+                        }}
+                    />
                 )
             }
         </>

@@ -1,10 +1,30 @@
 import { Space, Tag } from 'antd'
 import React from 'react'
+import roleTypes from 'types/role'
 
-const RoleTags = (): JSX.Element => {
+interface props {
+    selected: roleTypes.TABLE[]
+    setSelected: any
+}
+
+const RoleTags = ({ selected, setSelected }: props): JSX.Element => {
     return (
         <Space wrap>
-            <Tag>Tag 1</Tag>
+            {
+                selected?.map((item) => (
+                    <Tag
+                        key={item?.RoleId}
+                        onClose={() => {
+                            setSelected((prev) => (
+                                prev.filter((i) => i?.RoleId !== item?.RoleId)
+                            ))
+                        }}
+                        closable
+                    >
+                        {item?.RoleName}
+                    </Tag>
+                ))
+            }
         </Space>
     )
 }

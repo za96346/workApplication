@@ -8,10 +8,9 @@ declare namespace params {
     }
 
     interface update {
-        RoleId: number
+        RoleId?: number
         RoleName: string
-        StopFlag: Flag
-        Type: string
+        StopFlag?: Flag
         Data: systemTypes.auth['permission']
     }
 }
@@ -52,7 +51,20 @@ class roleApi extends apiAbstract {
     async update (v: params.update): Promise<void> {
         return await this.POST<null>({
             url: this.route,
-            data: v
+            data: {
+                ...v,
+                type: 'edit'
+            }
+        })
+    }
+
+    async add (v: params.update): Promise<void> {
+        return await this.POST<null>({
+            url: this.route,
+            data: {
+                ...v,
+                type: 'add'
+            }
         })
     }
 }

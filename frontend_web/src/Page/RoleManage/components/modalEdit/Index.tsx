@@ -29,7 +29,7 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                 form={form}
             >
                 <Form.Item
-                    name="BanchName"
+                    name="RoleName"
                     label="角色名稱"
                     rules={[{ required: true }]}
                 >
