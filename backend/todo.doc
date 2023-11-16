@@ -1,3 +1,7 @@
 1. 各個功能新增的時候，不看 scope ， 只有編輯獲取刪除要看。
 2. 角色新增的時候要去擋掉重複名稱
 3. 部門新增的時候要去擋掉重複名稱
+4. 使用者新增時要去擋掉重複帳號
+5. scopeBanch when "all" 只拿 deleteFlag == "N" ( 待考慮 )
+6. scopeRole when "all" 只拿 deleteFlag == "N" ( 待考慮 )
+7. 編輯 edit controller 時 new struct 不能直接拿 Model的

@@ -218,15 +218,23 @@ func Update(Request *gin.Context) {
 	}
 
 	if roleModal.IsRoleNameDuplicated() {
+		TX.Rollback()
 		ErrorInstance.ErrorHandler(Request, "角色名稱重複")
 		return
 	}
 
 	// 更新 role table
-	TX.
+	err := TX.
 		Where("companyId = ?", session.CompanyId).
 		Where("roleId = ?", reqBody.RoleId).
-		Updates(&roleModal)
+		Updates(&roleModal).
+		Error
+
+	if err != nil {
+		TX.Rollback()
+		ErrorInstance.ErrorHandler(Request, "更新失敗")
+		return
+	}
 
 	// 處理 role struct
 	handleRoleStruct(
@@ -295,11 +303,16 @@ func Add(Request *gin.Context) {
 
 	if roleModal.IsRoleNameDuplicated() {
 		ErrorInstance.ErrorHandler(Request, "角色名稱重複")
+		TX.Rollback()
 		return
 	}
 
 	// 新增 role table
-	TX.Model(&Model.Role{}).Create(&roleModal)
+	if TX.Model(&Model.Role{}).Create(&roleModal).Error != nil {
+		ErrorInstance.ErrorHandler(Request, "新增失敗")
+		TX.Rollback()
+		return
+	}
 
 	// 處理 role struct
 	handleRoleStruct(
@@ -347,10 +360,17 @@ func Delete(Request *gin.Context) {
 		"lastModify": time.Now(),
 	}
 
-	TX.Model(&Model.Role{}).
+	err := TX.Model(&Model.Role{}).
 		Where("companyId = ?", 0).
 		Where("roleId = ?", reqBody.RoleId).
-		Updates(&updateRoleQuery)
+		Updates(&updateRoleQuery).
+		Error
+
+	if err != nil {
+		ErrorInstance.ErrorHandler(Request, "刪除失敗")
+		TX.Rollback()
+		return
+	}
 
 	TX.Commit()
 	Request.JSON(

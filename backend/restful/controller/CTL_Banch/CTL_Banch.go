@@ -62,6 +62,7 @@ func Edit(Request *gin.Context) {
 	// 添加固定欄位
 	now := time.Now()
 
+	(*reqBody).CompanyId = session.CompanyId
 	(*reqBody).LastModify = &now
 	(*reqBody).DeleteTime = nil
 	(*reqBody).DeleteFlag = "N"

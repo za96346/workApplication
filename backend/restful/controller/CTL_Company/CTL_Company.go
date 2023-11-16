@@ -60,9 +60,14 @@ func Edit(Request *gin.Context) {
 	now := time.Now()
 	(*reqBody).LastModify = &now
 
-	Model.DB.
+	err := Model.DB.
 		Where("companyId = ?", session.CompanyId).
-		Updates(reqBody)
+		Updates(reqBody).
+		Error
+
+	if err != nil {
+		
+	}
 
 	Request.JSON(
 		http.StatusOK,

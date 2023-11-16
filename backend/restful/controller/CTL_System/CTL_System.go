@@ -106,6 +106,7 @@ func GetAuth(Request *gin.Context) {
 
 }
 
+// 拿取功能項目表
 func GetFunctionItem(Request *gin.Context) {
 	// 拿取功能項目表
 	functionItem := &[]Model.FunctionItem{}
@@ -126,6 +127,72 @@ func GetFunctionItem(Request *gin.Context) {
 		gin.H {
 			"message": "成功",
 			"data": result,
+		},
+	)
+}
+
+// 獲取 所有功能 的role banch id 清單
+func GetRoleBanchList(Request *gin.Context) {
+	session := &method.SessionStruct{
+		Request: Request,
+		ReqBodyValidation: false,
+	}
+	if session.SessionHandler() != nil {return}
+
+	// 拿取功能項目表
+	functionItem := &[]Model.FunctionItem{}
+	Model.DB.Find(functionItem)
+
+	// 拿取操作項目表
+	operationItem := &[]Model.OperationItem{}
+	Model.DB.Find(operationItem)
+
+	// data struct init
+	data := make(map[string]interface{})
+	scopeRole := make(map[string]map[string]interface{})
+	scopeBanch := make(map[string]map[string]interface{})
+	var availableBanch []Model.CompanyBanch
+	var availableRole []Model.Role
+
+	// get banch and role
+	Model.DB.
+		Where("companyId = ?", session.CompanyId).
+		Where("deleteFlag = ?", "N").
+		Find(&availableBanch)
+
+	Model.DB.
+		Where("companyId = ?", session.CompanyId).
+		Where("deleteFlag = ?", "N").
+		Find(&availableRole)
+
+	for _, FunctionItem := range *functionItem {
+		scopeBanch[FunctionItem.FuncCode] = make(map[string]interface{})
+		scopeRole[FunctionItem.FuncCode] = make(map[string]interface{})
+
+		for _, operation := range *operationItem {
+			// session
+			session := &method.SessionStruct{
+				Request: Request,
+				PermissionFuncCode: FunctionItem.FuncCode,
+				PermissionItemCode: operation.OperationCode,
+			}
+			session.SessionHandler()
+
+			scopeBanch[FunctionItem.FuncCode][operation.OperationCode] = (*session).CurrentPermissionScopeBanch
+			scopeRole[FunctionItem.FuncCode][operation.OperationCode] = (*session).CurrentPermissionScopeRole
+		}
+	}
+
+	data["scopeRole"] = scopeRole
+	data["scopeBanch"] = scopeBanch
+	data["availableBanch"] = availableBanch
+	data["availableRole"] = availableRole
+
+	Request.JSON(
+		http.StatusOK,
+		gin.H {
+			"message": "成功",
+			"data": data,
 		},
 	)
 }

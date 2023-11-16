@@ -160,16 +160,32 @@ func Edit(Request *gin.Context) {
 	if session.CheckScopeBanchValidation(*userData.BanchId) != nil {return}
 	if session.CheckScopeRoleValidation(userData.RoleId) != nil {return}
 
+	//共同 語句
+	commonQuery := Model.DB.
+		Model(&Model.Performance{}).
+		Where("companyId = ?", session.CompanyId).
+		Where("performanceId = ?", reqBody.PerformanceId)
+
+	// 找到舊的值 ( 不讓請求 的時候 userId 有任何的串改可能． )
+	var oldData Model.Performance 
+	commonQuery.First(&oldData)
+
 	// 新增固定欄位
 	now := time.Now()
+
+	(*reqBody).CompanyId = session.CompanyId
+	(*reqBody).UserId = oldData.UserId
 	(*reqBody).DeleteFlag = "N"
 	(*reqBody).DeleteTime = nil
 	(*reqBody).LastModify = &now
 
-	Model.DB.
-		Where("companyId = ?", session.CompanyId).
-		Where("performanceId = ?", reqBody.PerformanceId).
-		Updates(reqBody)
+	// 更新
+	err := commonQuery.Updates(reqBody).Error
+
+	if err != nil {
+		ErrorInstance.ErrorHandler(Request, "更新失敗")
+		return
+	}
 
 	Request.JSON(
 		http.StatusOK,
@@ -224,10 +240,16 @@ func Delete(Request *gin.Context) {
 	(*targetData).DeleteTime = &now
 	(*targetData).LastModify = &now
 	
-	Model.DB.
+	err := Model.DB.
 		Where("companyId = ?", session.CompanyId).
 		Where("performanceId = ?", reqBody.PerformanceId).
-		Updates(targetData)
+		Updates(targetData).
+		Error
+
+	if err != nil {
+		ErrorInstance.ErrorHandler(Request, "刪除失敗")
+		return
+	}
 
 	Request.JSON(
 		http.StatusOK,
