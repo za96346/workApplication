@@ -6,6 +6,14 @@ declare namespace params {
     interface deleted {
         UserId: number
     }
+
+    interface getEmployee {
+        BanchId?: number
+        RoleId?: number
+        UserName?: string
+        EmployeeNumber?: string
+    }
+
     type add = Omit<
     userTypes.TABLE,
     'CreateTime' | 'LastModify' | 'DeleteTime' | 'DeleteFlag' | 'CompanyId'
@@ -24,9 +32,10 @@ class userApi extends apiAbstract {
         })
     }
 
-    async getEmployee (): Promise<userReducerType['employee']> {
+    async getEmployee (v: params.getEmployee): Promise<userReducerType['employee']> {
         return await this.GET<userReducerType['employee']>({
-            url: this.route
+            url: this.route,
+            data: v
         }).then((res) => {
             this.store.dispatch(this.action.user.setEmployee(res))
             return res

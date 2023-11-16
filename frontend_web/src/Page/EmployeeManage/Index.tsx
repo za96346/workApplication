@@ -44,7 +44,7 @@ const Index = (): JSX.Element => {
     }, [employee, permission])
 
     useEffect(() => {
-        void api.user.getEmployee()
+        void api.user.getEmployee({})
     }, [])
     return (
         <>
@@ -61,7 +61,7 @@ const Index = (): JSX.Element => {
                     />
                 )
             }
-            <Searchbar/>
+            <Searchbar />
             <Table
                 dataSource={dataSource}
                 columns={columns}

@@ -10,17 +10,18 @@ const Searchbar = (): JSX.Element => {
         <>
             <Divider />
             <Form
-                onFinish={(v) => { void api.user.getEmployee() }}
-                name="validateOnly"
+                onFinish={(v) => { void api.role.get() }}
+                id="roleManage"
                 autoComplete="off"
                 className='row'
             >
                 <Form.Item
                     name="RoleName"
                     label="角色名稱"
+                    initialValue={''}
                     className='col-md-6'
                 >
-                    <Input />
+                    <Input name='RoleName' />
                 </Form.Item>
                 <Form.Item className='d-flex justify-content-end'>
                     <Btn.Submit text='搜尋' form={form} />

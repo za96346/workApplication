@@ -37,7 +37,9 @@ const BtnEvent = ({ type, value }: BtnEventParams<roleTypes.TABLE>): void => {
         })
     }
     if (type === modalType.delete) {
-        console.log()
+        void api.role.delete({
+            RoleId: value?.RoleId
+        }).then(onClose)
     } else if (type === modalType.add) {
         onOpen()
     } else if (type === modalType.edit) {

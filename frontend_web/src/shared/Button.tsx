@@ -61,6 +61,15 @@ const Btn = {
         >
             關閉
         </Button>
+    ),
+    Reset: (attr: ButtonProps) => (
+        <Button
+            type="primary"
+            htmlType="reset"
+            {...attr}
+        >
+            清除
+        </Button>
     )
 }
 

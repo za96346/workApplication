@@ -13,15 +13,23 @@ declare namespace params {
         StopFlag?: Flag
         Data: Partial<systemTypes.auth['permission']>
     }
+
+    interface deleted {
+        RoleId: number
+    }
 }
 
 class roleApi extends apiAbstract {
     private readonly route = 'workApp/role/'
 
     async get (): Promise<void> {
+        const [result] = this.makeFormData([{
+            formName: 'roleManage',
+            validCheck: true
+        }])
         return await this.GET<null>({
             url: this.route,
-            data: {}
+            data: result
         })
             .then((v) => {
                 this.store.dispatch(this.action.role.setAll(v))
@@ -61,6 +69,14 @@ class roleApi extends apiAbstract {
             url: this.route,
             data: v,
             check_title: this.checkTitle.confirmAdd
+        })
+    }
+
+    async delete (v: params.deleted): Promise<void> {
+        return await this.DELETE<null>({
+            url: this.route,
+            data: v,
+            check_title: this.checkTitle.confirmDelete
         })
     }
 }

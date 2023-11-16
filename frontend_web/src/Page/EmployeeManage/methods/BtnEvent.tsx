@@ -6,7 +6,7 @@ import userTypes from 'types/user'
 const BtnEvent = ({ type, value }: BtnEventParams<userTypes.TABLE>): void => {
     const onClose = (): void => {
         ModalEdit.close({})
-        void api.user.getEmployee()
+        void api.user.getEmployee({})
     }
     if (type === modalType.delete) {
         void api.user.delete({ UserId: value?.BanchId })

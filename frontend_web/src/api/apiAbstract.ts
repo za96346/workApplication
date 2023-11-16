@@ -31,6 +31,12 @@ interface formRequestParams extends dataRequestParams, SweetAlertOptions {
     method?: 'put' | 'post' | 'delete' | 'get'
 }
 
+interface formValueType {
+    formName: string
+    validCheck: boolean
+    InvalidAction?: () => void
+}
+
 type axiosRequestConfig = AxiosRequestConfig & { id: string }
 type axiosResponse = AxiosResponse<any, any> & { config: { id: string } }
 
@@ -101,6 +107,43 @@ class apiAbstract {
     protected action = allAction
 
     protected store = store
+
+    // 生成 form
+    /**
+     * @param formValue = [
+     *      {
+     *          formName: string, // dont need a hashTag
+     *          validCheck: boolean,
+     *          InvalidAction: () => {}
+     *      }
+     * ]
+     * @return FormData
+    */
+    public makeFormData (formValue: formValueType[]): [Record<string, any>, boolean] {
+        const formDataObject = {}
+        let isValid = true
+        formValue.forEach((item) => {
+            const form: HTMLFormElement | null = document.querySelector(`#${item?.formName}`)
+            if (form) {
+                // 如果 需要檢查 以及 檢查沒過
+                if (item.validCheck && !form?.checkValidity()) {
+                    // 先跑 原生跳出
+                    // 如果 發現 找步道 就換 tabs emit
+                    form?.reportValidity()
+
+                    if (item?.InvalidAction) item?.InvalidAction()
+                    isValid = false
+                    throw new Error('表單驗證失敗')
+                }
+                const a = new FormData(form)
+                // eslint-disable-next-line no-restricted-syntax
+                for (const pair of a.entries()) {
+                    formDataObject[pair[0]] = pair[1]
+                }
+            }
+        })
+        return [formDataObject, isValid]
+    }
 
     private loading (loadingActionName: string | undefined, state: boolean): void {
         let actionName = loadingActionName as unknown as string

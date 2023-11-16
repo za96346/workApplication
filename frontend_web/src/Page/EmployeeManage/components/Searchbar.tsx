@@ -17,8 +17,10 @@ const Searchbar = (): JSX.Element => {
         <>
             <Divider />
             <Form
-                onFinish={(v) => { void api.user.getEmployee() }}
-                name="validateOnly"
+                onFinish={(v) => {
+                    void api.user.getEmployee(v)
+                }}
+                id="employeeManage"
                 autoComplete="off"
                 className='row'
             >
@@ -27,30 +29,31 @@ const Searchbar = (): JSX.Element => {
                     label="部門"
                     className='col-md-6'
                 >
-                    <Select options={rolBanchList.banchSelectList} />
+                    <Select allowClear options={rolBanchList.banchSelectList} />
                 </Form.Item>
                 <Form.Item
                     name="RoleId"
                     label="角色"
                     className='col-md-6'
                 >
-                    <Select options={rolBanchList.roleSelectList} />
+                    <Select allowClear options={rolBanchList.roleSelectList} />
                 </Form.Item>
                 <Form.Item
                     name="UserName"
                     label="姓名"
                     className='col-md-6'
                 >
-                    <Input />
+                    <Input name='UserName' />
                 </Form.Item>
                 <Form.Item
                     name="EmployeeNumber"
                     label="員工編號"
                     className='col-md-6'
                 >
-                    <Input />
+                    <Input name='EmployeeNumber' />
                 </Form.Item>
                 <Form.Item className='d-flex justify-content-end'>
+                    {/* <Btn.Reset /> */}
                     <Btn.Submit text='搜尋' form={form} />
                 </Form.Item>
             </Form>
