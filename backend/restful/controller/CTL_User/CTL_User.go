@@ -44,23 +44,46 @@ func GetMine(Request *gin.Context) {
 
 // 獲取使用者 全部
 func Get(Request *gin.Context) {
+	// 請求處理
+	reqParams := new(struct {
+		BanchId *int `json:"BanchId"`
+		RoleId *int `json:"RoleId"`
+		UserName *string `json:"UserName"`
+		EmployeeNumber *string `json:"EmployeeNumber"`
+	})
 	// 權限驗證
 	session := &method.SessionStruct{
 		Request: Request,
+
 		PermissionValidation: true,
 		PermissionFuncCode: FuncCode,
 		PermissionItemCode: "inquire",
+
 		ReqBodyValidation: false,
+		ReqParamsValidation: true,
+		ReqParamsStruct: reqParams,
 	}
 	if session.SessionHandler() != nil {return}
 
 	var data []Model.User
-	Model.DB.
+
+	searchQuery := Model.DB.
 		Where("companyId = ?", session.CompanyId).
-		Where("roleId in (?)", session.CurrentPermissionScopeRole).
-		Where("banchId in (?)", session.CurrentPermissionScopeBanch).
-		Where("deleteFlag", "N").
-		Find(&data)
+		Where("roleId in (?)", *session.GetScopeRolehWithCustomize(reqParams.RoleId)).
+		Where("banchId in (?)", *session.GetScopeBanchWithCustomize(reqParams.BanchId)).
+		Where("deleteFlag", "N")
+
+	// 使用者名稱
+	if reqParams.UserName != nil {
+		searchQuery.Where("userName like ?", "%" + *reqParams.UserName + "%")
+	}
+
+	// 員工編號
+	if reqParams.EmployeeNumber != nil {
+		searchQuery.Where("employeeNumber like ?", "%" + *reqParams.EmployeeNumber + "%")
+	}
+
+	searchQuery.Find(&data)
 
 	Request.JSON(
 		http.StatusOK,

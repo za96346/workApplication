@@ -256,3 +256,31 @@ func(instance *SessionStruct) CheckScopeRoleValidation(roleId int) error {
 
 	return nil
 }
+
+// 指定的banch id 與 目前可查詢的 banch
+func(instance *SessionStruct) GetScopeBanchWithCustomize(banchId *int) *[]int {
+	if banchId != nil {
+		if exists, _ := InArray(
+			(*instance).CurrentPermissionScopeBanch,
+			banchId,
+		); !exists {
+			return &[]int{*banchId}
+		}
+		return &[]int{}
+	}
+	return &(*instance).CurrentPermissionScopeBanch
+}
+
+// 指定的role id 與 目前可查詢的 role
+func(instance *SessionStruct) GetScopeRolehWithCustomize(roleId *int) *[]int {
+	if roleId != nil {
+		if exists, _ := InArray(
+			(*instance).CurrentPermissionScopeRole,
+			roleId,
+		); !exists {
+			return &[]int{*roleId}
+		}
+		return &[]int{}
+	}
+	return &(*instance).CurrentPermissionScopeRole
+}

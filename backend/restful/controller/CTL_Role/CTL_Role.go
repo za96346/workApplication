@@ -80,10 +80,17 @@ func handleRoleStruct(
 
 // 獲取公司角色
 func Get(Request *gin.Context) {
+	// 請求處理
+	reqParams := new(struct {
+		RoleName string `json:"RoleName"`
+	})
+
 	// 權限驗證
 	session := method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: false,
+		ReqParamsValidation: true,
+		ReqParamsStruct: reqParams,
 	}
 	if session.SessionHandler() != nil {return}
 
@@ -91,6 +98,7 @@ func Get(Request *gin.Context) {
 	Model.DB.
 		Where("companyId = ?", session.CompanyId).
 		Where("deleteFlag = ?", "N").
+		Where("roleName like ?", "%" + reqParams.RoleName + "%").
 		Find(data)
 
 	Request.JSON(
@@ -109,7 +117,7 @@ func GetSingle(Request *gin.Context) {
 	rolePermissionMap := map[string](map[string]map[string]interface{}){}
 
 	// 請求處理
-	reqBody := new(struct {
+	reqParams := new(struct {
 		RoleId int `json:"RoleId" binding:"required"`
 	})
 
@@ -117,20 +125,20 @@ func GetSingle(Request *gin.Context) {
 	session := method.SessionStruct{
 		Request: Request,
 		ReqParamsValidation: true,
-		ReqParamsStruct: reqBody,
+		ReqParamsStruct: reqParams,
 	}
 	if session.SessionHandler() != nil {return}
 
 	// 查詢DB
 	Model.DB.
 		Where("companyId = ?", session.CompanyId).
-		Where("roleId = ?", reqBody.RoleId).
+		Where("roleId = ?", reqParams.RoleId).
 		Where("deleteFlag = ?", "N").
 		First(roleData)
 
 	Model.DB.
 		Where("companyId = ?", session.CompanyId).
-		Where("roleId = ?", reqBody.RoleId).
+		Where("roleId = ?", reqParams.RoleId).
 		Find(rolePermission)
 
 	for _, v := range *rolePermission {
@@ -339,7 +347,7 @@ func Delete(Request *gin.Context) {
 
 	// 請求處理
 	reqBody := new(struct {
-		RoleId int `json:"UserId" binding:"required"`
+		RoleId int `json:"RoleId" binding:"required"`
 	})
 
 	// 權限驗證
