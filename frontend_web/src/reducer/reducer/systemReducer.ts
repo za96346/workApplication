@@ -4,13 +4,15 @@ import systemTypes from 'types/system'
 const systemState = {
     auth: {},
     sidebar: true,
-    func: {}
+    func: {},
+    roleBanchList: {}
 }
 
 export interface systemReducerType {
     auth: systemTypes.auth
     sidebar: boolean
     func: systemTypes.func
+    roleBanchList: systemTypes.roleBanchList
 }
 
 export const systemReducer = (state = systemState, action: action): any => {

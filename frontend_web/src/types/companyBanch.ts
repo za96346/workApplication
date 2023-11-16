@@ -1,7 +1,7 @@
 declare namespace companyBanchTypes {
     interface TABLE {
-        CompanyId: 0
-        BanchId: 1
+        CompanyId: number
+        BanchId: number
         BanchName: string
         DeleteFlag: Flag
         DeleteTime: string

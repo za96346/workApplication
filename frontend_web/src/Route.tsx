@@ -42,6 +42,7 @@ const RouteIndex = (): JSX.Element => {
 
     useEffect(() => {
         void api.system.auth()
+        void api.system.getRoleBanchList()
     }, [])
     return (
         <Router>

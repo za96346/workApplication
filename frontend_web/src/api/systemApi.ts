@@ -25,6 +25,15 @@ class systemApi extends apiAbstract {
             return res
         })
     }
+
+    async getRoleBanchList (): Promise<systemTypes.roleBanchList> {
+        return await this.GET<systemTypes.roleBanchList>({
+            url: this.route + 'roleBanchList'
+        }).then((res) => {
+            this.store.dispatch(systemAction.setRoleBanchList(res))
+            return res
+        })
+    }
 }
 export default new systemApi()
 export {

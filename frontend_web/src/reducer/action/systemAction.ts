@@ -28,5 +28,14 @@ class systemAction {
             }
         }
     }
+
+    setRoleBanchList (v: systemReducerType['roleBanchList']): action {
+        return {
+            type: systemType.SET_ROLE_BANCH_LIST,
+            payload: {
+                roleBanchList: v
+            }
+        }
+    }
 }
 export default new systemAction()

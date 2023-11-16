@@ -1,10 +1,17 @@
 import { Divider, Form, Input, Select } from 'antd'
 import api from 'api/Index'
+import useRoleBanchList from 'hook/useRoleBanchList'
 import React from 'react'
 import Btn from 'shared/Button'
+import { funcCode, operationCode } from 'types/system'
 
 const Searchbar = (): JSX.Element => {
     const [form] = Form.useForm()
+
+    const rolBanchList = useRoleBanchList({
+        funcCode: funcCode.employeeManage,
+        operationCode: operationCode.inquire
+    })
 
     return (
         <>
@@ -20,7 +27,14 @@ const Searchbar = (): JSX.Element => {
                     label="部門"
                     className='col-md-6'
                 >
-                    <Select />
+                    <Select options={rolBanchList.banchSelectList} />
+                </Form.Item>
+                <Form.Item
+                    name="RoleId"
+                    label="角色"
+                    className='col-md-6'
+                >
+                    <Select options={rolBanchList.roleSelectList} />
                 </Form.Item>
                 <Form.Item
                     name="UserName"

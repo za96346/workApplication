@@ -1,3 +1,6 @@
+import companyBanchTypes from "./companyBanch"
+import roleTypes from "./role"
+
 enum funcCode {
     banchManage = 'banchManage',
     companyData = 'companyData',
@@ -35,6 +38,8 @@ declare namespace systemTypes {
         scopeBanch: 'self' | 'all' | number[]
         scopeRole: 'self' | 'all' | number[]
     }
+
+    // api
     interface auth {
         menu: functionItemTable[]
         permission: Record<funcCode, Record<operationCode, permission>>
@@ -43,6 +48,13 @@ declare namespace systemTypes {
     interface func {
         functionItem: functionItemTable[]
         operationItem: operationItemTable[]
+    }
+
+    interface roleBanchList {
+        availableBanch: companyBanchTypes.TABLE[]
+        availableRole: roleTypes.TABLE[]
+        scopeBanch: Record<funcCode, Record<operationCode, number[]>>
+        scopeRole: Record<funcCode, Record<operationCode, number[]>>
     }
 }
 export default systemTypes

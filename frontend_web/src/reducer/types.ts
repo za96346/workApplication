@@ -10,7 +10,8 @@ export const loadingType = {
 export const systemType = {
     SET_AUTH: 'SET_AUTH',
     SET_SIDEBAR: 'SET_SIDEBAR',
-    SET_FUNC: 'SET_FUNC'
+    SET_FUNC: 'SET_FUNC',
+    SET_ROLE_BANCH_LIST: 'SET_ROLE_BANCH_LIST'
 }
 
 export const userType = {

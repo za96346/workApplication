@@ -2,12 +2,15 @@ import React, { useMemo } from 'react'
 import { Menu as AntdMenu, Divider } from 'antd'
 import { useAppSelector } from 'hook/redux'
 import pic from 'asserts/logo192.png'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const Menu = (): JSX.Element => {
     const auth = useAppSelector((v) => v?.system?.auth)
     const sidebarOpen = useAppSelector((v) => v?.system?.sidebar)
     const navigate = useNavigate()
+    const location = useLocation()
+
+    const defaultSelectedKeys = location.pathname?.replace('/', '')
 
     const menuItem = useMemo(() => {
         return (
@@ -50,6 +53,7 @@ const Menu = (): JSX.Element => {
                         navigate(v?.key)
                     }
                 }}
+                defaultSelectedKeys={[defaultSelectedKeys]}
                 mode="inline"
                 items={menuItem}
                 className={`${!sidebarOpen && 'd-none'}`}
