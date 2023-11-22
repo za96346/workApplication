@@ -14,14 +14,19 @@ declare namespace params {
         BanchName: string
         BanchId: number
     }
+
+    interface get {
+        BanchName: string
+    }
 }
 
 class companyBanchApi extends apiAbstract {
     private readonly route = 'workApp/banch/'
 
-    async get (): Promise<companyBanchReducerType['all']> {
+    async get (v?: params.get): Promise<companyBanchReducerType['all']> {
         return await this.GET<companyBanchReducerType['all']>({
-            url: this.route
+            url: this.route,
+            data: v
         }).then((res) => {
             this.store.dispatch(this.action.companyBanch.setAll(res))
             return res

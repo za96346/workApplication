@@ -5,11 +5,14 @@ import { Modal } from 'shared/Modal/Index'
 import columns from '../method/columns'
 import modal from 'shared/Modal/types'
 import Btn from 'shared/Button'
-import roleTypes from 'types/role'
+import userTypes from 'types/user'
+import Searchbar from './Searchbar'
+import { RowSelectionType } from 'antd/es/table/interface'
 
 interface modalInfo {
     onSave: (v: any) => void
     defaultValue: number[]
+    type: RowSelectionType
 }
 
 interface props {
@@ -17,13 +20,13 @@ interface props {
 }
 
 const ModalEdit = ({ modalInfo }: props): JSX.Element => {
-    const dataRef = useRef<roleTypes.TABLE[]>([])
-    const selector = useAppSelector((v) => v?.role?.selector)
+    const dataRef = useRef<userTypes.TABLE[]>([])
+    const selector = useAppSelector((v) => v?.user?.selector)
 
     const dataSource = useMemo(() => {
         return selector?.map((item) => ({
             ...item,
-            key: item?.RoleId,
+            key: item?.UserId,
             Status: (
                 <span className='text-danger'>
                     {item?.DeleteFlag === 'Y' ? '已刪除' : ''}
@@ -32,32 +35,44 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
         }))
     }, [selector])
 
+    // 被選擇事件
+    const onSelect = (v: userTypes.TABLE, isSelected: boolean): void => {
+        if (modalInfo?.type === 'radio') {
+            if (isSelected) {
+                dataRef.current = [v]
+            } else {
+                dataRef.current = []
+            }
+        } else {
+            if (isSelected) {
+                dataRef.current.push(v)
+            } else {
+                dataRef.current = dataRef.current
+                    ?.filter((item) => (
+                        item?.UserId !== v?.UserId
+                    ))
+            }
+        }
+    }
+
     // 設定預設值
     useEffect(() => {
         dataRef.current = dataSource?.filter((item) => (
             modalInfo
                 ?.defaultValue
-                ?.includes(item?.RoleId)
+                ?.includes(item?.UserId)
         ))
     }, [modalInfo?.defaultValue])
     return (
         <>
+            <Searchbar />
             <Table
                 dataSource={dataSource}
                 columns={columns}
                 rowSelection={{
-                    type: 'checkbox',
+                    type: modalInfo?.type || 'checkbox',
                     defaultSelectedRowKeys: modalInfo?.defaultValue || [],
-                    onSelect: (v, isSelected) => {
-                        if (isSelected) {
-                            dataRef.current.push(v)
-                        } else {
-                            dataRef.current = dataRef.current
-                                ?.filter((item) => (
-                                    item?.RoleId !== v?.RoleId
-                                ))
-                        }
-                    }
+                    onSelect
                 }}
             />
             <Modal.Footer>
@@ -83,7 +98,7 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
 }
 export default ({ id }): any => Modal<modalInfo, any>({
     children: ModalEdit,
-    title: () => '角色選擇',
+    title: () => '使用者選擇',
     width: (isLess) => isLess('md') ? '100vw' : '500px',
     uid: id
 })

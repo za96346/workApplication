@@ -6,8 +6,8 @@ import companyBanchTypes from 'types/companyBanch'
 import { DefaultOptionType } from 'antd/es/select'
 
 interface props {
-    funcCode: funcCode
-    operationCode: operationCode
+    funcCode: funcCode | 'all'
+    operationCode: operationCode | 'all'
 }
 
 interface returnType {
@@ -33,11 +33,17 @@ const useRoleBanchList = (
 
     const banchList = useMemo(() => {
         const banchIdArray = scopeBanch?.[funcCode]?.[operationCode]
+        if (funcCode === 'all') {
+            return availableBanch
+        }
         return availableBanch?.filter((item) => banchIdArray.includes(item?.BanchId))
     }, [roleBanchList])
 
     const roleList = useMemo(() => {
         const roleIdArray = scopeRole?.[funcCode]?.[operationCode]
+        if (funcCode === 'all') {
+            return availableRole
+        }
         return availableRole?.filter((item) => roleIdArray.includes(item?.RoleId))
     }, [roleBanchList])
 

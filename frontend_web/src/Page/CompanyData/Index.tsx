@@ -6,6 +6,7 @@ import { usePermission } from 'hook/usePermission'
 import React, { useEffect } from 'react'
 import Btn from 'shared/Button'
 import { funcCode } from 'types/system'
+import UserSelector from 'shared/UserSelector/Index'
 
 const Index = (): JSX.Element => {
     const [form] = Form.useForm()
@@ -20,58 +21,67 @@ const Index = (): JSX.Element => {
         <div>
             <Form
                 disabled={!permission?.isEditable}
-                onFinish={(v) => { }}
+                onFinish={(v) => {
+                    void api.company.update(v)
+                        .then(() => {
+                            void api.company.getMine()
+                        })
+                }}
                 name="validateOnly"
                 className='row'
                 autoComplete="off"
+                form={form}
             >
                 <Form.Item
                     className='col-md-6'
                     name="CompanyName"
                     label="公司名稱"
+                    initialValue={data?.CompanyName}
                     rules={[{ required: true }]}
                 >
-                    <Input defaultValue={data?.CompanyName} />
+                    <Input />
                 </Form.Item>
                 <Form.Item
                     className='col-md-6'
-                    name="CompanyPhone"
+                    name="CompanyPhoneNumber"
                     label="公司電話"
+                    initialValue={data?.companyPhoneNumber}
                     rules={[{ required: true }]}
                 >
-                    <Input defaultValue={data?.companyPhoneNumber} />
+                    <Input />
                 </Form.Item>
                 <Form.Item
                     className='col-md-6'
                     name="CompanyCode"
                     label="公司代碼"
+                    initialValue={data?.CompanyCode}
                     rules={[{ required: true }]}
                 >
-                    <Input defaultValue={data?.CompanyCode} />
+                    <Input />
                 </Form.Item>
                 <Form.Item
                     className='col-md-6'
                     name="CompanyLocation"
                     label="公司位置"
+                    initialValue={data?.CompanyLocation}
                     rules={[{ required: true }]}
                 >
-                    <Input defaultValue={data?.CompanyLocation} />
+                    <Input />
                 </Form.Item>
                 <Form.Item
                     className='col-md-6'
-                    name="CompanyId"
-                    label="公司id"
-                    rules={[{ required: true }]}
-                >
-                    <Input defaultValue={data?.CompanyId} />
-                </Form.Item>
-                <Form.Item
-                    className='col-md-6'
+                    label="負責人"
                     name="BossId"
-                    label="boss id"
                     rules={[{ required: true }]}
                 >
-                    <Input defaultValue={data?.BossId} />
+                    <UserSelector
+                        onChange={(v) => {
+                            form.setFieldValue('BossId', v?.[0]?.UserId || null)
+                        }}
+                        type='radio'
+                        subComponents='tag'
+                        defaultValue={[data?.BossId]}
+                    />
                 </Form.Item>
 
                 <Form.Item className='d-flex justify-content-end'>

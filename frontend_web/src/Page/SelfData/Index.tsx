@@ -1,16 +1,22 @@
-import { DatePicker, Form, Input } from 'antd'
+import { DatePicker, Form, Input, Select } from 'antd'
 import api from 'api/Index'
 import dayjs from 'dayjs'
 import { useAppSelector } from 'hook/redux'
 import { usePermission } from 'hook/usePermission'
+import useRoleBanchList from 'hook/useRoleBanchList'
 import React, { useEffect } from 'react'
 import Btn from 'shared/Button'
-import { funcCode } from 'types/system'
+import { funcCode, operationCode } from 'types/system'
 
 const Index = (): JSX.Element => {
     const [form] = Form.useForm()
     const data = useAppSelector((v) => v?.user?.mine)
     const permission = usePermission({ funcCode: funcCode.selfData })
+
+    const rolBanchList = useRoleBanchList({
+        funcCode: funcCode.selfData,
+        operationCode: operationCode.edit
+    })
 
     useEffect(() => {
         void api.user.getMine()
@@ -20,7 +26,12 @@ const Index = (): JSX.Element => {
         <div>
             <Form
                 disabled={!permission?.isEditable}
-                onFinish={(v) => { }}
+                onFinish={(v) => {
+                    void api.user.update({
+                        ...v,
+                        UserId: data?.UserId
+                    })
+                }}
                 name="validateOnly"
                 className='row'
                 autoComplete="off"
@@ -29,57 +40,55 @@ const Index = (): JSX.Element => {
                     className='col-md-6'
                     name="Account"
                     label="帳號"
+                    initialValue={data?.Account}
                     rules={[{ required: true }]}
                 >
-                    <Input defaultValue={data?.Account} />
+                    <Input />
                 </Form.Item>
                 <Form.Item
                     className='col-md-6'
                     name="UserName"
                     label="姓名"
+                    initialValue={data?.UserName}
                     rules={[{ required: true }]}
                 >
-                    <Input defaultValue={data?.UserName} />
+                    <Input />
                 </Form.Item>
                 <Form.Item
                     className='col-md-6'
                     name="EmployeeNumber"
                     label="員工編號"
+                    initialValue={data?.EmployeeNumber}
                     rules={[{ required: true }]}
                 >
-                    <Input defaultValue={data?.EmployeeNumber} />
+                    <Input />
                 </Form.Item>
                 <Form.Item
                     className='col-md-6'
                     name="Banch"
                     label="部門"
+                    initialValue={data?.BanchId}
                     rules={[{ required: true }]}
                 >
-                    <Input defaultValue={data?.BanchId} />
-                </Form.Item>
-                <Form.Item
-                    className='col-md-6'
-                    name="UserId"
-                    label="userId"
-                    rules={[{ required: true }]}
-                >
-                    <Input defaultValue={data?.UserId} />
+                    <Select options={rolBanchList.banchSelectList} />
                 </Form.Item>
                 <Form.Item
                     className='col-md-6'
                     name="RoleId"
-                    label="roleId"
+                    label="角色"
+                    initialValue={data?.RoleId}
                     rules={[{ required: true }]}
                 >
-                    <Input defaultValue={data?.RoleId} />
+                    <Select options={rolBanchList.roleSelectList} />
                 </Form.Item>
                 <Form.Item
                     className='col-md-6'
                     name="OnWorkDay"
                     label="到職日"
+                    initialValue={dayjs(data?.OnWorkDay || new Date())}
                     rules={[{ required: true }]}
                 >
-                    <DatePicker defaultValue={dayjs(data?.OnWorkDay)} />
+                    <DatePicker disabled />
                 </Form.Item>
 
                 <Form.Item className='d-flex justify-content-end'>

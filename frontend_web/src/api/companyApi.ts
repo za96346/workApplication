@@ -2,6 +2,13 @@ import { companyReducerType } from 'reducer/reducer/companyReducer'
 import apiAbstract from './apiAbstract'
 
 declare namespace params {
+    interface update {
+        CompanyCode: string
+        CompanyName: string
+        CompanyLocation: string
+        CompanyPhoneNumber: string
+        BossId: number
+    }
 }
 
 class companyApi extends apiAbstract {
@@ -13,6 +20,14 @@ class companyApi extends apiAbstract {
         }).then((res) => {
             this.store.dispatch(this.action.company.setMine(res))
             return res
+        })
+    }
+
+    async update (v: params.update): Promise<void> {
+        return await this.POST<null>({
+            url: this.route,
+            data: v,
+            check_title: this.checkTitle.confirmUpdate
         })
     }
 }

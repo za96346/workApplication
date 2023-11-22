@@ -5,6 +5,7 @@ import { Modal } from 'shared/Modal/Index'
 import columns from '../method/columns'
 import modal from 'shared/Modal/types'
 import Btn from 'shared/Button'
+import companyBanchTypes from 'types/companyBanch'
 
 interface modalInfo {
     onSave: (v: any) => void
@@ -15,8 +16,8 @@ interface props {
     modalInfo: modal.modalInfoProps<modalInfo>
 }
 
-const BanchSelector = ({ modalInfo }: props): JSX.Element => {
-    const dataRef = useRef([])
+const ModalEdit = ({ modalInfo }: props): JSX.Element => {
+    const dataRef = useRef<companyBanchTypes.TABLE[]>([])
     const selector = useAppSelector((v) => v?.companyBanch?.selector)
 
     const dataSource = useMemo(() => {
@@ -81,7 +82,7 @@ const BanchSelector = ({ modalInfo }: props): JSX.Element => {
     )
 }
 export default ({ id }): any => Modal<modalInfo, any>({
-    children: BanchSelector,
+    children: ModalEdit,
     title: () => '部門選擇',
     width: (isLess) => isLess('md') ? '100vw' : '500px',
     uid: id

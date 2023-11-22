@@ -10,7 +10,7 @@ const Searchbar = (): JSX.Element => {
         <>
             <Divider />
             <Form
-                onFinish={(v) => { void api.user.getEmployee(v) }}
+                onFinish={(v) => { void api.companyBanch.get(v) }}
                 name="validateOnly"
                 autoComplete="off"
                 className='row'

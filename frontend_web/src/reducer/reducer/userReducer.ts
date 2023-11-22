@@ -3,12 +3,14 @@ import { type action, userType } from '../types'
 
 const userState = {
     mine: {},
-    employee: []
+    employee: [],
+    selector: []
 }
 
 export interface userReducerType {
     mine: userTypes.TABLE
     employee: userTypes.TABLE[]
+    selector: userTypes.TABLE[]
 }
 
 export const userReducer = (state = userState, action: action): any => {

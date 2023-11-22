@@ -19,5 +19,14 @@ class userAction {
             }
         }
     }
+
+    setSelector (v: userReducerType['selector']): action {
+        return {
+            type: userType.SET_USER_SELECTOR,
+            payload: {
+                selector: v
+            }
+        }
+    }
 }
 export default new userAction()

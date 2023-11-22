@@ -26,8 +26,13 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                 autoComplete="off"
                 form={form}
             >
-                <Form.Item name="BanchName" label="部門名稱" rules={[{ required: true }]}>
-                    <Input defaultValue={modalInfo?.data?.BanchName || ''} />
+                <Form.Item
+                    name="BanchName"
+                    label="部門名稱"
+                    rules={[{ required: true }]}
+                    initialValue={modalInfo?.data?.BanchName || ''}
+                >
+                    <Input />
                 </Form.Item>
                 <Modal.Footer>
                     {

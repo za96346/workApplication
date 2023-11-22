@@ -62,6 +62,16 @@ class userApi extends apiAbstract {
             data: v
         })
     }
+
+    async getSelector (v: params.getEmployee): Promise<userReducerType['selector']> {
+        return await this.GET<userReducerType['selector']>({
+            url: this.route + 'selector',
+            data: v
+        }).then((res) => {
+            this.store.dispatch(this.action.user.setSelector(res))
+            return res
+        })
+    }
 }
 export default new userApi()
 export {

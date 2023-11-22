@@ -16,7 +16,8 @@ export const systemType = {
 
 export const userType = {
     SET_USER_MINE: 'SET_USER_MINE',
-    SET_EMPLOYEE: 'SET_EMPLOYEE'
+    SET_EMPLOYEE: 'SET_EMPLOYEE',
+    SET_USER_SELECTOR: 'SET_USER_SELECTOR'
 }
 
 export const companyType = {
