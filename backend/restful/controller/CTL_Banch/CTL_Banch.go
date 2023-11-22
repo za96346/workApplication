@@ -17,23 +17,37 @@ const FuncCode = "banchManage"
 
 // 拿取
 func Get(Request *gin.Context) {
+	reqParams := new(struct{
+		BanchName   *string       `gorm:"column:banchName" json:"BanchName"`
+	})
+
 	// 權限驗證
 	session := &method.SessionStruct{
 		Request: Request,
-		ReqBodyValidation: false,
+
 		PermissionValidation: true,
 		PermissionFuncCode: FuncCode,
 		PermissionItemCode: "inquire",
+
+		ReqBodyValidation: false,
+		ReqParamsStruct: reqParams,
+		ReqParamsValidation: true,
 	}
 	if session.SessionHandler() != nil {return}
 
 	var responseData []Model.CompanyBanch
 
-	Model.DB.
+	searchQuery := Model.DB.
 		Where("companyId = ?", session.CompanyId).
 		Where("banchId in (?)", session.CurrentPermissionScopeBanch).
-		Where("deleteFlag = ?", "N").
-		Find(&responseData)
+		Where("deleteFlag = ?", "N")
+	
+	// banch name
+	if reqParams.BanchName != nil {
+		searchQuery.Where("banchName like ?", "%" + *reqParams.BanchName + "%")
+	}
+
+	searchQuery.Find(&responseData)
 
 	Request.JSON(
 		http.StatusOK,

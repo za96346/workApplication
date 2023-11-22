@@ -139,7 +139,12 @@ func Add(Request *gin.Context) {
 	這邊可能要 再加上 原本此使用者的 部門驗證以及 角色驗證
 */
 func Edit(Request *gin.Context) {
-	reqBody := new(Model.User)
+	reqBody := new(struct{
+		Model.User
+		Password         string       `gorm:"column:password" json:"Password"`
+		UserId           int         `gorm:"column:userId;primaryKey" json:"UserId" binding:"required"`
+	})
+
 	// 權限驗證
 	session := &method.SessionStruct{
 		Request: Request,
@@ -247,6 +252,60 @@ func Delete(Request *gin.Context) {
 		http.StatusOK,
 		gin.H {
 			"message": "刪除成功",
+		},
+	)
+}
+
+// 獲取全部
+func GetSelector(Request *gin.Context) {
+	// 請求處理
+	reqParams := new(struct {
+		BanchId *int `json:"BanchId"`
+		RoleId *int `json:"RoleId"`
+		UserName *string `json:"UserName"`
+		EmployeeNumber *string `json:"EmployeeNumber"`
+	})
+	// 權限驗證
+	session := &method.SessionStruct{
+		Request: Request,
+		ReqParamsValidation: true,
+		ReqParamsStruct: reqParams,
+	}
+	if session.SessionHandler() != nil {return}
+
+	var data []Model.User
+
+	searchQuery := Model.DB.
+		Where("companyId = ?", session.CompanyId)
+
+	// 使用者名稱
+	if reqParams.UserName != nil {
+		searchQuery.Where("userName like ?", "%" + *reqParams.UserName + "%")
+	}
+
+	// 員工編號
+	if reqParams.EmployeeNumber != nil {
+		searchQuery.Where("employeeNumber like ?", "%" + *reqParams.EmployeeNumber + "%")
+	}
+
+	// 部門查詢
+	if reqParams.BanchId != nil {
+		searchQuery.Where("banchId = ?", reqParams.BanchId)
+	}
+
+	// 角色查詢
+	if reqParams.RoleId != nil {
+		searchQuery.Where("roleId = ?", reqParams.RoleId)
+	}
+
+
+	searchQuery.Find(&data)
+
+	Request.JSON(
+		http.StatusOK,
+		gin.H {
+			"message": "成功",
+			"data":    data,
 		},
 	)
 }

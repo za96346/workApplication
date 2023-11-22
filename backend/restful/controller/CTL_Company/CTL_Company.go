@@ -59,6 +59,7 @@ func Edit(Request *gin.Context) {
 
 	now := time.Now()
 	(*reqBody).LastModify = &now
+	(*reqBody).CompanyId = session.CompanyId
 
 	err := Model.DB.
 		Where("companyId = ?", session.CompanyId).
