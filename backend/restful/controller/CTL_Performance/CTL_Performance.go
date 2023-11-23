@@ -276,6 +276,84 @@ func Delete(Request *gin.Context) {
 	)
 }
 
+// 尋找年度績效
+func GetYear(Request *gin.Context) {
+	reqParams := new(struct{
+		BanchId *int `json:"BanchId"`
+		RoleId *int `json:"RoleId"`
+		UserName *string `json:"UserName"`
+	})
+
+	// 權限驗證
+	session := &method.SessionStruct{
+		Request: Request,
+		ReqBodyValidation: false,
+		ReqParamsValidation: true,
+		ReqParamsStruct: reqParams,
+
+		PermissionValidation: true,
+		PermissionFuncCode: "yearPerformance",
+		PermissionItemCode: "inquire",
+	}
+	if session.SessionHandler() != nil {return}
+
+	// 獲取資料
+	var data []struct{
+		Year int `gorm:"column:year" json:"Year"`
+		UserName string  `gorm:"column:userName" json:"UserName"`
+		Score float32 `gorm:"column:score" json:"Score"`
+	}
+	searchQuery := Model.DB.
+		Model(&Model.Performance{}).
+		Where("performance.companyId = ?", session.CompanyId).
+		Where("performance.banchId in (?)", *session.GetScopeBanchWithCustomize(reqParams.BanchId)).
+		Where("user.roleId in (?)", *session.GetScopeRolehWithCustomize(reqParams.RoleId)).
+		Where("performance.deleteFlag = ?", "N").
+		Joins(`
+			left join user
+			on user.userId = performance.userId
+			and user.companyId = performance.companyId
+		`).
+		Joins(`
+			left join company_banch
+			on company_banch.companyId = performance.companyId
+			and company_banch.banchId = performance.banchId
+		`).
+		Group("performance.userId").
+		Group("performance.year").
+		Group("user.userName").
+		Order("score desc").
+		Select(
+			"performance.year as year",
+			"user.userName as userName",
+			`
+				round(
+					(
+						sum(performance.attitude)
+						+ sum(performance.efficiency)
+						+ sum(performance.professional)
+					) / 36, 2
+				) as score
+			`,
+		)
+
+	// 使用者名稱
+	if reqParams.UserName != nil {
+		searchQuery.Where("user.userName like ?", "%" + *reqParams.UserName + "%")
+	}
+
+	searchQuery.Find(&data)
+	
+
+	Request.JSON(
+		http.StatusOK,
+		gin.H {
+			"message": "成功",
+			"data":    data,
+		},
+	)
+}
+
 // 搜尋列 的 值
 func SearchBar(Request *gin.Context) {
 	// 權限驗證
