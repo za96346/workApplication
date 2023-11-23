@@ -31,9 +31,9 @@ const Menu = (): JSX.Element => {
     return (
         <div
             style={{
-                width: sidebarOpen
-                    ? '256px'
-                    : '0px'
+                left: sidebarOpen
+                    ? '0px'
+                    : '-256px'
             }}
             className='
                 menu

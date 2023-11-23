@@ -8,6 +8,7 @@ import { Loading } from './Loading/Index'
 const Layout = (): JSX.Element => {
     const location = useLocation()
     const menu = useAppSelector((v) => v?.system?.auth?.menu)
+    const sidebarOpen = useAppSelector((v) => v?.system.sidebar)
 
     const currentPage = menu?.find((item) => `/${item?.funcCode}` === location?.pathname)
 
@@ -23,9 +24,19 @@ const Layout = (): JSX.Element => {
         <div translate='no' className='layout'>
             <Loading />
             <Menu />
-            <div className='w-100 h-100'>
+            <div
+                className='w-100 h-100'
+            >
                 <Header />
-                <div className={'article'}>
+                <div
+                    className={'article'}
+                    style={!sidebarOpen
+                        ? {
+                            width: '100%',
+                            left: 0
+                        }
+                        : {}}
+                >
                     <h4 className='text-secondary'>
                         {currentPage?.FuncName || ''}
                     </h4>

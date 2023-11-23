@@ -58,14 +58,12 @@ const columns: ColumnsType<any> = [
         title: '遲到/早退',
         dataIndex: 'BeLate',
         width: '50px'
-        // responsive: ['md']
     },
     {
         key: 'DayOffNotOnRule',
         title: '未依規定請假',
         dataIndex: 'DayOffNotOnRule',
         width: '50px'
-        // responsive: ['md']
     },
     {
         key: 'Directions',

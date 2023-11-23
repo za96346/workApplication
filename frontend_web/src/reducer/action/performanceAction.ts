@@ -10,5 +10,14 @@ class performanceAction {
             }
         }
     }
+
+    setYear (v: performanceReducerType['year']): action {
+        return {
+            type: performanceType.SET_PERFORMANCE_YEAR,
+            payload: {
+                year: v
+            }
+        }
+    }
 }
 export default new performanceAction()

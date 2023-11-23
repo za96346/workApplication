@@ -60,13 +60,21 @@ const Index = (): JSX.Element => {
                         <Btn.Print
                             text='表單'
                             onClick={() => {
-                                window.open('performance/print/form', '績效評核', 'height=800,width=800')
+                                window.open(
+                                    'performance/print/form',
+                                    '績效評核',
+                                    'height=800,width=800'
+                                )
                             }}
                         />
                         <Btn.Print
                             text='清單'
                             onClick={() => {
-                                window.open('performance/print/list', '績效評核', 'height=800,width=800')
+                                window.open(
+                                    'performance/print/list',
+                                    '績效評核',
+                                    'height=800,width=800'
+                                )
                             }}
                         />
                     </>
@@ -78,13 +86,13 @@ const Index = (): JSX.Element => {
                 columns={columns}
                 sticky={{ offsetHeader: -20 }}
                 style={{
-                    fontSize: '0.5rem'
-                    // width: 'fit-content'
+                    fontSize: '0.5rem',
+                    width: 'fit-content'
                 }}
                 size='small'
                 scroll={{
                     scrollToFirstRowOnChange: true,
-                    x: 1000
+                    x: 1500
                 }}
             />
         </>

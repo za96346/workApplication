@@ -45,21 +45,24 @@ class userApi extends apiAbstract {
     async delete (v: params.deleted): Promise<void> {
         return await this.DELETE<null>({
             url: this.route,
-            data: v
+            data: v,
+            checkTitle: this.checkTitle.confirmDelete
         })
     }
 
     async update (v: params.add): Promise<void> {
         return await this.POST<null>({
             url: this.route,
-            data: v
+            data: v,
+            checkTitle: this.checkTitle.confirmUpdate
         })
     }
 
     async add (v: params.add): Promise<void> {
         return await this.PUT<null>({
             url: this.route,
-            data: v
+            data: v,
+            checkTitle: this.checkTitle.confirmAdd
         })
     }
 

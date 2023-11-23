@@ -34,11 +34,21 @@ class performanceApi extends apiAbstract {
             })
     }
 
+    async getYear (v?: params.get): Promise<void> {
+        return await this.GET<performanceReducerType['year']>({
+            url: this.route + 'year',
+            data: v
+        })
+            .then((v) => {
+                this.store.dispatch(this.action.performance.setYear(v))
+            })
+    }
+
     async add (v: params.add): Promise<void> {
         return await this.PUT<null>({
             url: this.route,
             data: v,
-            checkText: this.checkTitle.confirmAdd
+            checkTitle: this.checkTitle.confirmAdd
         })
     }
 
@@ -46,7 +56,7 @@ class performanceApi extends apiAbstract {
         return await this.POST<null>({
             url: this.route,
             data: v,
-            checkText: this.checkTitle.confirmUpdate
+            checkTitle: this.checkTitle.confirmUpdate
         })
     }
 
@@ -54,7 +64,7 @@ class performanceApi extends apiAbstract {
         return await this.DELETE<null>({
             url: this.route,
             data: v,
-            checkText: this.checkTitle.confirmDelete
+            checkTitle: this.checkTitle.confirmDelete
         })
     }
 }

@@ -60,7 +60,7 @@ class roleApi extends apiAbstract {
         return await this.POST<null>({
             url: this.route,
             data: v,
-            check_title: this.checkTitle.confirmUpdate
+            checkTitle: this.checkTitle.confirmUpdate
         })
     }
 
@@ -68,7 +68,7 @@ class roleApi extends apiAbstract {
         return await this.PUT<null>({
             url: this.route,
             data: v,
-            check_title: this.checkTitle.confirmAdd
+            checkTitle: this.checkTitle.confirmAdd
         })
     }
 
@@ -76,7 +76,7 @@ class roleApi extends apiAbstract {
         return await this.DELETE<null>({
             url: this.route,
             data: v,
-            check_title: this.checkTitle.confirmDelete
+            checkTitle: this.checkTitle.confirmDelete
         })
     }
 }

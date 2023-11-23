@@ -1,3 +1,5 @@
+import userTypes from './user'
+
 declare namespace performanceTypes {
     interface TABLE {
         CompanyId: number
@@ -17,6 +19,12 @@ declare namespace performanceTypes {
         DeleteTime: string
         CreateTime: string
         LastModify: string
+    }
+
+    interface year {
+        UserName: userTypes.TABLE['UserName']
+        Year: TABLE['Year']
+        Score: number
     }
 }
 export default performanceTypes

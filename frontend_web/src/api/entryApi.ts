@@ -14,7 +14,7 @@ class entryApi extends apiAbstract {
         return await this.POST<null>({
             url: this.route,
             data: params,
-            checkText: '是否登入'
+            checkTitle: '是否登入'
         })
             .then((v) => { window.location.href = '/' })
     }

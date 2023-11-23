@@ -37,5 +37,6 @@ export const roleType = {
 }
 
 export const performanceType = {
-    SET_PERFORMANCE_ALL: 'SET_PERFORMANCE_ALL'
+    SET_PERFORMANCE_ALL: 'SET_PERFORMANCE_ALL',
+    SET_PERFORMANCE_YEAR: 'SET_PERFORMANCE_YEAR'
 }

@@ -24,7 +24,7 @@ interface dataRequestParams {
 }
 
 interface formRequestParams extends dataRequestParams, SweetAlertOptions {
-    check_title?: string
+    checkTitle?: string
     check_type?: 'question' | 'warning' | 'error' | 'success' | 'info'
     checkText?: string
     imgUrl?: string
@@ -170,7 +170,7 @@ class apiAbstract {
     */
     private async ConfirmRequest <T extends any>(v: formRequestParams): Promise<T> {
         return await MySwal.checkMessage<responseParams<T>>({
-            title: v?.check_title,
+            title: v?.checkTitle,
             icon: v?.check_type || 'question',
             text: v?.checkText,
             imageUrl: v?.imgUrl,

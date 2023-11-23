@@ -4,7 +4,8 @@ import userTypes from 'types/user'
 import companyBanchTypes from 'types/companyBanch'
 
 const performanceState = {
-    all: []
+    all: [],
+    year: []
 }
 
 export interface performanceReducerType {
@@ -13,6 +14,7 @@ export interface performanceReducerType {
         UserName: userTypes.TABLE['UserName']
         BanchName: companyBanchTypes.TABLE['BanchName']
     }>
+    year: performanceTypes.year[]
 }
 
 export const performanceReducer = (state = performanceState, action: action): any => {

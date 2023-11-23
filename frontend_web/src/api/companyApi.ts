@@ -27,7 +27,7 @@ class companyApi extends apiAbstract {
         return await this.POST<null>({
             url: this.route,
             data: v,
-            check_title: this.checkTitle.confirmUpdate
+            checkTitle: this.checkTitle.confirmUpdate
         })
     }
 }

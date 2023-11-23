@@ -5,7 +5,9 @@ import { v4 } from 'uuid'
 const PrintList = (): JSX.Element => {
     const performance = useAppSelector((v) => v?.performance?.all)
     useEffect(() => {
-        window.print()
+        setTimeout(() => {
+            print()
+        }, 1000)
     }, [])
     return (
         <div translate='no' className={'print_page'}>
