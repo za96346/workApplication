@@ -35,3 +35,7 @@ export const roleType = {
     CLEAR_ROLE_SINGLE: 'CLEAR_ROLE_SINGLE',
     SET_ROLE_SELECTOR: 'SET_ROLE_SELECTOR'
 }
+
+export const performanceType = {
+    SET_PERFORMANCE_ALL: 'SET_PERFORMANCE_ALL'
+}

@@ -6,7 +6,7 @@ const Header = (): JSX.Element => {
     const { dispatch, action } = useAppDispatch()
     const sidebarOpen = useAppSelector((v) => v?.system.sidebar)
     return (
-        <div className='header d-flex justify-content-between align-item-center'>
+        <div className='header d-flex justify-content-around align-item-center'>
             <MenuOutlined
                 style={{ fontSize: 20, cursor: 'pointer' }}
                 onClick={() => {

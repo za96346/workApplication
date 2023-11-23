@@ -19,6 +19,8 @@ import { companyBanchReducer, companyBanchReducerType } from './reducer/companyB
 import companyBanchAction from './action/companyBanchAction'
 import { roleReducer, roleReducerType } from './reducer/roleReducer'
 import roleAction from './action/roleAction'
+import { performanceReducer, performanceReducerType } from './reducer/performanceReducer'
+import performanceAction from './action/performanceAction'
 
 export const allReducer = {
     loading: loadingReducer,
@@ -26,7 +28,8 @@ export const allReducer = {
     user: userReducer,
     company: companyReducer,
     companyBanch: companyBanchReducer,
-    role: roleReducer
+    role: roleReducer,
+    performance: performanceReducer
 }
 export const allAction = {
     loading: loadingAction,
@@ -34,7 +37,8 @@ export const allAction = {
     user: userAction,
     company: companyAction,
     companyBanch: companyBanchAction,
-    role: roleAction
+    role: roleAction,
+    performance: performanceAction
 }
 
 export interface RootState {
@@ -44,6 +48,7 @@ export interface RootState {
     company: companyReducerType
     companyBanch: companyBanchReducerType
     role: roleReducerType
+    performance: performanceReducerType
 }
 
 export const reducer = combineReducers<RootState>(allReducer)

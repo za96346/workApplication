@@ -13,7 +13,7 @@ import BtnEvent from './methods/BtnEvent'
 import { modalType } from 'static'
 import ModalEdit from './components/modalEdit/Index'
 import { dropdownList } from './methods/dropdownList'
-import useRoleBanchList from 'hook/useRoleBanchList'
+import useRoleBanchList from 'hook/useRoleBanchUserList'
 
 const Index = (): JSX.Element => {
     const permission = usePermission({ funcCode: funcCode.employeeManage })

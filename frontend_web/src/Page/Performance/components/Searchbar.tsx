@@ -3,13 +3,14 @@ import api from 'api/Index'
 import useRoleBanchList from 'hook/useRoleBanchUserList'
 import React from 'react'
 import Btn from 'shared/Button'
+import { funcCode, operationCode } from 'types/system'
 
 const Searchbar = (): JSX.Element => {
     const [form] = Form.useForm()
 
     const rolBanchList = useRoleBanchList({
-        funcCode: 'all',
-        operationCode: 'all'
+        funcCode: funcCode.performance,
+        operationCode: operationCode.inquire
     })
 
     return (
@@ -17,9 +18,9 @@ const Searchbar = (): JSX.Element => {
             <Divider />
             <Form
                 onFinish={(v) => {
-                    void api.user.getSelector(v)
+                    void api.performance.get(v)
                 }}
-                id="employeeManage"
+                id="performanceManage"
                 autoComplete="off"
                 className='row'
             >
@@ -43,13 +44,6 @@ const Searchbar = (): JSX.Element => {
                     className='col-md-6'
                 >
                     <Input name='UserName' />
-                </Form.Item>
-                <Form.Item
-                    name="EmployeeNumber"
-                    label="員工編號"
-                    className='col-md-6'
-                >
-                    <Input name='EmployeeNumber' />
                 </Form.Item>
                 <Form.Item className='d-flex justify-content-end'>
                     {/* <Btn.Reset /> */}

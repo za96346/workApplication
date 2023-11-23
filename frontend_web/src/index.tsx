@@ -8,7 +8,9 @@ import Locale from 'antd/es/locale/zh_TW'
 import RouteIndex from 'Route'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
-import './index.scss'
+import stylees from './index.scss'
+
+window.styles = stylees
 
 const root = ReactDOM.createRoot(document.getElementById('root') as NonNullable<Element>)
 root.render(

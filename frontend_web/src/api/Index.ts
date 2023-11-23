@@ -4,6 +4,7 @@ import systemApi, { systemApiParams } from './systemApi'
 import companyApi, { companyApiParams } from './companyApi'
 import companyBanchApi, { companyBanchApiParams } from './companyBanchApi'
 import roleApi, { roleApiParams } from './roleApi'
+import performanceApi, { performanceParams } from './performanceApi'
 
 const api = {
     entry: entryApi,
@@ -11,7 +12,8 @@ const api = {
     user: userApi,
     company: companyApi,
     companyBanch: companyBanchApi,
-    role: roleApi
+    role: roleApi,
+    performance: performanceApi
 }
 export default api
 export {
@@ -20,5 +22,6 @@ export {
     type companyApiParams,
     type companyBanchApiParams,
     type systemApiParams,
-    type roleApiParams
+    type roleApiParams,
+    type performanceParams
 }

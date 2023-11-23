@@ -9,7 +9,9 @@ const usePermission = ({ funcCode }: { funcCode: funcCode }): usePermissionProps
         isEditable: 'edit' in permission,
         isDeleteable: 'delete' in permission,
         isInquirable: 'inquire' in permission,
-        isAddable: 'add' in permission
+        isAddable: 'add' in permission,
+        isPrintable: 'print' in permission,
+        isCopyable: 'copy' in permission
     }
 }
 export {

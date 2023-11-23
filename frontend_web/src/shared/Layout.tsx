@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 import Menu from './Menu'
 import Header from './Header'
 import { useAppSelector } from 'hook/redux'
+import { Loading } from './Loading/Index'
 
 const Layout = (): JSX.Element => {
     const location = useLocation()
@@ -20,6 +21,7 @@ const Layout = (): JSX.Element => {
 
     return (
         <div translate='no' className='layout'>
+            <Loading />
             <Menu />
             <div className='w-100 h-100'>
                 <Header />

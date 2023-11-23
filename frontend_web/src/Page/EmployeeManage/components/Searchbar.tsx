@@ -1,6 +1,6 @@
 import { Divider, Form, Input, Select } from 'antd'
 import api from 'api/Index'
-import useRoleBanchList from 'hook/useRoleBanchList'
+import useRoleBanchList from 'hook/useRoleBanchUserList'
 import React from 'react'
 import Btn from 'shared/Button'
 import { funcCode, operationCode } from 'types/system'

@@ -22,7 +22,8 @@ import Shift from 'Page/Shift/Index'
 import ShiftSetting from 'Page/ShiftSetting/Index'
 import YearPerformance from 'Page/YearPerformance/Index'
 import Login from 'Page/Login/Index'
-import { Loading } from 'shared/Loading/Index'
+import PrintForm from 'Page/Performance/PrintForm'
+import PrintList from 'Page/Performance/PrintList'
 
 // page func
 const pageFuncCodePair = {
@@ -46,7 +47,6 @@ const RouteIndex = (): JSX.Element => {
     }, [])
     return (
         <Router>
-            <Loading />
             <Routes>
                 <Route path='/' element={<Layout />}>
                     <Route path='entry/login' element={<Login />} />
@@ -63,6 +63,8 @@ const RouteIndex = (): JSX.Element => {
                     {/* <Route path='/' element={<Navigate to={'entry/login'} />}/> */}
                     {/* <Route path='entry/:path' element={<Entry />} /> */}
                 </Route>
+                <Route path={'/performance/print/form'} element={<PrintForm />} />
+                <Route path={'/performance/print/list'} element={<PrintList />} />
                 <Route path='*' element={<Navigate to={'/'} />} />
             </Routes>
         </Router>

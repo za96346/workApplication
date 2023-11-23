@@ -77,3 +77,49 @@
         overflow-y: visible;
     }
 }
+
+/* 績效列印 */
+@media print{
+    .large{
+        display: none;
+    }
+    .print_page{
+        display: block;
+    }
+    @page{
+        margin:0px;/*隱藏頁首和頁尾*/
+        size: 29.7cm 21.0cm landscape;
+        
+    }
+}
+.print_page{
+    page-break-after: always;
+    padding: 1.5cm 1.5cm 1cm 1.5cm;
+    display: block;
+    font-size: large;
+    background-color: #fff;
+	font-size: xx-small;
+	div {
+		border-radius: 0cm;
+		>div {
+			border: #333 0.01em solid;
+			margin-bottom: -0.01em;
+			margin-right: -0.01em;
+		}
+	}
+	>div {
+		display: flex;
+		width: 18cm;
+	}
+}
+.print_page_column_one{
+    width: 0.5cm;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+}
+.print_page_column_two{
+    width: 17.5cm;
+    padding: 0.2cm;
+}

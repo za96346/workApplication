@@ -70,6 +70,15 @@ const Btn = {
         >
             清除
         </Button>
+    ),
+    Print: (attr: ButtonProps & { text?: string }) => (
+        <Button
+            type="default"
+            htmlType="button"
+            {...attr}
+        >
+            列印{attr?.text || ''}
+        </Button>
     )
 }
 

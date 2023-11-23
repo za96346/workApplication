@@ -1,5 +1,6 @@
 import companyBanchTypes from "./companyBanch"
 import roleTypes from "./role"
+import userTypes from "./user"
 
 enum funcCode {
     banchManage = 'banchManage',
@@ -53,8 +54,10 @@ declare namespace systemTypes {
     interface roleBanchList {
         availableBanch: companyBanchTypes.TABLE[]
         availableRole: roleTypes.TABLE[]
+        availableUser: userTypes.TABLE[]
         scopeBanch: Record<funcCode, Record<operationCode, number[]>>
         scopeRole: Record<funcCode, Record<operationCode, number[]>>
+        scopeUser: Record<funcCode, Record<operationCode, number[]>>
     }
 }
 export default systemTypes

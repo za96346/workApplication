@@ -37,7 +37,7 @@ class companyBanchApi extends apiAbstract {
         return await this.PUT<null>({
             url: this.route,
             data: v,
-            check_text: this.checkTitle.confirmAdd
+            checkText: this.checkTitle.confirmAdd
         })
     }
 
@@ -45,7 +45,7 @@ class companyBanchApi extends apiAbstract {
         return await this.DELETE<null>({
             url: this.route,
             data: v,
-            check_text: this.checkTitle.confirmDelete
+            checkText: this.checkTitle.confirmDelete
         })
     }
 
@@ -53,7 +53,7 @@ class companyBanchApi extends apiAbstract {
         return await this.POST<null>({
             url: this.route,
             data: v,
-            check_text: this.checkTitle.confirmUpdate
+            checkText: this.checkTitle.confirmUpdate
         })
     }
 

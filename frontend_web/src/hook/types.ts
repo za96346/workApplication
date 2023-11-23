@@ -42,6 +42,8 @@ declare namespace usePermissionProps {
         isDeleteable: boolean
         isInquirable: boolean
         isAddable: boolean
+        isPrintable: boolean
+        isCopyable: boolean
     }
 }
 
