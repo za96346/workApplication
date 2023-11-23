@@ -17,10 +17,18 @@ const FuncCode = "performance"
 
 // 尋找
 func Get(Request *gin.Context) {
+	reqParams := new(struct{
+		BanchId *int `json:"BanchId"`
+		RoleId *int `json:"RoleId"`
+		UserName *string `json:"UserName"`
+	})
+
 	// 權限驗證
 	session := &method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: false,
+		ReqParamsValidation: true,
+		ReqParamsStruct: reqParams,
 
 		PermissionValidation: true,
 		PermissionFuncCode: FuncCode,
@@ -34,11 +42,11 @@ func Get(Request *gin.Context) {
 		BanchName string  `gorm:"column:banchName" json:"BanchName"`
 		UserName string  `gorm:"column:userName" json:"UserName"`
 	}
-	Model.DB.
+	searchQuery := Model.DB.
 		Model(&Model.Performance{}).
 		Where("performance.companyId = ?", session.CompanyId).
-		Where("performance.banchId = ?", session.CurrentPermissionScopeBanch).
-		Where("user.roleId in (?)", session.CurrentPermissionScopeRole).
+		Where("performance.banchId in (?)", *session.GetScopeBanchWithCustomize(reqParams.BanchId)).
+		Where("user.roleId in (?)", *session.GetScopeRolehWithCustomize(reqParams.RoleId)).
 		Where("performance.deleteFlag = ?", "N").
 		Joins(`
 			left join user
@@ -50,12 +58,19 @@ func Get(Request *gin.Context) {
 			on company_banch.companyId = performance.companyId
 			and company_banch.banchId = performance.banchId
 		`).
-		Select(`
-			performance.*,
-			user.userName,
-			company_banch.banchName
-		`).
-		Find(&data)
+		Select(
+			"performance.*",
+			"user.userName as userName",
+			"company_banch.banchName as banchName",
+		)
+
+	// 使用者名稱
+	if reqParams.UserName != nil {
+		searchQuery.Where("userName like ?", "%" + *reqParams.UserName + "%")
+	}
+
+	searchQuery.Find(&data)
+	
 
 	Request.JSON(
 		http.StatusOK,
@@ -105,6 +120,7 @@ func Add(Request *gin.Context) {
 	// 新增固定欄位
 	now := time.Now()
 	(*reqBody).GetNewPerformanceID(session.CompanyId)
+	(*reqBody).BanchId = *userData.BanchId
 	(*reqBody).DeleteFlag = "N"
 	(*reqBody).DeleteTime = nil
 	(*reqBody).CreateTime = &now
@@ -175,6 +191,7 @@ func Edit(Request *gin.Context) {
 
 	(*reqBody).CompanyId = session.CompanyId
 	(*reqBody).UserId = oldData.UserId
+	(*reqBody).BanchId = oldData.BanchId
 	(*reqBody).DeleteFlag = "N"
 	(*reqBody).DeleteTime = nil
 	(*reqBody).LastModify = &now

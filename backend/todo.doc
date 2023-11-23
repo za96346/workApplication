@@ -5,3 +5,4 @@
 5. scopeBanch when "all" 只拿 deleteFlag == "N" ( 待考慮 )
 6. scopeRole when "all" 只拿 deleteFlag == "N" ( 待考慮 )
 7. 編輯 edit controller 時 new struct 不能直接拿 Model的
+8. 績效table 新增欄位 ' status '， 代表績效的狀態，並且新增角色是否可編輯的欄位

@@ -139,11 +139,7 @@ func Add(Request *gin.Context) {
 	這邊可能要 再加上 原本此使用者的 部門驗證以及 角色驗證
 */
 func Edit(Request *gin.Context) {
-	reqBody := new(struct{
-		Model.User
-		Password         string       `gorm:"column:password" json:"Password"`
-		UserId           int         `gorm:"column:userId;primaryKey" json:"UserId" binding:"required"`
-	})
+	reqBody := new(Model.User)
 
 	// 權限驗證
 	session := &method.SessionStruct{

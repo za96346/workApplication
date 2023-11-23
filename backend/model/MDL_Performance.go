@@ -24,12 +24,12 @@ type Performance struct {
     Month           int         `gorm:"column:month;primaryKey" json:"Month" binding:"required"`              //type:*int         comment:月份            version:2023-10-08 14:35
     BanchId         int         `gorm:"column:banchId" json:"BanchId"`                     //type:*int         comment:部門id          version:2023-10-08 14:35
     Goal            string       `gorm:"column:goal" json:"Goal" binding:"required"`                           //type:string       comment:績效目標        version:2023-10-08 14:35
-    Attitude        int         `gorm:"column:attitude" json:"Attitude" binding:"required"`                   //type:*int         comment:態度分數        version:2023-10-08 14:35
-    Efficiency      int         `gorm:"column:efficiency" json:"Efficiency" binding:"required"`               //type:*int         comment:效率分數        version:2023-10-08 14:35
-    Professional    int         `gorm:"column:professional" json:"Professional" binding:"required"`           //type:*int         comment:專業分數        version:2023-10-08 14:35
+    Attitude        *int         `gorm:"column:attitude" json:"Attitude" binding:"required"`                   //type:*int         comment:態度分數        version:2023-10-08 14:35
+    Efficiency      *int         `gorm:"column:efficiency" json:"Efficiency" binding:"required"`               //type:*int         comment:效率分數        version:2023-10-08 14:35
+    Professional    *int         `gorm:"column:professional" json:"Professional" binding:"required"`           //type:*int         comment:專業分數        version:2023-10-08 14:35
     Directions      string       `gorm:"column:directions" json:"Directions"`               //type:string       comment:                version:2023-10-08 14:35
-    BeLate          int         `gorm:"column:beLate" json:"BeLate" binding:"required"`                       //type:*int         comment:遲到            version:2023-10-08 14:35
-    DayOffNotOnRule int         `gorm:"column:dayOffNotOnRule" json:"DayOffNotOnRule" binding:"required"`     //type:*int         comment:未依規定請假    version:2023-10-08 14:35
+    BeLate          *int         `gorm:"column:beLate" json:"BeLate" binding:"required"`                       //type:*int         comment:遲到            version:2023-10-08 14:35
+    DayOffNotOnRule *int         `gorm:"column:dayOffNotOnRule" json:"DayOffNotOnRule" binding:"required"`     //type:*int         comment:未依規定請假    version:2023-10-08 14:35
     DeleteFlag      string         `gorm:"column:deleteFlag" json:"DeleteFlag"`               //type:CHAR         comment:刪除旗標 ( N, Y )    version:2023-10-08 16:10
     DeleteTime      *time.Time   `gorm:"column:deleteTime" json:"DeleteTime"`               //type:*time.Time   comment:刪除時間             version:2023-10-08 16:10
     CreateTime      *time.Time   `gorm:"column:createTime" json:"CreateTime"`               //type:*time.Time   comment:創建時間        version:2023-10-08 14:35

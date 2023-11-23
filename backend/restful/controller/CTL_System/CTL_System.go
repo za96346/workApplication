@@ -151,10 +151,12 @@ func GetRoleBanchList(Request *gin.Context) {
 	data := make(map[string]interface{})
 	scopeRole := make(map[string]map[string]interface{})
 	scopeBanch := make(map[string]map[string]interface{})
+	scopeUser := make(map[string]map[string]interface{})
 	var availableBanch []Model.CompanyBanch
 	var availableRole []Model.Role
+	var availableUser []Model.User
 
-	// get banch and role
+	// get banch, role, user
 	Model.DB.
 		Where("companyId = ?", session.CompanyId).
 		Where("deleteFlag = ?", "N").
@@ -165,9 +167,22 @@ func GetRoleBanchList(Request *gin.Context) {
 		Where("deleteFlag = ?", "N").
 		Find(&availableRole)
 
+	Model.DB.
+		Where("companyId = ?", session.CompanyId).
+		Where("deleteFlag = ?", "N").
+		Select(
+			"UserName",
+			"UserId",
+			"RoleId",
+			"EmployeeNumber",
+			"OnWorkDay",
+		).
+		Find(&availableUser)
+
 	for _, FunctionItem := range *functionItem {
 		scopeBanch[FunctionItem.FuncCode] = make(map[string]interface{})
 		scopeRole[FunctionItem.FuncCode] = make(map[string]interface{})
+		scopeUser[FunctionItem.FuncCode] = make(map[string]interface{})
 
 		for _, operation := range *operationItem {
 			// session
@@ -180,13 +195,29 @@ func GetRoleBanchList(Request *gin.Context) {
 
 			scopeBanch[FunctionItem.FuncCode][operation.OperationCode] = (*session).CurrentPermissionScopeBanch
 			scopeRole[FunctionItem.FuncCode][operation.OperationCode] = (*session).CurrentPermissionScopeRole
+
+			// scope user 去拿db
+			var scopeUserIdArray []int
+			Model.DB.
+				Where("companyId = ?", session.CompanyId).
+				Where("deleteFlag = ?", "N").
+				Where("banchId in (?)", (*session).CurrentPermissionScopeBanch).
+				Where("roleId in (?)", (*session).CurrentPermissionScopeRole).
+				Select("UserId").
+				Find(&[]Model.User{}).
+				Pluck("UserId", &scopeUserIdArray)
+				
+
+			scopeUser[FunctionItem.FuncCode][operation.OperationCode] = scopeUserIdArray
 		}
 	}
 
 	data["scopeRole"] = scopeRole
 	data["scopeBanch"] = scopeBanch
+	data["scopeUser"] = scopeUser
 	data["availableBanch"] = availableBanch
 	data["availableRole"] = availableRole
+	data["availableUser"] = availableUser
 
 	Request.JSON(
 		http.StatusOK,
