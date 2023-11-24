@@ -17,6 +17,7 @@ var ErrorInstance = &method.ErrorStruct{
 	MessageTitle: "[CTL_Role 角色]--",
 }
 
+const FuncCode = "roleManage"
 
 func checkRequest() {
 	
@@ -91,6 +92,10 @@ func Get(Request *gin.Context) {
 		ReqBodyValidation: false,
 		ReqParamsValidation: true,
 		ReqParamsStruct: reqParams,
+
+		PermissionValidation: true,
+		PermissionFuncCode: FuncCode,
+		PermissionItemCode: "inquire",
 	}
 	if session.SessionHandler() != nil {return}
 
@@ -126,6 +131,11 @@ func GetSingle(Request *gin.Context) {
 		Request: Request,
 		ReqParamsValidation: true,
 		ReqParamsStruct: reqParams,
+
+
+		PermissionValidation: true,
+		PermissionFuncCode: FuncCode,
+		PermissionItemCode: "inquire",
 	}
 	if session.SessionHandler() != nil {return}
 
@@ -207,6 +217,10 @@ func Update(Request *gin.Context) {
 		Request: Request,
 		ReqBodyValidation: true,
 		ReqBodyStruct: reqBody,
+
+		PermissionValidation: true,
+		PermissionFuncCode: FuncCode,
+		PermissionItemCode: "edit",
 	}
 	if session.SessionHandler() != nil {
 		TX.Rollback()
@@ -288,6 +302,10 @@ func Add(Request *gin.Context) {
 		Request: Request,
 		ReqBodyValidation: true,
 		ReqBodyStruct: reqBody,
+
+		PermissionValidation: true,
+		PermissionFuncCode: FuncCode,
+		PermissionItemCode: "add",
 	}
 	if session.SessionHandler() != nil {
 		TX.Rollback()
@@ -355,6 +373,10 @@ func Delete(Request *gin.Context) {
 		Request: Request,
 		ReqBodyValidation: true,
 		ReqBodyStruct: reqBody,
+
+		PermissionValidation: true,
+		PermissionFuncCode: FuncCode,
+		PermissionItemCode: "delete",
 	}
 	if session.SessionHandler() != nil {
 		TX.Rollback()

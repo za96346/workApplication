@@ -26,7 +26,7 @@ type User struct {
     UserName         string       `gorm:"column:userName" json:"UserName" binding:"required"`                 //type:string       comment:使用者名稱            version:2023-10-02 14:15
     EmployeeNumber   string       `gorm:"column:employeeNumber" json:"EmployeeNumber" binding:"required"`     //type:string       comment:使用者員工編號        version:2023-10-02 14:15
     Account          string       `gorm:"column:account" json:"Account" binding:"required"`                   //type:string       comment:使用者帳號            version:2023-10-02 14:15
-    Password         string       `gorm:"column:password" json:"Password" binding:"required"`                 //type:string       comment:使用者密碼            version:2023-10-02 14:15
+    Password         string       `gorm:"column:password" json:"Password"`                 //type:string       comment:使用者密碼            version:2023-10-02 14:15
     OnWorkDay        time.Time   `gorm:"column:onWorkDay" json:"OnWorkDay" binding:"required"`               //type:*time.Time   comment:開始工作日            version:2023-10-02 14:15
     DeleteFlag       string         `gorm:"column:deleteFlag" json:"DeleteFlag"`             //type:CHAR         comment:刪除旗標 ( N, Y )     version:2023-10-02 19:31
     DeleteTime       *time.Time   `gorm:"column:deleteTime" json:"DeleteTime"`             //type:*time.Time   comment:刪除時間              version:2023-10-02 19:31
@@ -41,14 +41,38 @@ func (u *User) TableName() string {
 }
 
 // 拿取新的 user id ( max count + 1 )
-func (u *User) GetNewUserID(companyId int) int {
+func (u *User) GetNewUserID(companyId ...int) int {
     var MaxCount int64
+
+    validateField := (*u).CompanyId
+
+    if len(companyId) > 0 {
+        validateField = companyId[0]
+    }
+
     DB.Model(&User{}).
-        Where("companyId = ?", companyId).
+        Where("companyId = ?", validateField).
         Count(&MaxCount)
     
     (*u).UserId = int(MaxCount) + 1
-    (*u).CompanyId = companyId
+    (*u).CompanyId = validateField
 
     return int(MaxCount) + 1
+}
+
+// 帳號是否重複
+func (u *User) IsAccountDuplicated(account ...string) bool {
+    var MaxCount int64
+
+    validateField := (*u).Account
+
+    if len(account) > 0 {
+        validateField = account[0]
+    }
+
+    DB.Model(&User{}).
+        Where("account = ?", validateField).
+        Count(&MaxCount)
+
+    return MaxCount > 0
 }

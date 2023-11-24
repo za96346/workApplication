@@ -112,8 +112,14 @@ func Add(Request *gin.Context) {
 
 	// 加入一些固定欄位
 	now := time.Now()
+	(*reqBody).CompanyId = session.CompanyId
 
-	(*reqBody).GetNewUserID(session.CompanyId)
+	if (*reqBody).IsAccountDuplicated() {
+		ErrorInstance.ErrorHandler(Request, "新增失敗-帳號重複")
+		return
+	}
+
+	(*reqBody).GetNewUserID()
 
 	(*reqBody).CreateTime = &now
 	(*reqBody).LastModify = &now
@@ -174,6 +180,7 @@ func Edit(Request *gin.Context) {
 	now := time.Now()
 
 	(*reqBody).Account = oldData.Account
+	(*reqBody).Password = oldData.Password
 	(*reqBody).CompanyId = session.CompanyId
 	(*reqBody).LastModify = &now
 	(*reqBody).DeleteTime = nil
@@ -181,6 +188,74 @@ func Edit(Request *gin.Context) {
 
 	// 更新
 	err := commonQuery.Updates(&reqBody).Error
+	if err != nil {
+		ErrorInstance.ErrorHandler(Request, "更新失敗")
+		return
+	}
+
+	Request.JSON(
+		http.StatusOK,
+		gin.H {
+			"message": "更新成功",
+		},
+	)
+}
+
+/*
+	更新密碼
+*/
+func UpdatePassword(Request *gin.Context) {
+	reqBody := new(struct{
+		OldPassword string `json:"OldPassword" binding:"required"`
+		NewPassword string `json:"NewPassword" binding:"required"`
+		NewPasswordAgain string `json:"NewPasswordAgain" binding:"required"`
+		UserId int `gorm:"column:userId;primaryKey" json:"UserId" binding:"required"`
+	})
+
+	// 權限驗證
+	session := &method.SessionStruct{
+		Request: Request,
+		PermissionValidation: true,
+		PermissionFuncCode: FuncCode,
+		PermissionItemCode: "edit",
+		ReqBodyValidation: true,
+		ReqBodyStruct: reqBody,
+	}
+	if session.SessionHandler() != nil {return}
+
+	// 找到舊的值 ( 不讓請求 的時候 userId 有任何的串改可能． )
+	var oldData Model.User
+
+	//共同 語句
+	commonQuery := Model.DB.
+		Model(&Model.User{}).
+		Where("companyId = ?", session.CompanyId).
+		Where("userId = ?", reqBody.UserId)
+
+	commonQuery.First(&oldData)
+
+	if session.CheckScopeBanchValidation(*oldData.BanchId) != nil {return}
+	if session.CheckScopeRoleValidation(oldData.RoleId) != nil {return}
+
+	// 檢查密碼相符性
+	if reqBody.NewPassword != reqBody.NewPasswordAgain {
+		ErrorInstance.ErrorHandler(Request, "更新失敗，password 與new password 不相等")
+		return
+	}
+
+	if reqBody.OldPassword != oldData.Password {
+		ErrorInstance.ErrorHandler(Request, "更新失敗，舊密碼不同")
+		return
+	}
+
+	// 加入一些固定欄位
+	now := time.Now()
+
+	oldData.Password = reqBody.NewPassword
+	oldData.LastModify = &now
+
+	// 更新
+	err := commonQuery.Updates(&oldData).Error
 	if err != nil {
 		ErrorInstance.ErrorHandler(Request, "更新失敗")
 		return

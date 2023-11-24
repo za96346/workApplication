@@ -16,6 +16,7 @@ func User(props *gin.RouterGroup) {
 		props.PUT("/", CTL_User.Add)
 		props.POST("/", CTL_User.Edit)
 		props.DELETE("/", CTL_User.Delete)
+		props.POST("/password", CTL_User.UpdatePassword)
 		props.GET("/selector", CTL_User.GetSelector)
 	}
 }
