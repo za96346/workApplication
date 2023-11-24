@@ -14,6 +14,13 @@ declare namespace params {
         EmployeeNumber?: string
     }
 
+    interface updatePassword {
+        OldPassword: string
+        NewPassword: string
+        NewPasswordAgain: string
+        UserId: number
+    }
+
     type add = Omit<
     userTypes.TABLE,
     'CreateTime' | 'LastModify' | 'DeleteTime' | 'DeleteFlag' | 'CompanyId'
@@ -73,6 +80,13 @@ class userApi extends apiAbstract {
         }).then((res) => {
             this.store.dispatch(this.action.user.setSelector(res))
             return res
+        })
+    }
+
+    async updatePassword (v: params.updatePassword): Promise<void> {
+        return await this.POST<null>({
+            url: this.route + 'password',
+            data: v
         })
     }
 }

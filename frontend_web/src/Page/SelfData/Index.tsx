@@ -1,4 +1,4 @@
-import { DatePicker, Form, Input, Select } from 'antd'
+import { Button, DatePicker, Form, Input, Select } from 'antd'
 import api from 'api/Index'
 import dayjs from 'dayjs'
 import { useAppSelector } from 'hook/redux'
@@ -7,6 +7,7 @@ import useRoleBanchList from 'hook/useRoleBanchUserList'
 import React, { useEffect } from 'react'
 import Btn from 'shared/Button'
 import { funcCode, operationCode } from 'types/system'
+import ModelChangePassword from 'Page/SelfData/ModelChangePassword/Index'
 
 const Index = (): JSX.Element => {
     const [form] = Form.useForm()
@@ -24,12 +25,15 @@ const Index = (): JSX.Element => {
 
     return (
         <div>
+            <ModelChangePassword />
             <Form
                 disabled={!permission?.isEditable}
                 onFinish={(v) => {
                     void api.user.update({
                         ...v,
                         UserId: data?.UserId
+                    }).then(() => {
+                        void api.user.getMine()
                     })
                 }}
                 name="validateOnly"
@@ -43,7 +47,7 @@ const Index = (): JSX.Element => {
                     initialValue={data?.Account}
                     rules={[{ required: true }]}
                 >
-                    <Input />
+                    <Input disabled />
                 </Form.Item>
                 <Form.Item
                     className='col-md-6'
@@ -61,16 +65,19 @@ const Index = (): JSX.Element => {
                     initialValue={data?.EmployeeNumber}
                     rules={[{ required: true }]}
                 >
-                    <Input />
+                    <Input disabled />
                 </Form.Item>
                 <Form.Item
                     className='col-md-6'
-                    name="Banch"
+                    name="BanchId"
                     label="部門"
                     initialValue={data?.BanchId}
                     rules={[{ required: true }]}
                 >
-                    <Select options={rolBanchList.banchSelectList} />
+                    <Select
+                        options={rolBanchList.banchSelectList}
+                        disabled
+                    />
                 </Form.Item>
                 <Form.Item
                     className='col-md-6'
@@ -79,7 +86,10 @@ const Index = (): JSX.Element => {
                     initialValue={data?.RoleId}
                     rules={[{ required: true }]}
                 >
-                    <Select options={rolBanchList.roleSelectList} />
+                    <Select
+                        options={rolBanchList.roleSelectList}
+                        disabled
+                    />
                 </Form.Item>
                 <Form.Item
                     className='col-md-6'
@@ -92,6 +102,15 @@ const Index = (): JSX.Element => {
                 </Form.Item>
 
                 <Form.Item className='d-flex justify-content-end'>
+                    <Button
+                        onClick={() => {
+                            ModelChangePassword.open({
+                                UserId: data?.UserId
+                            })
+                        }}
+                    >
+                        更換密碼
+                    </Button>
                     <Btn.Submit text='儲存' form={form} />
                 </Form.Item>
             </Form>

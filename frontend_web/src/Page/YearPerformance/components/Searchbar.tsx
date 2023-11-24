@@ -9,7 +9,7 @@ const Searchbar = (): JSX.Element => {
     const [form] = Form.useForm()
 
     const rolBanchList = useRoleBanchList({
-        funcCode: funcCode.performance,
+        funcCode: funcCode.yearPerformance,
         operationCode: operationCode.inquire
     })
 
@@ -46,7 +46,7 @@ const Searchbar = (): JSX.Element => {
                     <Input name='UserName' />
                 </Form.Item>
                 <Form.Item className='d-flex justify-content-end'>
-                    {/* <Btn.Reset /> */}
+                    <Btn.Reset />
                     <Btn.Submit text='搜尋' form={form} />
                 </Form.Item>
             </Form>

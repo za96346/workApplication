@@ -24,6 +24,7 @@ const Searchbar = (): JSX.Element => {
                     <Input name='RoleName' />
                 </Form.Item>
                 <Form.Item className='d-flex justify-content-end'>
+                    <Btn.Reset />
                     <Btn.Submit text='搜尋' form={form} />
                 </Form.Item>
             </Form>

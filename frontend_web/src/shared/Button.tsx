@@ -21,7 +21,12 @@ const Btn = {
         }, [values])
 
         return (
-            <Button type="primary" htmlType="submit" disabled={!submittable}>
+            <Button
+                type="primary"
+                htmlType="submit"
+                disabled={!submittable}
+                className='m-1'
+            >
                 {text}
             </Button>
         )
@@ -65,6 +70,7 @@ const Btn = {
     Reset: (attr: ButtonProps) => (
         <Button
             type="primary"
+            className='m-1'
             htmlType="reset"
             {...attr}
         >

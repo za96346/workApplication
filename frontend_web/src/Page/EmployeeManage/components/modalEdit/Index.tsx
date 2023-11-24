@@ -1,4 +1,4 @@
-import { DatePicker, Form, FormInstance, Input, Select } from 'antd'
+import { Button, DatePicker, Form, FormInstance, Input, Select } from 'antd'
 import dayjs from 'dayjs'
 import useRoleBanchList from 'hook/useRoleBanchUserList'
 import React from 'react'
@@ -8,6 +8,7 @@ import modal from 'shared/Modal/types'
 import { modalTitle, modalType } from 'static'
 import { funcCode, operationCode } from 'types/system'
 import userTypes from 'types/user'
+import ModelChangePassword from 'Page/SelfData/ModelChangePassword/Index'
 
 interface modalInfo {
     type?: modalType
@@ -28,6 +29,7 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
     const [form] = Form.useForm()
     return (
         <>
+            <ModelChangePassword />
             <Form
                 name="validateOnly"
                 autoComplete="off"
@@ -61,15 +63,19 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                 >
                     <Input disabled={modalInfo?.type === modalType.edit} />
                 </Form.Item>
-                <Form.Item
-                    name="Password"
-                    label="密碼"
-                    className='col-md-6'
-                    initialValue={modalInfo?.data?.Password || ''}
-                    rules={[{ required: true }]}
-                >
-                    <Input />
-                </Form.Item>
+                {
+                    modalInfo?.type === modalType.add && (
+                        <Form.Item
+                            name="Password"
+                            label="密碼"
+                            className='col-md-6'
+                            initialValue={modalInfo?.data?.Password || ''}
+                            rules={[{ required: true }]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    )
+                }
                 <Form.Item
                     name="OnWorkDay"
                     label="到職日"
@@ -100,14 +106,31 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                 <Modal.Footer>
                     {
                         () => (
-                            <>
-                                <Btn.Cancel onClick={() => { void modalInfo.onClose() }} />
-                                <Btn.Save
-                                    onClick={() => {
-                                        modalInfo.onSave(form)
-                                    }}
-                                />
-                            </>
+                            <div className='col-12 d-flex justify-content-between'>
+                                <div>
+                                    {
+                                        modalInfo?.type !== modalType.add && (
+                                            <Button
+                                                onClick={() => {
+                                                    ModelChangePassword.open({
+                                                        UserId: modalInfo?.data?.UserId
+                                                    })
+                                                }}
+                                            >
+                                            更換密碼
+                                            </Button>
+                                        )
+                                    }
+                                </div>
+                                <div>
+                                    <Btn.Cancel onClick={() => { void modalInfo.onClose() }} />
+                                    <Btn.Save
+                                        onClick={() => {
+                                            modalInfo.onSave(form)
+                                        }}
+                                    />
+                                </div>
+                            </div>
                         )
                     }
                 </Modal.Footer>
@@ -118,6 +141,6 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
 }
 export default Modal<modalInfo, any>({
     children: ModalEdit,
-    title: (v) => modalTitle[v?.type] + '員工',
+    title: (v) => `${modalTitle[v?.type]}員工`,
     width: (isLess) => isLess('md') ? '100vw' : '500px'
 })
