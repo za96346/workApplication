@@ -201,6 +201,53 @@ func Edit(Request *gin.Context) {
 	)
 }
 
+// 更新自己的資料
+func EditMine(Request *gin.Context) {
+	reqBody := new(struct{
+		UserName string `json:"UserName" binding:"required"`
+	})
+
+	// 權限驗證
+	session := &method.SessionStruct{
+		Request: Request,
+		PermissionValidation: true,
+		PermissionFuncCode: "selfData",
+		PermissionItemCode: "edit",
+		ReqBodyValidation: true,
+		ReqBodyStruct: reqBody,
+	}
+	if session.SessionHandler() != nil {return}
+
+	//共同 語句
+	commonQuery := Model.DB.
+		Model(&Model.User{}).
+		Where("companyId = ?", session.CompanyId).
+		Where("userId = ?", session.UserId)
+
+	// 找到舊的值 ( 不讓請求 的時候 userId 有任何的串改可能． )
+	var oldData Model.User 
+	commonQuery.First(&oldData)
+
+	// 加入一些固定欄位
+	now := time.Now()
+	oldData.LastModify = &now
+	oldData.UserName = reqBody.UserName
+
+	// 更新
+	err := commonQuery.Updates(&oldData).Error
+	if err != nil {
+		ErrorInstance.ErrorHandler(Request, "更新失敗")
+		return
+	}
+
+	Request.JSON(
+		http.StatusOK,
+		gin.H {
+			"message": "更新成功",
+		},
+	)
+}
+
 /*
 	更新密碼
 */

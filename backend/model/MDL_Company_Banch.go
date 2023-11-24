@@ -44,3 +44,16 @@ func (cb *CompanyBanch) GetNewBanchID(companyId int) int {
 
     return int(MaxCount) + 1
 }
+
+// 查詢是否有重複banch name
+func (b *CompanyBanch) IsBanchNameDuplicated() bool {
+    var MaxCount int64
+    DB.Model(&CompanyBanch{}).
+        Where("companyId = ?", (*b).CompanyId).
+        Where("banchName = ?", (*b).BanchName).
+        Where("banchId != ?", (*b).BanchId).
+        Where("deleteFlag = ?", "N").
+        Count(&MaxCount)
+
+    return int(MaxCount) > 0
+}

@@ -81,6 +81,11 @@ func Edit(Request *gin.Context) {
 	(*reqBody).DeleteTime = nil
 	(*reqBody).DeleteFlag = "N"
 
+	if reqBody.IsBanchNameDuplicated() {
+		ErrorInstance.ErrorHandler(Request, "部門名稱重複")
+		return
+	}
+
 	Model.DB.
 		Where("companyId = ?", session.CompanyId).
 		Where("banchId = ?", reqBody.BanchId).
@@ -116,6 +121,11 @@ func Add(Request *gin.Context) {
 	(*reqBody).CreateTime = &now
 	(*reqBody).DeleteTime = nil
 	(*reqBody).DeleteFlag = "N"
+
+	if reqBody.IsBanchNameDuplicated() {
+		ErrorInstance.ErrorHandler(Request, "部門名稱重複")
+		return
+	}
 
 	// 新增
 	if 	Model.DB.Create(reqBody).Error != nil {
