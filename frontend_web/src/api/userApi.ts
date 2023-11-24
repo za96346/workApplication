@@ -25,6 +25,10 @@ declare namespace params {
     userTypes.TABLE,
     'CreateTime' | 'LastModify' | 'DeleteTime' | 'DeleteFlag' | 'CompanyId'
     >
+
+    interface updateMy {
+        UserName: string
+    }
 }
 
 class userApi extends apiAbstract {
@@ -60,6 +64,14 @@ class userApi extends apiAbstract {
     async update (v: params.add): Promise<void> {
         return await this.POST<null>({
             url: this.route,
+            data: v,
+            checkTitle: this.checkTitle.confirmUpdate
+        })
+    }
+
+    async updateMine (v: params.updateMy): Promise<void> {
+        return await this.POST<null>({
+            url: this.route + 'my',
             data: v,
             checkTitle: this.checkTitle.confirmUpdate
         })

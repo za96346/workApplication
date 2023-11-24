@@ -29,10 +29,7 @@ const Index = (): JSX.Element => {
             <Form
                 disabled={!permission?.isEditable}
                 onFinish={(v) => {
-                    void api.user.update({
-                        ...v,
-                        UserId: data?.UserId
-                    }).then(() => {
+                    void api.user.updateMine(v).then(() => {
                         void api.user.getMine()
                     })
                 }}
