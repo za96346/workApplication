@@ -1,7 +1,8 @@
-1. 各個功能新增的時候，不看 scope ， 只有編輯獲取刪除要看。
 5. scopeBanch when "all" 只拿 deleteFlag == "N" ( 待考慮 )
 6. scopeRole when "all" 只拿 deleteFlag == "N" ( 待考慮 )
 7. 編輯 edit controller 時 new struct 不能直接拿 Model的
 8. 績效table 新增欄位 ' status '， 代表績效的狀態，並且新增角色是否可編輯的欄位
 9. 角色編輯畫面的operation code 要變為根據funccode 而開啟
 10. 離職員工 處理
+11. 角色管理的編輯畫面，只能從該使用者所擁有的權限下擴充
+12. 績效 新增組別更換

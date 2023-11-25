@@ -45,7 +45,7 @@ func Get(Request *gin.Context) {
 	searchQuery := Model.DB.
 		Model(&Model.Performance{}).
 		Where("performance.companyId = ?", session.CompanyId).
-		Where("performance.banchId in (?)", *session.GetScopeBanchWithCustomize(reqParams.BanchId)).
+		Where("user.banchId in (?)", *session.GetScopeBanchWithCustomize(reqParams.BanchId)).
 		Where("user.roleId in (?)", *session.GetScopeRolehWithCustomize(reqParams.RoleId)).
 		Where("performance.deleteFlag = ?", "N").
 		Joins(`
@@ -62,6 +62,7 @@ func Get(Request *gin.Context) {
 			"performance.*",
 			"user.userName as userName",
 			"company_banch.banchName as banchName",
+			"user.roleId",
 		)
 
 	// 使用者名稱
