@@ -38,8 +38,9 @@ declare namespace useCallBackStateProps {
 
 declare namespace usePermissionProps {
     interface returnType {
-        isEditable: boolean
-        isDeleteable: boolean
+        isEditable: ({ banchId, roleId }: { banchId?: number, roleId?: number }) => boolean
+        isDeleteable: ({ banchId, roleId }: { banchId?: number, roleId?: number }) => boolean
+
         isInquirable: boolean
         isAddable: boolean
         isPrintable: boolean

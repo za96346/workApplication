@@ -24,7 +24,7 @@ const Index = (): JSX.Element => {
             key: v4(),
             action: (
                 <Dropdown
-                    menu={dropdownList(permission)}
+                    menu={dropdownList(permission, item)}
                     onSelect={(v) => {
                         BtnEvent({
                             type: v,

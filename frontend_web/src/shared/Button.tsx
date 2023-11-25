@@ -3,7 +3,7 @@ import type { ButtonProps, FormInstance } from 'antd'
 import React from 'react'
 
 const Btn = {
-    Submit: ({ form, text }: { form: FormInstance, text: string }) => {
+    Submit: ({ form, text, ...attr }: Omit<ButtonProps, 'form'> & { form: FormInstance, text: string }) => {
         const [submittable, setSubmittable] = React.useState(false)
 
         // Watch all values
@@ -26,6 +26,7 @@ const Btn = {
                 htmlType="submit"
                 disabled={!submittable}
                 className='m-1'
+                {...attr}
             >
                 {text}
             </Button>

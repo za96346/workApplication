@@ -1,8 +1,8 @@
+import systemTypes from 'types/system'
 import { type action, systemType } from '../types'
-import { systemReducerType } from 'reducer/reducer/systemReducer'
 
 class systemAction {
-    setAuth (v: systemReducerType['auth']): action {
+    setAuth (v: systemTypes.reducerType['auth']): action {
         return {
             type: systemType.SET_AUTH,
             payload: {
@@ -11,7 +11,7 @@ class systemAction {
         }
     }
 
-    setSidebar (v: systemReducerType['sidebar']): action {
+    setSidebar (v: systemTypes.reducerType['sidebar']): action {
         return {
             type: systemType.SET_AUTH,
             payload: {
@@ -20,7 +20,7 @@ class systemAction {
         }
     }
 
-    setFunc (v: systemReducerType['func']): action {
+    setFunc (v: systemTypes.reducerType['func']): action {
         return {
             type: systemType.SET_FUNC,
             payload: {
@@ -29,7 +29,7 @@ class systemAction {
         }
     }
 
-    setRoleBanchList (v: systemReducerType['roleBanchList']): action {
+    setRoleBanchList (v: systemTypes.reducerType['roleBanchList']): action {
         return {
             type: systemType.SET_ROLE_BANCH_LIST,
             payload: {

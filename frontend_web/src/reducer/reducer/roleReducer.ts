@@ -1,4 +1,3 @@
-import roleTypes from 'types/role'
 import { type action, roleType } from '../types'
 
 const roleState = {
@@ -8,12 +7,6 @@ const roleState = {
         Role: {}
     },
     selector: []
-}
-
-export interface roleReducerType {
-    all: roleTypes.TABLE[]
-    single: roleTypes.single
-    selector: roleTypes.TABLE[]
 }
 
 export const roleReducer = (state = roleState, action: action): any => {

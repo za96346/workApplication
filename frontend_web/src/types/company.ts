@@ -9,5 +9,9 @@ declare namespace companyTypes {
         CreateTime: string
         LastModify: string
     }
+
+    interface reducerType {
+        mine: TABLE
+    }
 }
 export default companyTypes

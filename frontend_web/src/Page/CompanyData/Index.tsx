@@ -20,7 +20,7 @@ const Index = (): JSX.Element => {
     return (
         <div>
             <Form
-                disabled={!permission?.isEditable}
+                disabled={!permission?.isEditable({})}
                 onFinish={(v) => {
                     void api.company.update(v)
                         .then(() => {
@@ -85,7 +85,11 @@ const Index = (): JSX.Element => {
                 </Form.Item>
 
                 <Form.Item className='d-flex justify-content-end'>
-                    <Btn.Submit text='儲存' form={form} />
+                    <Btn.Submit
+                        disabled={!permission?.isEditable({})}
+                        text='儲存'
+                        form={form}
+                    />
                 </Form.Item>
             </Form>
         </div>

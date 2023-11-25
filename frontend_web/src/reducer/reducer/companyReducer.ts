@@ -1,12 +1,7 @@
-import companyTypes from 'types/company'
 import { type action, companyType } from '../types'
 
 const companyState = {
     mine: {}
-}
-
-export interface companyReducerType {
-    mine: companyTypes.TABLE
 }
 
 export const companyReducer = (state = companyState, action: action): any => {

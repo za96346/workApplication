@@ -1,8 +1,8 @@
+import performanceTypes from 'types/performance'
 import { type action, performanceType } from '../types'
-import { performanceReducerType } from 'reducer/reducer/performanceReducer'
 
 class performanceAction {
-    setAll (v: performanceReducerType['all']): action {
+    setAll (v: performanceTypes.reducerType['all']): action {
         return {
             type: performanceType.SET_PERFORMANCE_ALL,
             payload: {
@@ -11,7 +11,7 @@ class performanceAction {
         }
     }
 
-    setYear (v: performanceReducerType['year']): action {
+    setYear (v: performanceTypes.reducerType['year']): action {
         return {
             type: performanceType.SET_PERFORMANCE_YEAR,
             payload: {

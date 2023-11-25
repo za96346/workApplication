@@ -8,5 +8,10 @@ declare namespace companyBanchTypes {
         CreateTime: string
         LastModify: string
     }
+
+    interface reducerType {
+        all: TABLE[]
+        selector: TABLE[]
+    }
 }
 export default companyBanchTypes

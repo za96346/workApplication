@@ -1,4 +1,4 @@
-import { companyReducerType } from 'reducer/reducer/companyReducer'
+import companyTypes from 'types/company'
 import apiAbstract from './apiAbstract'
 
 declare namespace params {
@@ -14,8 +14,8 @@ declare namespace params {
 class companyApi extends apiAbstract {
     private readonly route = 'workApp/company/'
 
-    async getMine (): Promise<companyReducerType['mine']> {
-        return await this.GET<companyReducerType['mine']>({
+    async getMine (): Promise<companyTypes.reducerType['mine']> {
+        return await this.GET<companyTypes.reducerType['mine']>({
             url: this.route
         }).then((res) => {
             this.store.dispatch(this.action.company.setMine(res))

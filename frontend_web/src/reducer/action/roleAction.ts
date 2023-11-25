@@ -1,8 +1,8 @@
-import { roleReducerType } from 'reducer/reducer/roleReducer'
 import { type action, roleType } from '../types'
+import roleTypes from 'types/role'
 
 class roleAction {
-    setAll (v: roleReducerType['all']): action {
+    setAll (v: roleTypes.reducerType['all']): action {
         return {
             type: roleType.SET_ROLE_ALL,
             payload: {
@@ -11,7 +11,7 @@ class roleAction {
         }
     }
 
-    setSingle (v: roleReducerType['single']): action {
+    setSingle (v: roleTypes.reducerType['single']): action {
         return {
             type: roleType.SET_ROLE_SINGLE,
             payload: {
@@ -20,7 +20,7 @@ class roleAction {
         }
     }
 
-    setSelector (v: roleReducerType['selector']): action {
+    setSelector (v: roleTypes.reducerType['selector']): action {
         return {
             type: roleType.SET_ROLE_SELECTOR,
             payload: {

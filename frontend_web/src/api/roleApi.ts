@@ -1,4 +1,4 @@
-import { roleReducerType } from 'reducer/reducer/roleReducer'
+import roleTypes from 'types/role'
 import apiAbstract from './apiAbstract'
 import systemTypes from 'types/system'
 
@@ -37,7 +37,7 @@ class roleApi extends apiAbstract {
     }
 
     async getSingle (v: params.getSingle): Promise<void> {
-        return await this.GET<roleReducerType['single']>({
+        return await this.GET<roleTypes.reducerType['single']>({
             url: this.route + 'single',
             data: v
         })

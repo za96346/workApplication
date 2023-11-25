@@ -8,19 +8,25 @@ import {
     applyMiddleware
 } from 'redux'
 import { loadingReducer, loadingReducerType } from './reducer/loadingReducer'
-import { systemReducer, systemReducerType } from './reducer/systemReducer'
-import { userReducer, userReducerType } from './reducer/userReducer'
+import { systemReducer } from './reducer/systemReducer'
+import { userReducer } from './reducer/userReducer'
 import loadingAction from './action/loadingAction'
 import systemAction from './action/systemAction'
 import userAction from './action/userAction'
-import { companyReducer, companyReducerType } from './reducer/companyReducer'
+import { companyReducer } from './reducer/companyReducer'
 import companyAction from './action/companyAction'
-import { companyBanchReducer, companyBanchReducerType } from './reducer/companyBanchReducer'
+import { companyBanchReducer } from './reducer/companyBanchReducer'
 import companyBanchAction from './action/companyBanchAction'
-import { roleReducer, roleReducerType } from './reducer/roleReducer'
+import { roleReducer } from './reducer/roleReducer'
 import roleAction from './action/roleAction'
-import { performanceReducer, performanceReducerType } from './reducer/performanceReducer'
+import { performanceReducer } from './reducer/performanceReducer'
 import performanceAction from './action/performanceAction'
+import companyBanchTypes from 'types/companyBanch'
+import companyTypes from 'types/company'
+import performanceTypes from 'types/performance'
+import roleTypes from 'types/role'
+import systemTypes from 'types/system'
+import userTypes from 'types/user'
 
 export const allReducer = {
     loading: loadingReducer,
@@ -43,12 +49,12 @@ export const allAction = {
 
 export interface RootState {
     loading: loadingReducerType
-    system: systemReducerType
-    user: userReducerType
-    company: companyReducerType
-    companyBanch: companyBanchReducerType
-    role: roleReducerType
-    performance: performanceReducerType
+    system: systemTypes.reducerType
+    user: userTypes.reducerType
+    company: companyTypes.reducerType
+    companyBanch: companyBanchTypes.reducerType
+    role: roleTypes.reducerType
+    performance: performanceTypes.reducerType
 }
 
 export const reducer = combineReducers<RootState>(allReducer)

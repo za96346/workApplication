@@ -27,7 +27,7 @@ const Index = (): JSX.Element => {
         <div>
             <ModelChangePassword />
             <Form
-                disabled={!permission?.isEditable}
+                disabled={!permission?.isEditable({})}
                 onFinish={(v) => {
                     void api.user.updateMine(v).then(() => {
                         void api.user.getMine()
@@ -108,7 +108,7 @@ const Index = (): JSX.Element => {
                     >
                         更換密碼
                     </Button>
-                    <Btn.Submit text='儲存' form={form} />
+                    <Btn.Submit disabled={!permission?.isEditable({})} text='儲存' form={form} />
                 </Form.Item>
             </Form>
         </div>

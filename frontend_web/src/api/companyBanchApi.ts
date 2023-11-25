@@ -1,5 +1,5 @@
+import companyBanchTypes from 'types/companyBanch'
 import apiAbstract from './apiAbstract'
-import { companyBanchReducerType } from 'reducer/reducer/companyBanchReducer'
 
 declare namespace params {
     interface add {
@@ -23,8 +23,8 @@ declare namespace params {
 class companyBanchApi extends apiAbstract {
     private readonly route = 'workApp/banch/'
 
-    async get (v?: params.get): Promise<companyBanchReducerType['all']> {
-        return await this.GET<companyBanchReducerType['all']>({
+    async get (v?: params.get): Promise<companyBanchTypes.reducerType['all']> {
+        return await this.GET<companyBanchTypes.reducerType['all']>({
             url: this.route,
             data: v
         }).then((res) => {
@@ -57,8 +57,8 @@ class companyBanchApi extends apiAbstract {
         })
     }
 
-    async getSelector (): Promise<companyBanchReducerType['selector']> {
-        return await this.GET<companyBanchReducerType['selector']>({
+    async getSelector (): Promise<companyBanchTypes.reducerType['selector']> {
+        return await this.GET<companyBanchTypes.reducerType['selector']>({
             url: this.route + 'selector'
         }).then((res) => {
             this.store.dispatch(this.action.companyBanch.setSelector(res))

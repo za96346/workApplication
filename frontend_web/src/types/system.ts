@@ -1,6 +1,6 @@
-import companyBanchTypes from "./companyBanch"
-import roleTypes from "./role"
-import userTypes from "./user"
+import companyBanchTypes from './companyBanch'
+import roleTypes from './role'
+import userTypes from './user'
 
 enum funcCode {
     banchManage = 'banchManage',
@@ -58,6 +58,13 @@ declare namespace systemTypes {
         scopeBanch: Record<funcCode, Record<operationCode, number[]>>
         scopeRole: Record<funcCode, Record<operationCode, number[]>>
         scopeUser: Record<funcCode, Record<operationCode, number[]>>
+    }
+
+    interface reducerType {
+        auth: auth
+        sidebar: boolean
+        func: func
+        roleBanchList: roleBanchList
     }
 }
 export default systemTypes

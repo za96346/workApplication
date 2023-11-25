@@ -1,8 +1,8 @@
+import userTypes from 'types/user'
 import { type action, userType } from '../types'
-import { userReducerType } from 'reducer/reducer/userReducer'
 
 class userAction {
-    setMine (v: userReducerType['mine']): action {
+    setMine (v: userTypes.reducerType['mine']): action {
         return {
             type: userType.SET_USER_MINE,
             payload: {
@@ -11,7 +11,7 @@ class userAction {
         }
     }
 
-    setEmployee (v: userReducerType['employee']): action {
+    setEmployee (v: userTypes.reducerType['employee']): action {
         return {
             type: userType.SET_EMPLOYEE,
             payload: {
@@ -20,7 +20,7 @@ class userAction {
         }
     }
 
-    setSelector (v: userReducerType['selector']): action {
+    setSelector (v: userTypes.reducerType['selector']): action {
         return {
             type: userType.SET_USER_SELECTOR,
             payload: {

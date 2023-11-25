@@ -16,5 +16,11 @@ declare namespace roleTypes {
         Permission: systemTypes.auth['permission']
         Role: TABLE
     }
+
+    interface reducerType {
+        all: TABLE[]
+        single: single
+        selector: TABLE[]
+    }
 }
 export default roleTypes

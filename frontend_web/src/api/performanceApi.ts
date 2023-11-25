@@ -1,4 +1,3 @@
-import { performanceReducerType } from 'reducer/reducer/performanceReducer'
 import apiAbstract from './apiAbstract'
 import performanceTypes from 'types/performance'
 
@@ -25,7 +24,7 @@ class performanceApi extends apiAbstract {
     private readonly route = 'workApp/performance/'
 
     async get (v?: params.get): Promise<void> {
-        return await this.GET<performanceReducerType['all']>({
+        return await this.GET<performanceTypes.reducerType['all']>({
             url: this.route,
             data: v
         })
@@ -35,7 +34,7 @@ class performanceApi extends apiAbstract {
     }
 
     async getYear (v?: params.get): Promise<void> {
-        return await this.GET<performanceReducerType['year']>({
+        return await this.GET<performanceTypes.reducerType['year']>({
             url: this.route + 'year',
             data: v
         })

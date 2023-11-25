@@ -31,7 +31,7 @@ const Index = (): JSX.Element => {
             RoleId: roleBanchList.roleObject?.[item?.RoleId]?.RoleName,
             action: (
                 <Dropdown
-                    menu={dropdownList(permission)}
+                    menu={dropdownList(permission, item)}
                     onSelect={(v) => {
                         BtnEvent({
                             type: v,

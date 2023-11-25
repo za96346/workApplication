@@ -12,6 +12,8 @@ declare global {
     declare module '*.bmp'
     declare module '*.tiff'
 
+    type inferFirstArray<T> = T extends Array<infer U> ? U : never
+
     interface BtnEventParams<T> {
         type?: modalType
         value?: T

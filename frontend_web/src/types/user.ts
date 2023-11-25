@@ -14,5 +14,11 @@ declare namespace userTypes {
         CreateTime: string
         LastModify: string
     }
+
+    interface reducerType {
+        mine: TABLE
+        employee: TABLE[]
+        selector: TABLE[]
+    }
 }
 export default userTypes

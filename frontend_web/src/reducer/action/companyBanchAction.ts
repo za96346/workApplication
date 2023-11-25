@@ -1,8 +1,8 @@
-import { companyBanchReducerType } from 'reducer/reducer/companyBanchReducer'
+import companyBanchTypes from 'types/companyBanch'
 import { type action, companyBanchType } from '../types'
 
 class companyBanchAction {
-    setAll (v: companyBanchReducerType['all']): action {
+    setAll (v: companyBanchTypes.reducerType['all']): action {
         return {
             type: companyBanchType.SET_BANCH_ALL,
             payload: {
@@ -11,7 +11,7 @@ class companyBanchAction {
         }
     }
 
-    setSelector (v: companyBanchReducerType['selector']): action {
+    setSelector (v: companyBanchTypes.reducerType['selector']): action {
         return {
             type: companyBanchType.SET_BANCH_SELECTOR,
             payload: {

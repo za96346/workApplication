@@ -1,14 +1,8 @@
-import companyBanchTypes from 'types/companyBanch'
 import { type action, companyBanchType } from '../types'
 
 const companyBanchState = {
     all: [],
     selector: []
-}
-
-export interface companyBanchReducerType {
-    all: companyBanchTypes.TABLE[]
-    selector: companyBanchTypes.TABLE[]
 }
 
 export const companyBanchReducer = (state = companyBanchState, action: action): any => {

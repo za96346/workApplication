@@ -1,4 +1,3 @@
-import { userReducerType } from 'reducer/reducer/userReducer'
 import apiAbstract from './apiAbstract'
 import userTypes from 'types/user'
 
@@ -34,8 +33,8 @@ declare namespace params {
 class userApi extends apiAbstract {
     private readonly route = 'workApp/user/'
 
-    async getMine (): Promise<userReducerType['mine']> {
-        return await this.GET<userReducerType['mine']>({
+    async getMine (): Promise<userTypes.reducerType['mine']> {
+        return await this.GET<userTypes.reducerType['mine']>({
             url: this.route + 'my'
         }).then((res) => {
             this.store.dispatch(this.action.user.setMine(res))
@@ -43,8 +42,8 @@ class userApi extends apiAbstract {
         })
     }
 
-    async getEmployee (v: params.getEmployee): Promise<userReducerType['employee']> {
-        return await this.GET<userReducerType['employee']>({
+    async getEmployee (v: params.getEmployee): Promise<userTypes.reducerType['employee']> {
+        return await this.GET<userTypes.reducerType['employee']>({
             url: this.route,
             data: v
         }).then((res) => {
@@ -85,8 +84,8 @@ class userApi extends apiAbstract {
         })
     }
 
-    async getSelector (v: params.getEmployee): Promise<userReducerType['selector']> {
-        return await this.GET<userReducerType['selector']>({
+    async getSelector (v: params.getEmployee): Promise<userTypes.reducerType['selector']> {
+        return await this.GET<userTypes.reducerType['selector']>({
             url: this.route + 'selector',
             data: v
         }).then((res) => {

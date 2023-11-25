@@ -1,8 +1,8 @@
+import companyTypes from 'types/company'
 import { type action, companyType } from '../types'
-import { companyReducerType } from 'reducer/reducer/companyReducer'
 
 class companyAction {
-    setMine (v: companyReducerType['mine']): action {
+    setMine (v: companyTypes.reducerType['mine']): action {
         return {
             type: companyType.SET_COMPANY_MINE,
             payload: {
