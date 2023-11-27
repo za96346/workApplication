@@ -3,7 +3,8 @@ export enum modalType {
     delete = 'delete',
     add = 'add',
     copy = 'copy',
-    print = 'print'
+    print = 'print',
+    changeBanch = 'changeBanch'
 }
 
 export enum modalTitle {

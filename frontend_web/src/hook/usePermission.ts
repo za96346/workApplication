@@ -45,18 +45,50 @@ const usePermission = ({ funcCode }: { funcCode: funcCode }): usePermissionProps
         return resultFlag
     }, [funcCode, roleBanchList])
 
+    const isCopyable = useCallback(({ banchId = null, roleId = null }): boolean => {
+        let resultFlag = 'copy' in permission
+        if (banchId !== null) {
+            resultFlag = resultFlag && roleBanchList
+                ?.scopeBanch
+                ?.[funcCode]
+                ?.copy
+                ?.includes(banchId)
+        }
+        if (roleId !== null) {
+            resultFlag = resultFlag && roleBanchList
+                ?.scopeRole
+                ?.[funcCode]
+                ?.copy
+                ?.includes(roleId)
+        }
+        return resultFlag
+    }, [funcCode, roleBanchList])
+
+    const isChangeBanchable = useCallback(({ banchId = null }): boolean => {
+        let resultFlag = 'changeBanch' in permission
+        if (banchId !== null) {
+            resultFlag = resultFlag && roleBanchList
+                ?.scopeBanch
+                ?.[funcCode]
+                ?.changeBanch
+                ?.includes(banchId)
+        }
+        return resultFlag
+    }, [funcCode, roleBanchList])
+
     return {
         // 此兩個不需要看 role banch scope
         isInquirable: 'inquire' in permission,
         isAddable: 'add' in permission,
 
-        // 此兩個才需要看role banch scope
+        // 此三個才需要看role banch scope
         isEditable,
         isDeleteable,
+        isCopyable,
+        isChangeBanchable,
 
         //
-        isPrintable: 'print' in permission,
-        isCopyable: 'copy' in permission
+        isPrintable: 'print' in permission
     }
 }
 export {

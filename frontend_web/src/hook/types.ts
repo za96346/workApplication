@@ -40,11 +40,13 @@ declare namespace usePermissionProps {
     interface returnType {
         isEditable: ({ banchId, roleId }: { banchId?: number, roleId?: number }) => boolean
         isDeleteable: ({ banchId, roleId }: { banchId?: number, roleId?: number }) => boolean
+        isCopyable: ({ banchId, roleId }: { banchId?: number, roleId?: number }) => boolean
+        isChangeBanchable: ({ banchId }: { banchId?: number }) => boolean
 
         isInquirable: boolean
         isAddable: boolean
         isPrintable: boolean
-        isCopyable: boolean
+
     }
 }
 

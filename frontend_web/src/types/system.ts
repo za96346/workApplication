@@ -18,7 +18,9 @@ enum operationCode {
     edit = 'edit',
     delete = 'delete',
     inquire = 'inquire',
-    print = 'print'
+    print = 'print',
+    copy = 'copy',
+    changeBanch = 'changeBanch'
 }
 declare namespace systemTypes {
     interface functionItemTable {

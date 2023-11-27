@@ -4,6 +4,7 @@ import (
 	"backend/Model"
 	"backend/method"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -86,6 +87,11 @@ func Get(Request *gin.Context) {
 func Add(Request *gin.Context) {
 	reqBody := new(Model.Performance)
 
+	PermissionItemCode := "add"
+	if strings.Contains(Request.Request.URL.Path, "copy") {
+		PermissionItemCode = "copy"
+	}
+
 	// 權限驗證
 	session := &method.SessionStruct{
 		Request: Request,
@@ -94,7 +100,7 @@ func Add(Request *gin.Context) {
 
 		PermissionValidation: true,
 		PermissionFuncCode: FuncCode,
-		PermissionItemCode: "add",
+		PermissionItemCode: PermissionItemCode,
 	}
 	if session.SessionHandler() != nil {return}
 
@@ -126,6 +132,11 @@ func Add(Request *gin.Context) {
 	(*reqBody).DeleteTime = nil
 	(*reqBody).CreateTime = &now
 	(*reqBody).LastModify = &now
+
+	if (*reqBody).IsYearMonthDuplicated() {
+		ErrorInstance.ErrorHandler(Request, "新增失敗-檢查到重複資料")
+		return
+	}
 
 	// 新增資料
 	if Model.DB.Create(reqBody).Error != nil {
@@ -196,6 +207,11 @@ func Edit(Request *gin.Context) {
 	(*reqBody).DeleteFlag = "N"
 	(*reqBody).DeleteTime = nil
 	(*reqBody).LastModify = &now
+
+	if (*reqBody).IsYearMonthDuplicated() {
+		ErrorInstance.ErrorHandler(Request, "新增失敗-檢查到重複資料")
+		return
+	}
 
 	// 更新
 	err := commonQuery.Updates(reqBody).Error
@@ -355,15 +371,82 @@ func GetYear(Request *gin.Context) {
 	)
 }
 
-// 搜尋列 的 值
-func SearchBar(Request *gin.Context) {
+// 更換部門
+func ChangeBanch(Request *gin.Context) {
+	reqBody := new(struct {
+		PerformanceId   int         `json:"PerformanceId"`
+		BanchId         int         `json:"BanchId"`
+	})
+
 	// 權限驗證
 	session := &method.SessionStruct{
 		Request: Request,
-		ReqBodyValidation: false,
-		PermissionValidation: false,
+		ReqBodyValidation: true,
+		ReqBodyStruct: reqBody,
+
+		PermissionValidation: true,
+		PermissionFuncCode: FuncCode,
+		PermissionItemCode: "edit",
 	}
 	if session.SessionHandler() != nil {return}
 
+	// 查詢此 user 資料
+	userData := Model.User{}
+	var count int64
 
+	userQuery := Model.DB.
+		Model(&Model.User{}).
+		Where("userId = ?", reqBody.UserId).
+		Where("companyId = ?", session.CompanyId)
+
+	userQuery.Count(&count)
+	userQuery.First(&userData)
+	if count == int64(0) {
+		ErrorInstance.ErrorHandler(Request, "找不到此使用者")
+		return
+	}
+
+	// 檢查是否有此部門以及角色的權限
+	if session.CheckScopeBanchValidation(*userData.BanchId) != nil {return}
+	if session.CheckScopeRoleValidation(userData.RoleId) != nil {return}
+
+	//共同 語句
+	commonQuery := Model.DB.
+		Model(&Model.Performance{}).
+		Where("companyId = ?", session.CompanyId).
+		Where("performanceId = ?", reqBody.PerformanceId)
+
+	// 找到舊的值 ( 不讓請求 的時候 userId 有任何的串改可能． )
+	var oldData Model.Performance 
+	commonQuery.First(&oldData)
+
+	// 新增固定欄位
+	now := time.Now()
+
+	(*reqBody).CompanyId = session.CompanyId
+	(*reqBody).UserId = oldData.UserId
+	(*reqBody).BanchId = oldData.BanchId
+	(*reqBody).DeleteFlag = "N"
+	(*reqBody).DeleteTime = nil
+	(*reqBody).LastModify = &now
+
+	if (*reqBody).IsYearMonthDuplicated() {
+		ErrorInstance.ErrorHandler(Request, "新增失敗-檢查到重複資料")
+		return
+	}
+
+	// 更新
+	err := commonQuery.Updates(reqBody).Error
+
+	if err != nil {
+		ErrorInstance.ErrorHandler(Request, "更新失敗")
+		return
+	}
+
+	Request.JSON(
+		http.StatusOK,
+		gin.H {
+			"message": "更新成功",
+		},
+	)
 }

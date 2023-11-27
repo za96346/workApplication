@@ -55,3 +55,18 @@ func (p *Performance) GetNewPerformanceID(companyId int) int {
 
     return int(MaxCount) + 1
 }
+
+// 檢查績效年月是否重複
+func (p *Performance) IsYearMonthDuplicated() bool {
+    var MaxCount int64
+    DB.Model(&Performance{}).
+        Where("companyId = ?", (*p).CompanyId).
+        Where("userId = ?", (*p).UserId).
+        Where("performanceId != ?", (*p).PerformanceId).
+        Where("Year = ?", (*p).Year).
+        Where("Month = ?", (*p).Month).
+        Where("deleteFlag = ?", "N").
+        Count(&MaxCount)
+
+    return MaxCount > 0
+}

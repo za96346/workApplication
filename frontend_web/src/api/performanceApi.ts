@@ -51,6 +51,14 @@ class performanceApi extends apiAbstract {
         })
     }
 
+    async copy (v: params.add): Promise<void> {
+        return await this.PUT<null>({
+            url: this.route + 'copy',
+            data: v,
+            checkTitle: this.checkTitle.confirmAdd
+        })
+    }
+
     async update (v: params.add): Promise<void> {
         return await this.POST<null>({
             url: this.route,

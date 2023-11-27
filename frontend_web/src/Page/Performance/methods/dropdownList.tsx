@@ -1,5 +1,5 @@
 import React from 'react'
-import { EditOutlined } from '@ant-design/icons'
+import { CopyOutlined, EditOutlined, ExceptionOutlined } from '@ant-design/icons'
 import { modalType } from 'static'
 import { DropdownProps } from 'shared/Dropdown'
 import { type usePermissionTypes } from 'hook/usePermission'
@@ -18,5 +18,15 @@ export const dropdownList = (
         icon: <EditOutlined />,
         key: modalType.delete,
         label: '刪除'
+    },
+    permission?.isCopyable({ banchId: item?.BanchId, roleId: item?.RoleId }) && {
+        icon: <CopyOutlined />,
+        key: modalType.copy,
+        label: '複製'
+    },
+    permission?.isChangeBanchable({ banchId: item?.BanchId }) && {
+        icon: <ExceptionOutlined />,
+        key: modalType.changeBanch,
+        label: '更換部門'
     }
 ]
