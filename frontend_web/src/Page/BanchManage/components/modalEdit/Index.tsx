@@ -55,6 +55,6 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
 }
 export default Modal<modalInfo, any>({
     children: ModalEdit,
-    title: (v) => modalTitle[v?.type] + '部門',
+    title: (v) => `${modalTitle[v?.type]}部門`,
     width: (isLess) => isLess('md') ? '100vw' : '500px'
 })

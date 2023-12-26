@@ -65,6 +65,6 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
 }
 export default Modal<modalInfo, any>({
     children: ModalEdit,
-    title: (v) => modalTitle[v?.type] + '角色',
+    title: (v) => `${modalTitle[v?.type]}角色`,
     width: () => '100vw'
 })
