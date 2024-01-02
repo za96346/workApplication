@@ -4,11 +4,11 @@ const columns = [
         key: 'BanchName',
         title: '部門'
     },
-    {
-        dataIndex: 'count',
-        key: 'count',
-        title: '人數'
-    },
+    // {
+    //     dataIndex: 'count',
+    //     key: 'count',
+    //     title: '人數'
+    // },
     {
         dataIndex: 'action',
         key: 'action',
