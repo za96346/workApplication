@@ -141,7 +141,7 @@ func Add(Request *gin.Context) {
 	)
 }
 
-// 新增
+// 刪除
 func Delete(Request *gin.Context) {
 	reqBody := new(struct {
 		BanchId int `json:"BanchId" binding:"required"`
@@ -186,6 +186,7 @@ func Delete(Request *gin.Context) {
 	)
 }
 
+// 部門選擇器
 func GetSelector(Request *gin.Context) {
 	// 權限驗證
 	session := &method.SessionStruct{

@@ -374,7 +374,7 @@ func Delete(Request *gin.Context) {
 	)
 }
 
-// 獲取全部
+// 使用者選擇器
 func GetSelector(Request *gin.Context) {
 	// 請求處理
 	reqParams := new(struct {

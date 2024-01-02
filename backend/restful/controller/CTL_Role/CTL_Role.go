@@ -411,6 +411,7 @@ func Delete(Request *gin.Context) {
 	)
 }
 
+// 角色選擇器
 func GetSelector(Request *gin.Context) {
 	// 權限驗證
 	session := &method.SessionStruct{
