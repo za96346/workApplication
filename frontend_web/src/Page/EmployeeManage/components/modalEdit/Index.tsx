@@ -9,6 +9,7 @@ import { modalTitle, modalType } from 'static'
 import { funcCode, operationCode } from 'types/system'
 import userTypes from 'types/user'
 import ModelChangePassword from 'Page/SelfData/ModelChangePassword/Index'
+import Switch from 'shared/AntdOverwrite/Switch'
 
 interface modalInfo {
     type?: modalType
@@ -35,6 +36,7 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                 autoComplete="off"
                 className='row'
                 form={form}
+                onFieldsChange={(_, v) => console.log('all ', v)}
             >
                 <Form.Item
                     name="UserName"
@@ -107,6 +109,28 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                     {
                         () => (
                             <div className='col-12 d-flex justify-content-between'>
+
+                                <div>
+                                    {
+                                        modalInfo?.type !== modalType.add && (
+                                            <Switch
+                                                label="在職狀態"
+                                                formInstance={form}
+                                                defaultValue={modalInfo?.data?.QuitFlag}
+                                                fieldName='QuitFlag'
+                                                antdSwitchProps={{
+                                                    onChange: (v) => {
+                                                        console.log('change => ', v)
+                                                        form.setFieldValue('QuitFlag', v ? 'Y' : 'N')
+                                                    },
+                                                    checkedChildren: '在職',
+                                                    unCheckedChildren: '離職'
+                                                }}
+                                            />
+                                        )
+                                    }
+                                </div>
+
                                 <div>
                                     {
                                         modalInfo?.type !== modalType.add && (
@@ -117,13 +141,12 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                                                     })
                                                 }}
                                             >
-                                            更換密碼
+                                                        更換密碼
                                             </Button>
                                         )
                                     }
-                                </div>
-                                <div>
                                     <Btn.Cancel onClick={() => { void modalInfo.onClose() }} />
+
                                     <Btn.Save
                                         onClick={() => {
                                             modalInfo.onSave(form)

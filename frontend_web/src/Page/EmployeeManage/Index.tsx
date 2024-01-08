@@ -14,6 +14,8 @@ import { modalType } from 'static'
 import ModalEdit from './components/modalEdit/Index'
 import { dropdownList } from './methods/dropdownList'
 import useRoleBanchList from 'hook/useRoleBanchUserList'
+import useFlag from 'hook/useFlag'
+import dayjs from 'dayjs'
 
 const Index = (): JSX.Element => {
     const permission = usePermission({ funcCode: funcCode.employeeManage })
@@ -22,6 +24,7 @@ const Index = (): JSX.Element => {
         operationCode: operationCode.inquire
     })
     const employee = useAppSelector((v) => v?.user?.employee)
+    const { flagToDom } = useFlag()
 
     const dataSource = useMemo(() => {
         return employee?.map((item) => ({
@@ -29,6 +32,12 @@ const Index = (): JSX.Element => {
             key: v4(),
             BanchId: roleBanchList.banchObject?.[item?.BanchId]?.BanchName,
             RoleId: roleBanchList.roleObject?.[item?.RoleId]?.RoleName,
+            OnWorkDay: dayjs(item?.OnWorkDay).format('YYYY-MM-DD'),
+            QuitFlag: flagToDom({
+                flag: item.QuitFlag,
+                flagNText: '在職',
+                flagYText: '離職'
+            }),
             action: (
                 <Dropdown
                     menu={dropdownList(permission, item)}

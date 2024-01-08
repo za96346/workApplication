@@ -25,6 +25,11 @@ const columns = [
         title: '到職日'
     },
     {
+        dataIndex: 'QuitFlag',
+        key: 'QuitFlag',
+        title: '狀態'
+    },
+    {
         dataIndex: 'action',
         key: 'action',
         title: '更多'

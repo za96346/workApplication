@@ -64,10 +64,21 @@ declare namespace useSessionProps {
     }
 }
 
+declare namespace useFlagProps {
+    interface returnProps {
+        flagToDom: (v: {
+            flag: Flag
+            flagYText: any
+            flagNText: any
+        }) => JSX.Element
+    }
+}
+
 export {
     type useBreakPointProps,
     type useWindowSizeProps,
     type useCallBackStateProps,
     type usePermissionProps,
-    type useSessionProps
+    type useSessionProps,
+    type useFlagProps
 }

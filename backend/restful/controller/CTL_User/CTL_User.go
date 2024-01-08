@@ -50,6 +50,7 @@ func Get(Request *gin.Context) {
 		RoleId *int `json:"RoleId"`
 		UserName *string `json:"UserName"`
 		EmployeeNumber *string `json:"EmployeeNumber"`
+		QuitFlag *string `json:"QuitFlag"`
 	})
 	// 權限驗證
 	session := &method.SessionStruct{
@@ -68,6 +69,21 @@ func Get(Request *gin.Context) {
 	var data []Model.User
 
 	searchQuery := Model.DB.
+		Select(`
+			companyId,
+			userId,
+			roleId,
+			banchId,
+			userName,
+			employeeNumber,
+			account,
+			onWorkDay,
+			quitFlag,
+			deleteFlag,
+			deleteTime,
+			createTime,
+			lastModify
+		`).
 		Where("companyId = ?", session.CompanyId).
 		Where("roleId in (?)", *session.GetScopeRolehWithCustomize(reqParams.RoleId)).
 		Where("banchId in (?)", *session.GetScopeBanchWithCustomize(reqParams.BanchId)).
@@ -81,6 +97,11 @@ func Get(Request *gin.Context) {
 	// 員工編號
 	if reqParams.EmployeeNumber != nil {
 		searchQuery.Where("employeeNumber like ?", "%" + *reqParams.EmployeeNumber + "%")
+	}
+
+	// 離職狀態
+	if reqParams.QuitFlag != nil {
+		searchQuery.Where("quitFlag = ?", *reqParams.QuitFlag)
 	}
 
 	searchQuery.Find(&data)
@@ -125,6 +146,7 @@ func Add(Request *gin.Context) {
 	(*reqBody).LastModify = &now
 	(*reqBody).DeleteTime = nil
 	(*reqBody).DeleteFlag = "N"
+	(*reqBody).Quitflag = "N"
 
 	// 插入 Recorder
 	if Model.DB.Create(reqBody).Error != nil {

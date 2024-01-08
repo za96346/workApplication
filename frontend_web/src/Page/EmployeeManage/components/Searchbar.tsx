@@ -3,6 +3,7 @@ import api from 'api/Index'
 import useRoleBanchList from 'hook/useRoleBanchUserList'
 import React from 'react'
 import Btn from 'shared/Button'
+import { quitWorkStatusSelectList } from 'static'
 import { funcCode, operationCode } from 'types/system'
 
 const Searchbar = (): JSX.Element => {
@@ -37,6 +38,14 @@ const Searchbar = (): JSX.Element => {
                     className='col-md-6'
                 >
                     <Select allowClear options={rolBanchList.roleSelectList} />
+                </Form.Item>
+                <Form.Item
+                    name="QuitFlag"
+                    label="離職狀態"
+                    className='col-md-6'
+                    initialValue={'N'}
+                >
+                    <Select options={quitWorkStatusSelectList} />
                 </Form.Item>
                 <Form.Item
                     name="UserName"

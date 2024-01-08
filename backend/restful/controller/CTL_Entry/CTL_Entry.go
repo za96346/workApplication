@@ -49,6 +49,15 @@ func Login(Request *gin.Context) {
 		return
 	}
 
+	// 驗證是否是離職
+	if (*user).IsQuitWorking() {
+		ErrorInstance.ErrorHandler(
+			Request,
+			"帳號失效",
+		)
+		return
+	}
+
 	// 登入成功後 ， 寫入session
 	session.Set("isLogin", "Y")
 	session.Set("userId", strconv.Itoa((*user).UserId))
