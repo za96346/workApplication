@@ -112,7 +112,7 @@ const PrintForm = (): JSX.Element => {
                                             &nbsp;&nbsp;&nbsp; □專業概念解說與討論 □情緒支持與同理 □與機構主管溝通 <br/>
                                             &nbsp;&nbsp;&nbsp; □協助組員進行反思 □提供閱讀資源  □提供個人實習經驗<br/>
                                             &nbsp;&nbsp;&nbsp; □向園方反應 □要求組員達成園方基本要求 <br/>
-                                            &nbsp;&nbsp;&nbsp; □他（請說明）________________________________
+                                            &nbsp;&nbsp;&nbsp; □其他（請說明）________________________________
                             </div>
                         </div>
                         <div style={{

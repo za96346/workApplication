@@ -114,17 +114,13 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                                     {
                                         modalInfo?.type !== modalType.add && (
                                             <Switch
-                                                label="在職狀態"
+                                                label="離職狀態"
                                                 formInstance={form}
                                                 defaultValue={modalInfo?.data?.QuitFlag}
                                                 fieldName='QuitFlag'
                                                 antdSwitchProps={{
-                                                    onChange: (v) => {
-                                                        console.log('change => ', v)
-                                                        form.setFieldValue('QuitFlag', v ? 'Y' : 'N')
-                                                    },
-                                                    checkedChildren: '在職',
-                                                    unCheckedChildren: '離職'
+                                                    checkedChildren: '是',
+                                                    unCheckedChildren: '否'
                                                 }}
                                             />
                                         )

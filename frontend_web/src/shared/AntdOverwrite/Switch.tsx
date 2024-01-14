@@ -3,7 +3,7 @@ import { Form, FormInstance, Switch as AntdSwitch, SwitchProps } from 'antd'
 
 interface props {
     formInstance: FormInstance<any>
-    antdSwitchProps: SwitchProps
+    antdSwitchProps?: SwitchProps
     onValue?: any
     offValue?: any
     defaultValue: any
@@ -32,9 +32,9 @@ const Switch = ({
                 name={`${fieldName}Status`}
                 label={label}
                 initialValue={defaultValue === onValue}
-                rules={[{ required: true }]}
             >
                 <AntdSwitch
+                    defaultChecked={defaultValue === onValue}
                     onChange={(v) => {
                         formInstance.setFieldValue(
                             fieldName,
