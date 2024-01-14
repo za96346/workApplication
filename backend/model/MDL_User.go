@@ -28,6 +28,7 @@ type User struct {
     Account          string       `gorm:"column:account" json:"Account" binding:"required"`                   //type:string       comment:使用者帳號            version:2023-10-02 14:15
     Password         string       `gorm:"column:password" json:"Password"`                 //type:string       comment:使用者密碼            version:2023-10-02 14:15
     OnWorkDay        time.Time   `gorm:"column:onWorkDay" json:"OnWorkDay" binding:"required"`               //type:*time.Time   comment:開始工作日            version:2023-10-02 14:15
+    Sort             *int         `gorm:"column:sort" json:"Sort"`               //type:*int         comment:排序                 version:2024-00-14 15:12
     Quitflag         string         `gorm:"column:quitFlag" json:"QuitFlag"`                 //type:CHAR         comment:離職旗標              version:2024-00-06 14:30
     DeleteFlag       string         `gorm:"column:deleteFlag" json:"DeleteFlag"`             //type:CHAR         comment:刪除旗標 ( N, Y )     version:2023-10-02 19:31
     DeleteTime       *time.Time   `gorm:"column:deleteTime" json:"DeleteTime"`             //type:*time.Time   comment:刪除時間              version:2023-10-02 19:31

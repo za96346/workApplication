@@ -30,6 +30,7 @@ type Performance struct {
     Directions      string       `gorm:"column:directions" json:"Directions"`               //type:string       comment:                version:2023-10-08 14:35
     BeLate          *int         `gorm:"column:beLate" json:"BeLate" binding:"required"`                       //type:*int         comment:遲到            version:2023-10-08 14:35
     DayOffNotOnRule *int         `gorm:"column:dayOffNotOnRule" json:"DayOffNotOnRule" binding:"required"`     //type:*int         comment:未依規定請假    version:2023-10-08 14:35
+    Sort            *int         `gorm:"column:sort" json:"Sort"`               //type:*int         comment:排序                 version:2024-00-14 15:12
     DeleteFlag      string         `gorm:"column:deleteFlag" json:"DeleteFlag"`               //type:CHAR         comment:刪除旗標 ( N, Y )    version:2023-10-08 16:10
     DeleteTime      *time.Time   `gorm:"column:deleteTime" json:"DeleteTime"`               //type:*time.Time   comment:刪除時間             version:2023-10-08 16:10
     CreateTime      *time.Time   `gorm:"column:createTime" json:"CreateTime"`               //type:*time.Time   comment:創建時間        version:2023-10-08 14:35
