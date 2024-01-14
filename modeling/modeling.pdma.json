@@ -4,7 +4,7 @@
   "avatar": "",
   "version": "4.6.3",
   "createdTime": "2023-7-29 21:06:30",
-  "updatedTime": "2024-1-6 14:30:01",
+  "updatedTime": "2024-1-14 15:16:03",
   "dbConns": [],
   "profile": {
     "default": {
@@ -865,8 +865,25 @@
           "uiHint": "642D2E0A-8846-4549-BE56-8C0473F26EDE"
         },
         {
+          "defKey": "sort",
+          "defName": "排序",
+          "comment": "",
+          "type": "",
+          "len": "",
+          "scale": "",
+          "primaryKey": false,
+          "notNull": false,
+          "autoIncrement": false,
+          "defaultValue": "0",
+          "hideInGraph": false,
+          "refDict": "",
+          "extProps": {},
+          "domain": "6BC8F04B-6CFA-4995-98D3-318F5CDD774E",
+          "id": "17B83506-A7FA-419D-BD2C-164F3794F0AA"
+        },
+        {
           "defKey": "quitFlag",
-          "defName": "離職旗標",
+          "defName": "離職旗標 ( N, Y )",
           "comment": "",
           "type": "CHAR",
           "len": 1,
@@ -1652,7 +1669,7 @@
           "defName": "刪除旗標 ( N, Y )",
           "comment": "",
           "type": "CHAR",
-          "len": "",
+          "len": 1,
           "scale": "",
           "primaryKey": false,
           "notNull": false,
@@ -1680,6 +1697,23 @@
           "extProps": {},
           "domain": "",
           "id": "BDBF8624-B501-4DE0-B490-657C5646378C"
+        },
+        {
+          "defKey": "sort",
+          "defName": "排序",
+          "comment": "",
+          "type": "",
+          "len": "",
+          "scale": "",
+          "primaryKey": false,
+          "notNull": false,
+          "autoIncrement": false,
+          "defaultValue": "0",
+          "hideInGraph": false,
+          "refDict": "",
+          "extProps": {},
+          "domain": "6BC8F04B-6CFA-4995-98D3-318F5CDD774E",
+          "id": "A84DF5DD-E9ED-4168-8AB2-73C3BF3E4214"
         },
         {
           "defKey": "createTime",
@@ -1905,8 +1939,8 @@
           "defKey": "funcCode",
           "defName": "功能代碼( banchManage, shiftedit )",
           "comment": "",
-          "type": "",
-          "len": "",
+          "type": "VARCHAR",
+          "len": 50,
           "scale": "",
           "primaryKey": true,
           "notNull": true,
@@ -1915,15 +1949,15 @@
           "hideInGraph": false,
           "refDict": "",
           "extProps": {},
-          "domain": "9092C4E0-1A54-4859-ABBB-5B62DBC27573",
+          "domain": "",
           "id": "CAEFEADC-E8D3-4DF7-9D4B-B33F623BB0AB"
         },
         {
           "defKey": "itemCode",
           "defName": "操作代碼(edit, delete...)",
           "comment": "",
-          "type": "",
-          "len": "",
+          "type": "VARCHAR",
+          "len": 50,
           "scale": "",
           "primaryKey": true,
           "notNull": true,
@@ -1932,7 +1966,7 @@
           "hideInGraph": false,
           "refDict": "",
           "extProps": {},
-          "domain": "9092C4E0-1A54-4859-ABBB-5B62DBC27573",
+          "domain": "",
           "id": "7E4AE18B-2854-4BD3-8D02-D4F58B3F3326"
         },
         {
@@ -2024,127 +2058,229 @@
       "headers": [
         {
           "refKey": "hideInGraph",
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "relationNoShow",
+          "value": "关系图",
+          "newCode": "hideInGraph",
+          "com": "Icon",
+          "relationNoShow": true,
+          "freeze": true
         },
         {
           "refKey": "defKey",
-          "freeze": false,
-          "hideInGraph": false
+          "freeze": true,
+          "hideInGraph": false,
+          "code": "name",
+          "value": "字段代码",
+          "newCode": "defKey",
+          "com": "Input",
+          "relationNoShow": false
         },
         {
           "refKey": "defName",
-          "freeze": false,
-          "hideInGraph": false
+          "freeze": true,
+          "hideInGraph": false,
+          "code": "chnname",
+          "value": "显示名称",
+          "newCode": "defName",
+          "com": "Input",
+          "relationNoShow": false
         },
         {
           "refKey": "primaryKey",
           "freeze": false,
-          "hideInGraph": false
+          "hideInGraph": false,
+          "code": "pk",
+          "value": "主键",
+          "newCode": "primaryKey",
+          "com": "Checkbox",
+          "relationNoShow": false
         },
         {
           "refKey": "notNull",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "notNull",
+          "value": "不为空",
+          "newCode": "notNull",
+          "com": "Checkbox",
+          "relationNoShow": true
         },
         {
           "refKey": "autoIncrement",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "autoIncrement",
+          "value": "自增",
+          "newCode": "autoIncrement",
+          "com": "Checkbox",
+          "relationNoShow": true
         },
         {
           "refKey": "domain",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "type",
+          "value": "数据域",
+          "newCode": "domain",
+          "com": "Select",
+          "relationNoShow": true
         },
         {
           "refKey": "type",
           "freeze": false,
-          "hideInGraph": false
+          "hideInGraph": false,
+          "code": "dataType",
+          "value": "数据类型",
+          "newCode": "type",
+          "com": "Text",
+          "relationNoShow": false
         },
         {
           "refKey": "len",
           "freeze": false,
-          "hideInGraph": false
+          "hideInGraph": false,
+          "code": "len",
+          "value": "长度",
+          "newCode": "len",
+          "com": "Input",
+          "relationNoShow": false
         },
         {
           "refKey": "scale",
           "freeze": false,
-          "hideInGraph": false
+          "hideInGraph": false,
+          "code": "scale",
+          "value": "小数位数",
+          "newCode": "scale",
+          "com": "Input",
+          "relationNoShow": false
         },
         {
           "refKey": "comment",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "remark",
+          "value": "说明",
+          "newCode": "comment",
+          "com": "Input",
+          "relationNoShow": true
         },
         {
           "refKey": "refDict",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "refDict",
+          "value": "数据字典",
+          "newCode": "refDict",
+          "com": "SearchSelect",
+          "relationNoShow": true
         },
         {
           "refKey": "defaultValue",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "defaultValue",
+          "value": "默认值",
+          "newCode": "defaultValue",
+          "com": "Input",
+          "relationNoShow": true
         },
         {
           "refKey": "isStandard",
           "freeze": false,
-          "hideInGraph": false
+          "hideInGraph": false,
+          "code": "isStandard",
+          "value": "标准字段",
+          "newCode": "isStandard",
+          "com": "label",
+          "relationNoShow": false,
+          "enable": false
         },
         {
           "refKey": "uiHint",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "uiHint",
+          "value": "UI建议",
+          "newCode": "uiHint",
+          "com": "Select",
+          "relationNoShow": true,
+          "enable": true
         },
         {
           "refKey": "extProps",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "extProps",
+          "value": "拓展属性",
+          "newCode": "extProps",
+          "com": "linkButton",
+          "relationNoShow": true,
+          "enable": true
         },
         {
           "refKey": "attr1",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性1",
+          "enable": true
         },
         {
           "refKey": "attr2",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性2",
+          "enable": false
         },
         {
           "refKey": "attr3",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性3",
+          "enable": false
         },
         {
           "refKey": "attr4",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性4",
+          "enable": false
         },
         {
           "refKey": "attr5",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性5",
+          "enable": false
         },
         {
           "refKey": "attr6",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性6",
+          "enable": false
         },
         {
           "refKey": "attr7",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性7",
+          "enable": false
         },
         {
           "refKey": "attr8",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性8",
+          "enable": false
         },
         {
           "refKey": "attr9",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性9",
+          "enable": false
         }
       ],
       "fields": [
@@ -2152,8 +2288,8 @@
           "defKey": "funcCode",
           "defName": "功能代碼(banchManager)",
           "comment": "",
-          "type": "",
-          "len": "",
+          "type": "VARCHAR",
+          "len": 50,
           "scale": "",
           "primaryKey": true,
           "notNull": true,
@@ -2162,7 +2298,7 @@
           "hideInGraph": false,
           "refDict": "",
           "extProps": {},
-          "domain": "9092C4E0-1A54-4859-ABBB-5B62DBC27573",
+          "domain": "",
           "id": "88FCB22F-2432-4F42-8943-F25E03F5FA7D"
         },
         {
@@ -2215,6 +2351,23 @@
           "extProps": {},
           "domain": "",
           "id": "7556C332-662D-4347-8271-EA9CF8D6B695"
+        },
+        {
+          "defKey": "sort",
+          "defName": "排序",
+          "comment": "",
+          "type": "",
+          "len": "",
+          "scale": "",
+          "primaryKey": false,
+          "notNull": false,
+          "autoIncrement": false,
+          "defaultValue": "0",
+          "hideInGraph": false,
+          "refDict": "",
+          "extProps": {},
+          "domain": "6BC8F04B-6CFA-4995-98D3-318F5CDD774E",
+          "id": "15DF055D-590C-4389-9219-D70B741D0433"
         },
         {
           "defKey": "createTime",
@@ -2271,127 +2424,229 @@
       "headers": [
         {
           "refKey": "hideInGraph",
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "relationNoShow",
+          "value": "关系图",
+          "newCode": "hideInGraph",
+          "com": "Icon",
+          "relationNoShow": true,
+          "freeze": true
         },
         {
           "refKey": "defKey",
-          "freeze": false,
-          "hideInGraph": false
+          "freeze": true,
+          "hideInGraph": false,
+          "code": "name",
+          "value": "字段代码",
+          "newCode": "defKey",
+          "com": "Input",
+          "relationNoShow": false
         },
         {
           "refKey": "defName",
-          "freeze": false,
-          "hideInGraph": false
+          "freeze": true,
+          "hideInGraph": false,
+          "code": "chnname",
+          "value": "显示名称",
+          "newCode": "defName",
+          "com": "Input",
+          "relationNoShow": false
         },
         {
           "refKey": "primaryKey",
           "freeze": false,
-          "hideInGraph": false
+          "hideInGraph": false,
+          "code": "pk",
+          "value": "主键",
+          "newCode": "primaryKey",
+          "com": "Checkbox",
+          "relationNoShow": false
         },
         {
           "refKey": "notNull",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "notNull",
+          "value": "不为空",
+          "newCode": "notNull",
+          "com": "Checkbox",
+          "relationNoShow": true
         },
         {
           "refKey": "autoIncrement",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "autoIncrement",
+          "value": "自增",
+          "newCode": "autoIncrement",
+          "com": "Checkbox",
+          "relationNoShow": true
         },
         {
           "refKey": "domain",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "type",
+          "value": "数据域",
+          "newCode": "domain",
+          "com": "Select",
+          "relationNoShow": true
         },
         {
           "refKey": "type",
           "freeze": false,
-          "hideInGraph": false
+          "hideInGraph": false,
+          "code": "dataType",
+          "value": "数据类型",
+          "newCode": "type",
+          "com": "Text",
+          "relationNoShow": false
         },
         {
           "refKey": "len",
           "freeze": false,
-          "hideInGraph": false
+          "hideInGraph": false,
+          "code": "len",
+          "value": "长度",
+          "newCode": "len",
+          "com": "Input",
+          "relationNoShow": false
         },
         {
           "refKey": "scale",
           "freeze": false,
-          "hideInGraph": false
+          "hideInGraph": false,
+          "code": "scale",
+          "value": "小数位数",
+          "newCode": "scale",
+          "com": "Input",
+          "relationNoShow": false
         },
         {
           "refKey": "comment",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "remark",
+          "value": "说明",
+          "newCode": "comment",
+          "com": "Input",
+          "relationNoShow": true
         },
         {
           "refKey": "refDict",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "refDict",
+          "value": "数据字典",
+          "newCode": "refDict",
+          "com": "SearchSelect",
+          "relationNoShow": true
         },
         {
           "refKey": "defaultValue",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "defaultValue",
+          "value": "默认值",
+          "newCode": "defaultValue",
+          "com": "Input",
+          "relationNoShow": true
         },
         {
           "refKey": "isStandard",
           "freeze": false,
-          "hideInGraph": false
+          "hideInGraph": false,
+          "code": "isStandard",
+          "value": "标准字段",
+          "newCode": "isStandard",
+          "com": "label",
+          "relationNoShow": false,
+          "enable": false
         },
         {
           "refKey": "uiHint",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "uiHint",
+          "value": "UI建议",
+          "newCode": "uiHint",
+          "com": "Select",
+          "relationNoShow": true,
+          "enable": true
         },
         {
           "refKey": "extProps",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "code": "extProps",
+          "value": "拓展属性",
+          "newCode": "extProps",
+          "com": "linkButton",
+          "relationNoShow": true,
+          "enable": true
         },
         {
           "refKey": "attr1",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性1",
+          "enable": true
         },
         {
           "refKey": "attr2",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性2",
+          "enable": false
         },
         {
           "refKey": "attr3",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性3",
+          "enable": false
         },
         {
           "refKey": "attr4",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性4",
+          "enable": false
         },
         {
           "refKey": "attr5",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性5",
+          "enable": false
         },
         {
           "refKey": "attr6",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性6",
+          "enable": false
         },
         {
           "refKey": "attr7",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性7",
+          "enable": false
         },
         {
           "refKey": "attr8",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性8",
+          "enable": false
         },
         {
           "refKey": "attr9",
           "freeze": false,
-          "hideInGraph": true
+          "hideInGraph": true,
+          "value": "属性9",
+          "enable": false
         }
       ],
       "fields": [
@@ -2399,8 +2654,8 @@
           "defKey": "operationCode",
           "defName": "操作代碼(edit)",
           "comment": "",
-          "type": "",
-          "len": "",
+          "type": "VARCHAR",
+          "len": 50,
           "scale": "",
           "primaryKey": true,
           "notNull": true,
@@ -2409,15 +2664,15 @@
           "hideInGraph": false,
           "refDict": "",
           "extProps": {},
-          "domain": "9092C4E0-1A54-4859-ABBB-5B62DBC27573",
+          "domain": "",
           "id": "88FCB22F-2432-4F42-8943-F25E03F5FA7D"
         },
         {
           "defKey": "operationName",
           "defName": "操作名稱",
           "comment": "",
-          "type": "",
-          "len": "",
+          "type": "VARCHAR",
+          "len": 50,
           "scale": "",
           "primaryKey": false,
           "notNull": false,
@@ -2426,8 +2681,25 @@
           "hideInGraph": false,
           "refDict": "",
           "extProps": {},
-          "domain": "9092C4E0-1A54-4859-ABBB-5B62DBC27573",
+          "domain": "",
           "id": "24380B23-E53A-415C-B955-354F59C1E33D"
+        },
+        {
+          "defKey": "sort",
+          "defName": "排序",
+          "comment": "",
+          "type": "",
+          "len": "",
+          "scale": "",
+          "primaryKey": false,
+          "notNull": false,
+          "autoIncrement": false,
+          "defaultValue": "0",
+          "hideInGraph": false,
+          "refDict": "",
+          "extProps": {},
+          "domain": "6BC8F04B-6CFA-4995-98D3-318F5CDD774E",
+          "id": "325CE141-EB9A-4163-B64E-FA2AAA46CBD8"
         },
         {
           "defKey": "createTime",
@@ -2565,6 +2837,23 @@
           "id": "A8F54212-210D-4319-A5F2-5EFA491C67EB",
           "extProps": {},
           "uiHint": "642D2E0A-8846-4549-BE56-8C0473F26EDE"
+        },
+        {
+          "defKey": "sort",
+          "defName": "排序",
+          "comment": "",
+          "type": "",
+          "len": "",
+          "scale": "",
+          "primaryKey": false,
+          "notNull": false,
+          "autoIncrement": false,
+          "defaultValue": "0",
+          "hideInGraph": false,
+          "refDict": "",
+          "extProps": {},
+          "domain": "6BC8F04B-6CFA-4995-98D3-318F5CDD774E",
+          "id": "32D9E7A3-1B74-41A5-A64E-511080CFAA52"
         },
         {
           "defKey": "deleteFlag",
@@ -3118,11 +3407,28 @@
           "uiHint": "642D2E0A-8846-4549-BE56-8C0473F26EDE"
         },
         {
+          "defKey": "sort",
+          "defName": "排序",
+          "comment": "",
+          "type": "",
+          "len": "",
+          "scale": "",
+          "primaryKey": false,
+          "notNull": false,
+          "autoIncrement": false,
+          "defaultValue": "0",
+          "hideInGraph": false,
+          "refDict": "",
+          "extProps": {},
+          "domain": "6BC8F04B-6CFA-4995-98D3-318F5CDD774E",
+          "id": "FDF92402-F9C3-4AA0-AD3A-7F6DF676EB14"
+        },
+        {
           "defKey": "deleteFlag",
           "defName": "刪除旗標 ( N, Y )",
           "comment": "",
           "type": "CHAR",
-          "len": "",
+          "len": 1,
           "scale": "",
           "primaryKey": false,
           "notNull": false,
@@ -4053,6 +4359,23 @@
           "extProps": {},
           "domain": "",
           "id": "B0539FC0-5151-48AB-84AC-5D1CFBE01A8A"
+        },
+        {
+          "defKey": "sort",
+          "defName": "排序",
+          "comment": "",
+          "type": "",
+          "len": "",
+          "scale": "",
+          "primaryKey": false,
+          "notNull": false,
+          "autoIncrement": false,
+          "defaultValue": "0",
+          "hideInGraph": false,
+          "refDict": "",
+          "extProps": {},
+          "domain": "6BC8F04B-6CFA-4995-98D3-318F5CDD774E",
+          "id": "1F0DFDEA-5ECA-4EAC-85E9-FCBD0AE81208"
         },
         {
           "defKey": "createTime",
