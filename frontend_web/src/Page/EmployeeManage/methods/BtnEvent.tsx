@@ -9,7 +9,7 @@ const BtnEvent = ({ type, value }: BtnEventParams<userTypes.TABLE>): void => {
         void api.user.getEmployee({})
     }
     if (type === modalType.delete) {
-        void api.user.delete({ UserId: value?.BanchId })
+        void api.user.delete({ UserId: value?.UserId })
             .then(onClose)
         return
     }

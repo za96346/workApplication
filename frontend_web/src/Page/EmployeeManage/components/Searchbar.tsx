@@ -43,9 +43,8 @@ const Searchbar = (): JSX.Element => {
                     name="QuitFlag"
                     label="離職狀態"
                     className='col-md-6'
-                    initialValue={'N'}
                 >
-                    <Select options={quitWorkStatusSelectList} />
+                    <Select allowClear options={quitWorkStatusSelectList} />
                 </Form.Item>
                 <Form.Item
                     name="UserName"
