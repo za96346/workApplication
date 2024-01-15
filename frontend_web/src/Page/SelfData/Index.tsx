@@ -6,17 +6,17 @@ import { usePermission } from 'hook/usePermission'
 import useRoleBanchList from 'hook/useRoleBanchUserList'
 import React, { useEffect } from 'react'
 import Btn from 'shared/Button'
-import { funcCode, operationCode } from 'types/system'
+import { FuncCodeEnum, OperationCodeEnum } from 'types/system'
 import ModelChangePassword from 'Page/SelfData/ModelChangePassword/Index'
 
 const Index = (): JSX.Element => {
     const [form] = Form.useForm()
     const data = useAppSelector((v) => v?.user?.mine)
-    const permission = usePermission({ funcCode: funcCode.selfData })
+    const permission = usePermission({ funcCode: FuncCodeEnum.selfData })
 
     const rolBanchList = useRoleBanchList({
-        funcCode: funcCode.selfData,
-        operationCode: operationCode.edit
+        funcCode: FuncCodeEnum.selfData,
+        operationCode: OperationCodeEnum.edit
     })
 
     useEffect(() => {

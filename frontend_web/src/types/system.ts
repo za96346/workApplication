@@ -2,7 +2,7 @@ import companyBanchTypes from './companyBanch'
 import roleTypes from './role'
 import userTypes from './user'
 
-enum funcCode {
+enum FuncCodeEnum {
     banchManage = 'banchManage',
     companyData = 'companyData',
     employeeManage = 'employeeManage',
@@ -13,7 +13,7 @@ enum funcCode {
     shiftSetting = 'shiftSetting',
     yearPerformance = 'yearPerformance'
 }
-enum operationCode {
+enum OperationCodeEnum {
     add = 'add',
     edit = 'edit',
     delete = 'delete',
@@ -29,10 +29,10 @@ declare namespace systemTypes {
         LastModify: string
         ScopeBanchEnable: Flag
         ScopeRoleEnable: Flag
-        funcCode: funcCode
+        FuncCode: FuncCodeEnum
     }
     interface operationItemTable {
-        OperationCode: operationCode
+        OperationCode: OperationCodeEnum
         OperationName: string
         CreateTime: string
         LastModify: string
@@ -45,7 +45,7 @@ declare namespace systemTypes {
     // api
     interface auth {
         menu: functionItemTable[]
-        permission: Record<funcCode, Record<operationCode, permission>>
+        permission: Record<FuncCodeEnum, Record<OperationCodeEnum, permission>>
     }
 
     interface func {
@@ -57,9 +57,9 @@ declare namespace systemTypes {
         availableBanch: companyBanchTypes.TABLE[]
         availableRole: roleTypes.TABLE[]
         availableUser: userTypes.TABLE[]
-        scopeBanch: Record<funcCode, Record<operationCode, number[]>>
-        scopeRole: Record<funcCode, Record<operationCode, number[]>>
-        scopeUser: Record<funcCode, Record<operationCode, number[]>>
+        scopeBanch: Record<FuncCodeEnum, Record<OperationCodeEnum, number[]>>
+        scopeRole: Record<FuncCodeEnum, Record<OperationCodeEnum, number[]>>
+        scopeUser: Record<FuncCodeEnum, Record<OperationCodeEnum, number[]>>
     }
 
     interface reducerType {
@@ -71,6 +71,6 @@ declare namespace systemTypes {
 }
 export default systemTypes
 export {
-    funcCode,
-    operationCode
+    FuncCodeEnum,
+    OperationCodeEnum
 }

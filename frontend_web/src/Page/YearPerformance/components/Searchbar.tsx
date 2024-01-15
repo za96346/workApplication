@@ -3,14 +3,14 @@ import api from 'api/Index'
 import useRoleBanchList from 'hook/useRoleBanchUserList'
 import React from 'react'
 import Btn from 'shared/Button'
-import { funcCode, operationCode } from 'types/system'
+import { FuncCodeEnum, OperationCodeEnum } from 'types/system'
 
 const Searchbar = (): JSX.Element => {
     const [form] = Form.useForm()
 
     const rolBanchList = useRoleBanchList({
-        funcCode: funcCode.yearPerformance,
-        operationCode: operationCode.inquire
+        funcCode: FuncCodeEnum.yearPerformance,
+        operationCode: OperationCodeEnum.inquire
     })
 
     return (

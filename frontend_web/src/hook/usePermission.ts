@@ -1,9 +1,9 @@
-import { funcCode } from 'types/system'
+import { FuncCodeEnum } from 'types/system'
 import { useAppSelector } from './redux'
 import { usePermissionProps } from './types'
 import { useCallback } from 'react'
 
-const usePermission = ({ funcCode }: { funcCode: funcCode }): usePermissionProps.returnType => {
+const usePermission = ({ funcCode }: { funcCode: FuncCodeEnum }): usePermissionProps.returnType => {
     const permission = useAppSelector((v) => v?.system?.auth?.permission?.[funcCode])
     const roleBanchList = useAppSelector((v) => v?.system?.roleBanchList)
 

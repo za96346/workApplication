@@ -17,12 +17,12 @@ const Menu = (): JSX.Element => {
             [
                 ...(auth?.menu || []),
                 {
-                    funcCode: 'logout',
+                    FuncCode: 'logout',
                     FuncName: '登出'
                 }
             ]
                 ?.map((item) => ({
-                    key: item?.funcCode,
+                    key: item?.FuncCode,
                     label: item?.FuncName
                 }))
         )

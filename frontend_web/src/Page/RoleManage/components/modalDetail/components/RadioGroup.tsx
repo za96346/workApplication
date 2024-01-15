@@ -14,19 +14,19 @@ const RadioGroup = (
 
     // 此元件session 的值
     const currentValue = session()
-        ?.[functionItem.funcCode]
+        ?.[functionItem.FuncCode]
         ?.[operationItem?.OperationCode]
 
     // 當前的 session位置
     const setCurrentSession = (v: Partial<systemTypes.permission>): void => {
         setSession((prev) => ({
             ...prev,
-            [functionItem.funcCode]: {
-                ...(prev?.[functionItem.funcCode] || {}),
+            [functionItem.FuncCode]: {
+                ...(prev?.[functionItem.FuncCode] || {}),
                 [operationItem?.OperationCode]: {
                     ...(
                         prev
-                            ?.[functionItem.funcCode]
+                            ?.[functionItem.FuncCode]
                             ?.[operationItem?.OperationCode] ||
                         {}
                     ),

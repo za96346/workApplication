@@ -7,7 +7,7 @@ import { Modal } from 'shared/Modal/Index'
 import modal from 'shared/Modal/types'
 import { modalTitle, modalType } from 'static'
 import performanceTypes from 'types/performance'
-import { funcCode, operationCode } from 'types/system'
+import { FuncCodeEnum, OperationCodeEnum } from 'types/system'
 
 interface modalInfo {
     type?: modalType
@@ -22,8 +22,8 @@ interface props {
 const ModalEdit = ({ modalInfo }: props): JSX.Element => {
     const { data, type } = modalInfo
     const roleBanchUserList = useRoleBanchUserList({
-        funcCode: funcCode.performance,
-        operationCode: operationCode?.[type]
+        funcCode: FuncCodeEnum.performance,
+        operationCode: OperationCodeEnum?.[type]
     })
 
     const [form] = Form.useForm()

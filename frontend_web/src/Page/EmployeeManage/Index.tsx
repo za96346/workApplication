@@ -8,7 +8,7 @@ import { v4 } from 'uuid'
 import Btn from 'shared/Button'
 import Dropdown from 'shared/Dropdown'
 import { usePermission } from 'hook/usePermission'
-import { funcCode, operationCode } from 'types/system'
+import { FuncCodeEnum, OperationCodeEnum } from 'types/system'
 import BtnEvent from './methods/BtnEvent'
 import { modalType } from 'static'
 import ModalEdit from './components/modalEdit/Index'
@@ -18,10 +18,10 @@ import useFlag from 'hook/useFlag'
 import dayjs from 'dayjs'
 
 const Index = (): JSX.Element => {
-    const permission = usePermission({ funcCode: funcCode.employeeManage })
+    const permission = usePermission({ funcCode: FuncCodeEnum.employeeManage })
     const roleBanchList = useRoleBanchList({
-        funcCode: funcCode.employeeManage,
-        operationCode: operationCode.inquire
+        funcCode: FuncCodeEnum.employeeManage,
+        operationCode: OperationCodeEnum.inquire
     })
     const employee = useAppSelector((v) => v?.user?.employee)
     const { flagToDom } = useFlag()

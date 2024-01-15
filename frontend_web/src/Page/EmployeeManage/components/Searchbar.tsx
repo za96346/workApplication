@@ -4,14 +4,14 @@ import useRoleBanchList from 'hook/useRoleBanchUserList'
 import React from 'react'
 import Btn from 'shared/Button'
 import { quitWorkStatusSelectList } from 'static'
-import { funcCode, operationCode } from 'types/system'
+import { FuncCodeEnum, OperationCodeEnum } from 'types/system'
 
 const Searchbar = (): JSX.Element => {
     const [form] = Form.useForm()
 
     const rolBanchList = useRoleBanchList({
-        funcCode: funcCode.employeeManage,
-        operationCode: operationCode.inquire
+        funcCode: FuncCodeEnum.employeeManage,
+        operationCode: OperationCodeEnum.inquire
     })
 
     return (

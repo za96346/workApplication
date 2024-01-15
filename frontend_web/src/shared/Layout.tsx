@@ -10,7 +10,7 @@ const Layout = (): JSX.Element => {
     const menu = useAppSelector((v) => v?.system?.auth?.menu)
     const sidebarOpen = useAppSelector((v) => v?.system.sidebar)
 
-    const currentPage = menu?.find((item) => `/${item?.funcCode}` === location?.pathname)
+    const currentPage = menu?.find((item) => `/${item?.FuncCode}` === location?.pathname)
 
     if (location.pathname === '/entry/login') {
         return (

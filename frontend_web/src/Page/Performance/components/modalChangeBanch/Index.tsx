@@ -5,7 +5,7 @@ import Btn from 'shared/Button'
 import { Modal } from 'shared/Modal/Index'
 import modal from 'shared/Modal/types'
 import performanceTypes from 'types/performance'
-import { funcCode, operationCode } from 'types/system'
+import { FuncCodeEnum, OperationCodeEnum } from 'types/system'
 
 interface modalInfo {
     onSave: (v: FormInstance<any>) => void
@@ -19,8 +19,8 @@ interface props {
 const ModalChangeBanch = ({ modalInfo }: props): JSX.Element => {
     const { data } = modalInfo
     const roleBanchUserList = useRoleBanchUserList({
-        funcCode: funcCode.performance,
-        operationCode: operationCode.changeBanch
+        funcCode: FuncCodeEnum.performance,
+        operationCode: OperationCodeEnum.changeBanch
     })
 
     const [form] = Form.useForm()

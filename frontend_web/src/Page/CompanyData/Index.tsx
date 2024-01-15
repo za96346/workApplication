@@ -5,13 +5,13 @@ import { useAppSelector } from 'hook/redux'
 import { usePermission } from 'hook/usePermission'
 import React, { useEffect } from 'react'
 import Btn from 'shared/Button'
-import { funcCode } from 'types/system'
+import { FuncCodeEnum } from 'types/system'
 import UserSelector from 'shared/UserSelector/Index'
 
 const Index = (): JSX.Element => {
     const [form] = Form.useForm()
     const data = useAppSelector((v) => v?.company?.mine)
-    const permission = usePermission({ funcCode: funcCode.companyData })
+    const permission = usePermission({ funcCode: FuncCodeEnum.companyData })
 
     useEffect(() => {
         void api.company.getMine()

@@ -54,8 +54,8 @@ const RouteIndex = (): JSX.Element => {
                         auth?.menu?.map((item) => (
                             <Route
                                 key={v4()}
-                                path={item?.funcCode}
-                                element={pageFuncCodePair?.[item?.funcCode]}
+                                path={item?.FuncCode}
+                                element={pageFuncCodePair?.[item?.FuncCode]}
                             />
                         ))
                     }

@@ -1,4 +1,4 @@
-import { funcCode, operationCode } from 'types/system'
+import { FuncCodeEnum, OperationCodeEnum } from 'types/system'
 import { useAppSelector } from './redux'
 import { useMemo } from 'react'
 import roleTypes from 'types/role'
@@ -7,8 +7,8 @@ import { DefaultOptionType } from 'antd/es/select'
 import userTypes from 'types/user'
 
 interface props {
-    funcCode: funcCode | 'all'
-    operationCode: operationCode | 'all'
+    funcCode: FuncCodeEnum | 'all'
+    operationCode: OperationCodeEnum | 'all'
 }
 
 interface returnType {

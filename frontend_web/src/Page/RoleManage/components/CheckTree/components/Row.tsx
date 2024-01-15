@@ -29,7 +29,7 @@ const Row = ({
 
     // 單一勾選
     const onChange = (list: CheckboxValueType[]): void => {
-        const currentSession = session()?.[functionItem?.funcCode] || {}
+        const currentSession = session()?.[functionItem?.FuncCode] || {}
 
         /**
          * 轉變 list 中文變英文
@@ -59,7 +59,7 @@ const Row = ({
 
         setSession((prev) => ({
             ...prev,
-            [functionItem?.funcCode]: transListName
+            [functionItem?.FuncCode]: transListName
         }))
         setCheckedList(list)
     }
@@ -76,14 +76,14 @@ const Row = ({
         }, {})
         setSession((prev) => ({
             ...prev,
-            [functionItem?.funcCode]: data
+            [functionItem?.FuncCode]: data
         }))
         setCheckedList(e.target.checked ? option : [])
     }
 
     // 預設值
     useEffect(() => {
-        const operationCode = Object.keys(session()?.[functionItem?.funcCode] || {})
+        const operationCode = Object.keys(session()?.[functionItem?.FuncCode] || {})
 
         const transListName = operationCode.map((item) => {
             const op = operationItemArray?.find((i) => i?.OperationCode === item)
@@ -91,7 +91,7 @@ const Row = ({
         })
 
         setCheckedList(transListName)
-    }, [session()?.[functionItem?.funcCode]])
+    }, [session()?.[functionItem?.FuncCode]])
 
     return (
         <div className='row col-12 my-2'>

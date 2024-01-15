@@ -29,7 +29,7 @@ const ModalDetail = ({ modalInfo }: props): JSX.Element => {
         <>
             <div className='row'>
                 {
-                    Object.keys(session()?.[functionItem?.funcCode] || {})
+                    Object.keys(session()?.[functionItem?.FuncCode] || {})
                         ?.map((item) => {
                             const operationItem = findOperationItem(item)
                             return (

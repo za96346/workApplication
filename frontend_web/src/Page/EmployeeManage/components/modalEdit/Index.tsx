@@ -6,7 +6,7 @@ import Btn from 'shared/Button'
 import { Modal } from 'shared/Modal/Index'
 import modal from 'shared/Modal/types'
 import { modalTitle, modalType } from 'static'
-import { funcCode, operationCode } from 'types/system'
+import { FuncCodeEnum, OperationCodeEnum } from 'types/system'
 import userTypes from 'types/user'
 import ModelChangePassword from 'Page/SelfData/ModelChangePassword/Index'
 import Switch from 'shared/AntdOverwrite/Switch'
@@ -23,8 +23,8 @@ interface props {
 
 const ModalEdit = ({ modalInfo }: props): JSX.Element => {
     const roleBanchList = useRoleBanchList({
-        funcCode: funcCode.employeeManage,
-        operationCode: operationCode?.[modalInfo?.type]
+        funcCode: FuncCodeEnum.employeeManage,
+        operationCode: OperationCodeEnum?.[modalInfo?.type]
     })
 
     const [form] = Form.useForm()

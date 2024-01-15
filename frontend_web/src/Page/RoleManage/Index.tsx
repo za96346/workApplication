@@ -11,12 +11,12 @@ import ModalEdit from './components/modalEdit/Index'
 import BtnEvent from './methods/BtnEvent'
 import { modalType } from 'static'
 import { usePermission } from 'hook/usePermission'
-import { funcCode } from 'types/system'
+import { FuncCodeEnum } from 'types/system'
 import { dropdownList } from './methods/dropdownList'
 
 const Index = (): JSX.Element => {
     const role = useAppSelector((v) => v?.role?.all)
-    const permission = usePermission({ funcCode: funcCode.roleManage })
+    const permission = usePermission({ funcCode: FuncCodeEnum.roleManage })
 
     const dataSource = useMemo(() => {
         return role?.map((item) => ({
