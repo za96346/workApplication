@@ -17,7 +17,7 @@ import "time"
 // class:HongMouer.HIS.Models.FunctionItem
 // version:2023-10-04 12:55
 type FunctionItem struct {
-    FuncCode   string       `gorm:"column:funcCode;primaryKey" json:"funcCode"`   //type:string       comment:功能代碼(banchManager)    version:2023-10-04 12:55
+    FuncCode   string       `gorm:"column:funcCode;primaryKey" json:"FuncCode"`   //type:string       comment:功能代碼(banchManager)    version:2023-10-04 12:55
     FuncName   string       `gorm:"column:funcName" json:"FuncName"`         //type:string       comment:功能名稱                  version:2023-10-04 12:55
     ScopeRoleEnable   string  `gorm:"column:scopeRoleEnable" json:"ScopeRoleEnable"`     //type:CHAR         comment:可編輯角色範圍            version:2023-10-04 13:02
     ScopeBanchEnable  string  `gorm:"column:scopeBanchEnable" json:"ScopeBanchEnable"`   //type:CHAR         comment:可編輯部門範圍            version:2023-10-04 13:02

@@ -146,7 +146,7 @@ func Add(Request *gin.Context) {
 	(*reqBody).LastModify = &now
 	(*reqBody).DeleteTime = nil
 	(*reqBody).DeleteFlag = "N"
-	(*reqBody).Quitflag = "N"
+	(*reqBody).QuitFlag = "N"
 
 	// 插入 Recorder
 	if Model.DB.Create(reqBody).Error != nil {
