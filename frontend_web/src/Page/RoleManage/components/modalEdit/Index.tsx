@@ -1,5 +1,5 @@
 import Session from '../../methods/session'
-import { Form, FormInstance, Input } from 'antd'
+import { Form, FormInstance, Input, InputNumber } from 'antd'
 import React, { useEffect } from 'react'
 import Btn from 'shared/Button'
 import { Modal } from 'shared/Modal/Index'
@@ -34,15 +34,25 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
             <Form
                 name="validateOnly"
                 autoComplete="off"
+                className='row'
                 form={form}
             >
                 <Form.Item
                     name="RoleName"
                     label="角色名稱"
+                    className='col-md-6'
                     rules={[{ required: true }]}
                     initialValue={modalInfo?.data?.RoleName || ''}
                 >
                     <Input />
+                </Form.Item>
+                <Form.Item
+                    name="Sort"
+                    className='col-md-6'
+                    label="排序"
+                    initialValue={modalInfo?.data?.Sort || 0}
+                >
+                    <InputNumber />
                 </Form.Item>
                 <CheckTree />
                 <Modal.Footer>

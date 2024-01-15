@@ -77,6 +77,14 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                     <Select options={roleBanchUserList?.userSelectList} />
                 </Form.Item>
                 <Form.Item
+                    name="Sort"
+                    className='col-md-6'
+                    label="排序"
+                    initialValue={modalInfo?.data?.Sort || 0}
+                >
+                    <InputNumber />
+                </Form.Item>
+                <Form.Item
                     name="Goal"
                     initialValue={data?.Goal || ''}
                     className=""

@@ -9,6 +9,7 @@ declare namespace userTypes {
         Account: string
         Password: string
         OnWorkDay: string
+        Sort: number
         QuitFlag: Flag
         DeleteFlag: Flag
         DeleteTime: string

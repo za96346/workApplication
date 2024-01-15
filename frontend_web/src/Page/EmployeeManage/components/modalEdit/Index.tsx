@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, FormInstance, Input, Select } from 'antd'
+import { Button, DatePicker, Form, FormInstance, Input, InputNumber, Select } from 'antd'
 import dayjs from 'dayjs'
 import useRoleBanchList from 'hook/useRoleBanchUserList'
 import React from 'react'
@@ -104,6 +104,14 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                     rules={[{ required: true }]}
                 >
                     <Select options={roleBanchList?.roleSelectList} />
+                </Form.Item>
+                <Form.Item
+                    name="Sort"
+                    className='col-md-6'
+                    label="排序"
+                    initialValue={modalInfo?.data?.Sort || 0}
+                >
+                    <InputNumber />
                 </Form.Item>
                 <Modal.Footer>
                     {

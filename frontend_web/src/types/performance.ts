@@ -16,6 +16,7 @@ declare namespace performanceTypes {
         Directions: string
         BeLate: number
         DayOffNotOnRule: number
+        Sort: number
         DeleteFlag: Flag
         DeleteTime: string
         CreateTime: string

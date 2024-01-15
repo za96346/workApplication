@@ -1,4 +1,4 @@
-import { Form, FormInstance, Input } from 'antd'
+import { Form, FormInstance, Input, InputNumber } from 'antd'
 import React from 'react'
 import Btn from 'shared/Button'
 import { Modal } from 'shared/Modal/Index'
@@ -24,15 +24,25 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
             <Form
                 name="validateOnly"
                 autoComplete="off"
+                className='row'
                 form={form}
             >
                 <Form.Item
                     name="BanchName"
+                    className='col-md-6'
                     label="部門名稱"
                     rules={[{ required: true }]}
                     initialValue={modalInfo?.data?.BanchName || ''}
                 >
                     <Input />
+                </Form.Item>
+                <Form.Item
+                    name="Sort"
+                    className='col-md-6'
+                    label="排序"
+                    initialValue={modalInfo?.data?.Sort || 0}
+                >
+                    <InputNumber />
                 </Form.Item>
                 <Modal.Footer>
                     {

@@ -11,6 +11,7 @@ declare namespace params {
         RoleId?: number
         RoleName: string
         StopFlag?: Flag
+        Sort?: number
         Data: Partial<systemTypes.auth['permission']>
     }
 

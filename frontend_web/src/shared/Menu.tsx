@@ -18,9 +18,11 @@ const Menu = (): JSX.Element => {
                 ...(auth?.menu || []),
                 {
                     FuncCode: 'logout',
-                    FuncName: '登出'
+                    FuncName: '登出',
+                    Sort: 100
                 }
             ]
+                ?.sort((a, b) => a?.Sort - b?.Sort)
                 ?.map((item) => ({
                     key: item?.FuncCode,
                     label: item?.FuncName

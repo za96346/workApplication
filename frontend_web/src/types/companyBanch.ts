@@ -3,6 +3,7 @@ declare namespace companyBanchTypes {
         CompanyId: number
         BanchId: number
         BanchName: string
+        Sort: number
         DeleteFlag: Flag
         DeleteTime: string
         CreateTime: string

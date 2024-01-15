@@ -24,12 +24,14 @@ const BtnEvent = ({ type, value }: BtnEventParams<roleTypes.TABLE>): void => {
                             void api.role.update({
                                 Data: { ...permission },
                                 RoleId: value.RoleId,
-                                RoleName: fields.RoleName
+                                RoleName: fields.RoleName,
+                                Sort: fields.Sort
                             }).then(onClose)
                         } else if (type === modalType.add) {
                             void api.role.add({
                                 Data: { ...permission },
-                                RoleName: fields.RoleName
+                                RoleName: fields.RoleName,
+                                Sort: fields.Sort
                             }).then(onClose)
                         }
                     })

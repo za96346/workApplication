@@ -5,6 +5,7 @@ declare namespace roleTypes {
         CompanyId: number
         RoleId: number
         RoleName: string
+        Sort: number
         StopFlag: string
         DeleteFlag: Flag
         DeleteTime: string

@@ -30,10 +30,12 @@ declare namespace systemTypes {
         ScopeBanchEnable: Flag
         ScopeRoleEnable: Flag
         FuncCode: FuncCodeEnum
+        Sort: number
     }
     interface operationItemTable {
         OperationCode: OperationCodeEnum
         OperationName: string
+        Sort: number
         CreateTime: string
         LastModify: string
     }
