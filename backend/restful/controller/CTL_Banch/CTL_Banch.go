@@ -40,7 +40,8 @@ func Get(Request *gin.Context) {
 	searchQuery := Model.DB.
 		Where("companyId = ?", session.CompanyId).
 		Where("banchId in (?)", session.CurrentPermissionScopeBanch).
-		Where("deleteFlag = ?", "N")
+		Where("deleteFlag = ?", "N").
+		Order("sort asc")
 	
 	// banch name
 	if reqParams.BanchName != nil {

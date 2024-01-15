@@ -104,6 +104,7 @@ func Get(Request *gin.Context) {
 		Where("companyId = ?", session.CompanyId).
 		Where("deleteFlag = ?", "N").
 		Where("roleName like ?", "%" + reqParams.RoleName + "%").
+		Order("sort asc").
 		Find(data)
 
 	Request.JSON(
@@ -198,6 +199,7 @@ func Update(Request *gin.Context) {
 	reqBody := new(struct {
 		RoleId int `json:"RoleId" binding:"required"`
 		RoleName string `json:"RoleName" binding:"required"`
+		Sort *int `json:"Sort"`
 		/**
 			Data = {
 				[funcCode]: {
@@ -235,6 +237,7 @@ func Update(Request *gin.Context) {
 		CompanyId: session.CompanyId,
 		RoleName: reqBody.RoleName,
 		StopFlag: "N",
+		Sort: reqBody.Sort,
 		DeleteFlag: "N",
 		LastModify: &now,
 	}
@@ -283,6 +286,7 @@ func Add(Request *gin.Context) {
 	// 請求處理
 	reqBody := new(struct {
 		RoleName string `json:"RoleName" binding:"required"`
+		Sort *int `json:"Sort"`
 		/**
 			Data = {
 				[funcCode]: {
@@ -320,6 +324,7 @@ func Add(Request *gin.Context) {
 		RoleName: reqBody.RoleName,
 		StopFlag: "N",
 		DeleteFlag: "N",
+		Sort: reqBody.Sort,
 		LastModify: &now,
 		CreateTime: &now,
 	}
@@ -425,6 +430,7 @@ func GetSelector(Request *gin.Context) {
 	var targetData []Model.Role
 	Model.DB.
 		Where("companyId = ?", session.CompanyId).
+		Order("sort asc").
 		Find(&targetData)
 
 	Request.JSON(

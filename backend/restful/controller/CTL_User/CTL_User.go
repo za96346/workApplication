@@ -87,7 +87,8 @@ func Get(Request *gin.Context) {
 		Where("companyId = ?", session.CompanyId).
 		Where("roleId in (?)", *session.GetScopeRolehWithCustomize(reqParams.RoleId)).
 		Where("banchId in (?)", *session.GetScopeBanchWithCustomize(reqParams.BanchId)).
-		Where("deleteFlag", "N")
+		Where("deleteFlag", "N").
+		Order("sort asc")
 
 	// 使用者名稱
 	if reqParams.UserName != nil {
@@ -416,7 +417,8 @@ func GetSelector(Request *gin.Context) {
 	var data []Model.User
 
 	searchQuery := Model.DB.
-		Where("companyId = ?", session.CompanyId)
+		Where("companyId = ?", session.CompanyId).
+		Order("sort asc")
 
 	// 使用者名稱
 	if reqParams.UserName != nil {

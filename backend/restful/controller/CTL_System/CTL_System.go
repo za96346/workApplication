@@ -110,11 +110,15 @@ func GetAuth(Request *gin.Context) {
 func GetFunctionItem(Request *gin.Context) {
 	// 拿取功能項目表
 	functionItem := &[]Model.FunctionItem{}
-	Model.DB.Find(functionItem)
+	Model.DB.
+		Order("sort asc").
+		Find(functionItem)
 
 	// 拿取操作項目表
 	operationItem := &[]Model.OperationItem{}
-	Model.DB.Find(operationItem)
+	Model.DB.
+		Order("sort asc").
+		Find(operationItem)
 
 	// 整理 return data
 	result := make(map[string]interface{})
@@ -160,11 +164,13 @@ func GetRoleBanchList(Request *gin.Context) {
 	Model.DB.
 		Where("companyId = ?", session.CompanyId).
 		Where("deleteFlag = ?", "N").
+		Order("sort asc").
 		Find(&availableBanch)
 
 	Model.DB.
 		Where("companyId = ?", session.CompanyId).
 		Where("deleteFlag = ?", "N").
+		Order("sort asc").
 		Find(&availableRole)
 
 	Model.DB.
@@ -177,6 +183,7 @@ func GetRoleBanchList(Request *gin.Context) {
 			"EmployeeNumber",
 			"OnWorkDay",
 		).
+		Order("sort asc").
 		Find(&availableUser)
 
 	for _, FunctionItem := range *functionItem {
@@ -204,6 +211,7 @@ func GetRoleBanchList(Request *gin.Context) {
 				Where("banchId in (?)", (*session).CurrentPermissionScopeBanch).
 				Where("roleId in (?)", (*session).CurrentPermissionScopeRole).
 				Select("UserId").
+				Order("sort asc").
 				Find(&[]Model.User{}).
 				Pluck("UserId", &scopeUserIdArray)
 				
