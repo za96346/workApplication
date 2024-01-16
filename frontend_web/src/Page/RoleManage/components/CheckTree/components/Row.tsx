@@ -8,8 +8,6 @@ import { useSession } from 'hook/useSession'
 
 const CheckboxGroup = Checkbox.Group
 
-const defaultCheckedList = ['Apple', 'Orange']
-
 const Row = ({
     functionItem,
     operationItemArray = []
@@ -18,7 +16,7 @@ const Row = ({
     operationItemArray: systemTypes.operationItemTable[]
 }): JSX.Element => {
     const { setSession, session } = useSession<systemTypes.auth['permission']>({})
-    const [checkedList, setCheckedList] = useState<CheckboxValueType[]>(defaultCheckedList)
+    const [checkedList, setCheckedList] = useState<CheckboxValueType[]>([])
 
     const checkAll = operationItemArray.length === checkedList.length
     const indeterminate = checkedList.length > 0 && checkedList.length < operationItemArray.length
@@ -66,7 +64,7 @@ const Row = ({
 
     // 勾選全部
     const onCheckAllChange = (e: CheckboxChangeEvent): void => {
-        console.log('onchange all =>', e.target.checked)
+        const isCheckAll = e.target.checked
         const data = operationItemArray.reduce((accr, item) => {
             accr[item?.OperationCode] = {
                 scopeBanch: 'all',
@@ -76,9 +74,11 @@ const Row = ({
         }, {})
         setSession((prev) => ({
             ...prev,
-            [functionItem?.FuncCode]: data
+            [functionItem?.FuncCode]: isCheckAll
+                ? data
+                : {}
         }))
-        setCheckedList(e.target.checked ? option : [])
+        setCheckedList(isCheckAll ? option : [])
     }
 
     // 預設值
@@ -91,7 +91,9 @@ const Row = ({
         })
 
         setCheckedList(transListName)
-    }, [session()?.[functionItem?.FuncCode]])
+    }, [])
+
+    // console.log(functionItem?.FuncName, session()?.[functionItem?.FuncCode])
 
     return (
         <div className='row col-12 my-2'>
@@ -109,17 +111,21 @@ const Row = ({
                 onChange={onChange}
                 className='col-6'
             />
-            <Button
-                className='col-2'
-                onClick={() => {
-                    ModalDetail.open({
-                        functionItem,
-                        operationItemArray
-                    })
-                }}
-            >
-                編輯細項
-            </Button>
+            {
+                checkedList?.length > 0 && (
+                    <Button
+                        className='col-2'
+                        onClick={() => {
+                            ModalDetail.open({
+                                functionItem,
+                                operationItemArray
+                            })
+                        }}
+                    >
+                    編輯細項
+                    </Button>
+                )
+            }
         </div>
     )
 }
