@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"backend/Model"
 	"backend/method"
@@ -114,17 +115,38 @@ func GetFunctionItem(Request *gin.Context) {
 		Order("sort asc").
 		Find(functionItem)
 
+	// 拿取 功能項目 與 角色部門關聯表
+	functionRoleBanchRelation := &[]Model.FuncRoleBanchRelation{}
+	Model.DB.
+		Find(functionRoleBanchRelation)
+
 	// 拿取操作項目表
 	operationItem := &[]Model.OperationItem{}
 	Model.DB.
 		Order("sort asc").
 		Find(operationItem)
 
+	// 整理 功能項目 與 角色部門關聯表
+	functionRoleBanchRelationMap := map[string]map[string]map[string][]string{}
+	for _, value := range *functionRoleBanchRelation {
+		// 初始化
+		if functionRoleBanchRelationMap[value.FuncCode] == nil {
+			functionRoleBanchRelationMap[value.FuncCode] = map[string]map[string][]string{}
+		}
+		if functionRoleBanchRelationMap[value.FuncCode][value.ItemCode] == nil {
+			functionRoleBanchRelationMap[value.FuncCode][value.ItemCode] = map[string][]string{}
+		}
+		functionRoleBanchRelationMap[value.FuncCode][value.ItemCode]["scopeRole"] = strings.Split(value.HasScopeRole, ",")
+		functionRoleBanchRelationMap[value.FuncCode][value.ItemCode]["scopeBanch"] = strings.Split(value.HasScopeBanch, ",")
+	}
+
+
 	// 整理 return data
 	result := make(map[string]interface{})
 
 	result["functionItem"] = *functionItem
 	result["operationItem"] = *operationItem
+	result["functionRoleBanchRelation"] = functionRoleBanchRelationMap
 
 	Request.JSON(
 		http.StatusOK,

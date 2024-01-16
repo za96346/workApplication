@@ -1,11 +1,19 @@
 import Row from './components/Row'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useAppSelector } from 'hook/redux'
 import { v4 } from 'uuid'
 import ModalDetail from '../modalDetail/Index'
+import { FuncCodeEnum } from 'types/system'
 
 const Index = (): JSX.Element => {
     const func = useAppSelector((v) => v?.system?.func)
+
+    // 尋找 operation item
+    const getOperationItemArray = useCallback((funcCode: FuncCodeEnum) => {
+        const qperationKeyArray = Object.keys(func.functionRoleBanchRelation?.[funcCode] || {})
+        return func.operationItem.filter((item) => qperationKeyArray?.includes(item?.OperationCode))
+    }, [func])
+
     return (
         <>
             <ModalDetail />
@@ -30,7 +38,7 @@ const Index = (): JSX.Element => {
                         <Row
                             key={v4()}
                             functionItem={item}
-                            operationItemArray={func.operationItem}
+                            operationItemArray={getOperationItemArray(item?.FuncCode)}
                         />
                     ))
                 }

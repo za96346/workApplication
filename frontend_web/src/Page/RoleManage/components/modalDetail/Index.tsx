@@ -7,6 +7,7 @@ import modal from 'shared/Modal/types'
 import { useSession } from 'hook/useSession'
 import systemTypes from 'types/system'
 import RadioGroup from './components/RadioGroup'
+import { useAppSelector } from 'hook/redux'
 
 interface modalInfo {
     onSave: (v: any) => void
@@ -20,11 +21,21 @@ interface props {
 
 const ModalDetail = ({ modalInfo }: props): JSX.Element => {
     const { session } = useSession<systemTypes.auth['permission']>({})
-    const { functionItem, operationItemArray = [] } = modalInfo
+
+    const {
+        functionItem,
+        operationItemArray = []
+    } = modalInfo
+    const relation = useAppSelector((v) => (
+        v.system.func
+            ?.functionRoleBanchRelation
+            ?.[functionItem?.FuncCode]
+    ))
 
     const findOperationItem = (v: string): systemTypes.operationItemTable => {
         return operationItemArray?.find((item) => item?.OperationCode === v)
     }
+
     return (
         <>
             <div className='row'>
@@ -41,6 +52,7 @@ const ModalDetail = ({ modalInfo }: props): JSX.Element => {
                                         <RadioGroup
                                             operationItem={operationItem}
                                             functionItem={functionItem}
+                                            scopeLimit={relation?.[operationItem?.OperationCode]}
                                         />
                                     </div>
                                     <Divider/>

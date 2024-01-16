@@ -22,6 +22,12 @@ enum OperationCodeEnum {
     copy = 'copy',
     changeBanch = 'changeBanch'
 }
+enum ScopeEnum {
+    all = 'all',
+    self = 'self',
+    customize = 'customize'
+}
+
 declare namespace systemTypes {
     interface functionItemTable {
         CreateTime: string
@@ -39,9 +45,22 @@ declare namespace systemTypes {
         CreateTime: string
         LastModify: string
     }
+    interface functionRoleBanchRelationTable {
+        FuncCode: string
+        ItemCode: string
+        HasScopeBanch: string
+        HasScopeRole: string
+        CreateTime: string
+        LastModify: string
+    }
     interface permission {
         scopeBanch: 'self' | 'all' | number[]
         scopeRole: 'self' | 'all' | number[]
+    }
+
+    interface scope {
+        scopeBanch: ScopeEnum[]
+        scopeRole: ScopeEnum[]
     }
 
     // api
@@ -53,6 +72,7 @@ declare namespace systemTypes {
     interface func {
         functionItem: functionItemTable[]
         operationItem: operationItemTable[]
+        functionRoleBanchRelation: Record<FuncCodeEnum, Record<OperationCodeEnum, scope>>
     }
 
     interface roleBanchList {
@@ -74,5 +94,6 @@ declare namespace systemTypes {
 export default systemTypes
 export {
     FuncCodeEnum,
-    OperationCodeEnum
+    OperationCodeEnum,
+    ScopeEnum
 }

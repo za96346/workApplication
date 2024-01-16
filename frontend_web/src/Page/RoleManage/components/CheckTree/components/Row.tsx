@@ -6,19 +6,21 @@ import systemTypes from 'types/system'
 import ModalDetail from '../../modalDetail/Index'
 import { useSession } from 'hook/useSession'
 
+interface props {
+    functionItem: systemTypes.functionItemTable
+    operationItemArray: systemTypes.operationItemTable[]
+}
+
 const CheckboxGroup = Checkbox.Group
 
 const Row = ({
     functionItem,
     operationItemArray = []
-}: {
-    functionItem: systemTypes.functionItemTable
-    operationItemArray: systemTypes.operationItemTable[]
-}): JSX.Element => {
+}: props): JSX.Element => {
     const { setSession, session } = useSession<systemTypes.auth['permission']>({})
     const [checkedList, setCheckedList] = useState<CheckboxValueType[]>([])
 
-    const checkAll = operationItemArray.length === checkedList.length
+    const checkAll = operationItemArray.length === checkedList.length && operationItemArray.length > 0
     const indeterminate = checkedList.length > 0 && checkedList.length < operationItemArray.length
 
     const option = useMemo(() => {
@@ -122,7 +124,7 @@ const Row = ({
                             })
                         }}
                     >
-                    編輯細項
+                        編輯細項
                     </Button>
                 )
             }

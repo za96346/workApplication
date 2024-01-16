@@ -1,15 +1,23 @@
 import { Radio, RadioChangeEvent } from 'antd'
 import { useSession } from 'hook/useSession'
-import React from 'react'
+import React, { useMemo } from 'react'
 import BanchSelector from 'shared/BanchSelector/Index'
 import RoleSelector from 'shared/RoleSelector/Index'
+import { ScopeNameEnum } from 'static'
 import systemTypes from 'types/system'
 
 const RadioGroup = (
-    { operationItem, functionItem }: {
+    { operationItem, functionItem, scopeLimit }: {
         operationItem: systemTypes.operationItemTable
         functionItem: systemTypes.functionItemTable
+        scopeLimit?: systemTypes.scope
     }): JSX.Element => {
+    // scope 預處理 ( 把 empty string in array 的 移除 )
+    scopeLimit = useMemo(() => ({
+        scopeBanch: scopeLimit?.scopeBanch?.filter((i) => i),
+        scopeRole: scopeLimit?.scopeRole?.filter((i) => i)
+    }), [scopeLimit])
+
     const { session, setSession } = useSession<systemTypes.auth['permission']>({})
 
     // 此元件session 的值
@@ -53,22 +61,31 @@ const RadioGroup = (
                 : e.target.value
         })
     }
+
     return (
         <>
             {/* 部門 */}
-            <span className='text-secondary'>部門</span>
-            <Radio.Group
-                onChange={onBanchScopeChange}
-                value={
-                    Array.isArray(currentValue?.scopeBanch)
-                        ? 'customize'
-                        : currentValue?.scopeBanch
-                }
-            >
-                <Radio value={'all'}>全部</Radio>
-                <Radio value={'self'}>自己</Radio>
-                <Radio value={'customize'}>自訂</Radio>
-            </Radio.Group>
+            {
+                scopeLimit.scopeBanch?.length > 0 && (
+                    <>
+                        <span className='text-secondary'>部門</span>
+                        <Radio.Group
+                            onChange={onBanchScopeChange}
+                            value={
+                                Array.isArray(currentValue?.scopeBanch)
+                                    ? 'customize'
+                                    : currentValue?.scopeBanch
+                            }
+                        >
+                            {
+                                scopeLimit?.scopeBanch?.map((item) => (
+                                    <Radio key={item} value={item}>{ScopeNameEnum[item]}</Radio>
+                                ))
+                            }
+                        </Radio.Group>
+                    </>
+                )
+            }
             {
                 Array.isArray(currentValue?.scopeBanch) && (
                     <BanchSelector
@@ -84,19 +101,28 @@ const RadioGroup = (
             }
 
             {/* 角色 */}
-            <span className='text-secondary'>角色</span>
-            <Radio.Group
-                onChange={onRoleScopeChange}
-                value={
-                    Array.isArray(currentValue?.scopeRole)
-                        ? 'customize'
-                        : currentValue?.scopeRole
-                }
-            >
-                <Radio value={'all'}>全部</Radio>
-                <Radio value={'self'}>自己</Radio>
-                <Radio value={'customize'}>自訂</Radio>
-            </Radio.Group>
+            {
+                scopeLimit?.scopeRole?.length > 0 && (
+                    <>
+                        <span className='text-secondary'>角色</span>
+                        <Radio.Group
+                            onChange={onRoleScopeChange}
+                            value={
+                                Array.isArray(currentValue?.scopeRole)
+                                    ? 'customize'
+                                    : currentValue?.scopeRole
+                            }
+                        >
+                            {
+                                scopeLimit?.scopeRole?.map((item) => (
+                                    <Radio key={item} value={item}>{ScopeNameEnum[item]}</Radio>
+                                ))
+                            }
+                        </Radio.Group>
+                    </>
+                )
+            }
+
             {
                 Array.isArray(currentValue?.scopeRole) && (
                     <RoleSelector

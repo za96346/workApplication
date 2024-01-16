@@ -22,6 +22,12 @@ export enum quitWorkStatus {
     N = '在職'
 }
 
+export enum ScopeNameEnum {
+    all = '全部',
+    self = '自己',
+    customize = '自訂'
+}
+
 // 離職狀態下拉清單
 export const quitWorkStatusSelectList: DefaultOptionType[] = [
     {
