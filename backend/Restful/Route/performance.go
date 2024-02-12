@@ -4,7 +4,7 @@ import (
 	// "strconv"
 
 	"backend/middleware"
-	"backend/Restful/controller/CTL_Performance"
+	"backend/Restful/Controller/CTL_Performance"
 
 	"github.com/gin-gonic/gin"
 )

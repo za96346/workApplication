@@ -1,4 +1,4 @@
-package restFul
+package Restful
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"backend/middleware"
-	"backend/RestFul/Route"
+	"backend/Restful/Route"
 
 	"github.com/gin-gonic/gin"
 
