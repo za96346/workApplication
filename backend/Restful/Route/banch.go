@@ -3,14 +3,14 @@ package Route
 import (
 	// "strconv"
 
-	"backend/middleware"
+	"backend/Middleware"
 	"backend/Restful/Controller/CTL_Banch"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Banch(props *gin.RouterGroup) {
-	props.Use(middleware.Permission)
+	props.Use(Middleware.Permission)
 	{
 		props.GET("/", CTL_Banch.Get)
 		props.POST("/", CTL_Banch.Edit)

@@ -3,14 +3,14 @@ package Route
 import (
 	// "strconv"
 
-	"backend/middleware"
+	"backend/Middleware"
 	"backend/Restful/Controller/CTL_Performance"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Performance(props *gin.RouterGroup) {
-	props.Use(middleware.Permission)
+	props.Use(Middleware.Permission)
 	{
 		props.GET("/", CTL_Performance.Get)
 		props.PUT("/", CTL_Performance.Add)

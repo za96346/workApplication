@@ -3,13 +3,13 @@ package Route
 import (
 	// "strconv"
 
-	"backend/middleware"
+	"backend/Middleware"
 	"backend/Restful/Controller/CTL_User"
 
 	"github.com/gin-gonic/gin"
 )
 func User(props *gin.RouterGroup) {
-	props.Use(middleware.Permission)
+	props.Use(Middleware.Permission)
 	{
 		props.GET("/my", CTL_User.GetMine)
 		props.GET("/", CTL_User.Get)

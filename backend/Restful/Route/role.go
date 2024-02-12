@@ -3,14 +3,14 @@ package Route
 import (
 	// "strconv"
 
-	"backend/middleware"
+	"backend/Middleware"
 	"backend/Restful/Controller/CTL_Role"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Role(props *gin.RouterGroup) {
-	props.Use(middleware.Permission)
+	props.Use(Middleware.Permission)
 	{
 		props.GET("/", CTL_Role.Get)
 		props.POST("/", CTL_Role.Update)

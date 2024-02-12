@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"backend/middleware"
+	"backend/Middleware"
 	"backend/Restful/Route"
 
 	"github.com/gin-gonic/gin"
@@ -30,9 +30,9 @@ func SetUp() *gin.Engine {
 	// })
 
 	apiServer.Use(
-		middleware.CORS(),
+		Middleware.CORS(),
 		sessions.Sessions("workapp_session", store),
-		middleware.RateLimit(time.Second, 100, 100),
+		Middleware.RateLimit(time.Second, 100, 100),
 	)
 
 	// route group
