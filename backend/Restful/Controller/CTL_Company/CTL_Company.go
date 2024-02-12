@@ -5,12 +5,12 @@ import (
 	"time"
 
 	"backend/Model"
-	"backend/method"
+	"backend/Method"
 
 	"github.com/gin-gonic/gin"
 )
 
-var ErrorInstance = &method.ErrorStruct{
+var ErrorInstance = &Method.ErrorStruct{
 	MessageTitle: "[CTL_Company 公司]--",
 }
 
@@ -19,7 +19,7 @@ const FuncCode = "companyData"
 // 拿取
 func Get(Request *gin.Context) {
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: false,
 		PermissionValidation: true,
@@ -47,7 +47,7 @@ func Get(Request *gin.Context) {
 func Edit(Request *gin.Context) {
 	reqBody := new(Model.Company)
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: true,
 		ReqBodyStruct: reqBody,

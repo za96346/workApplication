@@ -2,7 +2,7 @@ package CTL_Performance
 
 import (
 	"backend/Model"
-	"backend/method"
+	"backend/Method"
 	"net/http"
 	"strings"
 	"time"
@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var ErrorInstance = &method.ErrorStruct{
+var ErrorInstance = &Method.ErrorStruct{
 	MessageTitle: "[CTL_Performance 績效]--",
 }
 
@@ -25,7 +25,7 @@ func Get(Request *gin.Context) {
 	})
 
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: false,
 		ReqParamsValidation: true,
@@ -94,7 +94,7 @@ func Add(Request *gin.Context) {
 	}
 
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: true,
 		ReqBodyStruct: reqBody,
@@ -158,7 +158,7 @@ func Edit(Request *gin.Context) {
 	reqBody := new(Model.Performance)
 
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: true,
 		ReqBodyStruct: reqBody,
@@ -240,7 +240,7 @@ func Delete(Request *gin.Context) {
 	targetUserData := new(Model.User)
 
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: true,
 		ReqBodyStruct: reqBody,
@@ -303,7 +303,7 @@ func GetYear(Request *gin.Context) {
 	})
 
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: false,
 		ReqParamsValidation: true,

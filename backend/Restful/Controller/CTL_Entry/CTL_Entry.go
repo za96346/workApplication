@@ -5,13 +5,13 @@ import (
 	"strconv"
 
 	"backend/Model"
-	"backend/method"
+	"backend/Method"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
-var ErrorInstance = &method.ErrorStruct{
+var ErrorInstance = &Method.ErrorStruct{
 	MessageTitle: "[CTL_Entry 入口]--",
 }
 

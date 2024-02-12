@@ -7,18 +7,18 @@ import (
 	"strings"
 
 	"backend/Model"
-	"backend/method"
+	"backend/Method"
 
 	"github.com/gin-gonic/gin"
 )
 
-var ErrorInstance = &method.ErrorStruct{
+var ErrorInstance = &Method.ErrorStruct{
 	MessageTitle: "[CTL_System 系統]--",
 }
 
 // 獲取權限
 func GetAuth(Request *gin.Context) {
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: false,
 	}
@@ -159,7 +159,7 @@ func GetFunctionItem(Request *gin.Context) {
 
 // 獲取 所有功能 的role banch id 清單
 func GetRoleBanchList(Request *gin.Context) {
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: false,
 	}
@@ -215,7 +215,7 @@ func GetRoleBanchList(Request *gin.Context) {
 
 		for _, operation := range *operationItem {
 			// session
-			session := &method.SessionStruct{
+			session := &Method.SessionStruct{
 				Request: Request,
 				PermissionFuncCode: FunctionItem.FuncCode,
 				PermissionItemCode: operation.OperationCode,

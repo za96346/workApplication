@@ -7,13 +7,13 @@ import (
 	"net/http"
 	"time"
 
-	"backend/method"
+	"backend/Method"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
-var ErrorInstance = &method.ErrorStruct{
+var ErrorInstance = &Method.ErrorStruct{
 	MessageTitle: "[CTL_Role 角色]--",
 }
 
@@ -26,7 +26,7 @@ func checkRequest() {
 func handleRoleStruct(
 	TX *gorm.DB,
 	Request *gin.Context,
-	session *method.SessionStruct,
+	session *Method.SessionStruct,
 	roleId int,
 	data map[string](map[string](map[string]interface{})),
 ) error {
@@ -87,7 +87,7 @@ func Get(Request *gin.Context) {
 	})
 
 	// 權限驗證
-	session := method.SessionStruct{
+	session := Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: false,
 		ReqParamsValidation: true,
@@ -128,7 +128,7 @@ func GetSingle(Request *gin.Context) {
 	})
 
 	// 權限驗證
-	session := method.SessionStruct{
+	session := Method.SessionStruct{
 		Request: Request,
 		ReqParamsValidation: true,
 		ReqParamsStruct: reqParams,
@@ -215,7 +215,7 @@ func Update(Request *gin.Context) {
 	})
 
 	// 權限驗證
-	session := method.SessionStruct{
+	session := Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: true,
 		ReqBodyStruct: reqBody,
@@ -302,7 +302,7 @@ func Add(Request *gin.Context) {
 	})
 
 	// 權限驗證
-	session := method.SessionStruct{
+	session := Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: true,
 		ReqBodyStruct: reqBody,
@@ -374,7 +374,7 @@ func Delete(Request *gin.Context) {
 	})
 
 	// 權限驗證
-	session := method.SessionStruct{
+	session := Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: true,
 		ReqBodyStruct: reqBody,
@@ -419,7 +419,7 @@ func Delete(Request *gin.Context) {
 // 角色選擇器
 func GetSelector(Request *gin.Context) {
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: false,
 		PermissionValidation: false,

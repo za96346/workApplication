@@ -2,14 +2,14 @@ package CTL_Banch
 
 import (
 	"backend/Model"
-	"backend/method"
+	"backend/Method"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
-var ErrorInstance = &method.ErrorStruct{
+var ErrorInstance = &Method.ErrorStruct{
 	MessageTitle: "[CTL_Banch 公司部門]--",
 }
 
@@ -22,7 +22,7 @@ func Get(Request *gin.Context) {
 	})
 
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 
 		PermissionValidation: true,
@@ -63,7 +63,7 @@ func Get(Request *gin.Context) {
 func Edit(Request *gin.Context) {
 	reqBody := new(Model.CompanyBanch)
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: true,
 		ReqBodyStruct: reqBody,
@@ -104,7 +104,7 @@ func Edit(Request *gin.Context) {
 func Add(Request *gin.Context) {
 	reqBody := new(Model.CompanyBanch)
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: true,
 		ReqBodyStruct: reqBody,
@@ -151,7 +151,7 @@ func Delete(Request *gin.Context) {
 	targetData := new(Model.CompanyBanch)
 
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: true,
 		ReqBodyStruct: reqBody,
@@ -190,7 +190,7 @@ func Delete(Request *gin.Context) {
 // 部門選擇器
 func GetSelector(Request *gin.Context) {
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: false,
 		PermissionValidation: false,

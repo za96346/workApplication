@@ -2,14 +2,14 @@ package CTL_User
 
 import (
 	"backend/Model"
-	"backend/method"
+	"backend/Method"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
-var ErrorInstance = &method.ErrorStruct{
+var ErrorInstance = &Method.ErrorStruct{
 	MessageTitle: "[CTL_User 使用者]--",
 }
 
@@ -18,7 +18,7 @@ const FuncCode = "employeeManage"
 // 尋找自己的 使用者資料
 func GetMine(Request *gin.Context) {
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqBodyValidation: false,
 	}
@@ -53,7 +53,7 @@ func Get(Request *gin.Context) {
 		QuitFlag *string `json:"QuitFlag"`
 	})
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 
 		PermissionValidation: true,
@@ -120,7 +120,7 @@ func Get(Request *gin.Context) {
 func Add(Request *gin.Context) {
 	reqBody := new(Model.User)
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		PermissionValidation: true,
 		PermissionFuncCode: FuncCode,
@@ -171,7 +171,7 @@ func Edit(Request *gin.Context) {
 	reqBody := new(Model.User)
 
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		PermissionValidation: true,
 		PermissionFuncCode: FuncCode,
@@ -231,7 +231,7 @@ func EditMine(Request *gin.Context) {
 	})
 
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		PermissionValidation: true,
 		PermissionFuncCode: "selfData",
@@ -283,7 +283,7 @@ func UpdatePassword(Request *gin.Context) {
 	})
 
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		PermissionValidation: true,
 		PermissionFuncCode: FuncCode,
@@ -350,7 +350,7 @@ func Delete(Request *gin.Context) {
 	targetData := new(Model.User)
 
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		PermissionValidation: true,
 		PermissionFuncCode: FuncCode,
@@ -407,7 +407,7 @@ func GetSelector(Request *gin.Context) {
 		EmployeeNumber *string `json:"EmployeeNumber"`
 	})
 	// 權限驗證
-	session := &method.SessionStruct{
+	session := &Method.SessionStruct{
 		Request: Request,
 		ReqParamsValidation: true,
 		ReqParamsStruct: reqParams,
