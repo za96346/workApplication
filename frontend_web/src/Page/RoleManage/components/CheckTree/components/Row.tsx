@@ -89,13 +89,11 @@ const Row = ({
 
         const transListName = operationCode.map((item) => {
             const op = operationItemArray?.find((i) => i?.OperationCode === item)
-            return op.OperationName
+            return op?.OperationName
         })
 
         setCheckedList(transListName)
     }, [])
-
-    // console.log(functionItem?.FuncName, session()?.[functionItem?.FuncCode])
 
     return (
         <div className='row col-12 my-2'>

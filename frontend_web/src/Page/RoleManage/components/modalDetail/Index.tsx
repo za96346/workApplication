@@ -36,11 +36,14 @@ const ModalDetail = ({ modalInfo }: props): JSX.Element => {
         return operationItemArray?.find((item) => item?.OperationCode === v)
     }
 
+    console.log(session()?.[functionItem?.FuncCode], operationItemArray)
+
     return (
         <>
             <div className='row'>
                 {
                     Object.keys(session()?.[functionItem?.FuncCode] || {})
+                        ?.filter((i) => findOperationItem(i))
                         ?.map((item) => {
                             const operationItem = findOperationItem(item)
                             return (

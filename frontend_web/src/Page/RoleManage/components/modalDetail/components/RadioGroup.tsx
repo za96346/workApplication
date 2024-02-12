@@ -4,7 +4,7 @@ import React, { useMemo } from 'react'
 import BanchSelector from 'shared/BanchSelector/Index'
 import RoleSelector from 'shared/RoleSelector/Index'
 import { ScopeNameEnum } from 'static'
-import systemTypes from 'types/system'
+import systemTypes, { ScopeEnum } from 'types/system'
 
 const RadioGroup = (
     { operationItem, functionItem, scopeLimit }: {
@@ -87,7 +87,10 @@ const RadioGroup = (
                 )
             }
             {
-                Array.isArray(currentValue?.scopeBanch) && (
+                (
+                    Array.isArray(currentValue?.scopeBanch) &&
+                    scopeLimit?.scopeBanch?.includes(ScopeEnum.customize)
+                ) && (
                     <BanchSelector
                         defaultValue={currentValue?.scopeBanch || []}
                         subComponents='tag'
@@ -124,7 +127,10 @@ const RadioGroup = (
             }
 
             {
-                Array.isArray(currentValue?.scopeRole) && (
+                (
+                    Array.isArray(currentValue?.scopeRole) &&
+                    scopeLimit?.scopeRole?.includes(ScopeEnum.customize)
+                ) && (
                     <RoleSelector
                         defaultValue={currentValue?.scopeRole || []}
                         subComponents='tag'
