@@ -1,7 +1,7 @@
 package main
 
 import (
-	restFul "backend/restful"
+	restFul "backend/Restful"
 	"path/filepath"
 
 	"github.com/joho/godotenv"

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"backend/middleware"
-	"backend/restFul/Route"
+	"backend/RestFul/Route"
 
 	"github.com/gin-gonic/gin"
 

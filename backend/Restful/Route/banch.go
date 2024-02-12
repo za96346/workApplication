@@ -4,7 +4,7 @@ import (
 	// "strconv"
 
 	"backend/middleware"
-	"backend/restful/controller/CTL_Banch"
+	"backend/Restful/controller/CTL_Banch"
 
 	"github.com/gin-gonic/gin"
 )

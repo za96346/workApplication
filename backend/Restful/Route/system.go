@@ -3,7 +3,7 @@ package Route
 import (
 	// "strconv"
 
-	"backend/restful/controller/CTL_System"
+	"backend/Restful/controller/CTL_System"
 
 	"github.com/gin-gonic/gin"
 )
