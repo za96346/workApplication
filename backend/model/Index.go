@@ -2,6 +2,9 @@ package Model
 
 import (
 	"fmt"
+	"strconv"
+
+	"os"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -12,11 +15,11 @@ var DB *gorm.DB
 // 設定 model
 func SetUp() {
 	//配置MySQL连接参数
-	username := "root"  //账号
-	password := "siou0722" //密码
-	host := "127.0.0.1" //数据库地址，可以是Ip或者域名
-	port := 3306 //数据库端口
-	Dbname := "new_workapp" //数据库名
+	username := os.Getenv("DATA_BASE_USER")  //账号
+	password := os.Getenv("DATA_BASE_PASSWORD") //密码
+	host := os.Getenv("DATA_BASE_IP") //数据库地址，可以是Ip或者域名
+	port, _ := strconv.Atoi(os.Getenv("DATA_BASE_PORT")) //数据库端口
+	Dbname := os.Getenv("DATA_BASE_NAME") //数据库名
 
 	DSN := fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
