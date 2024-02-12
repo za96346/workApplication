@@ -8,7 +8,7 @@ declare namespace params {
 }
 
 class entryApi extends apiAbstract {
-    private readonly route = 'workApp/entry/login'
+    private readonly route = 'entry/login'
 
     async login (params: params.login): Promise<void> {
         return await this.POST<null>({

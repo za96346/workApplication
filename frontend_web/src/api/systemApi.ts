@@ -6,7 +6,7 @@ declare namespace params {
 }
 
 class systemApi extends apiAbstract {
-    private readonly route = 'workApp/system/'
+    private readonly route = 'system/'
 
     async auth (): Promise<systemTypes.auth> {
         return await this.GET<systemTypes.auth>({

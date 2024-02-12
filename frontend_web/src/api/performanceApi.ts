@@ -21,7 +21,7 @@ declare namespace params {
 }
 
 class performanceApi extends apiAbstract {
-    private readonly route = 'workApp/performance/'
+    private readonly route = 'performance/'
 
     async get (v?: params.get): Promise<void> {
         return await this.GET<performanceTypes.reducerType['all']>({

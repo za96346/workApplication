@@ -21,7 +21,7 @@ declare namespace params {
 }
 
 class roleApi extends apiAbstract {
-    private readonly route = 'workApp/role/'
+    private readonly route = 'role/'
 
     async get (): Promise<void> {
         const [result] = this.makeFormData([{

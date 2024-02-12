@@ -21,7 +21,7 @@ declare namespace params {
 }
 
 class companyBanchApi extends apiAbstract {
-    private readonly route = 'workApp/banch/'
+    private readonly route = 'banch/'
 
     async get (v?: params.get): Promise<companyBanchTypes.reducerType['all']> {
         return await this.GET<companyBanchTypes.reducerType['all']>({

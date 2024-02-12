@@ -12,7 +12,7 @@ declare namespace params {
 }
 
 class companyApi extends apiAbstract {
-    private readonly route = 'workApp/company/'
+    private readonly route = 'company/'
 
     async getMine (): Promise<companyTypes.reducerType['mine']> {
         return await this.GET<companyTypes.reducerType['mine']>({

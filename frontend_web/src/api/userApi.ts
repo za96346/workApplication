@@ -31,7 +31,7 @@ declare namespace params {
 }
 
 class userApi extends apiAbstract {
-    private readonly route = 'workApp/user/'
+    private readonly route = 'user/'
 
     async getMine (): Promise<userTypes.reducerType['mine']> {
         return await this.GET<userTypes.reducerType['mine']>({
