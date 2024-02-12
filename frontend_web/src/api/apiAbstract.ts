@@ -43,7 +43,7 @@ type axiosResponse = AxiosResponse<any, any> & { config: { id: string } }
 // instance
 const instance = axios.create({
     withCredentials: true,
-    baseURL: 'http://localhost:4000/'
+    baseURL: process.env.REACT_APP_API
 })
 
 const showErrorDialog = async (error): Promise<void> => {
