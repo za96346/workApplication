@@ -67,7 +67,6 @@ type SessionStruct struct {
 */
 func(instance *SessionStruct) SessionHandler() error {
 	session := sessions.Default((*instance).Request)
-	session.Set("companyId", "0")
 	(*instance).IsCurrentScopeBanchAll = false
 	(*instance).IsCurrentScopeRoleAll = false
 

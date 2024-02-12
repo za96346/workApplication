@@ -65,7 +65,7 @@ func Get(Request *gin.Context) {
 			"company_banch.banchName as banchName",
 			"user.roleId",
 		).
-		Order("sort asc")
+		Order("year desc, sort")
 
 	// 使用者名稱
 	if reqParams.UserName != nil {
