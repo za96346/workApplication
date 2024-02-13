@@ -18,23 +18,20 @@ const BtnEvent = ({ type, value }: BtnEventParams<roleTypes.TABLE>): void => {
             onSave: (form) => {
                 const permission = Session.Instance.get()
                 const fields = form.getFieldsValue()
-                void form.validateFields()
-                    .then(() => {
-                        if (type === modalType.edit) {
-                            void api.role.update({
-                                Data: { ...permission },
-                                RoleId: value.RoleId,
-                                RoleName: fields.RoleName,
-                                Sort: fields.Sort
-                            }).then(onClose)
-                        } else if (type === modalType.add) {
-                            void api.role.add({
-                                Data: { ...permission },
-                                RoleName: fields.RoleName,
-                                Sort: fields.Sort
-                            }).then(onClose)
-                        }
-                    })
+                if (type === modalType.edit) {
+                    void api.role.update({
+                        Data: { ...permission },
+                        RoleId: value.RoleId,
+                        RoleName: fields.RoleName,
+                        Sort: fields.Sort
+                    }).then(onClose)
+                } else if (type === modalType.add) {
+                    void api.role.add({
+                        Data: { ...permission },
+                        RoleName: fields.RoleName,
+                        Sort: fields.Sort
+                    }).then(onClose)
+                }
             }
         })
     }

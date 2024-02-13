@@ -12,6 +12,7 @@ import { modalType } from 'static'
 import { usePermission } from 'hook/usePermission'
 import { FuncCodeEnum } from 'types/system'
 import { dropdownList } from './methods/dropdownList'
+import ModalChangeBanch from './components/modalChangeBanch/Index'
 
 const Index = (): JSX.Element => {
     const performance = useAppSelector((v) => v?.performance?.all)
@@ -38,6 +39,7 @@ const Index = (): JSX.Element => {
     return (
         <>
             <ModalEdit />
+            <ModalChangeBanch />
             {
                 permission?.isAddable && (
                     <Btn.Add

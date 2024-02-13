@@ -46,20 +46,23 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                 autoComplete="off"
                 form={form}
                 className="row mt-4"
+                onFinish={() => {
+                    modalInfo.onSave(form)
+                }}
             >
                 <Form.Item
                     name="Year"
                     initialValue={dayjs()}
                     className="col-6"
                     label="年度"
-                    required
+                    rules={[{ required: true }]}
                 >
                     <DatePicker picker='year' placeholder="選擇年度"/>
                 </Form.Item>
                 <Form.Item
                     name="Month"
                     initialValue={data?.Month}
-                    required
+                    rules={[{ required: true }]}
                     className="col-6"
                     label="月份"
                 >
@@ -72,7 +75,7 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                     className="col-md-6"
                     label="姓名"
                     initialValue={data?.UserId}
-                    required
+                    rules={[{ required: true }]}
                 >
                     <Select options={roleBanchUserList?.userSelectList} />
                 </Form.Item>
@@ -89,7 +92,7 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                     initialValue={data?.Goal || ''}
                     className=""
                     label="年度目標"
-                    required
+                    rules={[{ required: true }]}
                 >
                     <Input.TextArea autoSize placeholder="輸入年度目標"/>
                 </Form.Item>
@@ -146,11 +149,7 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                         () => (
                             <>
                                 <Btn.Cancel onClick={() => { void modalInfo.onClose() }} />
-                                <Btn.Save
-                                    onClick={() => {
-                                        modalInfo.onSave(form)
-                                    }}
-                                />
+                                <Btn.Save />
                             </>
                         )
                     }

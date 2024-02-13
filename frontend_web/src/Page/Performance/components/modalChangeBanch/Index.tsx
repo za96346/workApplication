@@ -32,11 +32,14 @@ const ModalChangeBanch = ({ modalInfo }: props): JSX.Element => {
                 autoComplete="off"
                 form={form}
                 className="row mt-4"
+                onFinish={() => {
+                    modalInfo.onSave(form)
+                }}
             >
                 <Form.Item
                     name="BanchId"
                     initialValue={data?.BanchId}
-                    required
+                    rules={[{ required: true }]}
                     className="col-6"
                     label="部門"
                 >
@@ -48,11 +51,7 @@ const ModalChangeBanch = ({ modalInfo }: props): JSX.Element => {
                         () => (
                             <>
                                 <Btn.Cancel onClick={() => { void modalInfo.onClose() }} />
-                                <Btn.Save
-                                    onClick={() => {
-                                        modalInfo.onSave(form)
-                                    }}
-                                />
+                                <Btn.Save />
                             </>
                         )
                     }

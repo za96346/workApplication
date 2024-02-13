@@ -18,19 +18,16 @@ const BtnEvent = ({ type, value }: BtnEventParams<companyBanchTypes.TABLE>): voi
         data: value,
         onSave: (form) => {
             const fields = form.getFieldsValue()
-            void form.validateFields()
-                .then(() => {
-                    if (type === modalType.edit) {
-                        void api.companyBanch.update({
-                            ...fields,
-                            BanchId: value?.BanchId
-                        })
-                            .then(onClose)
-                    } else if (type === modalType.add) {
-                        void api.companyBanch.add(fields)
-                            .then(onClose)
-                    }
+            if (type === modalType.edit) {
+                void api.companyBanch.update({
+                    ...fields,
+                    BanchId: value?.BanchId
                 })
+                    .then(onClose)
+            } else if (type === modalType.add) {
+                void api.companyBanch.add(fields)
+                    .then(onClose)
+            }
         }
     })
 }

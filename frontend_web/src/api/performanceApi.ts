@@ -2,6 +2,10 @@ import apiAbstract from './apiAbstract'
 import performanceTypes from 'types/performance'
 
 declare namespace params {
+    interface changeBanch {
+        PerformanceId: performanceTypes.TABLE['PerformanceId']
+        BanchId: number
+    }
     interface get {
         UserName: string
         RoleId: number
@@ -71,6 +75,14 @@ class performanceApi extends apiAbstract {
     async update (v: params.add): Promise<void> {
         return await this.POST<null>({
             url: this.route,
+            data: v,
+            checkTitle: this.checkTitle.confirmUpdate
+        })
+    }
+
+    async changeBanch (v: params.changeBanch): Promise<void> {
+        return await this.POST<null>({
+            url: this.route + 'banch',
             data: v,
             checkTitle: this.checkTitle.confirmUpdate
         })

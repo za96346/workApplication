@@ -36,6 +36,9 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                 autoComplete="off"
                 className='row'
                 form={form}
+                onFinish={() => {
+                    modalInfo.onSave(form)
+                }}
             >
                 <Form.Item
                     name="RoleName"
@@ -60,11 +63,7 @@ const ModalEdit = ({ modalInfo }: props): JSX.Element => {
                         () => (
                             <>
                                 <Btn.Cancel onClick={() => { void modalInfo.onClose() }} />
-                                <Btn.Save
-                                    onClick={() => {
-                                        modalInfo.onSave(form)
-                                    }}
-                                />
+                                <Btn.Save />
                             </>
                         )
                     }

@@ -19,19 +19,16 @@ const BtnEvent = ({ type, value }: BtnEventParams<userTypes.TABLE>): void => {
         data: value,
         onSave: (form) => {
             const fields = form.getFieldsValue()
-            void form.validateFields()
-                .then(() => {
-                    if (type === modalType.edit) {
-                        void api.user.update({
-                            ...fields,
-                            UserId: value?.UserId
-                        })
-                            .then(onClose)
-                    } else if (type === modalType.add) {
-                        void api.user.add(fields)
-                            .then(onClose)
-                    }
+            if (type === modalType.edit) {
+                void api.user.update({
+                    ...fields,
+                    UserId: value?.UserId
                 })
+                    .then(onClose)
+            } else if (type === modalType.add) {
+                void api.user.add(fields)
+                    .then(onClose)
+            }
         }
     })
 }
