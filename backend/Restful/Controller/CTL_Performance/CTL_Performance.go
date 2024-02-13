@@ -22,6 +22,8 @@ func Get(Request *gin.Context) {
 		BanchId *int `json:"BanchId"`
 		RoleId *int `json:"RoleId"`
 		UserName *string `json:"UserName"`
+		StartDate *string `json:"StartDate"`
+		EndDate *string `json:"EndDate"`
 	})
 
 	// 權限驗證
@@ -65,11 +67,46 @@ func Get(Request *gin.Context) {
 			"company_banch.banchName as banchName",
 			"user.roleId",
 		).
-		Order("year desc, sort")
+		Order("year desc, month desc, sort")
 
 	// 使用者名稱
 	if reqParams.UserName != nil {
 		searchQuery.Where("userName like ?", "%" + *reqParams.UserName + "%")
+	}
+
+	// 日期塞選
+	if reqParams.StartDate != nil {
+		searchQuery.Where(
+			`
+				concat(
+					performance.year,
+					'-',
+					if(
+						performance.month < 10,
+						concat('0', performance.month),
+						performance.month
+					)
+				) >= ?
+			`,
+			*(*reqParams).StartDate,
+		)
+	}
+
+	if reqParams.EndDate != nil {
+		searchQuery.Where(
+			`
+				concat(
+					performance.year,
+					'-',
+					if(
+						performance.month < 10,
+						concat('0', performance.month),
+						performance.month
+					)
+				) <= ?
+			`,
+			*(*reqParams).EndDate,
+		)
 	}
 
 	searchQuery.Find(&data)
@@ -300,6 +337,8 @@ func GetYear(Request *gin.Context) {
 		BanchId *int `json:"BanchId"`
 		RoleId *int `json:"RoleId"`
 		UserName *string `json:"UserName"`
+		StartYear *string `json:"StartYear"`
+		EndYear *string `json:"EndYear"`
 	})
 
 	// 權限驗證
@@ -358,6 +397,15 @@ func GetYear(Request *gin.Context) {
 	// 使用者名稱
 	if reqParams.UserName != nil {
 		searchQuery.Where("user.userName like ?", "%" + *reqParams.UserName + "%")
+	}
+
+	// 年度塞選
+	if reqParams.StartYear != nil {
+		searchQuery.Where("performance.year >= ?", reqParams.StartYear)
+	}
+
+	if reqParams.EndYear != nil {
+		searchQuery.Where("performance.year <= ?", reqParams.EndYear)
 	}
 
 	searchQuery.Find(&data)

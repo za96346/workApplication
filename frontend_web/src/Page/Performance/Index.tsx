@@ -1,7 +1,6 @@
 import { Table } from 'antd'
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import columns from './methods/column'
-import api from 'api/Index'
 import Searchbar from './components/Searchbar'
 import { useAppSelector } from 'hook/redux'
 import { v4 } from 'uuid'
@@ -36,9 +35,6 @@ const Index = (): JSX.Element => {
         }))
     }, [performance, permission])
 
-    useEffect(() => {
-        void api.performance.get()
-    }, [])
     return (
         <>
             <ModalEdit />

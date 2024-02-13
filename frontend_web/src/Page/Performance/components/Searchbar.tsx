@@ -1,9 +1,10 @@
 import { Divider, Form, Input, Select } from 'antd'
 import api from 'api/Index'
 import useRoleBanchList from 'hook/useRoleBanchUserList'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Btn from 'shared/Button'
 import { FuncCodeEnum, OperationCodeEnum } from 'types/system'
+import DateSelect from 'shared/AntdOverwrite/DateSelectRangePicker'
 
 const Searchbar = (): JSX.Element => {
     const [form] = Form.useForm()
@@ -13,17 +14,31 @@ const Searchbar = (): JSX.Element => {
         operationCode: OperationCodeEnum.inquire
     })
 
+    const onSearch = (v: any): void => {
+        void api.performance.get({
+            ...v,
+            ...DateSelect.getZhtwDate(v?.range)
+        })
+    }
+
+    useEffect(() => {
+        onSearch(form.getFieldsValue())
+    }, [])
+
     return (
         <>
             <Divider />
             <Form
                 onFinish={(v) => {
-                    void api.performance.get(v)
+                    onSearch(v)
                 }}
                 id="performanceManage"
                 autoComplete="off"
                 className='row'
             >
+                <Form.Item label='範圍搜尋' name='range' className='col-md-4'>
+                    <DateSelect type='month' onChange={(v) => { }} />
+                </Form.Item>
                 <Form.Item
                     name="BanchId"
                     label="部門"

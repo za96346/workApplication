@@ -6,6 +6,15 @@ declare namespace params {
         UserName: string
         RoleId: number
         BanchId: number
+        StartDate: string
+        EndDate: string
+    }
+    interface getYear {
+        UserName: string
+        RoleId: number
+        BanchId: number
+        StartYear: string
+        EndYear: string
     }
     interface deleted {
         performanceId: performanceTypes.TABLE['PerformanceId']
@@ -33,7 +42,7 @@ class performanceApi extends apiAbstract {
             })
     }
 
-    async getYear (v?: params.get): Promise<void> {
+    async getYear (v?: params.getYear): Promise<void> {
         return await this.GET<performanceTypes.reducerType['year']>({
             url: this.route + 'year',
             data: v
