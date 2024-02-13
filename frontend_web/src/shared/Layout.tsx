@@ -39,7 +39,8 @@ const Layout = (): JSX.Element => {
             <Loading />
             <Menu />
             <div
-                className='w-100 h-100'
+                className='main'
+                style={sidebarOpen ? {} : { width: '100%', left: 0 }}
             >
                 <Header />
                 <div

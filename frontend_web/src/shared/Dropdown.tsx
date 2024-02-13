@@ -5,9 +5,10 @@ import { modalType } from 'static'
 interface props {
     menu?: MenuProps['items']
     onSelect?: (v: modalType) => void
+    children?: any
 }
 
-const Dropdown = ({ menu = [], onSelect }: props): JSX.Element => {
+const Dropdown = ({ menu = [], onSelect, children }: props): JSX.Element => {
     return (
         <AntdDropdown
             menu={{
@@ -24,7 +25,7 @@ const Dropdown = ({ menu = [], onSelect }: props): JSX.Element => {
                 }}
             >
                 <Space>
-                • • •
+                    {children ?? '• • •'}
                 </Space>
             </Typography.Link>
         </AntdDropdown>

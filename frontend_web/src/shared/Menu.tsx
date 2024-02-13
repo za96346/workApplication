@@ -45,7 +45,7 @@ const Menu = (): JSX.Element => {
                 align-items-center
             '
         >
-            <img src={pic} className={`${!sidebarOpen && 'd-none'}`} />
+            <img src={pic} />
             <Divider />
             <AntdMenu
                 onClick={(v) => {
@@ -55,10 +55,9 @@ const Menu = (): JSX.Element => {
                         navigate(v?.key)
                     }
                 }}
-                defaultSelectedKeys={[defaultSelectedKeys]}
+                selectedKeys={[defaultSelectedKeys]}
                 mode="inline"
                 items={menuItem}
-                className={`${!sidebarOpen && 'd-none'}`}
             />
         </div>
     )
