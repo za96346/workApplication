@@ -39,7 +39,9 @@ func (r *Role) GetNewRoleID() int {
     var MaxCount int64
     DB.Model(&Role{}).
         Where("companyId = ?", (*r).CompanyId).
-        Count(&MaxCount)
+        Select("max(roleId)").
+        Row().
+        Scan(&MaxCount)
     
     (*r).RoleId = int(MaxCount) + 1
 

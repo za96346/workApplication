@@ -38,7 +38,9 @@ func (cb *CompanyBanch) GetNewBanchID(companyId int) int {
     var MaxCount int64
     DB.Model(&CompanyBanch{}).
         Where("companyId = ?", companyId).
-        Count(&MaxCount)
+        Select("max(banchId)").
+        Row().
+        Scan(&MaxCount)
     
     (*cb).BanchId = int(MaxCount) + 1
     (*cb).CompanyId = companyId

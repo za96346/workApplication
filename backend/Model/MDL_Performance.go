@@ -49,7 +49,9 @@ func (p *Performance) GetNewPerformanceID(companyId int) int {
     var MaxCount int64
     DB.Model(&Performance{}).
         Where("companyId = ?", companyId).
-        Count(&MaxCount)
+        Select("max(performanceId)").
+        Row().
+        Scan(&MaxCount)
     
     (*p).PerformanceId = int(MaxCount) + 1
     (*p).CompanyId = companyId

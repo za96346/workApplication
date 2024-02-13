@@ -48,7 +48,7 @@ func Get(Request *gin.Context) {
 	searchQuery := Model.DB.
 		Model(&Model.Performance{}).
 		Where("performance.companyId = ?", session.CompanyId).
-		Where("user.banchId in (?)", *session.GetScopeBanchWithCustomize(reqParams.BanchId)).
+		Where("performance.banchId in (?)", *session.GetScopeBanchWithCustomize(reqParams.BanchId)).
 		Where("user.roleId in (?)", *session.GetScopeRolehWithCustomize(reqParams.RoleId)).
 		Where("performance.deleteFlag = ?", "N").
 		Joins(`
@@ -270,7 +270,7 @@ func Edit(Request *gin.Context) {
 // 刪除
 func Delete(Request *gin.Context) {
 	reqBody := new(struct {
-		PerformanceId int `gorm:"column:performanceId;primaryKey" json:"PerformanceId"`
+		PerformanceId int `gorm:"column:performanceId;primaryKey" json:"PerformanceId" binding:"required"`
 	})
 
 	targetData := new(Model.Performance)
@@ -421,81 +421,77 @@ func GetYear(Request *gin.Context) {
 }
 
 // 更換部門
-// func ChangeBanch(Request *gin.Context) {
-// 	reqBody := new(struct {
-// 		PerformanceId   int         `json:"PerformanceId"`
-// 		BanchId         int         `json:"BanchId"`
-// 	})
+func ChangeBanch(Request *gin.Context) {
+	reqBody := new(struct {
+		PerformanceId   int         `json:"PerformanceId" binding:"required"`
+		BanchId         int         `json:"BanchId" binding:"required"`
+	})
 
-// 	// 權限驗證
-// 	session := &method.SessionStruct{
-// 		Request: Request,
-// 		ReqBodyValidation: true,
-// 		ReqBodyStruct: reqBody,
+	// 權限驗證
+	session := &Method.SessionStruct{
+		Request: Request,
+		ReqBodyValidation: true,
+		ReqBodyStruct: reqBody,
 
-// 		PermissionValidation: true,
-// 		PermissionFuncCode: FuncCode,
-// 		PermissionItemCode: "edit",
-// 	}
-// 	if session.SessionHandler() != nil {return}
+		PermissionValidation: true,
+		PermissionFuncCode: FuncCode,
+		PermissionItemCode: "edit",
+	}
+	if session.SessionHandler() != nil {return}
 
-// 	// 查詢此 user 資料
-// 	userData := Model.User{}
-// 	var count int64
+	//共同 語句
+	commonQuery := Model.DB.
+		Model(&Model.Performance{}).
+		Where("companyId = ?", session.CompanyId).
+		Where("performanceId = ?", reqBody.PerformanceId)
 
-// 	userQuery := Model.DB.
-// 		Model(&Model.User{}).
-// 		Where("userId = ?", reqBody.UserId).
-// 		Where("companyId = ?", session.CompanyId)
+	// 找到舊的值 ( 不讓請求 的時候 userId 有任何的串改可能． )
+	var originData Model.Performance
+	commonQuery.First(&originData)
 
-// 	userQuery.Count(&count)
-// 	userQuery.First(&userData)
-// 	if count == int64(0) {
-// 		ErrorInstance.ErrorHandler(Request, "找不到此使用者")
-// 		return
-// 	}
+	// 查詢此 user 資料
+	userData := Model.User{}
+	var count int64
 
-// 	// 檢查是否有此部門以及角色的權限
-// 	if session.CheckScopeBanchValidation(*userData.BanchId) != nil {return}
-// 	if session.CheckScopeRoleValidation(userData.RoleId) != nil {return}
+	userQuery := Model.DB.
+		Model(&Model.User{}).
+		Where("userId = ?", originData.UserId).
+		Where("companyId = ?", session.CompanyId)
 
-// 	//共同 語句
-// 	commonQuery := Model.DB.
-// 		Model(&Model.Performance{}).
-// 		Where("companyId = ?", session.CompanyId).
-// 		Where("performanceId = ?", reqBody.PerformanceId)
+	userQuery.Count(&count)
+	userQuery.First(&userData)
+	if count == int64(0) {
+		ErrorInstance.ErrorHandler(Request, "找不到此使用者")
+		return
+	}
 
-// 	// 找到舊的值 ( 不讓請求 的時候 userId 有任何的串改可能． )
-// 	var oldData Model.Performance 
-// 	commonQuery.First(&oldData)
+	// 檢查是否有此部門以及角色的權限
+	if session.CheckScopeBanchValidation(originData.BanchId) != nil {return}
+	if session.CheckScopeRoleValidation(userData.RoleId) != nil {return}
 
-// 	// 新增固定欄位
-// 	now := time.Now()
+	// 新增固定欄位
+	now := time.Now()
 
-// 	(*reqBody).CompanyId = session.CompanyId
-// 	(*reqBody).UserId = oldData.UserId
-// 	(*reqBody).BanchId = oldData.BanchId
-// 	(*reqBody).DeleteFlag = "N"
-// 	(*reqBody).DeleteTime = nil
-// 	(*reqBody).LastModify = &now
+	originData.BanchId = reqBody.BanchId
+	originData.LastModify = &now
 
-// 	if (*reqBody).IsYearMonthDuplicated() {
-// 		ErrorInstance.ErrorHandler(Request, "新增失敗-檢查到重複資料")
-// 		return
-// 	}
+	if originData.IsYearMonthDuplicated() {
+		ErrorInstance.ErrorHandler(Request, "新增失敗-檢查到重複資料")
+		return
+	}
 
-// 	// 更新
-// 	err := commonQuery.Updates(reqBody).Error
+	// 更新
+	err := commonQuery.Updates(originData).Error
 
-// 	if err != nil {
-// 		ErrorInstance.ErrorHandler(Request, "更新失敗")
-// 		return
-// 	}
+	if err != nil {
+		ErrorInstance.ErrorHandler(Request, "更新失敗")
+		return
+	}
 
-// 	Request.JSON(
-// 		http.StatusOK,
-// 		gin.H {
-// 			"message": "更新成功",
-// 		},
-// 	)
-// }
+	Request.JSON(
+		http.StatusOK,
+		gin.H {
+			"message": "更新成功",
+		},
+	)
+}

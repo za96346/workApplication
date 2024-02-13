@@ -38,7 +38,9 @@ func (l *Log) GetNewLogId(companyId int) int {
     var MaxCount int64
     DB.Model(&Log{}).
         Where("companyId = ?", companyId).
-        Count(&MaxCount)
+        Select("max(logId)").
+        Row().
+        Scan(&MaxCount)
     
     (*l).LogId = int(MaxCount) + 1
     (*l).CompanyId = companyId

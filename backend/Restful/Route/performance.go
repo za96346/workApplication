@@ -18,7 +18,7 @@ func Performance(props *gin.RouterGroup) {
 		props.POST("/", CTL_Performance.Edit)
 		props.DELETE("/", CTL_Performance.Delete)
 		props.PUT("/copy", CTL_Performance.Add)
-		// props.POST("/banch", CTL_Performance.ChangeBanch)
+		props.POST("/banch", CTL_Performance.ChangeBanch)
 		props.GET("/year", CTL_Performance.GetYear)
 	}
 }

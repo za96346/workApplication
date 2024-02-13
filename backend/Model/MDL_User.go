@@ -54,7 +54,9 @@ func (u *User) GetNewUserID(companyId ...int) int {
 
     DB.Model(&User{}).
         Where("companyId = ?", validateField).
-        Count(&MaxCount)
+        Select("max(userId)").
+        Row().
+        Scan(&MaxCount)
     
     (*u).UserId = int(MaxCount) + 1
     (*u).CompanyId = validateField
