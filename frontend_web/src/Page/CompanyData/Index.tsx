@@ -1,4 +1,4 @@
-import { Form, Input } from 'antd'
+import { Form, Input, Spin } from 'antd'
 import api from 'api/Index'
 
 import { useAppSelector } from 'hook/redux'
@@ -16,6 +16,10 @@ const Index = (): JSX.Element => {
     useEffect(() => {
         void api.company.getMine()
     }, [])
+
+    if (Object.keys(data).length === 0) {
+        return <Spin />
+    }
 
     return (
         <div>

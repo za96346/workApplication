@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, Input, Select } from 'antd'
+import { Button, DatePicker, Form, Input, Select, Spin } from 'antd'
 import api from 'api/Index'
 import dayjs from 'dayjs'
 import { useAppSelector } from 'hook/redux'
@@ -12,6 +12,7 @@ import ModelChangePassword from 'Page/SelfData/ModelChangePassword/Index'
 const Index = (): JSX.Element => {
     const [form] = Form.useForm()
     const data = useAppSelector((v) => v?.user?.mine)
+    const selectorData = useAppSelector((v) => v?.user?.selector)
     const permission = usePermission({ funcCode: FuncCodeEnum.selfData })
 
     const rolBanchList = useRoleBanchList({
@@ -22,6 +23,10 @@ const Index = (): JSX.Element => {
     useEffect(() => {
         void api.user.getMine()
     }, [])
+
+    if (Object.keys(data).length === 0 || Object.keys(selectorData)?.length === 0) {
+        return <Spin />
+    }
 
     return (
         <div>
