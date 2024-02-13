@@ -64,14 +64,14 @@ DateSelect.getZhtwDate = (v: any) => {
     const StartDate = `${
         DateSelect.yearTransferToZhtw(v?.[0]?.year())
     }-${
-        DateSelect.monthFormat((v?.[0]?.month() ?? 0) as number)
+        DateSelect.monthFormat((v?.[0]?.month() ?? new Date().getMonth()) as number)
     }`
 
     // 結束
     const EndDate = `${
         DateSelect.yearTransferToZhtw(v?.[1]?.year())
     }-${
-        DateSelect.monthFormat((v?.[1]?.month() ?? 11) as number)
+        DateSelect.monthFormat((v?.[1]?.month() ?? new Date().getMonth()) as number)
     }`
     return {
         StartDate,
