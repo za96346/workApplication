@@ -58,6 +58,12 @@ func Login(Request *gin.Context) {
 		return
 	}
 
+	// 加入 banch id 為 nil 的轉換
+	if (*user).BanchId == nil {
+		a := -1
+		(*user).BanchId = &a
+	}
+
 	// 登入成功後 ， 寫入session
 	session.Set("isLogin", "Y")
 	session.Set("userId", strconv.Itoa((*user).UserId))
