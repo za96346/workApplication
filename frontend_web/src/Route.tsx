@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
     BrowserRouter as Router,
     Routes,
@@ -8,7 +8,6 @@ import {
 import { useAppSelector } from 'hook/redux'
 import Layout from 'shared/Layout'
 
-import api from 'api/Index'
 import { v4 } from 'uuid'
 
 // page
@@ -41,10 +40,6 @@ const pageFuncCodePair = {
 const RouteIndex = (): JSX.Element => {
     const auth = useAppSelector((v) => v?.system?.auth)
 
-    useEffect(() => {
-        void api.system.auth()
-        void api.system.getRoleBanchList()
-    }, [])
     return (
         <Router>
             <Routes>

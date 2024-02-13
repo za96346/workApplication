@@ -77,6 +77,11 @@ instance.interceptors.response.use(
     async (error) => {
         store.dispatch(allAction.loading.onLoading({ [error.config.id]: false }))
         void showErrorDialog(error)
+
+        if (error.response.status === 511) {
+            window.location.href = '/entry/login'
+        }
+
         return await Promise.reject()
     }
 )

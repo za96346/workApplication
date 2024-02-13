@@ -9,7 +9,7 @@ const Index = (): JSX.Element => {
     return (
         <div>
             <Form
-                onFinish={(v) => { api.entry.login(v) }}
+                onFinish={(v) => { void api.entry.login(v) }}
                 name="validateOnly"
                 autoComplete="off"
             >

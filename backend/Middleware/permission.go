@@ -1,9 +1,9 @@
 package Middleware
 
 import (
-	// "net/http"
+	"net/http"
 
-	// "github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,11 +11,11 @@ import (
 	權限檢查 middle
 */
 func Permission(c *gin.Context)  {
-	// session := sessions.Default(c)
-	// if 1 == 2 {
-	// 	c.String(http.StatusForbidden, "rate limit...")
-	// 	c.Abort()
-	// 	return
-	// }
+	session := sessions.Default(c)
+	if session.Get("isLogin") != "Y" {
+		c.String(http.StatusNetworkAuthenticationRequired, "fail")
+		c.Abort()
+		return
+	}
 	c.Next()
 }

@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import Menu from './Menu'
 import Header from './Header'
 import { useAppSelector } from 'hook/redux'
 import { Loading } from './Loading/Index'
+import api from 'api/Index'
 
 const Layout = (): JSX.Element => {
     const location = useLocation()
@@ -11,6 +12,19 @@ const Layout = (): JSX.Element => {
     const sidebarOpen = useAppSelector((v) => v?.system.sidebar)
 
     const currentPage = menu?.find((item) => `/${item?.FuncCode}` === location?.pathname)
+
+    useEffect(() => {
+        // 這邊先這樣打 兩次 api, 之後換後端
+        if (location.pathname !== '/entry/login') {
+            void Promise.all([
+                api.system.auth(),
+                api.system.getRoleBanchList()
+            ]).then(() => {
+                void api.system.auth()
+                void api.system.getRoleBanchList()
+            })
+        }
+    }, [location.pathname])
 
     if (location.pathname === '/entry/login') {
         return (
