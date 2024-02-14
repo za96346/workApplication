@@ -24,7 +24,7 @@ const Index = (): JSX.Element => {
         void api.user.getMine()
     }, [])
 
-    if (Object.keys(data).length === 0 || Object.keys(selectorData)?.length === 0) {
+    if (Object.keys(data || {}).length === 0 || Object.keys(selectorData || {})?.length === 0) {
         return <Spin />
     }
 
