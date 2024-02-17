@@ -6,14 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Banch(props *gin.RouterGroup) {
+func Banch(props *gin.RouterGroup, companyBanchController *controller.CompanyBanchController) {
 	props.Use(middleware.Permission)
 	{
-		props.GET("/", CTL_Banch.Get)
-		props.POST("/", CTL_Banch.Edit)
-		props.PUT("/", CTL_Banch.Add)
-		props.DELETE("/", CTL_Banch.Delete)
+		props.GET("/", companyBanchController.GetCompanyBanches)
+		props.POST("/", companyBanchController.UpdateCompanyBanch)
+		props.PUT("/", companyBanchController.SaveCompanyBanch)
+		props.DELETE("/", companyBanchController.DeleteCompanyBanch)
 
-		props.GET("/selector", CTL_Banch.GetSelector)
+		props.GET("/selector", companyBanchController.GetCompanyBanchesSelector)
 	}
 }

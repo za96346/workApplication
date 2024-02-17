@@ -6,15 +6,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Role(props *gin.RouterGroup) {
-	props.Use(Middleware.Permission)
+func Role(props *gin.RouterGroup, roleController *controller.RoleController) {
+	props.Use(middleware.Permission)
 	{
-		props.GET("/", CTL_Role.Get)
-		props.POST("/", CTL_Role.Update)
-		props.PUT("/", CTL_Role.Add)
-		props.DELETE("/", CTL_Role.Delete)
+		props.GET("/", roleController.GetRoles)
+		props.POST("/", roleController.UpdateRole)
+		props.PUT("/", roleController.SaveRole)
+		props.DELETE("/", roleController.DeleteRole)
 
-		props.GET("/single", CTL_Role.GetSingle)
-		props.GET("/selector", CTL_Role.GetSelector)
+		props.GET("/single", roleController.GetRole)
+		props.GET("/selector", roleController.GetRolesSelector)
 	}
 }

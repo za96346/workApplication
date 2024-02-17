@@ -1,13 +1,12 @@
 package route
 
 import (
-	"backend/interfaces/middleware"
 	"backend/interfaces/controller"
 	"github.com/gin-gonic/gin"
 )
 
-func System(props *gin.RouterGroup) {
-	props.GET("/auth", CTL_System.GetAuth)
-	props.GET("/func", CTL_System.GetFunctionItem)
-	props.GET("/roleBanchList", CTL_System.GetRoleBanchList)
+func System(props *gin.RouterGroup, systemController *controller.SystemController) {
+	props.GET("/auth", systemController.GetAuth)
+	props.GET("/func", systemController.GetFunc)
+	props.GET("/roleBanchList", systemController.GetRoleBanchList)
 }

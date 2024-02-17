@@ -5,16 +5,16 @@ import (
 	"backend/interfaces/controller"
 	"github.com/gin-gonic/gin"
 )
-func User(props *gin.RouterGroup) {
-	props.Use(Middleware.Permission)
+func User(props *gin.RouterGroup, userController *controller.UserController) {
+	props.Use(middleware.Permission)
 	{
-		props.GET("/my", CTL_User.GetMine)
-		props.GET("/", CTL_User.Get)
-		props.PUT("/", CTL_User.Add)
-		props.POST("/", CTL_User.Edit)
-		props.POST("/my", CTL_User.EditMine)
-		props.DELETE("/", CTL_User.Delete)
-		props.POST("/password", CTL_User.UpdatePassword)
-		props.GET("/selector", CTL_User.GetSelector)
+		props.GET("/my", userController.GetMine)
+		props.GET("/", userController.GetUsers)
+		props.PUT("/", userController.SaveUser)
+		props.POST("/", userController.UpdateUser)
+		props.POST("/my", userController.UpdateMine)
+		props.DELETE("/", userController.DeleteUser)
+		props.POST("/password", userController.UpdatePassword)
+		props.GET("/selector", userController.GetUsersSelector)
 	}
 }

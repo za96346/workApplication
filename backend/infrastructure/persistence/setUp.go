@@ -9,6 +9,16 @@ import (
 
 type Repositories struct {
 	Company repository.CompanyRepository
+	CompanyBanch repository.CompanyBanchRepository
+	FunctionItem repository.FunctionItemRepository
+	FunctionRoleBanchRelation repository.FunctionRoleBanchRelationRepository
+	Log repository.LogRepository
+	OperationItem repository.OperationItemRepository
+	Performance repository.PerformanceRepository
+	QuitWorkUser repository.QuitWorkUserRepository
+	Role repository.RoleRepository
+	RoleStruct repository.RoleStructRepository
+	User repository.UserRepository
 	db   *gorm.DB
 }
 

@@ -14,9 +14,9 @@ type CompanyController struct {
 	companyApp application.CompanyAppInterface
 }
 
-func NewCompany(companyApp application.CompanyAppInterface) *CompanyController {
+func NewCompany() *CompanyController {
 	return &CompanyController{
-		companyApp: companyApp,
+		companyApp: &application.CompanyApp{},
 	}
 }
 

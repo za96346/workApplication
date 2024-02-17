@@ -44,16 +44,22 @@ func SetUp(repo *persistence.Repositories) *gin.Engine {
 	performanceApi := apiServer.Group("/workApp/performance")
 
 	// 實例 app
-	companyController := controller.NewCompany(repo.Company)
+	companyController := controller.NewCompany()
+	companyBanchController := controller.NewCompanyBanch()
+	entryController := controller.NewEntry()
+	performanceController := controller.NewPerformance()
+	roleController := controller.NewRole()
+	systemController := controller.NewSystem()
+	userController := controller.NewUser()
 
 	// 嵌入 route group
-	route.User(userApi)
-	route.Role(roleApi)
+	route.User(userApi, userController)
+	route.Role(roleApi, roleController)
 	route.Company(companyApi, companyController)
-	route.Entry(entryApi)
-	route.System(systemApi)
-	route.Banch(banchApi)
-	route.Performance(performanceApi)
+	route.Entry(entryApi, entryController)
+	route.System(systemApi, systemController)
+	route.Banch(banchApi, companyBanchController)
+	route.Performance(performanceApi, performanceController)
 
 	// start
 	apiServer.Run(":" + port)
