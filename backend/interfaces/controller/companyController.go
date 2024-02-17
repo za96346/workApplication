@@ -1,4 +1,4 @@
-package interfaces
+package controller
 
 import (
 	"backend/application/services"
@@ -14,7 +14,7 @@ type CompanyController struct {
 	companyApp application.CompanyAppInterface
 }
 
-func NewCompanys(companyApp application.CompanyAppInterface) *CompanyController {
+func NewCompany(companyApp application.CompanyAppInterface) *CompanyController {
 	return &CompanyController{
 		companyApp: companyApp,
 	}

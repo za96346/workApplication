@@ -13,22 +13,3 @@ type Log struct {
     CreateTime  *time.Time   `gorm:"column:createTime" json:"CreateTime"`   //type:TIMESTAMP   comment:    version:2023-10-24 12:55
     LastModify  *time.Time   `gorm:"column:lastModify" json:"LastModify"`   //type:TIMESTAMP   comment:    version:2023-10-24 12:55
 }
-
-func (l *Log) TableName() string {
-	return "log"
-}
-
-// 拿取新的 log id ( max count + 1 )
-func (l *Log) GetNewLogId(companyId int) int {
-    var MaxCount int64
-    DB.Model(&Log{}).
-        Where("companyId = ?", companyId).
-        Select("max(logId)").
-        Row().
-        Scan(&MaxCount)
-    
-    (*l).LogId = int(MaxCount) + 1
-    (*l).CompanyId = companyId
-
-    return int(MaxCount) + 1
-}

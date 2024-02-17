@@ -2,15 +2,15 @@ package main
 
 import (
 	"backend/infrastructure/persistence"
-	"log"
+	"backend/interfaces"
 	"os"
+	"path/filepath"
 	"github.com/joho/godotenv"
 )
 
 func init() {
-	//To load our environmental variables.
-	if err := godotenv.Load(); err != nil {
-		log.Println("no env gotten")
+	if godotenv.Load(filepath.Join("./", ".env")) != nil {
+		panic("error loading .env file")
 	}
 }
 
@@ -34,5 +34,5 @@ func main() {
 	}
 	defer repo.Close()
 
-	
+	interfaces.SetUp(repo)
 }

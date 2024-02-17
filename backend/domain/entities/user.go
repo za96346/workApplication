@@ -22,49 +22,6 @@ type User struct {
     LastModify       *time.Time   `gorm:"column:lastModify" json:"LastModify"`             //type:*time.Time   comment:最後更新時間          version:2023-10-02 14:15
 }
 
-func (u *User) TableName() string {
-	return "user"
-}
-
-// 拿取新的 user id ( max count + 1 )
-func (u *User) GetNewUserID(companyId ...int) int {
-    var MaxCount int64
-
-    validateField := (*u).CompanyId
-
-    if len(companyId) > 0 {
-        validateField = companyId[0]
-    }
-
-    DB.Model(&User{}).
-        Where("companyId = ?", validateField).
-        Select("max(userId)").
-        Row().
-        Scan(&MaxCount)
-    
-    (*u).UserId = int(MaxCount) + 1
-    (*u).CompanyId = validateField
-
-    return int(MaxCount) + 1
-}
-
-// 帳號是否重複
-func (u *User) IsAccountDuplicated(account ...string) bool {
-    var MaxCount int64
-
-    validateField := (*u).Account
-
-    if len(account) > 0 {
-        validateField = account[0]
-    }
-
-    DB.Model(&User{}).
-        Where("account = ?", validateField).
-        Count(&MaxCount)
-
-    return MaxCount > 0
-}
-
 // 是否離職
 func (u *User) IsQuitWorking() bool {
     return  (*u).QuitFlag == "Y"

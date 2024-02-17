@@ -12,36 +12,3 @@ type CompanyBanch struct {
     CreateTime  *time.Time   `gorm:"column:createTime" json:"CreateTime"`   //type:*time.Time   comment:創建時間             version:2023-10-04 16:45
     LastModify  *time.Time   `gorm:"column:lastModify" json:"LastModify"`   //type:*time.Time   comment:最後更新時間         version:2023-10-04 16:45
 }
-
-
-func (c *CompanyBanch) TableName() string {
-	return "company_banch"
-}
-
-// 拿取新的 banch id ( max count + 1 )
-func (cb *CompanyBanch) GetNewBanchID(companyId int) int {
-    var MaxCount int64
-    DB.Model(&CompanyBanch{}).
-        Where("companyId = ?", companyId).
-        Select("max(banchId)").
-        Row().
-        Scan(&MaxCount)
-    
-    (*cb).BanchId = int(MaxCount) + 1
-    (*cb).CompanyId = companyId
-
-    return int(MaxCount) + 1
-}
-
-// 查詢是否有重複banch name
-func (b *CompanyBanch) IsBanchNameDuplicated() bool {
-    var MaxCount int64
-    DB.Model(&CompanyBanch{}).
-        Where("companyId = ?", (*b).CompanyId).
-        Where("banchName = ?", (*b).BanchName).
-        Where("banchId != ?", (*b).BanchId).
-        Where("deleteFlag = ?", "N").
-        Count(&MaxCount)
-
-    return int(MaxCount) > 0
-}

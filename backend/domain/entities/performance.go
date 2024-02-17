@@ -22,38 +22,3 @@ type Performance struct {
     CreateTime      *time.Time   `gorm:"column:createTime" json:"CreateTime"`               //type:*time.Time   comment:創建時間        version:2023-10-08 14:35
     LastModify      *time.Time   `gorm:"column:lastModify" json:"LastModify"`               //type:*time.Time   comment:最後更新時間    version:2023-10-08 14:35
 }
-
-func (p *Performance) TableName() string {
-	return "performance"
-}
-
-
-// 拿取新的 performance id ( max count + 1 )
-func (p *Performance) GetNewPerformanceID(companyId int) int {
-    var MaxCount int64
-    DB.Model(&Performance{}).
-        Where("companyId = ?", companyId).
-        Select("max(performanceId)").
-        Row().
-        Scan(&MaxCount)
-    
-    (*p).PerformanceId = int(MaxCount) + 1
-    (*p).CompanyId = companyId
-
-    return int(MaxCount) + 1
-}
-
-// 檢查績效年月是否重複
-func (p *Performance) IsYearMonthDuplicated() bool {
-    var MaxCount int64
-    DB.Model(&Performance{}).
-        Where("companyId = ?", (*p).CompanyId).
-        Where("userId = ?", (*p).UserId).
-        Where("performanceId != ?", (*p).PerformanceId).
-        Where("Year = ?", (*p).Year).
-        Where("Month = ?", (*p).Month).
-        Where("deleteFlag = ?", "N").
-        Count(&MaxCount)
-
-    return MaxCount > 0
-}

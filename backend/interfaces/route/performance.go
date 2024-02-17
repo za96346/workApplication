@@ -1,11 +1,8 @@
-package Route
+package route
 
 import (
-	// "strconv"
-
-	"backend/Middleware"
-	"backend/Restful/Controller/CTL_Performance"
-
+	"backend/interfaces/middleware"
+	"backend/interfaces/controller"
 	"github.com/gin-gonic/gin"
 )
 

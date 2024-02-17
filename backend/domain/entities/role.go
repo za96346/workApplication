@@ -13,34 +13,3 @@ type Role struct {
     CreateTime  *time.Time   `gorm:"column:createTime" json:"CreateTime"`   //type:*time.Time   comment:創建時間             version:2023-10-02 14:18
     LastModify  *time.Time   `gorm:"column:lastModify" json:"LastModify"`   //type:*time.Time   comment:最近修改             version:2023-10-02 14:18
 }
-
-func (r *Role) TableName() string {
-	return "role"
-}
-
-// 拿取新的 role id ( max count + 1 )
-func (r *Role) GetNewRoleID() int {
-    var MaxCount int64
-    DB.Model(&Role{}).
-        Where("companyId = ?", (*r).CompanyId).
-        Select("max(roleId)").
-        Row().
-        Scan(&MaxCount)
-    
-    (*r).RoleId = int(MaxCount) + 1
-
-    return int(MaxCount) + 1
-}
-
-// 查詢是否有重複role name
-func (r *Role) IsRoleNameDuplicated() bool {
-    var MaxCount int64
-    DB.Model(&Role{}).
-        Where("companyId = ?", (*r).CompanyId).
-        Where("roleName = ?", (*r).RoleName).
-        Where("roleId != ?", (*r).RoleId).
-        Where("deleteFlag = ?", "N").
-        Count(&MaxCount)
-
-    return int(MaxCount) > 0
-}
