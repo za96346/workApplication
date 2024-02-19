@@ -1,11 +1,11 @@
 package controller
 
 import (
+	"backend/interfaces/method"
 	"backend/application/services"
 	"backend/domain/entities"
-	"fmt"
+	"backend/interfaces/enum"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,22 +20,51 @@ func NewCompany() *CompanyController {
 	}
 }
 
-func (s *CompanyController) UpdateCompany(c *gin.Context) {
-	var companyEntity entities.Company
-	if err := c.ShouldBindJSON(&companyEntity); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, gin.H{
-			"invalid_json": "invalid json",
-		})
-		return
+func (s *CompanyController) GetCompany(Request *gin.Context) {
+	// 權限驗證
+	session := &method.SessionStruct{
+		Request: Request,
+		ReqBodyValidation: false,
+		PermissionValidation: true,
+		PermissionFuncCode: string(enum.CompanyData),
+		PermissionItemCode: "inquire",
 	}
+	if session.SessionHandler() != nil {return}
 
+	responseData, _ := s.companyApp.GetCompany(
+		&entities.Company{
+			CompanyId: session.CompanyId,
+		},
+	)
+
+	Request.JSON(
+		http.StatusOK,
+		gin.H {
+			"message": "成功",
+			"data":    responseData,
+		},
+	)
 }
 
-func (s *CompanyController) GetCompany(c *gin.Context) {
-	userId, err := strconv.ParseUint(c.Param("user_id"), 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, err.Error())
-		return
+func (s *CompanyController) UpdateCompany(Request *gin.Context) {
+	reqBody := new(entities.Company)
+	// 權限驗證
+	session := &method.SessionStruct{
+		Request: Request,
+		ReqBodyValidation: true,
+		ReqBodyStruct: reqBody,
+		PermissionValidation: true,
+		PermissionFuncCode: string(enum.CompanyData),
+		PermissionItemCode: "edit",
 	}
-	fmt.Print(userId)
+	if session.SessionHandler() != nil {return}
+
+	s.companyApp.UpdateCompany(reqBody)
+
+	Request.JSON(
+		http.StatusOK,
+		gin.H {
+			"message": "更新成功",
+		},
+	)
 }

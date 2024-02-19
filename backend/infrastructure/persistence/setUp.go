@@ -1,8 +1,10 @@
 package persistence
 
 import (
-	"fmt"
 	"backend/domain/repository"
+	"fmt"
+	"strings"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
@@ -39,4 +41,19 @@ func NewRepositories(Dbdriver, DbUser, DbPassword, DbPort, DbHost, DbName string
 //closes the  database connection
 func (s *Repositories) Close() error {
 	return s.db.Close()
+}
+
+
+func persistenceErrorHandler(err error) *map[string]string {
+	dbErr := map[string]string{}
+
+	if err != nil {
+		if gorm.IsRecordNotFoundError(err) {
+			dbErr["notFound"] = "recorder not found"
+		}
+		if strings.Contains(err.Error(), "duplicate") || strings.Contains(err.Error(), "Duplicate") {
+			dbErr["unique_title"] = "title already taken"
+		}
+	}
+	return  &dbErr
 }

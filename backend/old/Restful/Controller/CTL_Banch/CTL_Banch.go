@@ -9,11 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var ErrorInstance = &Method.ErrorStruct{
-	MessageTitle: "[CTL_Banch 公司部門]--",
-}
 
-const FuncCode = "banchManage"
 
 // 拿取
 func Get(Request *gin.Context) {

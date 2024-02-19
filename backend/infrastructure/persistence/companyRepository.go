@@ -1,11 +1,11 @@
 package persistence
 
 import (
-	"errors"
 	"backend/domain/entities"
 	"backend/domain/repository"
+	"time"
+
 	"github.com/jinzhu/gorm"
-	"strings"
 )
 
 
@@ -20,42 +20,29 @@ func NewCompanyRepository(db *gorm.DB) *CompanyRepo {
 
 var _ repository.CompanyRepository = &CompanyRepo{}
 
-func (r *CompanyRepo) GetCompany(companyEntity *entities.Company) (*entities.Company, error) {
+func (r *CompanyRepo) GetCompany(companyEntity *entities.Company) (*entities.Company, *map[string]string) {
 	var company entities.Company
 	err := r.db.
 		Debug().
 		Table(r.tableName).
 		Where("id = ?", (*companyEntity).CompanyId).
-		Take(&companyEntity).
+		First(&company).
 		Error
 
-	if err != nil {
-		return nil, errors.New("database error, please try again")
-	}
-	if gorm.IsRecordNotFoundError(err) {
-		return nil, errors.New("company not found")
-	}
-	return &company, nil
+	return &company, persistenceErrorHandler(err)
 }
 
 
 func (r *CompanyRepo) UpdateCompany(companyEntity *entities.Company) (*entities.Company, *map[string]string) {
-	dbErr := map[string]string{}
+	now := time.Now()
+	(*companyEntity).LastModify = &now
+
 	err := r.db.
 		Debug().
 		Table(r.tableName).
-		Save(&companyEntity).
+		Where("companyId = ?", (*companyEntity).CompanyId).
+		Updates(&companyEntity).
 		Error
 
-	if err != nil {
-		//since our title is unique
-		if strings.Contains(err.Error(), "duplicate") || strings.Contains(err.Error(), "Duplicate") {
-			dbErr["unique_title"] = "title already taken"
-			return nil, &dbErr
-		}
-		//any other db error
-		dbErr["db_error"] = "database error"
-		return nil, &dbErr
-	}
-	return companyEntity, nil
+	return companyEntity, persistenceErrorHandler(err)
 }

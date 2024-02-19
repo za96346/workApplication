@@ -1,4 +1,4 @@
-package Method
+package method
 
 import (
 	"encoding/json"
