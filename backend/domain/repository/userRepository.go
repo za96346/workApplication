@@ -10,6 +10,7 @@ type UserRepository interface {
 
 	UpdateUser(*entities.User) (*entities.User, *map[string]string)
 	SaveUser(*entities.User) (*entities.User, *map[string]string)
+	DeleteUser(*entities.User) (*entities.User, *map[string]string)
 	
 	GetNewUserID(int) int
 	IsAccountDuplicated(string) bool

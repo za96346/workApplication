@@ -237,4 +237,30 @@ func (u *UserController) SaveUser(Request *gin.Context) {
 }
 
 func (u *UserController) DeleteUser(Request *gin.Context) {
+	reqBody := new(struct {
+		UserId int `json:"UserId" binding:"required"`
+	})
+
+	// 權限驗證
+	session := &method.SessionStruct{
+		Request: Request,
+		PermissionValidation: true,
+		PermissionFuncCode: string(enum.EmployeeManage),
+		PermissionItemCode: "delete",
+		ReqBodyValidation: true,
+		ReqBodyStruct: reqBody,
+	}
+	if session.SessionHandler() != nil {return}
+
+	u.userApp.DeleteUser(&entities.User{
+		CompanyId: session.CompanyId,
+		UserId: reqBody.UserId,
+	})
+
+	Request.JSON(
+		http.StatusOK,
+		gin.H {
+			"message": "刪除成功",
+		},
+	)
 }

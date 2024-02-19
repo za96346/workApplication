@@ -66,6 +66,6 @@ func (u *UserApp) SaveUser(userEntity *entities.User) (*entities.User, *map[stri
 	return u.userRepo.SaveUser(userEntity)
 }
 
-func (u *UserApp) DeleteUser(*entities.User) (*entities.User, *map[string]string) {
-	return &entities.User{}, &map[string]string{}
+func (u *UserApp) DeleteUser(userEntity *entities.User) (*entities.User, *map[string]string) {
+	return u.userRepo.DeleteUser(userEntity)
 }

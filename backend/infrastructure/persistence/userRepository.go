@@ -196,6 +196,27 @@ func (r *UserRepo) UpdateUser(userEntity *entities.User) (*entities.User, *map[s
 	return userEntity, persistenceErrorHandler(err)
 }
 
+func (r *UserRepo) DeleteUser(userEntity *entities.User) (*entities.User, *map[string]string) {
+	// 加入一些固定欄位
+	now := time.Now()
+
+	(*userEntity).LastModify = &now
+	(*userEntity).DeleteTime = &now
+	(*userEntity).DeleteFlag = "Y"
+
+	// 更新
+	err := r.db.
+		Debug().
+		Table(r.tableName).
+		Where("companyId = ?", userEntity.CompanyId).
+		Where("userId = ?", userEntity.UserId).
+		Updates(&userEntity).
+		Error
+
+	return userEntity, persistenceErrorHandler(err)
+}
+
+
 // 帳號是否重複
 func (r *UserRepo) IsAccountDuplicated(account string) bool {
     var MaxCount int64
