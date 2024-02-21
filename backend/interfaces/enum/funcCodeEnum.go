@@ -8,4 +8,5 @@ const (
 	EmployeeManage FuncCode = "employeeManage"
 	SelfData FuncCode = "selfData"
 	RoleManage FuncCode = "roleManage"
+	Performance FuncCode = "performance"
 )

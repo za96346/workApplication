@@ -22,7 +22,13 @@ func NewRoleRepository(db *gorm.DB) *RoleRepo {
 var _ repository.RoleRepository = &RoleRepo{}
 
 func (r *RoleRepo) SaveRole(roleEntity *entities.Role, TX *gorm.DB) (*entities.Role, *map[string]string) {
-	roleEntity.RoleId = r.GetNewRoleID(roleEntity.CompanyId)
+	// 新增固定欄位
+	now := time.Now()
+	(*roleEntity).RoleId = r.GetNewRoleID((*roleEntity).CompanyId)
+	(*roleEntity).CreateTime = &now
+	(*roleEntity).LastModify = &now
+	(*roleEntity).DeleteFlag = "N"
+	(*roleEntity).DeleteTime = nil
 
 	err := TX.
 		Debug().

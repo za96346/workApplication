@@ -1,8 +1,9 @@
 package route
 
 import (
-	"backend/interfaces/middleware"
 	"backend/interfaces/controller"
+	"backend/interfaces/middleware"
+
 	"github.com/gin-gonic/gin"
 )
 func User(props *gin.RouterGroup, userController *controller.UserController) {

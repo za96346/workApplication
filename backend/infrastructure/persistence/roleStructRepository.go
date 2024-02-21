@@ -3,6 +3,7 @@ package persistence
 import (
 	"backend/domain/entities"
 	"backend/domain/repository"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -48,13 +49,15 @@ func (r *RoleStrcutRepo) DeleteRoleStructs(roleStructEntity *entities.RoleStruct
 }
 
 func (r *RoleStrcutRepo) SaveRoleStruct(roleStructEntity *entities.RoleStruct, Tx *gorm.DB) (*entities.RoleStruct, *map[string]string) {
-	var roleStruct entities.RoleStruct
+	now := time.Now()
+	(*roleStructEntity).CreateTime = &now
+	(*roleStructEntity).LastModify = &now
 
 	err := Tx.
 		Debug().
 		Table(r.tableName).
-		Create(&roleStruct).
+		Create(&roleStructEntity).
 		Error
 
-	return &roleStruct, persistenceErrorHandler(err)
+	return roleStructEntity, persistenceErrorHandler(err)
 }

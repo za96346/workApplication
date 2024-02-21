@@ -1,8 +1,11 @@
 package persistence
 
 import (
+	"backend/domain/dtos"
 	"backend/domain/entities"
 	"backend/domain/repository"
+	"errors"
+	"time"
 
 	"github.com/jinzhu/gorm"
 )
@@ -18,6 +21,227 @@ func NewPerformanceRepository(db *gorm.DB) *PerformanceRepo {
 }
 
 var _ repository.PerformanceRepository = &PerformanceRepo{}
+
+func (r *PerformanceRepo) GetPerformances(
+    performanceEntity *entities.Performance,
+    userName string,
+    startDate string,
+    endDate string,
+    scopeBanch *[]int,
+    scopeRole *[]int,
+) (*[]dtos.PerformanceDetailDto, *map[string]string) {
+    // 獲取資料
+	var data []dtos.PerformanceDetailDto
+	searchQuery := r.db.
+        Debug().
+        Table(r.tableName).
+		Where("performance.companyId = ?", performanceEntity.CompanyId).
+		Where("performance.banchId in (?)", *scopeBanch).
+		Where("user.roleId in (?)", *scopeRole).
+		Where("performance.deleteFlag = ?", "N").
+		Joins(`
+			left join user
+			on user.userId = performance.userId
+			and user.companyId = performance.companyId
+		`).
+		Joins(`
+			left join company_banch
+			on company_banch.companyId = performance.companyId
+			and company_banch.banchId = performance.banchId
+		`).
+		Select(
+			"performance.*",
+			"user.userName as userName",
+			"company_banch.banchName as banchName",
+			"user.roleId",
+		).
+		Order("year desc, month desc, sort")
+
+	// 使用者名稱
+	if &userName != nil {
+		searchQuery.Where("userName like ?", "%" + userName + "%")
+	}
+
+	// 日期塞選
+	if &startDate != nil {
+		searchQuery.Where(
+			`
+				concat(
+					performance.year,
+					'-',
+					if(
+						performance.month < 10,
+						concat('0', performance.month),
+						performance.month
+					)
+				) >= ?
+			`,
+			startDate,
+		)
+	}
+
+	if &endDate != nil {
+		searchQuery.Where(
+			`
+				concat(
+					performance.year,
+					'-',
+					if(
+						performance.month < 10,
+						concat('0', performance.month),
+						performance.month
+					)
+				) <= ?
+			`,
+			endDate,
+		)
+	}
+
+	err := searchQuery.Find(&data).Error
+
+    return &data, persistenceErrorHandler(err)
+}
+
+func (r *PerformanceRepo) GetYearPerformances(
+	performanceEntity *entities.Performance,
+    userName string,
+    startYear string,
+    endYear string,
+    scopeBanch *[]int,
+    scopeRole *[]int,
+) (*[]entities.YearPerformance, *map[string]string) {
+	var data []entities.YearPerformance
+
+	searchQuery := r.db.
+		Debug().
+		Table(r.tableName).
+		Where("performance.companyId = ?", performanceEntity.CompanyId).
+		Where("performance.banchId in (?)", *scopeBanch).
+		Where("user.roleId in (?)", *scopeRole).
+		Where("performance.deleteFlag = ?", "N").
+		Joins(`
+			left join user
+			on user.userId = performance.userId
+			and user.companyId = performance.companyId
+		`).
+		Joins(`
+			left join company_banch
+			on company_banch.companyId = performance.companyId
+			and company_banch.banchId = performance.banchId
+		`).
+		Group("performance.userId").
+		Group("performance.year").
+		Group("user.userName").
+		Order("score desc").
+		Select(
+			"performance.year as year",
+			"user.userName as userName",
+			`
+				round(
+					(
+						sum(performance.attitude)
+						+ sum(performance.efficiency)
+						+ sum(performance.professional)
+					) / 36, 2
+				) as score
+			`,
+		)
+
+	// 使用者名稱
+	if &userName != nil {
+		searchQuery.Where("user.userName like ?", "%" + userName + "%")
+	}
+
+	// 年度塞選
+	if &startYear != nil {
+		searchQuery.Where("performance.year >= ?", startYear)
+	}
+
+	if &endYear != nil {
+		searchQuery.Where("performance.year <= ?", endYear)
+	}
+
+	err := searchQuery.Find(&data).Error
+
+	return &data, persistenceErrorHandler(err)
+}
+
+func (r *PerformanceRepo) GetPerformance(performanceEntity *entities.Performance) (*entities.Performance, *map[string]string) {
+	var performance entities.Performance
+	searchQuery := r.db.
+		Debug().
+		Table(r.tableName)
+
+	if &performanceEntity.PerformanceId != nil {
+		searchQuery.Where("performanceId = ?", performanceEntity.PerformanceId)
+	}
+
+	if &performanceEntity.CompanyId != nil {
+		searchQuery.Where("companyId = ?", performanceEntity.CompanyId)
+	}
+
+	err := searchQuery.First(&performance).Error
+
+	return performanceEntity, persistenceErrorHandler(err)
+}
+
+func (r *PerformanceRepo) SavePerformance(performanceEntity *entities.Performance) (*entities.Performance, *map[string]string) {
+	if r.IsYearMonthDuplicated(performanceEntity) {
+		return nil, persistenceErrorHandler(errors.New("年月份重複"))
+	}
+
+	// 新增固定欄位
+	now := time.Now()
+	(*performanceEntity).PerformanceId = r.GetNewPerformanceID(performanceEntity.CompanyId)
+	(*performanceEntity).DeleteFlag = "N"
+	(*performanceEntity).DeleteTime = nil
+	(*performanceEntity).CreateTime = &now
+	(*performanceEntity).LastModify = &now
+
+	err := r.db.
+		Debug().
+		Table(r.tableName).
+		Create(performanceEntity).
+		Error
+
+	return performanceEntity, persistenceErrorHandler(err)
+}
+
+func (r *PerformanceRepo) UpdatePerformance(performanceEntity *entities.Performance) (*entities.Performance, *map[string]string) {
+	if r.IsYearMonthDuplicated(performanceEntity) {
+		return nil, persistenceErrorHandler(errors.New("年月份重複"))
+	}
+
+	// 新增固定欄位
+	now := time.Now()
+	(*performanceEntity).DeleteFlag = "N"
+	(*performanceEntity).DeleteTime = nil
+	(*performanceEntity).LastModify = &now
+
+	err := r.db.
+		Debug().
+		Table(r.tableName).
+		Updates(performanceEntity).
+		Error
+
+	return performanceEntity, persistenceErrorHandler(err)
+}
+
+func (r *PerformanceRepo) DeletePerformance(performanceEntity *entities.Performance) (*entities.Performance, *map[string]string) {
+	// 新增固定欄位
+	now := time.Now()
+	(*performanceEntity).DeleteFlag = "Y"
+	(*performanceEntity).DeleteTime = &now
+	(*performanceEntity).LastModify = &now
+
+	err := r.db.
+		Debug().
+		Table(r.tableName).
+		Updates(performanceEntity).
+		Error
+
+	return performanceEntity, persistenceErrorHandler(err)
+}
 
 // 拿取新的 performance id ( max count + 1 )
 func (r *PerformanceRepo) GetNewPerformanceID(companyId int) int {
