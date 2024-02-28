@@ -4,7 +4,6 @@ import (
 	application "backend/application/services"
 	"backend/domain/entities"
 	"backend/infrastructure/persistence"
-	"backend/interfaces/enum"
 	"backend/interfaces/method"
 	"net/http"
 
@@ -38,12 +37,22 @@ func (s *CompanyBanchController) GetCompanyBanches(Request *gin.Context) {
 	)
 	if err != nil {return}
 
-	responseData, _ := s.companyBanchApp.GetCompanyBanches(
+	responseData, appErr := s.companyBanchApp.GetCompanyBanches(
 		&entities.CompanyBanch{
 			BanchName: *reqParams.BanchName,
 		},
 		session,
 	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "失敗",
+				"data":    []int{},
+			},
+		)
+	}
 
 	Request.JSON(
 		http.StatusOK,
@@ -61,7 +70,17 @@ func (s *CompanyBanchController) GetCompanyBanchesSelector(Request *gin.Context)
 	)
 	if err != nil {return}
 
-	responseData, _ := s.companyBanchApp.GetCompanyBanchesSelector(session)
+	responseData, appErr := s.companyBanchApp.GetCompanyBanchesSelector(session)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "失敗",
+				"data":    []int{},
+			},
+		)
+	}
 
 	Request.JSON(
 		http.StatusOK,
@@ -84,9 +103,16 @@ func (s *CompanyBanchController) UpdateCompanyBanch(Request *gin.Context) {
 	)
 	if err != nil {return}
 
-	if session.CheckScopeBanchValidation((*reqBody).BanchId) != nil {return}
+	_, appErr := s.companyBanchApp.UpdateCompanyBanch(reqBody, session)
 
-	s.companyBanchApp.UpdateCompanyBanch(reqBody)
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "更新失敗",
+			},
+		)
+	}
 
 	Request.JSON(
 		http.StatusOK,
@@ -98,18 +124,25 @@ func (s *CompanyBanchController) UpdateCompanyBanch(Request *gin.Context) {
 
 func (s *CompanyBanchController) SaveCompanyBanch(Request *gin.Context) {
 	reqBody := new(entities.CompanyBanch)
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.BanchManage),
-		PermissionItemCode: "add",
-	}
-	if session.SessionHandler() != nil {return}
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
 
-	s.companyBanchApp.SaveCompanyBanch(reqBody)
+	_, appErr := s.companyBanchApp.SaveCompanyBanch(reqBody, session)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "新增失敗",
+			},
+		)
+	}
 
 	Request.JSON(
 		http.StatusOK,
@@ -124,17 +157,30 @@ func (s *CompanyBanchController) DeleteCompanyBanch(Request *gin.Context) {
 		BanchId int `json:"BanchId" binding:"required"`
 	})
 
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.BanchManage),
-		PermissionItemCode: "delete",
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
+
+	_, appErr := s.companyBanchApp.DeleteCompanyBanch(
+		&entities.CompanyBanch{
+			BanchId: reqBody.BanchId,
+		},
+		session,
+	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "刪除失敗",
+			},
+		)
 	}
-	if session.SessionHandler() != nil {return}
-	if session.CheckScopeBanchValidation((*reqBody).BanchId) != nil {return}
 
 	Request.JSON(
 		http.StatusOK,

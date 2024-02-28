@@ -65,6 +65,7 @@ func (c *CompanyBanchApp) GetCompanyBanchesSelector(sessionStruct *method.Sessio
 	if err != nil {
 		return nil, err
 	}
+
 	return c.companyBanchRepo.GetCompanyBanchesSelector(authAggregate.User.CompanyId)
 }
 
@@ -73,7 +74,7 @@ func (c *CompanyBanchApp) UpdateCompanyBanch(companyBanchEntity *entities.Compan
 		sessionStruct,
 		c.roleRepo,
 		c.companyBanchRepo,
-		false,
+		true,
 		string(enum.BanchManage),
 		string(enum.Edit),
 	)
@@ -82,8 +83,8 @@ func (c *CompanyBanchApp) UpdateCompanyBanch(companyBanchEntity *entities.Compan
 		return nil, err
 	}
 
-	if err1 := authAggregate.CheckScopeBanchValidation((*companyBanchEntity).BanchId); err1 != nil {
-		return nil, &err1
+	if err := authAggregate.CheckScopeBanchValidation((*companyBanchEntity).BanchId); err != nil {
+		return nil, &err
 	}
 
 	companyBanchEntity.CompanyId = authAggregate.User.CompanyId
@@ -92,9 +93,43 @@ func (c *CompanyBanchApp) UpdateCompanyBanch(companyBanchEntity *entities.Compan
 }
 
 func (c *CompanyBanchApp) SaveCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, *error) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		c.roleRepo,
+		c.companyBanchRepo,
+		true,
+		string(enum.BanchManage),
+		string(enum.Add),
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
+	companyBanchEntity.CompanyId = authAggregate.User.CompanyId
+
 	return c.companyBanchRepo.SaveCompanyBanch(companyBanchEntity)
 }
 
 func (c *CompanyBanchApp) DeleteCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, *error) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		c.roleRepo,
+		c.companyBanchRepo,
+		true,
+		string(enum.BanchManage),
+		string(enum.Delete),
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
+	if err := authAggregate.CheckScopeBanchValidation((*companyBanchEntity).BanchId); err != nil {
+		return nil, &err
+	}
+
+	companyBanchEntity.CompanyId = authAggregate.User.CompanyId
+
 	return c.companyBanchRepo.DeleteCompanyBanch(companyBanchEntity)
 }
