@@ -33,14 +33,28 @@ func (e *EntryController) Login(Request *gin.Context) {
 	})
 
 	if Request.ShouldBindJSON(&reqBody) != nil {
-		// ErrorInstance.ErrorHandler(Request, "Request Data 格式不正確")
+		Request.JSON(
+			http.StatusOK,
+			gin.H {
+				"message": "Request Data 格式不正確",
+			},
+		)
 		return
 	}
 
-	user, _ := e.entryApp.Login(&entities.User{
+	user, hasAuth := e.entryApp.Login(&entities.User{
 		Account: reqBody.Account,
 		Password: reqBody.Password,
 	})
+
+	if hasAuth != nil {
+		Request.JSON(
+			http.StatusOK,
+			gin.H {
+				"message": "登入失敗",
+			},
+		)
+	}
 
 	// 加入 banch id 為 nil 的轉換
 	if (*user).BanchId == nil {
