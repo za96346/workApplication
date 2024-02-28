@@ -26,12 +26,22 @@ func (s *CompanyController) GetCompany(Request *gin.Context) {
 	session, err := method.NewSession(Request, nil)
 	if err != nil {return}
 
-	responseData, _ := s.companyApp.GetCompany(
+	responseData, appErr := s.companyApp.GetCompany(
 		&entities.Company{
 			CompanyId: session.User.CompanyId,
 		},
 		session,
 	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "失敗",
+				"data":    []int{},
+			},
+		)
+	}
 
 	Request.JSON(
 		http.StatusOK,
@@ -54,7 +64,16 @@ func (s *CompanyController) UpdateCompany(Request *gin.Context) {
 	)
 	if err != nil {return}
 
-	s.companyApp.UpdateCompany(reqBody, session)
+	_, appErr := s.companyApp.UpdateCompany(reqBody, session)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "更新失敗",
+			},
+		)
+	}
 
 	Request.JSON(
 		http.StatusOK,
