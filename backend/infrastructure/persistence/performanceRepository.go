@@ -29,7 +29,7 @@ func (r *PerformanceRepo) GetPerformances(
     endDate string,
     scopeBanch *[]int,
     scopeRole *[]int,
-) (*[]dtos.PerformanceDetailDto, *map[string]string) {
+) (*[]dtos.PerformanceDetailDto, *error) {
     // 獲取資料
 	var data []dtos.PerformanceDetailDto
 	searchQuery := r.db.
@@ -99,7 +99,7 @@ func (r *PerformanceRepo) GetPerformances(
 
 	err := searchQuery.Find(&data).Error
 
-    return &data, persistenceErrorHandler(err)
+    return &data, &err
 }
 
 func (r *PerformanceRepo) GetYearPerformances(
@@ -109,7 +109,7 @@ func (r *PerformanceRepo) GetYearPerformances(
     endYear string,
     scopeBanch *[]int,
     scopeRole *[]int,
-) (*[]entities.YearPerformance, *map[string]string) {
+) (*[]entities.YearPerformance, *error) {
 	var data []entities.YearPerformance
 
 	searchQuery := r.db.
@@ -163,10 +163,10 @@ func (r *PerformanceRepo) GetYearPerformances(
 
 	err := searchQuery.Find(&data).Error
 
-	return &data, persistenceErrorHandler(err)
+	return &data, &err
 }
 
-func (r *PerformanceRepo) GetPerformance(performanceEntity *entities.Performance) (*entities.Performance, *map[string]string) {
+func (r *PerformanceRepo) GetPerformance(performanceEntity *entities.Performance) (*entities.Performance, *error) {
 	var performance entities.Performance
 	searchQuery := r.db.
 		Debug().
@@ -182,12 +182,13 @@ func (r *PerformanceRepo) GetPerformance(performanceEntity *entities.Performance
 
 	err := searchQuery.First(&performance).Error
 
-	return performanceEntity, persistenceErrorHandler(err)
+	return performanceEntity, &err
 }
 
-func (r *PerformanceRepo) SavePerformance(performanceEntity *entities.Performance) (*entities.Performance, *map[string]string) {
+func (r *PerformanceRepo) SavePerformance(performanceEntity *entities.Performance) (*entities.Performance, *error) {
 	if r.IsYearMonthDuplicated(performanceEntity) {
-		return nil, persistenceErrorHandler(errors.New("年月份重複"))
+		err := errors.New("年月份重複")
+		return nil, &err
 	}
 
 	// 新增固定欄位
@@ -204,12 +205,13 @@ func (r *PerformanceRepo) SavePerformance(performanceEntity *entities.Performanc
 		Create(performanceEntity).
 		Error
 
-	return performanceEntity, persistenceErrorHandler(err)
+	return performanceEntity, &err
 }
 
-func (r *PerformanceRepo) UpdatePerformance(performanceEntity *entities.Performance) (*entities.Performance, *map[string]string) {
+func (r *PerformanceRepo) UpdatePerformance(performanceEntity *entities.Performance) (*entities.Performance, *error) {
 	if r.IsYearMonthDuplicated(performanceEntity) {
-		return nil, persistenceErrorHandler(errors.New("年月份重複"))
+		err := errors.New("年月份重複")
+		return nil, &err
 	}
 
 	// 新增固定欄位
@@ -224,10 +226,10 @@ func (r *PerformanceRepo) UpdatePerformance(performanceEntity *entities.Performa
 		Updates(performanceEntity).
 		Error
 
-	return performanceEntity, persistenceErrorHandler(err)
+	return performanceEntity, &err
 }
 
-func (r *PerformanceRepo) DeletePerformance(performanceEntity *entities.Performance) (*entities.Performance, *map[string]string) {
+func (r *PerformanceRepo) DeletePerformance(performanceEntity *entities.Performance) (*entities.Performance, *error) {
 	// 新增固定欄位
 	now := time.Now()
 	(*performanceEntity).DeleteFlag = "Y"
@@ -240,7 +242,7 @@ func (r *PerformanceRepo) DeletePerformance(performanceEntity *entities.Performa
 		Updates(performanceEntity).
 		Error
 
-	return performanceEntity, persistenceErrorHandler(err)
+	return performanceEntity, &err
 }
 
 // 拿取新的 performance id ( max count + 1 )

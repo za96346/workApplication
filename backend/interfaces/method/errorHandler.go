@@ -16,7 +16,6 @@ func (instance *ErrorStruct) ErrorHandler(Request *gin.Context, MSG string) {
 	session := SessionStruct{
 		Request: Request,
 		ReqBodyValidation: false,
-		PermissionValidation: false,
 	}
 	session.SessionHandler()
 

@@ -1,7 +1,9 @@
 package persistence
 
 import (
+	"backend/domain/entities"
 	"backend/domain/repository"
+
 	"github.com/jinzhu/gorm"
 )
 
@@ -16,3 +18,16 @@ func NewOperationItemRepository(db *gorm.DB) *OperationItemRepo {
 }
 
 var _ repository.OperationItemRepository = &OperationItemRepo{}
+
+func (o *OperationItemRepo) GetOperationItems() (*[]entities.OperationItem, *error) {
+	var operationItems []entities.OperationItem
+
+	err := o.db.
+		Debug().
+		Table(o.tableName).
+		Order("sort asc").
+		Find(&operationItems).
+		Error
+
+	return &operationItems, &err
+}

@@ -3,6 +3,7 @@ package aggregates
 import (
 	"backend/domain/entities"
 	"backend/domain/repository"
+	"backend/interfaces/method"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -43,7 +44,7 @@ func convertSliceToInt(in []any) (out []int) {
 type AutAggregate struct {
 	ID string
 	User entities.User
-		/**
+	/**
 		Permission = {
 			[funcCode]: {
 				[itemCode]: {
@@ -54,12 +55,10 @@ type AutAggregate struct {
 		}
 	*/
 	Permission map[string](map[string](map[string]interface{}))
-	PermissionFuncCode string
-	PermissionItemCode string
 	CurrentPermission map[string]interface{} // 當前的權限
 	CurrentPermissionScopeBanch []int // 當前的 scope banch
 	CurrentPermissionScopeRole []int // 當前的 scope role
-	PermissionValidation bool // 是否開啟 權限驗證
+	
 
 	IsCurrentScopeBanchAll bool // scope banch 是否是 all (給add 看的)
 	IsCurrentScopeRoleAll bool // scope role 是否是 all (給add 看的)
@@ -69,41 +68,45 @@ type AutAggregate struct {
 	auth 基本處理
 */
 func NewAuthAggregate(
-	userEntity entities.User,
-	permission interface{},
+	sessionStruct *method.SessionStruct,
 	roleRepo repository.RoleRepository,
 	banchRepo repository.CompanyBanchRepository,
-) (*AutAggregate, error){
+	permissionValidation bool, // 是否開啟 權限驗證
+	permissionFuncCode string,
+	permissionItemCode string,
+) (*AutAggregate, *error){
 	instance := new(AutAggregate)
 
 	(*instance).IsCurrentScopeBanchAll = false
 	(*instance).IsCurrentScopeRoleAll = false
-	(*instance).User = userEntity
+	(*instance).User = *sessionStruct.User
 
 	// 權限json decode
-	if permission != nil {
-		json.Unmarshal([]byte(permission.(string)), &(*instance).Permission)
+	if sessionStruct.Permission != nil {
+		json.Unmarshal([]byte(sessionStruct.Permission.(string)), &(*instance).Permission)
 
-		funcCode := (*instance).PermissionFuncCode
-		itemCode := (*instance).PermissionItemCode
-
-		permission, OK := (*instance).Permission[funcCode][itemCode]
-		if !OK && (*instance).PermissionValidation {
-			errMSG := fmt.Sprintf("權限驗證失敗--[funcCode: '%s'][itemCode: '%s']", funcCode, itemCode)
-			return nil, errors.New(errMSG)
+		permission, OK := (*instance).Permission[permissionFuncCode][permissionItemCode]
+		if !OK && permissionValidation {
+			errMSG := fmt.Sprintf(
+				"權限驗證失敗--[funcCode: '%s'][itemCode: '%s']",
+				permissionFuncCode,
+				permissionItemCode,
+			)
+			err := errors.New(errMSG)
+			return nil, &err
 		}
 
 		// 可編輯角色範圍 的資料 搜尋 ( 分為自己，所有，自訂 )
 		var scopeRole []int
 		if permission["scopeRole"] == "all" {
 			scopeRole = *roleRepo.GetRolesId(&entities.Role{
-				CompanyId: userEntity.CompanyId,
+				CompanyId: sessionStruct.User.CompanyId,
 			})
 
 			// 設定 is current scope role all
 			(*instance).IsCurrentScopeRoleAll = true
 		} else if permission["scopeRole"] == "self" {
-			scopeRole = append(scopeRole, userEntity.RoleId)
+			scopeRole = append(scopeRole, sessionStruct.User.RoleId)
 		} else if permission["scopeRole"] != nil {
 			scopeRoleSlice := convertSliceToInt(
 				permission["scopeRole"].([]any),
@@ -112,7 +115,7 @@ func NewAuthAggregate(
 			// 要把　自訂義裡面　可能被刪除的　roleId 過濾掉
 			scopeRole = *roleRepo.GetRolesIdByScopeRole(
 				&entities.Role{
-					CompanyId: userEntity.CompanyId,
+					CompanyId: sessionStruct.User.CompanyId,
 				},
 				&scopeRoleSlice,
 			)
@@ -122,13 +125,13 @@ func NewAuthAggregate(
 		var scopeBanch  []int
 		if permission["scopeBanch"] == "all" {
 			scopeBanch = *banchRepo.GetBanchesId(&entities.CompanyBanch{
-				CompanyId: userEntity.CompanyId,
+				CompanyId: sessionStruct.User.CompanyId,
 			})
 			
 			// 設定 is current scope banch all
 			(*instance).IsCurrentScopeBanchAll = true
 		} else if permission["scopeBanch"] == "self" {
-			scopeBanch = append(scopeBanch, *userEntity.BanchId)
+			scopeBanch = append(scopeBanch, *sessionStruct.User.BanchId)
 		} else if permission["scopeBanch"] != nil {
 			scopeBanchSlice := convertSliceToInt(
 				permission["scopeBanch"].([]any),
@@ -137,7 +140,7 @@ func NewAuthAggregate(
 			// 要把 自訂義裡面 可能被刪除的 banchId過濾掉
 			scopeBanch = *banchRepo.GetBanchesIdByScopeBanch(
 				&entities.CompanyBanch{
-					CompanyId: userEntity.CompanyId,
+					CompanyId: sessionStruct.User.CompanyId,
 				},
 				&scopeBanchSlice,
 			)

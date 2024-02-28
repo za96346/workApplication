@@ -21,7 +21,7 @@ func NewRoleRepository(db *gorm.DB) *RoleRepo {
 
 var _ repository.RoleRepository = &RoleRepo{}
 
-func (r *RoleRepo) SaveRole(roleEntity *entities.Role, TX *gorm.DB) (*entities.Role, *map[string]string) {
+func (r *RoleRepo) SaveRole(roleEntity *entities.Role, TX *gorm.DB) (*entities.Role, *error) {
 	// 新增固定欄位
 	now := time.Now()
 	(*roleEntity).RoleId = r.GetNewRoleID((*roleEntity).CompanyId)
@@ -36,10 +36,10 @@ func (r *RoleRepo) SaveRole(roleEntity *entities.Role, TX *gorm.DB) (*entities.R
 		Create(&roleEntity).
 		Error
 
-	return roleEntity, persistenceErrorHandler(err)
+	return roleEntity, &err
 }
 
-func (r *RoleRepo) GetRole(roleEntity *entities.Role) (*entities.Role, *map[string]string) {
+func (r *RoleRepo) GetRole(roleEntity *entities.Role) (*entities.Role, *error) {
 	var role entities.Role
 
 	err := r.db.
@@ -51,26 +51,29 @@ func (r *RoleRepo) GetRole(roleEntity *entities.Role) (*entities.Role, *map[stri
 		First(role).
 		Error
 
-	return &role, persistenceErrorHandler(err)
+	return &role, &err
 }
 
-func (r *RoleRepo) GetRoles(roleEntity *entities.Role) (*[]entities.Role, *map[string]string) {
+func (r *RoleRepo) GetRoles(roleEntity *entities.Role) (*[]entities.Role, *error) {
 	var roles []entities.Role
 
-	err := r.db.
+	searchQuery := r.db.
 		Debug().
 		Table(r.tableName).
 		Where("companyId = ?", roleEntity.CompanyId).
 		Where("deleteFlag = ?", "N").
-		Where("roleName like ?", "%" + roleEntity.RoleName + "%").
-		Order("sort asc").
-		Find(&roles).
-		Error
+		Order("sort asc")
 
-	return &roles, persistenceErrorHandler(err)
+	if &roleEntity.RoleName != nil {
+		searchQuery.Where("roleName like ?", "%" + roleEntity.RoleName + "%")
+	}
+
+	err := searchQuery.Find(&roles).Error
+
+	return &roles, &err
 }
 
-func (r *RoleRepo) GetRolesSelector(roleEntity *entities.Role) (*[]entities.Role, *map[string]string) {
+func (r *RoleRepo) GetRolesSelector(roleEntity *entities.Role) (*[]entities.Role, *error) {
 	var roles []entities.Role
 
 	err := r.db.
@@ -81,13 +84,14 @@ func (r *RoleRepo) GetRolesSelector(roleEntity *entities.Role) (*[]entities.Role
 		Find(&roles).
 		Error
 
-	return &roles, persistenceErrorHandler(err)
+	return &roles, &err
 }
 
 
-func (r *RoleRepo) UpdateRole(roleEntity *entities.Role, TX *gorm.DB) (*entities.Role, *map[string]string) {
+func (r *RoleRepo) UpdateRole(roleEntity *entities.Role, TX *gorm.DB) (*entities.Role, *error) {
 	if r.IsRoleNameDuplicated(roleEntity) {
-		return roleEntity, persistenceErrorHandler(errors.New("角色名稱重複"))
+		err := errors.New("角色名稱重複")
+		return roleEntity, &err
 	}
 	err := TX.
 		Debug().
@@ -97,10 +101,10 @@ func (r *RoleRepo) UpdateRole(roleEntity *entities.Role, TX *gorm.DB) (*entities
 		Updates(&roleEntity).
 		Error
 
-	return roleEntity, persistenceErrorHandler(err)
+	return roleEntity, &err
 }
 
-func (r *RoleRepo) DeleteRole(roleEntity *entities.Role) (*entities.Role, *map[string]string) {
+func (r *RoleRepo) DeleteRole(roleEntity *entities.Role) (*entities.Role, *error) {
 	now := time.Now()
 	roleEntity.DeleteFlag = "Y"
 	roleEntity.DeleteTime = &now
@@ -114,7 +118,7 @@ func (r *RoleRepo) DeleteRole(roleEntity *entities.Role) (*entities.Role, *map[s
 		Updates(&roleEntity).
 		Error
 
-	return roleEntity, persistenceErrorHandler(err)
+	return roleEntity, &err
 }
 
 // 拿取新的 role id ( max count + 1 )

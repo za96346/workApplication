@@ -4,15 +4,26 @@ import "backend/domain/entities"
 
 
 type CompanyBanchRepository interface {
-	GetCompanyBanches(int, *[]int, *string) (*[]entities.CompanyBanch, *map[string]string)
+	GetCompanyBanches(
+		companyBanchEntity *entities.CompanyBanch,
+		scopeBanch *[]int,
+	) (*[]entities.CompanyBanch, *error)
 
-	GetCompanyBanchesSelector(int) (*[]entities.CompanyBanch, *map[string]string)
+	GetCompanyBanchesSelector(
+		companyId int,
+	) (*[]entities.CompanyBanch, *error)
 
-	UpdateCompanyBanch(*entities.CompanyBanch) (*entities.CompanyBanch, *map[string]string)
+	UpdateCompanyBanch(
+		companyBanchEntity *entities.CompanyBanch,
+	) (*entities.CompanyBanch, *error)
 
-	SaveCompanyBanch(*entities.CompanyBanch) (*entities.CompanyBanch, *map[string]string)
+	SaveCompanyBanch(
+		companyBanchEntity *entities.CompanyBanch,
+	) (*entities.CompanyBanch, *error)
 
-	DeleteCompanyBanch(*entities.CompanyBanch) (*entities.CompanyBanch, *map[string]string)
+	DeleteCompanyBanch(
+		companyBanchEntity *entities.CompanyBanch,
+	) (*entities.CompanyBanch, *error)
 
 	GetNewBanchID(int) int
 	GetBanchesId(*entities.CompanyBanch) *[]int

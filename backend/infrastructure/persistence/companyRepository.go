@@ -20,7 +20,7 @@ func NewCompanyRepository(db *gorm.DB) *CompanyRepo {
 
 var _ repository.CompanyRepository = &CompanyRepo{}
 
-func (r *CompanyRepo) GetCompany(companyEntity *entities.Company) (*entities.Company, *map[string]string) {
+func (r *CompanyRepo) GetCompany(companyEntity *entities.Company) (*entities.Company, *error) {
 	var company entities.Company
 	err := r.db.
 		Debug().
@@ -29,11 +29,11 @@ func (r *CompanyRepo) GetCompany(companyEntity *entities.Company) (*entities.Com
 		First(&company).
 		Error
 
-	return &company, persistenceErrorHandler(err)
+	return &company, &err
 }
 
 
-func (r *CompanyRepo) UpdateCompany(companyEntity *entities.Company) (*entities.Company, *map[string]string) {
+func (r *CompanyRepo) UpdateCompany(companyEntity *entities.Company) (*entities.Company, *error) {
 	now := time.Now()
 	(*companyEntity).LastModify = &now
 
@@ -44,5 +44,5 @@ func (r *CompanyRepo) UpdateCompany(companyEntity *entities.Company) (*entities.
 		Updates(&companyEntity).
 		Error
 
-	return companyEntity, persistenceErrorHandler(err)
+	return companyEntity, &err
 }

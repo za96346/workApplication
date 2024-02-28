@@ -1,52 +1,100 @@
 package application
 
 import (
+	"backend/domain/aggregates"
 	"backend/domain/entities"
 	"backend/domain/repository"
+	"backend/enum"
+	"backend/interfaces/method"
 )
 
 type CompanyBanchApp struct {
 	companyBanchRepo repository.CompanyBanchRepository
+	roleRepo repository.RoleRepository
 }
 
 var _ CompanyBanchAppInterface = &CompanyBanchApp{}
 
 type CompanyBanchAppInterface interface {
 	GetCompanyBanches(
-		companyId int,
-		scopeBanch *[]int,
-		banchName *string,
-	) (*[]entities.CompanyBanch, *map[string]string)
-	GetCompanyBanchesSelector(int) (*[]entities.CompanyBanch, *map[string]string)
-	UpdateCompanyBanch(*entities.CompanyBanch) (*entities.CompanyBanch, *map[string]string)
-	SaveCompanyBanch(*entities.CompanyBanch) (*entities.CompanyBanch, *map[string]string)
-	DeleteCompanyBanch(*entities.CompanyBanch) (*entities.CompanyBanch, *map[string]string)
+		companyBanchEntity *entities.CompanyBanch,
+		sessionStruct *method.SessionStruct,
+	) (*[]entities.CompanyBanch, *error)
+	GetCompanyBanchesSelector(sessionStruct *method.SessionStruct) (*[]entities.CompanyBanch, *error)
+	UpdateCompanyBanch(*entities.CompanyBanch, *method.SessionStruct) (*entities.CompanyBanch, *error)
+	SaveCompanyBanch(*entities.CompanyBanch, *method.SessionStruct) (*entities.CompanyBanch, *error)
+	DeleteCompanyBanch(*entities.CompanyBanch, *method.SessionStruct) (*entities.CompanyBanch, *error)
 }
 
 func (c *CompanyBanchApp) GetCompanyBanches(
-	companyId int,
-	scopeBanch *[]int,
-	banchName *string,
-) (*[]entities.CompanyBanch, *map[string]string) {
+	companyBanchEntity *entities.CompanyBanch,
+	sessionStruct *method.SessionStruct,
+) (*[]entities.CompanyBanch, *error) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		c.roleRepo,
+		c.companyBanchRepo,
+		true,
+		string(enum.BanchManage),
+		string(enum.Inquire),
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
 	return c.companyBanchRepo.GetCompanyBanches(
-		companyId,
-		scopeBanch,
-		banchName,
+		&entities.CompanyBanch{
+			CompanyId: authAggregate.User.CompanyId,
+			BanchName: companyBanchEntity.BanchName,
+		},
+		&authAggregate.CurrentPermissionScopeBanch,
 	)
 }
 
-func (c *CompanyBanchApp) GetCompanyBanchesSelector(companyId int) (*[]entities.CompanyBanch, *map[string]string) {
-	return c.companyBanchRepo.GetCompanyBanchesSelector(companyId)
+func (c *CompanyBanchApp) GetCompanyBanchesSelector(sessionStruct *method.SessionStruct) (*[]entities.CompanyBanch, *error) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		c.roleRepo,
+		c.companyBanchRepo,
+		false,
+		"",
+		"",
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+	return c.companyBanchRepo.GetCompanyBanchesSelector(authAggregate.User.CompanyId)
 }
 
-func (c *CompanyBanchApp) UpdateCompanyBanch(companyBanchEntity *entities.CompanyBanch) (*entities.CompanyBanch, *map[string]string) {
+func (c *CompanyBanchApp) UpdateCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, *error) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		c.roleRepo,
+		c.companyBanchRepo,
+		false,
+		string(enum.BanchManage),
+		string(enum.Edit),
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
+	if err1 := authAggregate.CheckScopeBanchValidation((*companyBanchEntity).BanchId); err1 != nil {
+		return nil, &err1
+	}
+
+	companyBanchEntity.CompanyId = authAggregate.User.CompanyId
+
 	return c.companyBanchRepo.UpdateCompanyBanch(companyBanchEntity)
 }
 
-func (c *CompanyBanchApp) SaveCompanyBanch(companyBanchEntity *entities.CompanyBanch) (*entities.CompanyBanch, *map[string]string) {
+func (c *CompanyBanchApp) SaveCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, *error) {
 	return c.companyBanchRepo.SaveCompanyBanch(companyBanchEntity)
 }
 
-func (c *CompanyBanchApp) DeleteCompanyBanch(companyBanchEntity *entities.CompanyBanch) (*entities.CompanyBanch, *map[string]string) {
+func (c *CompanyBanchApp) DeleteCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, *error) {
 	return c.companyBanchRepo.DeleteCompanyBanch(companyBanchEntity)
 }

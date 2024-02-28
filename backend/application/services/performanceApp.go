@@ -14,17 +14,17 @@ type PerformanceApp struct {
 var _ PerformanceAppInterface = &PerformanceApp{}
 
 type PerformanceAppInterface interface {
-	GetPerformances(*entities.Performance) (*[]dtos.PerformanceDetailDto, *map[string]string)
-	GetYearPerformances(*entities.Performance) (*[]entities.YearPerformance, *map[string]string)
+	GetPerformances(*entities.Performance) (*[]dtos.PerformanceDetailDto, *error)
+	GetYearPerformances(*entities.Performance) (*[]entities.YearPerformance, *error)
 
-	UpdatePerformance(*entities.Performance) (*entities.Performance, *map[string]string)
-	SavePerformance(*entities.Performance) (*entities.Performance, *map[string]string)
-	DeletePerformance(*entities.Performance) (*entities.Performance, *map[string]string)
+	UpdatePerformance(*entities.Performance) (*entities.Performance, *error)
+	SavePerformance(*entities.Performance) (*entities.Performance, *error)
+	DeletePerformance(*entities.Performance) (*entities.Performance, *error)
 
-	ChangeBanch(*entities.Performance) (*entities.Performance, *map[string]string)
+	ChangeBanch(*entities.Performance) (*entities.Performance, *error)
 }
 
-func (p *PerformanceApp) GetPerformances(performanceEntity *entities.Performance) (*[]dtos.PerformanceDetailDto, *map[string]string) {
+func (p *PerformanceApp) GetPerformances(performanceEntity *entities.Performance) (*[]dtos.PerformanceDetailDto, *error) {
 	v := []int{}
 	return p.performanceRepo.GetPerformances(
 		performanceEntity,
@@ -36,7 +36,7 @@ func (p *PerformanceApp) GetPerformances(performanceEntity *entities.Performance
 	)
 }
 
-func (p *PerformanceApp) GetYearPerformances(performanceEntity *entities.Performance) (*[]entities.YearPerformance, *map[string]string) {
+func (p *PerformanceApp) GetYearPerformances(performanceEntity *entities.Performance) (*[]entities.YearPerformance, *error) {
 	v := []int{}
 	return p.performanceRepo.GetYearPerformances(
 		performanceEntity,
@@ -48,7 +48,7 @@ func (p *PerformanceApp) GetYearPerformances(performanceEntity *entities.Perform
 	)
 }
 
-func (p *PerformanceApp) SavePerformance(performanceEntity *entities.Performance) (*entities.Performance, *map[string]string) {
+func (p *PerformanceApp) SavePerformance(performanceEntity *entities.Performance) (*entities.Performance, *error) {
 	user, err := p.userRepo.GetUser(&entities.User{
 		CompanyId: performanceEntity.CompanyId,
 		UserId: performanceEntity.UserId,
@@ -60,7 +60,7 @@ func (p *PerformanceApp) SavePerformance(performanceEntity *entities.Performance
 	return p.performanceRepo.SavePerformance(performanceEntity)
 }
 
-func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performance) (*entities.Performance, *map[string]string) {
+func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performance) (*entities.Performance, *error) {
 	user, err := p.userRepo.GetUser(&entities.User{
 		CompanyId: performanceEntity.CompanyId,
 		UserId: performanceEntity.UserId,
@@ -72,11 +72,11 @@ func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performan
 	return p.performanceRepo.UpdatePerformance(performanceEntity)
 }
 
-func (p *PerformanceApp) DeletePerformance(performanceEntity *entities.Performance) (*entities.Performance, *map[string]string) {
+func (p *PerformanceApp) DeletePerformance(performanceEntity *entities.Performance) (*entities.Performance, *error) {
 	return p.performanceRepo.DeletePerformance(performanceEntity)
 }
 
-func (p *PerformanceApp) ChangeBanch(performanceEntity *entities.Performance) (*entities.Performance, *map[string]string) {
+func (p *PerformanceApp) ChangeBanch(performanceEntity *entities.Performance) (*entities.Performance, *error) {
 	thisPerformance, _ := p.performanceRepo.GetPerformance(performanceEntity)
 	thisPerformance.BanchId = performanceEntity.BanchId
 	return p.performanceRepo.UpdatePerformance(thisPerformance)

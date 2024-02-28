@@ -7,12 +7,12 @@ import (
 )
 
 type RoleRepository interface {
-	GetRole(*entities.Role) (*entities.Role, *map[string]string)
-	GetRoles(*entities.Role) (*[]entities.Role, *map[string]string)
-	GetRolesSelector(*entities.Role) (*[]entities.Role, *map[string]string)
-	UpdateRole(*entities.Role,*gorm.DB) (*entities.Role, *map[string]string)
-	SaveRole(*entities.Role,*gorm.DB) (*entities.Role, *map[string]string)
-	DeleteRole(*entities.Role) (*entities.Role, *map[string]string)
+	GetRole(roleEntity *entities.Role) (*entities.Role, *error)
+	GetRoles(roleEntity *entities.Role) (*[]entities.Role, *error)
+	GetRolesSelector(roleEntity *entities.Role) (*[]entities.Role, *error)
+	UpdateRole(roleEntity *entities.Role, TX *gorm.DB) (*entities.Role, *error)
+	SaveRole(roleEntity *entities.Role, TX *gorm.DB) (*entities.Role, *error)
+	DeleteRole(roleEntity *entities.Role) (*entities.Role, *error)
 	
 	GetNewRoleID(int) int
 	GetRolesId(*entities.Role) *[]int

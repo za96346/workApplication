@@ -14,7 +14,7 @@ type PerformanceRepository interface {
 		endDate string,
 		scopeBanch *[]int,
 		scopeRole *[]int,
-	) (*[]dtos.PerformanceDetailDto, *map[string]string)
+	) (*[]dtos.PerformanceDetailDto, *error)
 
 	GetYearPerformances(
 		performanceEntity *entities.Performance,
@@ -23,12 +23,12 @@ type PerformanceRepository interface {
 		endYear string,
 		scopeBanch *[]int,
 		scopeRole *[]int,
-	) (*[]entities.YearPerformance, *map[string]string)
-	GetPerformance(*entities.Performance) (*entities.Performance, *map[string]string)
+	) (*[]entities.YearPerformance, *error)
+	GetPerformance(performanceEntity *entities.Performance) (*entities.Performance, *error)
 
-	SavePerformance(*entities.Performance) (*entities.Performance, *map[string]string)
-	UpdatePerformance(*entities.Performance) (*entities.Performance, *map[string]string)
-	DeletePerformance(*entities.Performance) (*entities.Performance, *map[string]string)
+	SavePerformance(performanceEntity *entities.Performance) (*entities.Performance, *error)
+	UpdatePerformance(performanceEntity *entities.Performance) (*entities.Performance, *error)
+	DeletePerformance(performanceEntity *entities.Performance) (*entities.Performance, *error)
 	GetNewPerformanceID(int) int
 	IsYearMonthDuplicated(*entities.Performance) bool
 }

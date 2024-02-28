@@ -3,6 +3,7 @@ package controller
 import (
 	"backend/application/services"
 	"backend/domain/entities"
+	"backend/infrastructure/persistence"
 	"backend/interfaces/enum"
 	"backend/interfaces/method"
 	"net/http"
@@ -12,11 +13,13 @@ import (
 )
 
 type PerformanceController struct {
+	repo *persistence.Repositories
 	performanceApp application.PerformanceAppInterface
 }
 
-func NewPerformance() *PerformanceController {
+func NewPerformance(repo *persistence.Repositories) *PerformanceController {
 	return &PerformanceController{
+		repo: repo,
 		performanceApp: &application.PerformanceApp{},
 	}
 }

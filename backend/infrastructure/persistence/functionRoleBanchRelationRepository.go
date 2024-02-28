@@ -1,7 +1,9 @@
 package persistence
 
 import (
+	"backend/domain/entities"
 	"backend/domain/repository"
+
 	"github.com/jinzhu/gorm"
 )
 
@@ -16,3 +18,15 @@ func NewFunctionRoleBanchRelationRepository(db *gorm.DB) *FunctionRoleBanchRelat
 }
 
 var _ repository.FunctionRoleBanchRelationRepository = &FunctionRoleBanchRelationRepo{}
+
+func (f *FunctionRoleBanchRelationRepo) GetFunctionRoleBanchRelations() (*[]entities.FuncRoleBanchRelation, *error) {
+	var funcRoleBanchRelation []entities.FuncRoleBanchRelation
+
+	err := f.db.
+		Debug().
+		Table(f.tableName).
+		Find(funcRoleBanchRelation).
+		Error
+
+	return &funcRoleBanchRelation, &err
+}

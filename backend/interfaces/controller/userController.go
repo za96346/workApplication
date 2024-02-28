@@ -3,6 +3,7 @@ package controller
 import (
 	"backend/application/services"
 	"backend/domain/entities"
+	"backend/infrastructure/persistence"
 	"backend/interfaces/enum"
 	"backend/interfaces/method"
 	"net/http"
@@ -11,11 +12,13 @@ import (
 )
 
 type UserController struct {
+	repo *persistence.Repositories
 	userApp application.UserAppInterface
 }
 
-func NewUser() *UserController {
+func NewUser(repo *persistence.Repositories) *UserController {
 	return &UserController{
+		repo: repo,
 		userApp: &application.UserApp{},
 	}
 }

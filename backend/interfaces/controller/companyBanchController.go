@@ -1,8 +1,9 @@
 package controller
 
 import (
-	"backend/application/services"
+	application "backend/application/services"
 	"backend/domain/entities"
+	"backend/infrastructure/persistence"
 	"backend/interfaces/enum"
 	"backend/interfaces/method"
 	"net/http"
@@ -11,11 +12,13 @@ import (
 )
 
 type CompanyBanchController struct {
+	repo *persistence.Repositories
 	companyBanchApp application.CompanyBanchAppInterface
 }
 
-func NewCompanyBanch() *CompanyBanchController {
+func NewCompanyBanch(repo *persistence.Repositories) *CompanyBanchController {
 	return &CompanyBanchController{
+		repo: repo,
 		companyBanchApp: &application.CompanyBanchApp{},
 	}
 }
@@ -26,24 +29,20 @@ func (s *CompanyBanchController) GetCompanyBanches(Request *gin.Context) {
 		BanchName   *string       `gorm:"column:banchName" json:"BanchName"`
 	})
 
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.BanchManage),
-		PermissionItemCode: "inquire",
-
-		ReqBodyValidation: false,
-		ReqParamsStruct: reqParams,
-		ReqParamsValidation: true,
-	}
-	if session.SessionHandler() != nil {return}
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqParamsStruct: reqParams,
+			ReqParamsValidation: true,
+		},
+	)
+	if err != nil {return}
 
 	responseData, _ := s.companyBanchApp.GetCompanyBanches(
-		session.CompanyId,
-		&session.CurrentPermissionScopeBanch,
-		reqParams.BanchName,
+		&entities.CompanyBanch{
+			BanchName: *reqParams.BanchName,
+		},
+		session,
 	)
 
 	Request.JSON(
@@ -56,15 +55,13 @@ func (s *CompanyBanchController) GetCompanyBanches(Request *gin.Context) {
 }
 
 func (s *CompanyBanchController) GetCompanyBanchesSelector(Request *gin.Context) {
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: false,
-		PermissionValidation: false,
-	}
-	if session.SessionHandler() != nil {return}
+	session, err := method.NewSession(
+		Request,
+		nil,
+	)
+	if err != nil {return}
 
-	responseData, _ := s.companyBanchApp.GetCompanyBanchesSelector(session.CompanyId)
+	responseData, _ := s.companyBanchApp.GetCompanyBanchesSelector(session)
 
 	Request.JSON(
 		http.StatusOK,
@@ -78,15 +75,15 @@ func (s *CompanyBanchController) GetCompanyBanchesSelector(Request *gin.Context)
 func (s *CompanyBanchController) UpdateCompanyBanch(Request *gin.Context) {
 	reqBody := new(entities.CompanyBanch)
 	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.BanchManage),
-		PermissionItemCode: "edit",
-	}
-	if session.SessionHandler() != nil {return}
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
+
 	if session.CheckScopeBanchValidation((*reqBody).BanchId) != nil {return}
 
 	s.companyBanchApp.UpdateCompanyBanch(reqBody)

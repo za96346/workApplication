@@ -3,6 +3,7 @@ package controller
 import (
 	"backend/application/services"
 	"backend/domain/entities"
+	"backend/infrastructure/persistence"
 	"net/http"
 	"strconv"
 
@@ -11,11 +12,13 @@ import (
 )
 
 type EntryController struct {
+	repo *persistence.Repositories
 	entryApp application.EntryAppInterface
 }
 
-func NewEntry() *EntryController {
+func NewEntry(repo *persistence.Repositories) *EntryController {
 	return &EntryController{
+		repo: repo,
 		entryApp: &application.EntryApp{},
 	}
 }

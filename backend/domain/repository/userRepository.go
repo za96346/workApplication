@@ -3,14 +3,20 @@ package repository
 import "backend/domain/entities"
 
 type UserRepository interface {
-	GetUser(*entities.User) (*entities.User, *map[string]string)
-	GetUserByAccount(*entities.User) (*entities.User, *map[string]string)
-	GetUsers(*entities.User, *[]int, *[]int) (*[]entities.User, *map[string]string)
-	GetUsersSelector(*entities.User) (*[]entities.User, *map[string]string)
+	GetUser(userEntity *entities.User) (*entities.User, *error)
+	GetUserByAccount(userEntity *entities.User) (*entities.User, *error)
+	GetUsers(
+		userEntity *entities.User,
+		roleScope *[]int,
+		banchScope *[]int,
+	) (*[]entities.User, *error)
+	GetUsersSelector(
+		userEntity *entities.User,
+	) (*[]entities.User, *error)
 
-	UpdateUser(*entities.User) (*entities.User, *map[string]string)
-	SaveUser(*entities.User) (*entities.User, *map[string]string)
-	DeleteUser(*entities.User) (*entities.User, *map[string]string)
+	UpdateUser(userEntity *entities.User) (*entities.User, *error)
+	SaveUser(userEntity *entities.User) (*entities.User, *error)
+	DeleteUser(userEntity *entities.User) (*entities.User, *error)
 	
 	GetNewUserID(int) int
 	IsAccountDuplicated(string) bool

@@ -16,16 +16,16 @@ var _ RoleAppInterface = &RoleApp{}
 
 type RoleAppInterface interface {
 	GetRole(*entities.Role) (*entities.Role, *map[string](map[string]map[string]interface{}))
-	GetRoles(*entities.Role) (*[]entities.Role, *map[string]string)
-	GetRolesSelector(*entities.Role) (*[]entities.Role, *map[string]string)
+	GetRoles(*entities.Role) (*[]entities.Role, *error)
+	GetRolesSelector(*entities.Role) (*[]entities.Role, *error)
 
-	UpdateRole(*entities.Role, *map[string]map[string]map[string]interface{}) (*entities.Role, *map[string]string)
+	UpdateRole(*entities.Role, *map[string]map[string]map[string]interface{}) (*entities.Role, *error)
 
-	SaveRole(*entities.Role, *map[string]map[string]map[string]interface{}) (*entities.Role, *map[string]string)
-	DeleteRole(*entities.Role) (*entities.Role, *map[string]string)
+	SaveRole(*entities.Role, *map[string]map[string]map[string]interface{}) (*entities.Role, *error)
+	DeleteRole(*entities.Role) (*entities.Role, *error)
 }
 
-func (r *RoleApp) GetRoles(roleEntity *entities.Role) (*[]entities.Role, *map[string]string) {
+func (r *RoleApp) GetRoles(roleEntity *entities.Role) (*[]entities.Role, *error) {
 	return r.roleRepo.GetRoles(roleEntity)
 }
 
@@ -67,14 +67,14 @@ func (r *RoleApp) GetRole(roleEntity *entities.Role) (*entities.Role, *map[strin
 	return role, &rolePermissionMap
 }
 
-func (r *RoleApp) GetRolesSelector(roleEntity *entities.Role) (*[]entities.Role, *map[string]string) {
+func (r *RoleApp) GetRolesSelector(roleEntity *entities.Role) (*[]entities.Role, *error) {
 	return r.roleRepo.GetRolesSelector(roleEntity)
 }
 
 func (r *RoleApp) UpdateRole(
 	roleEntity *entities.Role,
 	data *map[string]map[string]map[string]interface{},
-) (*entities.Role, *map[string]string) {
+) (*entities.Role, *error) {
 	TX := r.roleRepo.Begin()
 	if _, err := r.roleRepo.UpdateRole(roleEntity, TX); err != nil {
 		TX.Rollback()
@@ -99,7 +99,7 @@ func (r *RoleApp) UpdateRole(
 func (r *RoleApp) SaveRole(
 	roleEntity *entities.Role,
 	data *map[string]map[string]map[string]interface{},
-) (*entities.Role, *map[string]string) {
+) (*entities.Role, *error) {
 	TX := r.roleRepo.Begin()
 	if _, err := r.roleRepo.SaveRole(roleEntity, TX); err != nil {
 		TX.Rollback()
@@ -121,6 +121,6 @@ func (r *RoleApp) SaveRole(
 	return nil, nil
 }
 
-func (r *RoleApp) DeleteRole(roleEntity *entities.Role) (*entities.Role, *map[string]string) {
+func (r *RoleApp) DeleteRole(roleEntity *entities.Role) (*entities.Role, *error) {
 	return r.roleRepo.DeleteRole(roleEntity)
 }

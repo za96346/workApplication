@@ -1,40 +1,36 @@
 package controller
 
 import (
-	"backend/interfaces/method"
 	"backend/application/services"
 	"backend/domain/entities"
-	"backend/interfaces/enum"
+	"backend/infrastructure/persistence"
+	"backend/interfaces/method"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 type CompanyController struct {
+	repo *persistence.Repositories
 	companyApp application.CompanyAppInterface
 }
 
-func NewCompany() *CompanyController {
+func NewCompany(repo *persistence.Repositories) *CompanyController {
 	return &CompanyController{
+		repo: repo,
 		companyApp: &application.CompanyApp{},
 	}
 }
 
 func (s *CompanyController) GetCompany(Request *gin.Context) {
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: false,
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.CompanyData),
-		PermissionItemCode: "inquire",
-	}
-	if session.SessionHandler() != nil {return}
+	session, err := method.NewSession(Request, nil)
+	if err != nil {return}
 
 	responseData, _ := s.companyApp.GetCompany(
 		&entities.Company{
-			CompanyId: session.CompanyId,
+			CompanyId: session.User.CompanyId,
 		},
+		session,
 	)
 
 	Request.JSON(
@@ -48,18 +44,17 @@ func (s *CompanyController) GetCompany(Request *gin.Context) {
 
 func (s *CompanyController) UpdateCompany(Request *gin.Context) {
 	reqBody := new(entities.Company)
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.CompanyData),
-		PermissionItemCode: "edit",
-	}
-	if session.SessionHandler() != nil {return}
 
-	s.companyApp.UpdateCompany(reqBody)
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
+
+	s.companyApp.UpdateCompany(reqBody, session)
 
 	Request.JSON(
 		http.StatusOK,
