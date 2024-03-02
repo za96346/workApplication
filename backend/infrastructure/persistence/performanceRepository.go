@@ -1,7 +1,8 @@
 package persistence
 
 import (
-	"backend/domain/dtos"
+	domainDtos "backend/domain/dtos"
+	appDtos "backend/application/dtos"
 	"backend/domain/entities"
 	"backend/domain/repository"
 	"errors"
@@ -24,14 +25,12 @@ var _ repository.PerformanceRepository = &PerformanceRepo{}
 
 func (r *PerformanceRepo) GetPerformances(
     performanceEntity *entities.Performance,
-    userName string,
-    startDate string,
-    endDate string,
+	queryParams *appDtos.PerformanceQueryParams,
     scopeBanch *[]int,
     scopeRole *[]int,
-) (*[]dtos.PerformanceDetailDto, *error) {
+) (*[]domainDtos.PerformanceDetailDto, *error) {
     // 獲取資料
-	var data []dtos.PerformanceDetailDto
+	var data []domainDtos.PerformanceDetailDto
 	searchQuery := r.db.
         Debug().
         Table(r.tableName).
@@ -58,12 +57,12 @@ func (r *PerformanceRepo) GetPerformances(
 		Order("year desc, month desc, sort")
 
 	// 使用者名稱
-	if &userName != nil {
-		searchQuery.Where("userName like ?", "%" + userName + "%")
+	if queryParams.UserName != nil {
+		searchQuery.Where("userName like ?", "%" + *queryParams.UserName + "%")
 	}
 
 	// 日期塞選
-	if &startDate != nil {
+	if queryParams.StartDate != nil {
 		searchQuery.Where(
 			`
 				concat(
@@ -76,11 +75,11 @@ func (r *PerformanceRepo) GetPerformances(
 					)
 				) >= ?
 			`,
-			startDate,
+			*queryParams.StartDate,
 		)
 	}
 
-	if &endDate != nil {
+	if queryParams.EndDate != nil {
 		searchQuery.Where(
 			`
 				concat(
@@ -93,7 +92,7 @@ func (r *PerformanceRepo) GetPerformances(
 					)
 				) <= ?
 			`,
-			endDate,
+			*queryParams.EndDate,
 		)
 	}
 
@@ -104,9 +103,7 @@ func (r *PerformanceRepo) GetPerformances(
 
 func (r *PerformanceRepo) GetYearPerformances(
 	performanceEntity *entities.Performance,
-    userName string,
-    startYear string,
-    endYear string,
+	queryParams *appDtos.PerformanceQueryParams,
     scopeBanch *[]int,
     scopeRole *[]int,
 ) (*[]entities.YearPerformance, *error) {
@@ -148,17 +145,17 @@ func (r *PerformanceRepo) GetYearPerformances(
 		)
 
 	// 使用者名稱
-	if &userName != nil {
-		searchQuery.Where("user.userName like ?", "%" + userName + "%")
+	if queryParams.UserName != nil {
+		searchQuery.Where("user.userName like ?", "%" + *queryParams.UserName + "%")
 	}
 
 	// 年度塞選
-	if &startYear != nil {
-		searchQuery.Where("performance.year >= ?", startYear)
+	if queryParams.StartYear != nil {
+		searchQuery.Where("performance.year >= ?", *queryParams.StartYear)
 	}
 
-	if &endYear != nil {
-		searchQuery.Where("performance.year <= ?", endYear)
+	if queryParams.EndYear != nil {
+		searchQuery.Where("performance.year <= ?", *queryParams.EndYear)
 	}
 
 	err := searchQuery.Find(&data).Error

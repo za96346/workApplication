@@ -1,82 +1,170 @@
 package application
 
 import (
-	"backend/domain/dtos"
+	"backend/domain/aggregates"
+	domainDtos "backend/domain/dtos"
+	appDtos "backend/application/dtos"
 	"backend/domain/entities"
 	"backend/domain/repository"
+	"backend/enum"
+	"backend/interfaces/method"
 )
 
 type PerformanceApp struct {
 	performanceRepo repository.PerformanceRepository
 	userRepo repository.UserRepository
+	companyBanchRepo repository.CompanyBanchRepository
+	roleRepo repository.RoleRepository
 }
 
 var _ PerformanceAppInterface = &PerformanceApp{}
 
 type PerformanceAppInterface interface {
-	GetPerformances(*entities.Performance) (*[]dtos.PerformanceDetailDto, *error)
-	GetYearPerformances(*entities.Performance) (*[]entities.YearPerformance, *error)
+	GetPerformances(
+		performanceEntity *entities.Performance,
+		queryParams *appDtos.PerformanceQueryParams,
+		sessionStruct *method.SessionStruct,
+	) (*[]domainDtos.PerformanceDetailDto, *error)
+	GetYearPerformances(
+		performanceEntity *entities.Performance,
+		queryParams *appDtos.PerformanceQueryParams,
+		sessionStruct *method.SessionStruct,
+	) (*[]entities.YearPerformance, *error)
 
-	UpdatePerformance(*entities.Performance) (*entities.Performance, *error)
-	SavePerformance(*entities.Performance) (*entities.Performance, *error)
-	DeletePerformance(*entities.Performance) (*entities.Performance, *error)
+	UpdatePerformance(*entities.Performance, *method.SessionStruct) (*entities.Performance, *error)
+	SavePerformance(*entities.Performance, *method.SessionStruct) (*entities.Performance, *error)
+	DeletePerformance(*entities.Performance, *method.SessionStruct) (*entities.Performance, *error)
 
-	ChangeBanch(*entities.Performance) (*entities.Performance, *error)
+	ChangeBanch(*entities.Performance, *method.SessionStruct) (*entities.Performance, *error)
 }
 
-func (p *PerformanceApp) GetPerformances(performanceEntity *entities.Performance) (*[]dtos.PerformanceDetailDto, *error) {
-	v := []int{}
+func (p *PerformanceApp) GetPerformances(
+	performanceEntity *entities.Performance,
+	queryParams *appDtos.PerformanceQueryParams,
+	sessionStruct *method.SessionStruct,
+) (*[]domainDtos.PerformanceDetailDto, *error) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		p.roleRepo,
+		p.companyBanchRepo,
+		true,
+		string(enum.Performance),
+		string(enum.Inquire),
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
 	return p.performanceRepo.GetPerformances(
 		performanceEntity,
-		"",
-		"",
-		"",
-		&v,
-		&v,
+		queryParams,
+		&authAggregate.CurrentPermissionScopeBanch,
+		&authAggregate.CurrentPermissionScopeRole,
 	)
 }
 
-func (p *PerformanceApp) GetYearPerformances(performanceEntity *entities.Performance) (*[]entities.YearPerformance, *error) {
-	v := []int{}
+func (p *PerformanceApp) GetYearPerformances(
+	performanceEntity *entities.Performance,
+	queryParams *appDtos.PerformanceQueryParams,
+	sessionStruct *method.SessionStruct,
+) (*[]entities.YearPerformance, *error) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		p.roleRepo,
+		p.companyBanchRepo,
+		true,
+		string(enum.Performance),
+		string(enum.Inquire),
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
+	performanceEntity.CompanyId = authAggregate.User.CompanyId
+
 	return p.performanceRepo.GetYearPerformances(
 		performanceEntity,
-		"",
-		"",
-		"",
-		&v,
-		&v,
+		queryParams,
+		&authAggregate.CurrentPermissionScopeBanch,
+		&authAggregate.CurrentPermissionScopeRole,
 	)
 }
 
-func (p *PerformanceApp) SavePerformance(performanceEntity *entities.Performance) (*entities.Performance, *error) {
+func (p *PerformanceApp) SavePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, *error) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		p.roleRepo,
+		p.companyBanchRepo,
+		true,
+		string(enum.Performance),
+		string(enum.Add),
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
 	user, err := p.userRepo.GetUser(&entities.User{
 		CompanyId: performanceEntity.CompanyId,
 		UserId: performanceEntity.UserId,
 	})
+
 	if user == nil {
 		return nil, err
+	}
+
+	if err := authAggregate.CheckScopeBanchValidation(*user.BanchId); err != nil {
+		return nil, &err
+	}
+
+	if err := authAggregate.CheckScopeRoleValidation(user.RoleId); err != nil {
+		return nil, &err
 	}
 
 	return p.performanceRepo.SavePerformance(performanceEntity)
 }
 
-func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performance) (*entities.Performance, *error) {
+func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, *error) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		p.roleRepo,
+		p.companyBanchRepo,
+		true,
+		string(enum.Performance),
+		string(enum.Edit),
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
 	user, err := p.userRepo.GetUser(&entities.User{
 		CompanyId: performanceEntity.CompanyId,
 		UserId: performanceEntity.UserId,
 	})
+
 	if user == nil {
 		return nil, err
+	}
+
+	if err := authAggregate.CheckScopeBanchValidation(*user.BanchId); err != nil {
+		return nil, &err
+	}
+
+	if err := authAggregate.CheckScopeRoleValidation(user.RoleId); err != nil {
+		return nil, &err
 	}
 
 	return p.performanceRepo.UpdatePerformance(performanceEntity)
 }
 
-func (p *PerformanceApp) DeletePerformance(performanceEntity *entities.Performance) (*entities.Performance, *error) {
+func (p *PerformanceApp) DeletePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, *error) {
 	return p.performanceRepo.DeletePerformance(performanceEntity)
 }
 
-func (p *PerformanceApp) ChangeBanch(performanceEntity *entities.Performance) (*entities.Performance, *error) {
+func (p *PerformanceApp) ChangeBanch(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, *error) {
 	thisPerformance, _ := p.performanceRepo.GetPerformance(performanceEntity)
 	thisPerformance.BanchId = performanceEntity.BanchId
 	return p.performanceRepo.UpdatePerformance(thisPerformance)

@@ -2,25 +2,22 @@ package repository
 
 import (
 	"backend/domain/entities"
-	"backend/domain/dtos"
+	domainDto "backend/domain/dtos"
+	appDtos "backend/application/dtos"
 )
 
 
 type PerformanceRepository interface {
 	GetPerformances(
 		performanceEntity *entities.Performance,
-		userName string,
-		startDate string,
-		endDate string,
+		queryParams *appDtos.PerformanceQueryParams,
 		scopeBanch *[]int,
 		scopeRole *[]int,
-	) (*[]dtos.PerformanceDetailDto, *error)
+	) (*[]domainDto.PerformanceDetailDto, *error)
 
 	GetYearPerformances(
 		performanceEntity *entities.Performance,
-		userName string,
-		startYear string,
-		endYear string,
+		queryParams *appDtos.PerformanceQueryParams,
 		scopeBanch *[]int,
 		scopeRole *[]int,
 	) (*[]entities.YearPerformance, *error)

@@ -4,8 +4,8 @@ import (
 	"backend/application/services"
 	"backend/domain/entities"
 	"backend/infrastructure/persistence"
-	"backend/interfaces/enum"
 	"backend/interfaces/method"
+	"backend/application/dtos"
 	"net/http"
 	"strings"
 
@@ -25,30 +25,34 @@ func NewPerformance(repo *persistence.Repositories) *PerformanceController {
 }
 
 func (e *PerformanceController) GetPerformances(Request *gin.Context) {
-	reqParams := new(struct{
-		BanchId *int `json:"BanchId"`
-		RoleId *int `json:"RoleId"`
-		UserName *string `json:"UserName"`
-		StartDate *string `json:"StartDate"`
-		EndDate *string `json:"EndDate"`
-	})
+	reqParams := new(dtos.PerformanceQueryParams)
 
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: false,
-		ReqParamsValidation: true,
-		ReqParamsStruct: reqParams,
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqParamsValidation: true,
+			ReqParamsStruct: reqParams,
+		},
+	)
+	if err != nil {return}
 
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.Performance),
-		PermissionItemCode: "inquire",
+	data, appErr := e.performanceApp.GetPerformances(
+		&entities.Performance{
+			BanchId: *reqParams.BanchId,
+		},
+		reqParams,
+		session,
+	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "失敗",
+				"data":    []int{},
+			},
+		)
 	}
-	if session.SessionHandler() != nil {return}
-
-	data, _ := e.performanceApp.GetPerformances(&entities.Performance{
-		CompanyId: session.CompanyId,
-	})
 
 	Request.JSON(
 		http.StatusOK,
@@ -60,30 +64,32 @@ func (e *PerformanceController) GetPerformances(Request *gin.Context) {
 }
 
 func (e *PerformanceController) GetYearPerformances(Request *gin.Context) {
-	reqParams := new(struct{
-		BanchId *int `json:"BanchId"`
-		RoleId *int `json:"RoleId"`
-		UserName *string `json:"UserName"`
-		StartYear *string `json:"StartYear"`
-		EndYear *string `json:"EndYear"`
-	})
+	reqParams := new(dtos.PerformanceQueryParams)
 
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: false,
-		ReqParamsValidation: true,
-		ReqParamsStruct: reqParams,
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqParamsValidation: true,
+			ReqParamsStruct: reqParams,
+		},
+	)
+	if err != nil {return}
 
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.Performance),
-		PermissionItemCode: "inquire",
+	data, appErr := e.performanceApp.GetYearPerformances(
+		&entities.Performance{},
+		reqParams,
+		session,
+	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "失敗",
+				"data":    []int{},
+			},
+		)
 	}
-	if session.SessionHandler() != nil {return}
-
-	data, _ := e.performanceApp.GetYearPerformances(&entities.Performance{
-		CompanyId: session.CompanyId,
-	})
 
 	Request.JSON(
 		http.StatusOK,
@@ -98,25 +104,30 @@ func (e *PerformanceController) SavePerformance(Request *gin.Context) {
 	reqBody := new(entities.Performance)
 
 	// 不想多寫一個 copy
-	PermissionItemCode := "add"
-	if strings.Contains(Request.Request.URL.Path, "copy") {
-		PermissionItemCode = "copy"
+	// PermissionItemCode := "add"
+	// if strings.Contains(Request.Request.URL.Path, "copy") {
+	// 	PermissionItemCode = "copy"
+	// }
+
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
+
+	_, appErr := e.performanceApp.SavePerformance(reqBody, session)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "新增失敗",
+			},
+		)
 	}
-
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
-
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.Performance),
-		PermissionItemCode: PermissionItemCode,
-	}
-	if session.SessionHandler() != nil {return}
-
-	reqBody.CompanyId = session.CompanyId
-	e.performanceApp.SavePerformance(reqBody)
 
 	Request.JSON(
 		http.StatusOK,
@@ -129,20 +140,25 @@ func (e *PerformanceController) SavePerformance(Request *gin.Context) {
 func (e *PerformanceController) UpdatePerformance(Request *gin.Context) {
 	reqBody := new(entities.Performance)
 
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
 
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.Performance),
-		PermissionItemCode: "edit",
+	_, appErr := e.performanceApp.UpdatePerformance(reqBody, session)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "更新失敗",
+			},
+		)
 	}
-	if session.SessionHandler() != nil {return}
-
-	reqBody.CompanyId = session.CompanyId
-	e.performanceApp.UpdatePerformance(reqBody)
 
 	Request.JSON(
 		http.StatusOK,
