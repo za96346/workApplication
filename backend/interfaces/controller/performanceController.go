@@ -51,6 +51,7 @@ func (e *PerformanceController) GetPerformances(Request *gin.Context) {
 				"data":    []int{},
 			},
 		)
+		return
 	}
 
 	Request.JSON(
@@ -88,6 +89,7 @@ func (e *PerformanceController) GetYearPerformances(Request *gin.Context) {
 				"data":    []int{},
 			},
 		)
+		return
 	}
 
 	Request.JSON(
@@ -126,6 +128,7 @@ func (e *PerformanceController) SavePerformance(Request *gin.Context) {
 				"message": "新增失敗",
 			},
 		)
+		return
 	}
 
 	Request.JSON(
@@ -157,6 +160,7 @@ func (e *PerformanceController) UpdatePerformance(Request *gin.Context) {
 				"message": "更新失敗",
 			},
 		)
+		return
 	}
 
 	Request.JSON(
@@ -195,6 +199,7 @@ func (e *PerformanceController) DeletePerformance(Request *gin.Context) {
 				"message": "刪除失敗",
 			},
 		)
+		return
 	}
 
 	Request.JSON(
@@ -235,6 +240,7 @@ func (e *PerformanceController) ChangeBanch(Request *gin.Context) {
 				"message": "更新失敗",
 			},
 		)
+		return
 	}
 
 	Request.JSON(

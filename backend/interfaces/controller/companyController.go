@@ -41,6 +41,7 @@ func (s *CompanyController) GetCompany(Request *gin.Context) {
 				"data":    []int{},
 			},
 		)
+		return
 	}
 
 	Request.JSON(
@@ -73,6 +74,7 @@ func (s *CompanyController) UpdateCompany(Request *gin.Context) {
 				"message": "更新失敗",
 			},
 		)
+		return
 	}
 
 	Request.JSON(

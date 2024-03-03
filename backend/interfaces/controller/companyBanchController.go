@@ -52,6 +52,7 @@ func (s *CompanyBanchController) GetCompanyBanches(Request *gin.Context) {
 				"data":    []int{},
 			},
 		)
+		return
 	}
 
 	Request.JSON(
@@ -80,6 +81,7 @@ func (s *CompanyBanchController) GetCompanyBanchesSelector(Request *gin.Context)
 				"data":    []int{},
 			},
 		)
+		return
 	}
 
 	Request.JSON(
@@ -112,6 +114,7 @@ func (s *CompanyBanchController) UpdateCompanyBanch(Request *gin.Context) {
 				"message": "更新失敗",
 			},
 		)
+		return
 	}
 
 	Request.JSON(
@@ -142,6 +145,7 @@ func (s *CompanyBanchController) SaveCompanyBanch(Request *gin.Context) {
 				"message": "新增失敗",
 			},
 		)
+		return
 	}
 
 	Request.JSON(
@@ -180,6 +184,7 @@ func (s *CompanyBanchController) DeleteCompanyBanch(Request *gin.Context) {
 				"message": "刪除失敗",
 			},
 		)
+		return
 	}
 
 	Request.JSON(

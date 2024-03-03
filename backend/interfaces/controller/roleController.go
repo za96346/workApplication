@@ -4,7 +4,6 @@ import (
 	"backend/application/services"
 	"backend/domain/entities"
 	"backend/infrastructure/persistence"
-	"backend/interfaces/enum"
 	"backend/interfaces/method"
 	"net/http"
 
@@ -29,23 +28,32 @@ func (e *RoleController) GetRoles(Request *gin.Context) {
 		RoleName string `json:"RoleName"`
 	})
 
-	// 權限驗證
-	session := method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: false,
-		ReqParamsValidation: true,
-		ReqParamsStruct: reqParams,
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqParamsValidation: true,
+			ReqParamsStruct: reqParams,
+		},
+	)
+	if err != nil {return}
 
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.RoleManage),
-		PermissionItemCode: "inquire",
+	data, appErr := e.roleApp.GetRoles(
+		&entities.Role{
+			RoleName: reqParams.RoleName,
+		},
+		session,
+	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusOK,
+			gin.H {
+				"message": "失敗",
+				"data":  data,
+			},
+		)
+		return
 	}
-	if session.SessionHandler() != nil {return}
-
-	data, _ := e.roleApp.GetRoles(&entities.Role{
-		CompanyId: session.CompanyId,
-		RoleName: reqParams.RoleName,
-	})
 
 	Request.JSON(
 		http.StatusOK,
@@ -62,23 +70,32 @@ func (e *RoleController) GetRole(Request *gin.Context) {
 		RoleId int `json:"RoleId" binding:"required"`
 	})
 
-	// 權限驗證
-	session := method.SessionStruct{
-		Request: Request,
-		ReqParamsValidation: true,
-		ReqParamsStruct: reqParams,
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqParamsValidation: true,
+			ReqParamsStruct: reqParams,
+		},
+	)
+	if err != nil {return}
 
+	role, rolePermissionMap, appErr := e.roleApp.GetRole(
+		&entities.Role{
+			RoleId: reqParams.RoleId,
+		},
+		session,
+	)
 
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.RoleManage),
-		PermissionItemCode: "inquire",
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "失敗",
+				"data":  nil,
+			},
+		)
+		return
 	}
-	if session.SessionHandler() != nil {return}
-
-	role, rolePermissionMap := e.roleApp.GetRole(&entities.Role{
-		CompanyId: session.CompanyId,
-		RoleId: reqParams.RoleId,
-	})
 
 	Request.JSON(
 		http.StatusOK,
@@ -93,17 +110,27 @@ func (e *RoleController) GetRole(Request *gin.Context) {
 }
 
 func (e *RoleController) GetRolesSelector(Request *gin.Context) {
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: false,
-		PermissionValidation: false,
-	}
-	if session.SessionHandler() != nil {return}
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{},
+	)
+	if err != nil {return}
 
-	data, _ := e.roleApp.GetRolesSelector(&entities.Role{
-		CompanyId: session.CompanyId,
-	})
+	data, appErr := e.roleApp.GetRolesSelector(
+		&entities.Role{},
+		session,
+	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "失敗",
+				"data": nil,
+			},
+		)
+		return
+	}
 
 	Request.JSON(
 		http.StatusOK,
@@ -134,25 +161,34 @@ func (e *RoleController) UpdateRole(Request *gin.Context) {
 
 	})
 
-	// 權限驗證
-	session := method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
 
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.RoleManage),
-		PermissionItemCode: "edit",
+	_, appErr := e.roleApp.UpdateRole(
+		&entities.Role{
+			RoleId: reqBody.RoleId,
+			RoleName: reqBody.RoleName,
+			Sort: reqBody.Sort,
+		},
+		&reqBody.Data,
+		session,
+	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusOK,
+			gin.H {
+				"message": "更新失敗",
+			},
+		)
+		return
 	}
-
-	if session.SessionHandler() != nil {return}
-
-	e.roleApp.UpdateRole(&entities.Role{
-		CompanyId: session.CompanyId,
-		RoleId: reqBody.RoleId,
-		RoleName: reqBody.RoleName,
-		Sort: reqBody.Sort,
-	}, &reqBody.Data)
 
 	Request.JSON(
 		http.StatusOK,
@@ -181,20 +217,30 @@ func (e *RoleController) SaveRole(Request *gin.Context) {
 
 	})
 
-	// 權限驗證
-	session := method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
 
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.RoleManage),
-		PermissionItemCode: "add",
+	_, appErr := e.roleApp.SaveRole(
+		&entities.Role{},
+		&reqBody.Data,
+		session,
+	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "新增失敗",
+			},
+		)
+		return
 	}
-
-	e.roleApp.SaveRole(&entities.Role{
-		CompanyId: session.CompanyId,
-	}, &reqBody.Data)
 
 	Request.JSON(
 		http.StatusOK,
@@ -210,22 +256,31 @@ func (e *RoleController) DeleteRole(Request *gin.Context) {
 		RoleId int `json:"RoleId" binding:"required"`
 	})
 
-	// 權限驗證
-	session := method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
 
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.RoleManage),
-		PermissionItemCode: "delete",
+	_, appErr := e.roleApp.DeleteRole(
+		&entities.Role{
+			RoleId: reqBody.RoleId,
+		},
+		session,
+	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "刪除失敗",
+			},
+		)
+		return
 	}
-	if session.SessionHandler() != nil {return}
-
-	e.roleApp.DeleteRole(&entities.Role{
-		CompanyId: session.CompanyId,
-		RoleId: reqBody.RoleId,
-	})
 
 	Request.JSON(
 		http.StatusOK,

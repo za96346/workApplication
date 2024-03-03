@@ -4,32 +4,87 @@ import (
 	"backend/domain/aggregates"
 	"backend/domain/entities"
 	"backend/domain/repository"
+	"backend/enum"
+	"backend/interfaces/method"
 	"encoding/json"
 )
 
 type RoleApp struct {
 	roleRepo repository.RoleRepository
 	roleStructRepo repository.RoleStructRepository
+	companyBanchRepo repository.CompanyBanchRepository
 }
 
 var _ RoleAppInterface = &RoleApp{}
 
 type RoleAppInterface interface {
-	GetRole(*entities.Role) (*entities.Role, *map[string](map[string]map[string]interface{}))
-	GetRoles(*entities.Role) (*[]entities.Role, *error)
-	GetRolesSelector(*entities.Role) (*[]entities.Role, *error)
+	GetRole(
+		*entities.Role,
+		*method.SessionStruct,
+	) (
+		*entities.Role,
+		*map[string](map[string]map[string]interface{}),
+		*error,
+	)
+	GetRoles(*entities.Role, *method.SessionStruct) (*[]entities.Role, *error)
+	GetRolesSelector(*entities.Role, *method.SessionStruct) (*[]entities.Role, *error)
 
-	UpdateRole(*entities.Role, *map[string]map[string]map[string]interface{}) (*entities.Role, *error)
+	UpdateRole(
+		*entities.Role,
+		*map[string]map[string]map[string]interface{},
+		*method.SessionStruct,
+	) (*entities.Role, *error)
 
-	SaveRole(*entities.Role, *map[string]map[string]map[string]interface{}) (*entities.Role, *error)
-	DeleteRole(*entities.Role) (*entities.Role, *error)
+	SaveRole(
+		*entities.Role,
+		*map[string]map[string]map[string]interface{},
+		*method.SessionStruct,
+	) (*entities.Role, *error)
+	DeleteRole(*entities.Role, *method.SessionStruct) (*entities.Role, *error)
 }
 
-func (r *RoleApp) GetRoles(roleEntity *entities.Role) (*[]entities.Role, *error) {
+func (r *RoleApp) GetRoles(roleEntity *entities.Role, sessionStruct *method.SessionStruct) (*[]entities.Role, *error) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		r.roleRepo,
+		r.companyBanchRepo,
+		true,
+		string(enum.RoleManage),
+		string(enum.Inquire),
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
+	roleEntity.CompanyId = authAggregate.User.CompanyId
+
 	return r.roleRepo.GetRoles(roleEntity)
 }
 
-func (r *RoleApp) GetRole(roleEntity *entities.Role) (*entities.Role, *map[string](map[string]map[string]interface{})) {
+func (r *RoleApp) GetRole(
+	roleEntity *entities.Role,
+	sessionStruct *method.SessionStruct,
+) (
+	*entities.Role,
+	*map[string](map[string]map[string]interface{}),
+	*error,
+) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		r.roleRepo,
+		r.companyBanchRepo,
+		true,
+		string(enum.RoleManage),
+		string(enum.Inquire),
+	)
+	
+	if err != nil {
+		return nil, nil, err
+	}
+
+	roleEntity.CompanyId = authAggregate.User.CompanyId
+
 	rolePermissionMap := map[string](map[string]map[string]interface{}){}
 
 	role, _ := r.roleRepo.GetRole(roleEntity)
@@ -64,17 +119,48 @@ func (r *RoleApp) GetRole(roleEntity *entities.Role) (*entities.Role, *map[strin
 			rolePermissionMap[v.FuncCode][v.ItemCode]["scopeRole"] = v.ScopeRole
 		}
 	}
-	return role, &rolePermissionMap
+	return role, &rolePermissionMap, nil
 }
 
-func (r *RoleApp) GetRolesSelector(roleEntity *entities.Role) (*[]entities.Role, *error) {
+func (r *RoleApp) GetRolesSelector(roleEntity *entities.Role, sessionStruct *method.SessionStruct) (*[]entities.Role, *error) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		r.roleRepo,
+		r.companyBanchRepo,
+		false,
+		string(enum.RoleManage),
+		string(enum.Inquire),
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
+	roleEntity.CompanyId = authAggregate.User.CompanyId
+
 	return r.roleRepo.GetRolesSelector(roleEntity)
 }
 
 func (r *RoleApp) UpdateRole(
 	roleEntity *entities.Role,
 	data *map[string]map[string]map[string]interface{},
+	sessionStruct *method.SessionStruct,
 ) (*entities.Role, *error) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		r.roleRepo,
+		r.companyBanchRepo,
+		true,
+		string(enum.RoleManage),
+		string(enum.Edit),
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
+	roleEntity.CompanyId = authAggregate.User.CompanyId
+
 	TX := r.roleRepo.Begin()
 	if _, err := r.roleRepo.UpdateRole(roleEntity, TX); err != nil {
 		TX.Rollback()
@@ -99,7 +185,23 @@ func (r *RoleApp) UpdateRole(
 func (r *RoleApp) SaveRole(
 	roleEntity *entities.Role,
 	data *map[string]map[string]map[string]interface{},
+	sessionStruct *method.SessionStruct,
 ) (*entities.Role, *error) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		r.roleRepo,
+		r.companyBanchRepo,
+		true,
+		string(enum.RoleManage),
+		string(enum.Add),
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
+	roleEntity.CompanyId = authAggregate.User.CompanyId
+
 	TX := r.roleRepo.Begin()
 	if _, err := r.roleRepo.SaveRole(roleEntity, TX); err != nil {
 		TX.Rollback()
@@ -121,6 +223,21 @@ func (r *RoleApp) SaveRole(
 	return nil, nil
 }
 
-func (r *RoleApp) DeleteRole(roleEntity *entities.Role) (*entities.Role, *error) {
+func (r *RoleApp) DeleteRole(roleEntity *entities.Role, sessionStruct *method.SessionStruct) (*entities.Role, *error) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		r.roleRepo,
+		r.companyBanchRepo,
+		true,
+		string(enum.RoleManage),
+		string(enum.Delete),
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
+	roleEntity.CompanyId = authAggregate.User.CompanyId
+
 	return r.roleRepo.DeleteRole(roleEntity)
 }
