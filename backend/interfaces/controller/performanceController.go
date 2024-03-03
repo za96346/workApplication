@@ -7,7 +7,6 @@ import (
 	"backend/interfaces/method"
 	"backend/application/dtos"
 	"net/http"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -173,22 +172,30 @@ func (e *PerformanceController) DeletePerformance(Request *gin.Context) {
 		PerformanceId int `gorm:"column:performanceId;primaryKey" json:"PerformanceId" binding:"required"`
 	})
 
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
 
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.Performance),
-		PermissionItemCode: "delete",
+	_, appErr := e.performanceApp.DeletePerformance(
+		&entities.Performance{
+			PerformanceId: reqBody.PerformanceId,
+		},
+		session,
+	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "刪除失敗",
+			},
+		)
 	}
-	if session.SessionHandler() != nil {return}
-
-	e.performanceApp.DeletePerformance(&entities.Performance{
-		CompanyId: session.CompanyId,
-		PerformanceId: reqBody.PerformanceId,
-	})
 
 	Request.JSON(
 		http.StatusOK,
@@ -204,23 +211,31 @@ func (e *PerformanceController) ChangeBanch(Request *gin.Context) {
 		BanchId         int         `json:"BanchId" binding:"required"`
 	})
 
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
 
-		PermissionValidation: true,
-		PermissionFuncCode:  string(enum.Performance),
-		PermissionItemCode: "edit",
+	_, appErr := e.performanceApp.ChangeBanch(
+		&entities.Performance{
+			PerformanceId: reqBody.PerformanceId,
+			BanchId: reqBody.BanchId,
+		},
+		session,
+	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "更新失敗",
+			},
+		)
 	}
-	if session.SessionHandler() != nil {return}
-
-	e.performanceApp.ChangeBanch(&entities.Performance{
-		CompanyId: session.CompanyId,
-		PerformanceId: reqBody.PerformanceId,
-		BanchId: reqBody.BanchId,
-	})
 
 	Request.JSON(
 		http.StatusOK,

@@ -56,6 +56,8 @@ func (p *PerformanceApp) GetPerformances(
 		return nil, err
 	}
 
+	performanceEntity.CompanyId = authAggregate.User.CompanyId
+
 	return p.performanceRepo.GetPerformances(
 		performanceEntity,
 		queryParams,
@@ -106,6 +108,8 @@ func (p *PerformanceApp) SavePerformance(performanceEntity *entities.Performance
 		return nil, err
 	}
 
+	performanceEntity.CompanyId = authAggregate.User.CompanyId
+
 	user, err := p.userRepo.GetUser(&entities.User{
 		CompanyId: performanceEntity.CompanyId,
 		UserId: performanceEntity.UserId,
@@ -140,8 +144,10 @@ func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performan
 		return nil, err
 	}
 
+	performanceEntity.CompanyId = authAggregate.User.CompanyId
+
 	user, err := p.userRepo.GetUser(&entities.User{
-		CompanyId: performanceEntity.CompanyId,
+		CompanyId: authAggregate.User.CompanyId,
 		UserId: performanceEntity.UserId,
 	})
 
@@ -161,11 +167,63 @@ func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performan
 }
 
 func (p *PerformanceApp) DeletePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, *error) {
-	return p.performanceRepo.DeletePerformance(performanceEntity)
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		p.roleRepo,
+		p.companyBanchRepo,
+		true,
+		string(enum.Performance),
+		string(enum.Delete),
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
+	performanceEntity.CompanyId = authAggregate.User.CompanyId
+
+	performance, err := p.performanceRepo.DeletePerformance(performanceEntity)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return performance, nil
 }
 
 func (p *PerformanceApp) ChangeBanch(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, *error) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		p.roleRepo,
+		p.companyBanchRepo,
+		true,
+		string(enum.Performance),
+		string(enum.Edit),
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+
+	performanceEntity.CompanyId = authAggregate.User.CompanyId
+
+	user, err := p.userRepo.GetUser(&entities.User{
+		CompanyId: authAggregate.User.CompanyId,
+		UserId: performanceEntity.UserId,
+	})
+
+	// 檢查 role
+	if err := authAggregate.CheckScopeRoleValidation(user.RoleId); err != nil {
+		return nil, &err
+	}
+
 	thisPerformance, _ := p.performanceRepo.GetPerformance(performanceEntity)
+
+	// 檢查 banch
+	if err := authAggregate.CheckScopeBanchValidation(thisPerformance.BanchId); err != nil {
+		return nil, &err
+	}
+
 	thisPerformance.BanchId = performanceEntity.BanchId
 	return p.performanceRepo.UpdatePerformance(thisPerformance)
 }
