@@ -11,10 +11,10 @@ import (
 )
 
 type PerformanceApp struct {
-	performanceRepo repository.PerformanceRepository
-	userRepo repository.UserRepository
-	companyBanchRepo repository.CompanyBanchRepository
-	roleRepo repository.RoleRepository
+	PerformanceRepo repository.PerformanceRepository
+	UserRepo repository.UserRepository
+	CompanyBanchRepo repository.CompanyBanchRepository
+	RoleRepo repository.RoleRepository
 }
 
 var _ PerformanceAppInterface = &PerformanceApp{}
@@ -45,8 +45,8 @@ func (p *PerformanceApp) GetPerformances(
 ) (*[]domainDtos.PerformanceDetailDto, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		p.roleRepo,
-		p.companyBanchRepo,
+		p.RoleRepo,
+		p.CompanyBanchRepo,
 		true,
 		string(enum.Performance),
 		string(enum.Inquire),
@@ -58,7 +58,7 @@ func (p *PerformanceApp) GetPerformances(
 
 	performanceEntity.CompanyId = authAggregate.User.CompanyId
 
-	return p.performanceRepo.GetPerformances(
+	return p.PerformanceRepo.GetPerformances(
 		performanceEntity,
 		queryParams,
 		&authAggregate.CurrentPermissionScopeBanch,
@@ -73,8 +73,8 @@ func (p *PerformanceApp) GetYearPerformances(
 ) (*[]entities.YearPerformance, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		p.roleRepo,
-		p.companyBanchRepo,
+		p.RoleRepo,
+		p.CompanyBanchRepo,
 		true,
 		string(enum.Performance),
 		string(enum.Inquire),
@@ -86,7 +86,7 @@ func (p *PerformanceApp) GetYearPerformances(
 
 	performanceEntity.CompanyId = authAggregate.User.CompanyId
 
-	return p.performanceRepo.GetYearPerformances(
+	return p.PerformanceRepo.GetYearPerformances(
 		performanceEntity,
 		queryParams,
 		&authAggregate.CurrentPermissionScopeBanch,
@@ -97,8 +97,8 @@ func (p *PerformanceApp) GetYearPerformances(
 func (p *PerformanceApp) SavePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		p.roleRepo,
-		p.companyBanchRepo,
+		p.RoleRepo,
+		p.CompanyBanchRepo,
 		true,
 		string(enum.Performance),
 		string(enum.Add),
@@ -110,7 +110,7 @@ func (p *PerformanceApp) SavePerformance(performanceEntity *entities.Performance
 
 	performanceEntity.CompanyId = authAggregate.User.CompanyId
 
-	user, err := p.userRepo.GetUser(&entities.User{
+	user, err := p.UserRepo.GetUser(&entities.User{
 		CompanyId: performanceEntity.CompanyId,
 		UserId: performanceEntity.UserId,
 	})
@@ -127,14 +127,14 @@ func (p *PerformanceApp) SavePerformance(performanceEntity *entities.Performance
 		return nil, &err
 	}
 
-	return p.performanceRepo.SavePerformance(performanceEntity)
+	return p.PerformanceRepo.SavePerformance(performanceEntity)
 }
 
 func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		p.roleRepo,
-		p.companyBanchRepo,
+		p.RoleRepo,
+		p.CompanyBanchRepo,
 		true,
 		string(enum.Performance),
 		string(enum.Edit),
@@ -146,7 +146,7 @@ func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performan
 
 	performanceEntity.CompanyId = authAggregate.User.CompanyId
 
-	user, err := p.userRepo.GetUser(&entities.User{
+	user, err := p.UserRepo.GetUser(&entities.User{
 		CompanyId: authAggregate.User.CompanyId,
 		UserId: performanceEntity.UserId,
 	})
@@ -163,14 +163,14 @@ func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performan
 		return nil, &err
 	}
 
-	return p.performanceRepo.UpdatePerformance(performanceEntity)
+	return p.PerformanceRepo.UpdatePerformance(performanceEntity)
 }
 
 func (p *PerformanceApp) DeletePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		p.roleRepo,
-		p.companyBanchRepo,
+		p.RoleRepo,
+		p.CompanyBanchRepo,
 		true,
 		string(enum.Performance),
 		string(enum.Delete),
@@ -182,7 +182,7 @@ func (p *PerformanceApp) DeletePerformance(performanceEntity *entities.Performan
 
 	performanceEntity.CompanyId = authAggregate.User.CompanyId
 
-	performance, err := p.performanceRepo.DeletePerformance(performanceEntity)
+	performance, err := p.PerformanceRepo.DeletePerformance(performanceEntity)
 
 	if err != nil {
 		return nil, err
@@ -194,8 +194,8 @@ func (p *PerformanceApp) DeletePerformance(performanceEntity *entities.Performan
 func (p *PerformanceApp) ChangeBanch(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		p.roleRepo,
-		p.companyBanchRepo,
+		p.RoleRepo,
+		p.CompanyBanchRepo,
 		true,
 		string(enum.Performance),
 		string(enum.Edit),
@@ -207,7 +207,7 @@ func (p *PerformanceApp) ChangeBanch(performanceEntity *entities.Performance, se
 
 	performanceEntity.CompanyId = authAggregate.User.CompanyId
 
-	user, err := p.userRepo.GetUser(&entities.User{
+	user, err := p.UserRepo.GetUser(&entities.User{
 		CompanyId: authAggregate.User.CompanyId,
 		UserId: performanceEntity.UserId,
 	})
@@ -217,7 +217,7 @@ func (p *PerformanceApp) ChangeBanch(performanceEntity *entities.Performance, se
 		return nil, &err
 	}
 
-	thisPerformance, _ := p.performanceRepo.GetPerformance(performanceEntity)
+	thisPerformance, _ := p.PerformanceRepo.GetPerformance(performanceEntity)
 
 	// 檢查 banch
 	if err := authAggregate.CheckScopeBanchValidation(thisPerformance.BanchId); err != nil {
@@ -225,5 +225,5 @@ func (p *PerformanceApp) ChangeBanch(performanceEntity *entities.Performance, se
 	}
 
 	thisPerformance.BanchId = performanceEntity.BanchId
-	return p.performanceRepo.UpdatePerformance(thisPerformance)
+	return p.PerformanceRepo.UpdatePerformance(thisPerformance)
 }

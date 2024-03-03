@@ -15,10 +15,10 @@ type RoleController struct {
 	roleApp application.RoleAppInterface
 }
 
-func NewRole(repo *persistence.Repositories) *RoleController {
+func NewRole(repo *persistence.Repositories, app application.RoleAppInterface) *RoleController {
 	return &RoleController{
 		repo: repo,
-		roleApp: &application.RoleApp{},
+		roleApp: app,
 	}
 }
 

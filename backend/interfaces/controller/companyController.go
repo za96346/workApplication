@@ -15,10 +15,10 @@ type CompanyController struct {
 	companyApp application.CompanyAppInterface
 }
 
-func NewCompany(repo *persistence.Repositories) *CompanyController {
+func NewCompany(repo *persistence.Repositories, app application.CompanyAppInterface) *CompanyController {
 	return &CompanyController{
 		repo: repo,
-		companyApp: &application.CompanyApp{},
+		companyApp: app,
 	}
 }
 

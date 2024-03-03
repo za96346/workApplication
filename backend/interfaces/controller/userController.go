@@ -16,10 +16,10 @@ type UserController struct {
 	userApp application.UserAppInterface
 }
 
-func NewUser(repo *persistence.Repositories) *UserController {
+func NewUser(repo *persistence.Repositories, app application.UserAppInterface) *UserController {
 	return &UserController{
 		repo: repo,
-		userApp: &application.UserApp{},
+		userApp: app,
 	}
 }
 

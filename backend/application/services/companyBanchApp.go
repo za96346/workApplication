@@ -9,8 +9,8 @@ import (
 )
 
 type CompanyBanchApp struct {
-	companyBanchRepo repository.CompanyBanchRepository
-	roleRepo repository.RoleRepository
+	CompanyBanchRepo repository.CompanyBanchRepository
+	RoleRepo repository.RoleRepository
 }
 
 var _ CompanyBanchAppInterface = &CompanyBanchApp{}
@@ -32,8 +32,8 @@ func (c *CompanyBanchApp) GetCompanyBanches(
 ) (*[]entities.CompanyBanch, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		c.roleRepo,
-		c.companyBanchRepo,
+		c.RoleRepo,
+		c.CompanyBanchRepo,
 		true,
 		string(enum.BanchManage),
 		string(enum.Inquire),
@@ -43,7 +43,7 @@ func (c *CompanyBanchApp) GetCompanyBanches(
 		return nil, err
 	}
 
-	return c.companyBanchRepo.GetCompanyBanches(
+	return c.CompanyBanchRepo.GetCompanyBanches(
 		&entities.CompanyBanch{
 			CompanyId: authAggregate.User.CompanyId,
 			BanchName: companyBanchEntity.BanchName,
@@ -55,8 +55,8 @@ func (c *CompanyBanchApp) GetCompanyBanches(
 func (c *CompanyBanchApp) GetCompanyBanchesSelector(sessionStruct *method.SessionStruct) (*[]entities.CompanyBanch, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		c.roleRepo,
-		c.companyBanchRepo,
+		c.RoleRepo,
+		c.CompanyBanchRepo,
 		false,
 		"",
 		"",
@@ -66,14 +66,14 @@ func (c *CompanyBanchApp) GetCompanyBanchesSelector(sessionStruct *method.Sessio
 		return nil, err
 	}
 
-	return c.companyBanchRepo.GetCompanyBanchesSelector(authAggregate.User.CompanyId)
+	return c.CompanyBanchRepo.GetCompanyBanchesSelector(authAggregate.User.CompanyId)
 }
 
 func (c *CompanyBanchApp) UpdateCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		c.roleRepo,
-		c.companyBanchRepo,
+		c.RoleRepo,
+		c.CompanyBanchRepo,
 		true,
 		string(enum.BanchManage),
 		string(enum.Edit),
@@ -89,14 +89,14 @@ func (c *CompanyBanchApp) UpdateCompanyBanch(companyBanchEntity *entities.Compan
 
 	companyBanchEntity.CompanyId = authAggregate.User.CompanyId
 
-	return c.companyBanchRepo.UpdateCompanyBanch(companyBanchEntity)
+	return c.CompanyBanchRepo.UpdateCompanyBanch(companyBanchEntity)
 }
 
 func (c *CompanyBanchApp) SaveCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		c.roleRepo,
-		c.companyBanchRepo,
+		c.RoleRepo,
+		c.CompanyBanchRepo,
 		true,
 		string(enum.BanchManage),
 		string(enum.Add),
@@ -108,14 +108,14 @@ func (c *CompanyBanchApp) SaveCompanyBanch(companyBanchEntity *entities.CompanyB
 
 	companyBanchEntity.CompanyId = authAggregate.User.CompanyId
 
-	return c.companyBanchRepo.SaveCompanyBanch(companyBanchEntity)
+	return c.CompanyBanchRepo.SaveCompanyBanch(companyBanchEntity)
 }
 
 func (c *CompanyBanchApp) DeleteCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		c.roleRepo,
-		c.companyBanchRepo,
+		c.RoleRepo,
+		c.CompanyBanchRepo,
 		true,
 		string(enum.BanchManage),
 		string(enum.Delete),
@@ -131,5 +131,5 @@ func (c *CompanyBanchApp) DeleteCompanyBanch(companyBanchEntity *entities.Compan
 
 	companyBanchEntity.CompanyId = authAggregate.User.CompanyId
 
-	return c.companyBanchRepo.DeleteCompanyBanch(companyBanchEntity)
+	return c.CompanyBanchRepo.DeleteCompanyBanch(companyBanchEntity)
 }

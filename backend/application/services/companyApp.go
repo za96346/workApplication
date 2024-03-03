@@ -9,9 +9,9 @@ import (
 )
 
 type CompanyApp struct {
-	companyRepo repository.CompanyRepository
-	companyBanchRepo repository.CompanyBanchRepository
-	roleRepo repository.RoleRepository
+	CompanyRepo repository.CompanyRepository
+	CompanyBanchRepo repository.CompanyBanchRepository
+	RoleRepo repository.RoleRepository
 }
 
 var _ CompanyAppInterface = &CompanyApp{}
@@ -27,8 +27,8 @@ func (c *CompanyApp) UpdateCompany(
 ) (*entities.Company, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		c.roleRepo,
-		c.companyBanchRepo,
+		c.RoleRepo,
+		c.CompanyBanchRepo,
 		true,
 		string(enum.CompanyData),
 		string(enum.Edit),
@@ -40,7 +40,7 @@ func (c *CompanyApp) UpdateCompany(
 
 	(*companyEntity).CompanyId = authAggregate.User.CompanyId
 
-	return c.companyRepo.UpdateCompany(companyEntity)
+	return c.CompanyRepo.UpdateCompany(companyEntity)
 }
 
 func (c *CompanyApp) GetCompany(
@@ -49,8 +49,8 @@ func (c *CompanyApp) GetCompany(
 ) (*entities.Company, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		c.roleRepo,
-		c.companyBanchRepo,
+		c.RoleRepo,
+		c.CompanyBanchRepo,
 		true,
 		string(enum.CompanyData),
 		string(enum.Inquire),
@@ -62,5 +62,5 @@ func (c *CompanyApp) GetCompany(
 
 	(*companyEntity).CompanyId = authAggregate.User.CompanyId
 
-	return c.companyRepo.GetCompany(companyEntity)
+	return c.CompanyRepo.GetCompany(companyEntity)
 }

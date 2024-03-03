@@ -16,10 +16,10 @@ type PerformanceController struct {
 	performanceApp application.PerformanceAppInterface
 }
 
-func NewPerformance(repo *persistence.Repositories) *PerformanceController {
+func NewPerformance(repo *persistence.Repositories, app application.PerformanceAppInterface) *PerformanceController {
 	return &PerformanceController{
 		repo: repo,
-		performanceApp: &application.PerformanceApp{},
+		performanceApp: app,
 	}
 }
 

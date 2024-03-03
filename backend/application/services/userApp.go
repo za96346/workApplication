@@ -11,9 +11,9 @@ import (
 )
 
 type UserApp struct {
-	userRepo repository.UserRepository
-	roleRepo repository.RoleRepository
-	companyBanchRepo repository.CompanyBanchRepository
+	UserRepo repository.UserRepository
+	RoleRepo repository.RoleRepository
+	CompanyBanchRepo repository.CompanyBanchRepository
 }
 
 var _ UserAppInterface = &UserApp{}
@@ -63,8 +63,8 @@ type UserAppInterface interface {
 func (u *UserApp) GetMine(userEntity *entities.User, sessionStruct *method.SessionStruct) (*entities.User, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.roleRepo,
-		u.companyBanchRepo,
+		u.RoleRepo,
+		u.CompanyBanchRepo,
 		false,
 		"",
 		"",
@@ -76,7 +76,7 @@ func (u *UserApp) GetMine(userEntity *entities.User, sessionStruct *method.Sessi
 
 	userEntity = &authAggregate.User
 
-	user, err := u.userRepo.GetUser(userEntity)
+	user, err := u.UserRepo.GetUser(userEntity)
 	user.Password = ""
 	return user, err
 }
@@ -87,8 +87,8 @@ func (u *UserApp) GetUsers(
 ) (*[]entities.User, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.roleRepo,
-		u.companyBanchRepo,
+		u.RoleRepo,
+		u.CompanyBanchRepo,
 		true,
 		string(enum.EmployeeManage),
 		string(enum.Inquire),
@@ -100,7 +100,7 @@ func (u *UserApp) GetUsers(
 
 	userEntity.CompanyId = authAggregate.User.CompanyId
 
-	return u.userRepo.GetUsers(
+	return u.UserRepo.GetUsers(
 		userEntity,
 		authAggregate.GetScopeBanchWithCustomize(userEntity.BanchId),
 		authAggregate.GetScopeRolehWithCustomize(&userEntity.RoleId),
@@ -113,8 +113,8 @@ func (u *UserApp) GetUsersSelector(
 ) (*[]entities.User, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.roleRepo,
-		u.companyBanchRepo,
+		u.RoleRepo,
+		u.CompanyBanchRepo,
 		false,
 		"",
 		"",
@@ -125,7 +125,7 @@ func (u *UserApp) GetUsersSelector(
 	}
 
 	userEntity.CompanyId = authAggregate.User.CompanyId
-	return u.userRepo.GetUsersSelector(userEntity)
+	return u.UserRepo.GetUsersSelector(userEntity)
 }
 
 func (u *UserApp) UpdateUser(
@@ -134,8 +134,8 @@ func (u *UserApp) UpdateUser(
 ) (*entities.User, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.roleRepo,
-		u.companyBanchRepo,
+		u.RoleRepo,
+		u.CompanyBanchRepo,
 		true,
 		string(enum.EmployeeManage),
 		string(enum.Edit),
@@ -160,7 +160,7 @@ func (u *UserApp) UpdateUser(
 	}
 
 	userEntity.CompanyId = authAggregate.User.CompanyId
-	return u.userRepo.UpdateUser(userEntity)
+	return u.UserRepo.UpdateUser(userEntity)
 }
 
 func (u *UserApp) UpdatePassword(
@@ -169,8 +169,8 @@ func (u *UserApp) UpdatePassword(
 ) (*entities.User, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.roleRepo,
-		u.companyBanchRepo,
+		u.RoleRepo,
+		u.CompanyBanchRepo,
 		true,
 		string(enum.EmployeeManage),
 		string(enum.Edit),
@@ -180,7 +180,7 @@ func (u *UserApp) UpdatePassword(
 		return nil, err
 	}
 
-	userEntity, _ := u.userRepo.GetUser(&entities.User{
+	userEntity, _ := u.UserRepo.GetUser(&entities.User{
 		CompanyId: authAggregate.User.CompanyId,
 		UserId: updatePwdDto.UserId,
 	})
@@ -201,7 +201,7 @@ func (u *UserApp) UpdatePassword(
 		return nil, &err
 	}
 
-	return u.userRepo.UpdateUser(userEntity)
+	return u.UserRepo.UpdateUser(userEntity)
 }
 
 func (u *UserApp) UpdateMine(
@@ -210,8 +210,8 @@ func (u *UserApp) UpdateMine(
 ) (*entities.User, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.roleRepo,
-		u.companyBanchRepo,
+		u.RoleRepo,
+		u.CompanyBanchRepo,
 		true,
 		string(enum.SelfData),
 		string(enum.Edit),
@@ -224,7 +224,7 @@ func (u *UserApp) UpdateMine(
 	// 只能更新名字
 	authAggregate.User.UserName = userEntity.UserName
 
-	return u.userRepo.UpdateUser(&authAggregate.User)
+	return u.UserRepo.UpdateUser(&authAggregate.User)
 }
 
 func (u *UserApp) SaveUser(
@@ -233,8 +233,8 @@ func (u *UserApp) SaveUser(
 ) (*entities.User, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.roleRepo,
-		u.companyBanchRepo,
+		u.RoleRepo,
+		u.CompanyBanchRepo,
 		true,
 		string(enum.EmployeeManage),
 		string(enum.Add),
@@ -253,7 +253,7 @@ func (u *UserApp) SaveUser(
 
 	userEntity.CompanyId = authAggregate.User.CompanyId
 
-	return u.userRepo.SaveUser(userEntity)
+	return u.UserRepo.SaveUser(userEntity)
 }
 
 func (u *UserApp) DeleteUser(
@@ -262,8 +262,8 @@ func (u *UserApp) DeleteUser(
 ) (*entities.User, *error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.roleRepo,
-		u.companyBanchRepo,
+		u.RoleRepo,
+		u.CompanyBanchRepo,
 		true,
 		string(enum.EmployeeManage),
 		string(enum.Delete),
@@ -282,5 +282,5 @@ func (u *UserApp) DeleteUser(
 
 	userEntity.CompanyId = authAggregate.User.CompanyId
 
-	return u.userRepo.DeleteUser(userEntity)
+	return u.UserRepo.DeleteUser(userEntity)
 }

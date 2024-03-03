@@ -16,10 +16,10 @@ type EntryController struct {
 	entryApp application.EntryAppInterface
 }
 
-func NewEntry(repo *persistence.Repositories) *EntryController {
+func NewEntry(repo *persistence.Repositories, app application.EntryAppInterface) *EntryController {
 	return &EntryController{
 		repo: repo,
-		entryApp: &application.EntryApp{},
+		entryApp: app,
 	}
 }
 

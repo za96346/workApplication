@@ -14,10 +14,10 @@ type SystemController struct {
 	systemApp application.SystemAppInterface
 }
 
-func NewSystem(repo *persistence.Repositories) *SystemController {
+func NewSystem(repo *persistence.Repositories, app application.SystemAppInterface) *SystemController {
 	return &SystemController{
 		repo: repo,
-		systemApp: &application.SystemApp{},
+		systemApp: app,
 	}
 }
 

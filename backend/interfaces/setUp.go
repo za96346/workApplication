@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	application "backend/application/services"
 	"backend/infrastructure/persistence"
 	"backend/interfaces/controller"
 	"backend/interfaces/middleware"
@@ -44,13 +45,64 @@ func SetUp(repo *persistence.Repositories) *gin.Engine {
 	performanceApi := apiServer.Group("/workApp/performance")
 
 	// 實例 app
-	companyController := controller.NewCompany(repo)
-	companyBanchController := controller.NewCompanyBanch(repo)
-	entryController := controller.NewEntry(repo)
-	performanceController := controller.NewPerformance(repo)
-	roleController := controller.NewRole(repo)
-	systemController := controller.NewSystem(repo)
-	userController := controller.NewUser(repo)
+	companyController := controller.NewCompany(
+		repo,
+		&application.CompanyApp{
+			CompanyRepo: repo.Company,
+			CompanyBanchRepo: repo.CompanyBanch,
+			RoleRepo: repo.Role,
+		},
+	)
+	companyBanchController := controller.NewCompanyBanch(
+		repo,
+		&application.CompanyBanchApp{
+			CompanyBanchRepo: repo.CompanyBanch,
+			RoleRepo: repo.Role,
+		},
+	)
+	entryController := controller.NewEntry(
+		repo,
+		&application.EntryApp{
+			UserRepo: repo.User,
+		},
+	)
+	performanceController := controller.NewPerformance(
+		repo,
+		&application.PerformanceApp{
+			PerformanceRepo: repo.Performance,
+			UserRepo: repo.User,
+			CompanyBanchRepo: repo.CompanyBanch,
+			RoleRepo: repo.Role,
+		},
+	)
+	roleController := controller.NewRole(
+		repo,
+		&application.RoleApp{
+			RoleRepo: repo.Role,
+			RoleStructRepo: repo.RoleStruct,
+			CompanyBanchRepo: repo.CompanyBanch,
+		},
+	)
+	systemController := controller.NewSystem(
+		repo,
+		&application.SystemApp{
+			RoleRepo: repo.Role,
+			RoleStructRepo: repo.RoleStruct,
+			FunctionItemRepo: repo.FunctionItem,
+			FunctionRoleBanchRelationRepo: repo.FunctionRoleBanchRelation,
+			OperationItemRepo: repo.OperationItem,
+			CompanyBanchRepo: repo.CompanyBanch,
+			UserRepo: repo.User,
+		},
+	)
+	userController := controller.NewUser(
+		repo,
+		&application.UserApp{
+			UserRepo: repo.User,
+			RoleRepo: repo.Role,
+			CompanyBanchRepo: repo.CompanyBanch,
+		},
+	)
 
 	// 嵌入 route group
 	route.User(userApi, userController)
