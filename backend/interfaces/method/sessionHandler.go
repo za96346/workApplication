@@ -2,6 +2,7 @@ package method
 
 import (
 	"fmt"
+	"net/http"
 	"strconv"
 
 	"backend/domain/entities"
@@ -9,10 +10,6 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
-
-var ErrorInstance = &ErrorStruct{
-	MessageTitle: "[session fail]--",
-}
 
 /*
 	請求body, param
@@ -44,7 +41,12 @@ func NewSession(
 	// 公司 id
 	companyId, err := strconv.Atoi(session.Get("companyId").(string))
 	if err != nil {
-		ErrorInstance.ErrorHandler(Request, "公司id Error")
+		Request.JSON(
+			http.StatusOK,
+			gin.H {
+				"message": "公司id Error",
+			},
+		)
 		return nil, err
 	}
 
@@ -58,21 +60,36 @@ func NewSession(
 	// 使用者id
 	userId, err := strconv.Atoi(session.Get("userId").(string))
 	if err != nil {
-		ErrorInstance.ErrorHandler(Request, "使用者id Error")
+		Request.JSON(
+			http.StatusOK,
+			gin.H {
+				"message": "使用者id Error",
+			},
+		)
 		return nil, err
 	}
 
 	//角色id
 	roleId, err := strconv.Atoi(session.Get("roleId").(string))
 	if err != nil {
-		ErrorInstance.ErrorHandler(Request, "使用者角色id Error")
+		Request.JSON(
+			http.StatusOK,
+			gin.H {
+				"message": "使用者角色id Error",
+			},
+		)
 		return nil, err
 	}
 
 	// 部門id
 	banchId, err := strconv.Atoi(session.Get("banchId").(string))
 	if err != nil {
-		ErrorInstance.ErrorHandler(Request, "使用者部門id Error")
+		Request.JSON(
+			http.StatusOK,
+			gin.H {
+				"message": "使用者部門id Error",
+			},
+		)
 		return nil, err
 	}
 
@@ -88,9 +105,11 @@ func NewSession(
 		bindError := Request.ShouldBindJSON((*req).ReqBodyStruct)
 	
 		if bindError != nil {
-			ErrorInstance.ErrorHandler(
-				Request,
-				fmt.Sprintf("Request Data 格式不正確 %s", bindError),
+			Request.JSON(
+				http.StatusOK,
+				gin.H {
+					"message": fmt.Sprintf("Request Data 格式不正確 %s", bindError),
+				},
 			)
 			return nil, bindError
 		}	
@@ -101,9 +120,11 @@ func NewSession(
 		bindError := Request.BindQuery((*req).ReqParamsStruct)
 	
 		if bindError != nil {
-			ErrorInstance.ErrorHandler(
-				Request,
-				fmt.Sprintf("Request Params 格式不正確 %s", bindError),
+			Request.JSON(
+				http.StatusOK,
+				gin.H {
+					"message": fmt.Sprintf("Request Params 格式不正確 %s", bindError),
+				},
 			)
 			return nil, bindError
 		}	

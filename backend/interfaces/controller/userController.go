@@ -1,10 +1,10 @@
 package controller
 
 import (
+	"backend/application/dtos"
 	"backend/application/services"
 	"backend/domain/entities"
 	"backend/infrastructure/persistence"
-	"backend/interfaces/enum"
 	"backend/interfaces/method"
 	"net/http"
 
@@ -24,17 +24,27 @@ func NewUser(repo *persistence.Repositories) *UserController {
 }
 
 func (u *UserController) GetMine(Request *gin.Context) {
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: false,
-	}
-	if session.SessionHandler() != nil {return}
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{},
+	)
+	if err != nil {return}
 
-	data, _ := u.userApp.GetMine(&entities.User{
-		UserId: session.UserId,
-		CompanyId: session.CompanyId,
-	})
+	data, appErr := u.userApp.GetMine(
+		&entities.User{},
+		session,
+	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "失敗",
+				"data":    nil,
+			},
+		)
+		return
+	}
 
 	Request.JSON(
 		http.StatusOK,
@@ -54,32 +64,37 @@ func (u *UserController) GetUsers(Request *gin.Context) {
 		EmployeeNumber *string `json:"EmployeeNumber"`
 		QuitFlag *string `json:"QuitFlag"`
 	})
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
 
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.EmployeeManage),
-		PermissionItemCode: "inquire",
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqParamsValidation: true,
+			ReqParamsStruct: reqParams,
+		},
+	)
+	if err != nil {return}
 
-		ReqBodyValidation: false,
-		ReqParamsValidation: true,
-		ReqParamsStruct: reqParams,
-	}
-	if session.SessionHandler() != nil {return}
-
-	data, _ := u.userApp.GetUsers(
+	data, appErr := u.userApp.GetUsers(
 		&entities.User{
-			CompanyId: session.CompanyId,
 			BanchId: reqParams.BanchId,
 			RoleId: *reqParams.RoleId,
 			UserName: *reqParams.UserName,
 			EmployeeNumber: *reqParams.EmployeeNumber,
 			QuitFlag: *reqParams.QuitFlag,
 		},
-		session.GetScopeBanchWithCustomize(reqParams.BanchId),
-		session.GetScopeRolehWithCustomize(reqParams.RoleId),
+		session,
 	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "失敗",
+				"data":    nil,
+			},
+		)
+		return
+	}
 
 	Request.JSON(
 		http.StatusOK,
@@ -98,21 +113,36 @@ func (u *UserController) GetUsersSelector(Request *gin.Context) {
 		UserName *string `json:"UserName"`
 		EmployeeNumber *string `json:"EmployeeNumber"`
 	})
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqParamsValidation: true,
-		ReqParamsStruct: reqParams,
-	}
-	if session.SessionHandler() != nil {return}
 
-	data, _ := u.userApp.GetUsersSelector(&entities.User{
-		CompanyId: session.CompanyId,
-		BanchId: reqParams.BanchId,
-		RoleId: *reqParams.RoleId,
-		UserName: *reqParams.UserName,
-		EmployeeNumber:  *reqParams.EmployeeNumber,
-	})
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqParamsValidation: true,
+			ReqParamsStruct: reqParams,
+		},
+	)
+	if err != nil {return}
+
+	data, appErr := u.userApp.GetUsersSelector(
+		&entities.User{
+			BanchId: reqParams.BanchId,
+			RoleId: *reqParams.RoleId,
+			UserName: *reqParams.UserName,
+			EmployeeNumber:  *reqParams.EmployeeNumber,
+		},
+		session,
+	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "失敗",
+				"data":    nil,
+			},
+		)
+		return
+	}
 
 	Request.JSON(
 		http.StatusOK,
@@ -126,27 +156,26 @@ func (u *UserController) GetUsersSelector(Request *gin.Context) {
 func (u *UserController) UpdateUser(Request *gin.Context) {
 	reqBody := new(entities.User)
 
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.EmployeeManage),
-		PermissionItemCode: "edit",
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
-	}
-	if session.SessionHandler() != nil {return}
-	if session.CheckScopeBanchValidation(*(*reqBody).BanchId) != nil {return}
-	if session.CheckScopeRoleValidation((*reqBody).RoleId) != nil {return}
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
 
-	// 檢驗欄位
-	if reqBody.UserId == 0 {
-		// ErrorInstance.ErrorHandler(Request, "更新失敗，UserId is nil.")
+	_, appErr := u.userApp.UpdateUser(reqBody, session)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "更新失敗",
+			},
+		)
 		return
 	}
-
-	(*reqBody).CompanyId = session.CompanyId
-	u.userApp.UpdateUser(reqBody)
 
 	Request.JSON(
 		http.StatusOK,
@@ -157,23 +186,28 @@ func (u *UserController) UpdateUser(Request *gin.Context) {
 }
 
 func (u *UserController) UpdatePassword(Request *gin.Context) {
-	reqBody := new(struct{
-		OldPassword string `json:"OldPassword" binding:"required"`
-		NewPassword string `json:"NewPassword" binding:"required"`
-		NewPasswordAgain string `json:"NewPasswordAgain" binding:"required"`
-		UserId int `gorm:"column:userId;primaryKey" json:"UserId" binding:"required"`
-	})
+	reqBody := new(dtos.UserPasswordUpdateQueryParams)
 
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.EmployeeManage),
-		PermissionItemCode: "edit",
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
+
+	_, appErr := u.userApp.UpdatePassword(reqBody, session)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "更新失敗",
+			},
+		)
+		return
 	}
-	if session.SessionHandler() != nil {return}
 
 	Request.JSON(
 		http.StatusOK,
@@ -188,22 +222,31 @@ func (u *UserController) UpdateMine(Request *gin.Context) {
 		UserName string `json:"UserName" binding:"required"`
 	})
 
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.SelfData),
-		PermissionItemCode: "edit",
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
-	}
-	if session.SessionHandler() != nil {return}
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
 
-	u.userApp.UpdateMine(&entities.User{
-		CompanyId: session.CompanyId,
-		UserId: session.UserId,
-		UserName: reqBody.UserName,
-	})
+	_, appErr := u.userApp.UpdateMine(
+		&entities.User{
+			UserName: reqBody.UserName,
+		},
+		session,
+	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "更新失敗",
+			},
+		)
+		return
+	}
 
 	Request.JSON(
 		http.StatusOK,
@@ -215,21 +258,27 @@ func (u *UserController) UpdateMine(Request *gin.Context) {
 
 func (u *UserController) SaveUser(Request *gin.Context) {
 	reqBody := new(entities.User)
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.EmployeeManage),
-		PermissionItemCode: "add",
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
-	}
-	if session.SessionHandler() != nil {return}
-	if session.CheckScopeBanchValidation(*(*reqBody).BanchId) != nil {return}
-	if session.CheckScopeRoleValidation((*reqBody).RoleId) != nil {return}
 
-	reqBody.CompanyId = session.CompanyId
-	u.userApp.SaveUser(reqBody)
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
+
+	_, appErr := u.userApp.SaveUser(reqBody, session)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "新增失敗",
+			},
+		)
+		return
+	}
 
 	Request.JSON(
 		http.StatusOK,
@@ -244,21 +293,31 @@ func (u *UserController) DeleteUser(Request *gin.Context) {
 		UserId int `json:"UserId" binding:"required"`
 	})
 
-	// 權限驗證
-	session := &method.SessionStruct{
-		Request: Request,
-		PermissionValidation: true,
-		PermissionFuncCode: string(enum.EmployeeManage),
-		PermissionItemCode: "delete",
-		ReqBodyValidation: true,
-		ReqBodyStruct: reqBody,
-	}
-	if session.SessionHandler() != nil {return}
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
 
-	u.userApp.DeleteUser(&entities.User{
-		CompanyId: session.CompanyId,
-		UserId: reqBody.UserId,
-	})
+	_, appErr := u.userApp.DeleteUser(
+		&entities.User{
+			UserId: reqBody.UserId,
+		},
+		session,
+	)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusOK,
+			gin.H {
+				"message": "刪除失敗",
+			},
+		)
+		return
+	}
 
 	Request.JSON(
 		http.StatusOK,
