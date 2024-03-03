@@ -22,16 +22,24 @@ func NewSystem(repo *persistence.Repositories) *SystemController {
 }
 
 func (e *SystemController) GetAuth(Request *gin.Context) {
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: false,
-	}
-	if session.SessionHandler() != nil {return}
-
-	functionItem, permission := e.systemApp.GetAuth(
-		session.CompanyId,
-		session.RoleId,
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{},
 	)
+	if err != nil {return}
+
+	functionItem, permission, appErr := e.systemApp.GetAuth(session)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "失敗",
+				"data": nil,
+			},
+		)
+		return
+	}
 
 	Request.JSON(
 		http.StatusOK,
@@ -65,17 +73,23 @@ func (e *SystemController) GetFunc(Request *gin.Context) {
 }
 
 func (e *SystemController) GetRoleBanchList(Request *gin.Context) {
-	session := &method.SessionStruct{
-		Request: Request,
-		ReqBodyValidation: false,
-	}
-	if session.SessionHandler() != nil {return}
-
-	scopeRole, scopeBanch, scopeUser, availableBanch, availableRole, availableUser := e.systemApp.GetRoleBanchList(
-		session.CompanyId,
-		&session.CurrentPermissionScopeBanch,
-		&session.CurrentPermissionScopeRole,
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{},
 	)
+	if err != nil {return}
+
+	scopeRole, scopeBanch, scopeUser, availableBanch, availableRole, availableUser, appErr := e.systemApp.GetRoleBanchList(session)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "失敗",
+				"data": nil,
+			},
+		)
+	}
 
 	data := make(map[string]interface{})
 	data["scopeRole"] = scopeRole

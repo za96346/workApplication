@@ -1,8 +1,10 @@
 package application
 
 import (
+	"backend/domain/aggregates"
 	"backend/domain/entities"
 	"backend/domain/repository"
+	"backend/interfaces/method"
 	"encoding/json"
 	"strings"
 )
@@ -20,16 +22,18 @@ type SystemApp struct {
 var _ SystemAppInterface = &SystemApp{}
 
 type SystemAppInterface interface {
-	GetAuth(companyId int, roleId int) (*[]entities.FunctionItem, *map[string](map[string](map[string]interface{})))
+	GetAuth(sessionStruct *method.SessionStruct) (
+		*[]entities.FunctionItem,
+		*map[string](map[string](map[string]interface{})),
+		*error,
+	)
 	GetFunc() (
 		*[]entities.FunctionItem,
 		*[]entities.OperationItem,
 		*map[string]map[string]map[string][]string,
 	)
 	GetRoleBanchList(
-		companyId int,
-		currentPermissionScopeBanch *[]int,
-		currentPermissionScopeRole *[]int,
+		sessionStruct *method.SessionStruct,
 	) (
 		*map[string]map[string]interface{},
 		*map[string]map[string]interface{},
@@ -37,23 +41,43 @@ type SystemAppInterface interface {
 		*[]entities.CompanyBanch,
 		*[]entities.Role,
 		*[]entities.User,
+		*error,
 	)
 }
 
 // 獲取權限
-func (s *SystemApp) GetAuth(companyId int, roleId int) (*[]entities.FunctionItem, *map[string](map[string](map[string]interface{}))) {
+func (s *SystemApp) GetAuth(
+	sessionStruct *method.SessionStruct,
+) (
+	*[]entities.FunctionItem,
+	*map[string](map[string](map[string]interface{})),
+	*error,
+) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		s.roleRepo,
+		s.companyBanchRepo,
+		false,
+		"",
+		"",
+	)
+	
+	if err != nil {
+		return nil, nil, err
+	}
+
 	permission := &map[string](map[string](map[string]interface{})){}
 
 	// 角色結構
 	roleStructs, _ := s.roleStructRepo.GetRoleStructs(&entities.RoleStruct{
-		CompanyId: companyId,
-		RoleId: roleId,
+		CompanyId: authAggregate.User.CompanyId,
+		RoleId: authAggregate.User.RoleId,
 	})
 
 	// 該角色的角色結構表中所擁有的 funcCode
 	roleSturctFuncCodes, _ := s.roleStructRepo.GetRoleStructsFuncCode(&entities.RoleStruct{
-		CompanyId: companyId,
-		RoleId: roleId,
+		CompanyId: authAggregate.User.CompanyId,
+		RoleId: authAggregate.User.RoleId,
 	})
 
 	// 功能項目表
@@ -89,7 +113,7 @@ func (s *SystemApp) GetAuth(companyId int, roleId int) (*[]entities.FunctionItem
 		}
 	}
 
-	return functionItem, permission
+	return functionItem, permission, nil
 }
 
 // 拿取功能項目表
@@ -125,9 +149,7 @@ func (s *SystemApp) GetFunc() (
 }
 
 func (s *SystemApp) GetRoleBanchList(
-	companyId int,
-	currentPermissionScopeBanch *[]int,
-	currentPermissionScopeRole *[]int,
+	sessionStruct *method.SessionStruct,
 ) (
 	*map[string]map[string]interface{},
 	*map[string]map[string]interface{},
@@ -135,7 +157,21 @@ func (s *SystemApp) GetRoleBanchList(
 	*[]entities.CompanyBanch,
 	*[]entities.Role,
 	*[]entities.User,
+	*error,
 ) {
+	authAggregate, err := aggregates.NewAuthAggregate(
+		sessionStruct,
+		s.roleRepo,
+		s.companyBanchRepo,
+		false,
+		"",
+		"",
+	)
+	
+	if err != nil {
+		return nil, nil, nil, nil, nil, nil, err
+	}
+
 	// 拿取功能項目表
 	functionItem, _ := s.functionItemRepo.GetFunctionItems()
 
@@ -149,17 +185,17 @@ func (s *SystemApp) GetRoleBanchList(
 
 	availableBanch, _ := s.companyBanchRepo.GetCompanyBanches(
 		&entities.CompanyBanch{
-			CompanyId: companyId,
+			CompanyId: authAggregate.User.CompanyId,
 		},
 		nil,
 	)
 
 	availableRole, _ := s.roleRepo.GetRoles(&entities.Role{
-		CompanyId: companyId,
+		CompanyId: authAggregate.User.CompanyId,
 	})
 
 	availableUser, _ := s.userRepo.GetUsers(&entities.User{
-		CompanyId: companyId,
+		CompanyId: authAggregate.User.CompanyId,
 	}, nil, nil)
 
 	for _, FunctionItem := range *functionItem {
@@ -169,16 +205,16 @@ func (s *SystemApp) GetRoleBanchList(
 
 		for _, operation := range *operationItem {
 
-			scopeBanch[FunctionItem.FuncCode][operation.OperationCode] = currentPermissionScopeBanch
-			scopeRole[FunctionItem.FuncCode][operation.OperationCode] = currentPermissionScopeRole
+			scopeBanch[FunctionItem.FuncCode][operation.OperationCode] = authAggregate.CurrentPermissionScopeBanch
+			scopeRole[FunctionItem.FuncCode][operation.OperationCode] = authAggregate.CurrentPermissionScopeRole
 
 			var scopeUserIdArray []int
 			userDatas, _ := s.userRepo.GetUsers(
 				&entities.User{
-					CompanyId: companyId,
+					CompanyId: authAggregate.User.CompanyId,
 				},
-				currentPermissionScopeRole,
-				currentPermissionScopeBanch,
+				&authAggregate.CurrentPermissionScopeRole,
+				&authAggregate.CurrentPermissionScopeBanch,
 			)
 
 			for _, user := range *userDatas{
@@ -189,5 +225,5 @@ func (s *SystemApp) GetRoleBanchList(
 		}
 	}
 
-	return &scopeRole, &scopeBanch, &scopeUser, availableBanch, availableRole, availableUser
+	return &scopeRole, &scopeBanch, &scopeUser, availableBanch, availableRole, availableUser, nil
 }
