@@ -35,11 +35,14 @@ const Form = ({ value }: { value: performanceTypes.reducerType['all'][0] }): JSX
             ? 'always'
             : 'avoid'
 
-        if (!isPageBreakBeforeRef.current) {
-            setBreakState((prev) => ({ ...prev, [key]: 'always' }))
-        }
+        // 如果算到某一個區塊要斷航的話
+        if (result === 'always') {
+            if (!isPageBreakBeforeRef.current) {
+                setBreakState((prev) => ({ ...prev, [key]: 'always' }))
+            }
 
-        isPageBreakBeforeRef.current = true
+            isPageBreakBeforeRef.current = true
+        }
 
         return result
     }
