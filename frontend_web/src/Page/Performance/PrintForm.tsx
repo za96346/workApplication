@@ -3,12 +3,13 @@ import { useAppSelector } from 'hook/redux'
 import React, { useEffect, useRef, ReactNode, useState } from 'react'
 import performanceTypes from 'types/performance'
 
+// 最低從 10 cm 開始
 const breakPoint = {
-    signBlock: [12, 15],
-    trackListBlock: [15, 17.5],
-    feedBackBlock: [17.5, 22.5],
-    workBlock: [22.5, 27.5],
-    memberFeedBackBlock: [27.5, '']
+    signBlock: [10, 11],
+    trackListBlock: [11, 13.5],
+    feedBackBlock: [13.5, 15],
+    workBlock: [15, 22.5],
+    memberFeedBackBlock: [22.5, '']
 }
 
 const Form = ({ value }: { value: performanceTypes.reducerType['all'][0] }): JSX.Element => {
@@ -23,7 +24,7 @@ const Form = ({ value }: { value: performanceTypes.reducerType['all'][0] }): JSX
     const selfEvaluationRef = useRef<HTMLDivElement>()
     const monthPerformanceRef = useRef<HTMLDivElement>()
 
-    const calBreak = (num1: any, num2: any, key): 'always' | 'avoid' => {
+    const calBreak = (num1: any, num2: any, key: string): 'always' | 'avoid' => {
         const selfEvaluationHeight = selfEvaluationRef.current?.offsetHeight ?? 0
         const monthPerformanceHeight = monthPerformanceRef.current?.offsetHeight ?? 0
 
@@ -36,12 +37,9 @@ const Form = ({ value }: { value: performanceTypes.reducerType['all'][0] }): JSX
             : 'avoid'
 
         // 如果算到某一個區塊要斷航的話
-        if (result === 'always') {
-            if (!isPageBreakBeforeRef.current) {
-                setBreakState((prev) => ({ ...prev, [key]: 'always' }))
-            }
-
+        if (result === 'always' && !isPageBreakBeforeRef.current) {
             isPageBreakBeforeRef.current = true
+            setBreakState((prev) => ({ ...prev, [key]: 'always' }))
         }
 
         return result
@@ -88,6 +86,8 @@ const Form = ({ value }: { value: performanceTypes.reducerType['all'][0] }): JSX
             )
         }, 200)
     }, [])
+
+    console.log(breakState)
 
     return (
         <div translate='no' className="print_page">
