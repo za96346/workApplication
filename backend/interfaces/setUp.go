@@ -46,7 +46,6 @@ func SetUp(repo *persistence.Repositories) *gin.Engine {
 
 	// 實例 app
 	companyController := controller.NewCompany(
-		repo,
 		&application.CompanyApp{
 			CompanyRepo: repo.Company,
 			CompanyBanchRepo: repo.CompanyBanch,
@@ -54,20 +53,17 @@ func SetUp(repo *persistence.Repositories) *gin.Engine {
 		},
 	)
 	companyBanchController := controller.NewCompanyBanch(
-		repo,
 		&application.CompanyBanchApp{
 			CompanyBanchRepo: repo.CompanyBanch,
 			RoleRepo: repo.Role,
 		},
 	)
 	entryController := controller.NewEntry(
-		repo,
 		&application.EntryApp{
 			UserRepo: repo.User,
 		},
 	)
 	performanceController := controller.NewPerformance(
-		repo,
 		&application.PerformanceApp{
 			PerformanceRepo: repo.Performance,
 			UserRepo: repo.User,
@@ -76,7 +72,6 @@ func SetUp(repo *persistence.Repositories) *gin.Engine {
 		},
 	)
 	roleController := controller.NewRole(
-		repo,
 		&application.RoleApp{
 			RoleRepo: repo.Role,
 			RoleStructRepo: repo.RoleStruct,
@@ -84,7 +79,6 @@ func SetUp(repo *persistence.Repositories) *gin.Engine {
 		},
 	)
 	systemController := controller.NewSystem(
-		repo,
 		&application.SystemApp{
 			RoleRepo: repo.Role,
 			RoleStructRepo: repo.RoleStruct,
@@ -96,7 +90,6 @@ func SetUp(repo *persistence.Repositories) *gin.Engine {
 		},
 	)
 	userController := controller.NewUser(
-		repo,
 		&application.UserApp{
 			UserRepo: repo.User,
 			RoleRepo: repo.Role,

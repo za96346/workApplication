@@ -3,7 +3,6 @@ package controller
 import (
 	"backend/application/services"
 	"backend/domain/entities"
-	"backend/infrastructure/persistence"
 	"backend/interfaces/method"
 	"net/http"
 
@@ -11,13 +10,11 @@ import (
 )
 
 type CompanyController struct {
-	repo *persistence.Repositories
 	companyApp application.CompanyAppInterface
 }
 
-func NewCompany(repo *persistence.Repositories, app application.CompanyAppInterface) *CompanyController {
+func NewCompany(app application.CompanyAppInterface) *CompanyController {
 	return &CompanyController{
-		repo: repo,
 		companyApp: app,
 	}
 }

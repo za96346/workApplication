@@ -4,12 +4,11 @@ import (
 	"backend/domain/entities"
 	"backend/domain/repository"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
-
 type FunctionItemRepo struct {
-	db *gorm.DB
+	db        *gorm.DB
 	tableName string
 }
 
@@ -25,11 +24,12 @@ func (f *FunctionItemRepo) GetFunctionItemsByFuncCodes(funcCodes *[]string) (*[]
 	err := f.db.
 		Debug().
 		Table(f.tableName).
+		Select("*").
 		Where(
 			"funcCode in (?)",
 			*funcCodes,
 		).
-		Find(functionItem).
+		Find(&functionItem).
 		Error
 
 	return &functionItem, &err

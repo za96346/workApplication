@@ -6,7 +6,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type CompanyBanchRepo struct {
@@ -37,7 +37,7 @@ func (r *CompanyBanchRepo) GetCompanyBanches(
 
 	// banch name
 	if &companyBanchEntity.BanchName != nil {
-		searchQuery.Where("banchName like ?", "%" + companyBanchEntity.BanchName + "%")
+		searchQuery.Where("banchName like ?", "%"+companyBanchEntity.BanchName+"%")
 	}
 
 	// 部門範圍
@@ -81,7 +81,7 @@ func (r *CompanyBanchRepo) GetNewBanchID(companyId int) int {
 }
 
 func (r *CompanyBanchRepo) GetBanchesId(banchEntity *entities.CompanyBanch) *[]int {
-    var banchesIdArr []int
+	var banchesIdArr []int
 
 	r.db.
 		Debug().
@@ -92,11 +92,11 @@ func (r *CompanyBanchRepo) GetBanchesId(banchEntity *entities.CompanyBanch) *[]i
 		Find(&entities.CompanyBanch{}).
 		Pluck("banchId", &banchesIdArr)
 
-    return &banchesIdArr
+	return &banchesIdArr
 }
 
 func (r *CompanyBanchRepo) GetBanchesIdByScopeBanch(banchEntity *entities.CompanyBanch, scopeBanch *[]int) *[]int {
-    var banchesIdArr []int
+	var banchesIdArr []int
 
 	r.db.
 		Debug().
@@ -108,7 +108,7 @@ func (r *CompanyBanchRepo) GetBanchesIdByScopeBanch(banchEntity *entities.Compan
 		Find(&entities.CompanyBanch{}).
 		Pluck("banchId", &banchesIdArr)
 
-    return &banchesIdArr
+	return &banchesIdArr
 }
 
 // 查詢是否有重複banch name
@@ -129,7 +129,7 @@ func (r *CompanyBanchRepo) IsBanchNameDuplicated(companyBanchEntity *entities.Co
 
 // 更新 該公司部門
 func (r *CompanyBanchRepo) UpdateCompanyBanch(
-    companyBanchEntity *entities.CompanyBanch,
+	companyBanchEntity *entities.CompanyBanch,
 ) (*entities.CompanyBanch, *error) {
 
 	// 添加固定欄位
@@ -141,8 +141,8 @@ func (r *CompanyBanchRepo) UpdateCompanyBanch(
 
 	if r.IsBanchNameDuplicated(companyBanchEntity) {
 		err := errors.New("部門名稱重複")
-        return companyBanchEntity, &err
-    }
+		return companyBanchEntity, &err
+	}
 
 	err := r.db.
 		Debug().
@@ -150,14 +150,14 @@ func (r *CompanyBanchRepo) UpdateCompanyBanch(
 		Where("companyId = ?", (*companyBanchEntity).CompanyId).
 		Where("banchId = ?", (*companyBanchEntity).BanchId).
 		Updates(companyBanchEntity).
-        Error
+		Error
 
 	return companyBanchEntity, &err
 }
 
 // 新增 該公司部門
 func (r *CompanyBanchRepo) SaveCompanyBanch(
-    companyBanchEntity *entities.CompanyBanch,
+	companyBanchEntity *entities.CompanyBanch,
 ) (*entities.CompanyBanch, *error) {
 
 	// 添加固定欄位
@@ -171,21 +171,21 @@ func (r *CompanyBanchRepo) SaveCompanyBanch(
 
 	if r.IsBanchNameDuplicated(companyBanchEntity) {
 		err := errors.New("部門名稱重複")
-        return companyBanchEntity, &err
+		return companyBanchEntity, &err
 	}
 
 	err := r.db.
 		Debug().
 		Table(r.tableName).
-        Create(companyBanchEntity).
-        Error
+		Create(companyBanchEntity).
+		Error
 
 	return companyBanchEntity, &err
 }
 
 // 刪除 該公司部門
 func (r *CompanyBanchRepo) DeleteCompanyBanch(
-    companyBanchEntity *entities.CompanyBanch,
+	companyBanchEntity *entities.CompanyBanch,
 ) (*entities.CompanyBanch, *error) {
 
 	// 加入固定欄位
@@ -193,15 +193,14 @@ func (r *CompanyBanchRepo) DeleteCompanyBanch(
 	(*companyBanchEntity).DeleteFlag = "Y"
 	(*companyBanchEntity).DeleteTime = &now
 	(*companyBanchEntity).LastModify = &now
-	
-    err := r.db.
-        Debug().
-        Table(r.tableName).
+
+	err := r.db.
+		Debug().
+		Table(r.tableName).
 		Where("companyId = ?", companyBanchEntity.CompanyId).
 		Where("banchId = ?", companyBanchEntity.BanchId).
 		Updates(companyBanchEntity).
-        Error
-
+		Error
 
 	return companyBanchEntity, &err
 }

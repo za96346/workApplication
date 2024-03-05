@@ -2,12 +2,12 @@ package persistence
 
 import (
 	"backend/domain/repository"
-	"github.com/jinzhu/gorm"
+
+	"gorm.io/gorm"
 )
 
-
 type LogRepo struct {
-	db *gorm.DB
+	db        *gorm.DB
 	tableName string
 }
 
@@ -19,14 +19,14 @@ var _ repository.LogRepository = &LogRepo{}
 
 // 拿取新的 log id ( max count + 1 )
 func (r *LogRepo) GetNewLogId(companyId int) int {
-    var MaxCount int64
+	var MaxCount int64
 	r.db.
 		Debug().
 		Table(r.tableName).
-        Where("companyId = ?", companyId).
-        Select("max(logId)").
-        Row().
-        Scan(&MaxCount)
+		Where("companyId = ?", companyId).
+		Select("max(logId)").
+		Row().
+		Scan(&MaxCount)
 
-    return int(MaxCount) + 1
+	return int(MaxCount) + 1
 }

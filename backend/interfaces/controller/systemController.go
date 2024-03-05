@@ -2,7 +2,6 @@ package controller
 
 import (
 	"backend/application/services"
-	"backend/infrastructure/persistence"
 	"backend/interfaces/method"
 	"net/http"
 
@@ -10,13 +9,11 @@ import (
 )
 
 type SystemController struct {
-	repo *persistence.Repositories
 	systemApp application.SystemAppInterface
 }
 
-func NewSystem(repo *persistence.Repositories, app application.SystemAppInterface) *SystemController {
+func NewSystem(app application.SystemAppInterface) *SystemController {
 	return &SystemController{
-		repo: repo,
 		systemApp: app,
 	}
 }

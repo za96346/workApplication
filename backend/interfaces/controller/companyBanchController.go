@@ -3,7 +3,6 @@ package controller
 import (
 	application "backend/application/services"
 	"backend/domain/entities"
-	"backend/infrastructure/persistence"
 	"backend/interfaces/method"
 	"net/http"
 
@@ -11,13 +10,11 @@ import (
 )
 
 type CompanyBanchController struct {
-	repo *persistence.Repositories
 	companyBanchApp application.CompanyBanchAppInterface
 }
 
-func NewCompanyBanch(repo *persistence.Repositories, app application.CompanyBanchAppInterface) *CompanyBanchController {
+func NewCompanyBanch(app application.CompanyBanchAppInterface) *CompanyBanchController {
 	return &CompanyBanchController{
-		repo: repo,
 		companyBanchApp: app,
 	}
 }

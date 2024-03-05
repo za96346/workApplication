@@ -5,12 +5,11 @@ import (
 	"backend/domain/repository"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
-
 type CompanyRepo struct {
-	db *gorm.DB
+	db        *gorm.DB
 	tableName string
 }
 
@@ -31,7 +30,6 @@ func (r *CompanyRepo) GetCompany(companyEntity *entities.Company) (*entities.Com
 
 	return &company, &err
 }
-
 
 func (r *CompanyRepo) UpdateCompany(companyEntity *entities.Company) (*entities.Company, *error) {
 	now := time.Now()

@@ -2,12 +2,12 @@ package persistence
 
 import (
 	"backend/domain/repository"
-	"github.com/jinzhu/gorm"
+
+	"gorm.io/gorm"
 )
 
-
 type QuitWorkUserRepo struct {
-	db *gorm.DB
+	db        *gorm.DB
 	tableName string
 }
 

@@ -6,12 +6,11 @@ import (
 	"errors"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
-
 type UserRepo struct {
-	db *gorm.DB
+	db        *gorm.DB
 	tableName string
 }
 
@@ -40,7 +39,6 @@ func (r *UserRepo) GetUserByAccount(userEntity *entities.User) (*entities.User, 
 		Debug().
 		Table(r.tableName).
 		Where("account = ?", (*userEntity).Account).
-		Where("companyId = ?", (*userEntity).CompanyId).
 		First(&user).
 		Error
 
@@ -88,12 +86,12 @@ func (r *UserRepo) GetUsers(
 
 	// 使用者名稱
 	if &userEntity.UserName != nil {
-		searchQuery.Where("userName like ?", "%" + userEntity.UserName + "%")
+		searchQuery.Where("userName like ?", "%"+userEntity.UserName+"%")
 	}
 
 	// 員工編號
 	if &userEntity.EmployeeNumber != nil {
-		searchQuery.Where("employeeNumber like ?", "%" + userEntity.EmployeeNumber + "%")
+		searchQuery.Where("employeeNumber like ?", "%"+userEntity.EmployeeNumber+"%")
 	}
 
 	// 離職狀態
@@ -120,12 +118,12 @@ func (r *UserRepo) GetUsersSelector(
 
 	// 使用者名稱
 	if &userEntity.UserName != nil {
-		searchQuery.Where("userName like ?", "%" + userEntity.UserName + "%")
+		searchQuery.Where("userName like ?", "%"+userEntity.UserName+"%")
 	}
 
 	// 員工編號
 	if &userEntity.EmployeeNumber != nil {
-		searchQuery.Where("employeeNumber like ?", "%" + userEntity.EmployeeNumber + "%")
+		searchQuery.Where("employeeNumber like ?", "%"+userEntity.EmployeeNumber+"%")
 	}
 
 	// 部門查詢
@@ -145,17 +143,17 @@ func (r *UserRepo) GetUsersSelector(
 
 // 拿取新的 user id ( max count + 1 )
 func (r *UserRepo) GetNewUserID(companyId int) int {
-    var MaxCount int64
+	var MaxCount int64
 
-    r.db.
+	r.db.
 		Debug().
 		Table(r.tableName).
-        Where("companyId = ?", companyId).
-        Select("max(userId)").
-        Row().
-        Scan(&MaxCount)
+		Where("companyId = ?", companyId).
+		Select("max(userId)").
+		Row().
+		Scan(&MaxCount)
 
-    return int(MaxCount) + 1
+	return int(MaxCount) + 1
 }
 
 func (r *UserRepo) SaveUser(userEntity *entities.User) (*entities.User, *error) {
@@ -183,7 +181,6 @@ func (r *UserRepo) SaveUser(userEntity *entities.User) (*entities.User, *error) 
 
 	return userEntity, &err
 }
-
 
 func (r *UserRepo) UpdateUser(userEntity *entities.User) (*entities.User, *error) {
 	// 加入一些固定欄位
@@ -225,16 +222,15 @@ func (r *UserRepo) DeleteUser(userEntity *entities.User) (*entities.User, *error
 	return userEntity, &err
 }
 
-
 // 帳號是否重複
 func (r *UserRepo) IsAccountDuplicated(account string) bool {
-    var MaxCount int64
+	var MaxCount int64
 
-    r.db.
+	r.db.
 		Debug().
 		Table(r.tableName).
-        Where("account = ?", account).
-        Count(&MaxCount)
+		Where("account = ?", account).
+		Count(&MaxCount)
 
-    return MaxCount > 0
+	return MaxCount > 0
 }

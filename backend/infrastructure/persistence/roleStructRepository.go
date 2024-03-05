@@ -44,7 +44,8 @@ func (r *RoleStrcutRepo) GetRoleStructsFuncCode(roleStructEntity *entities.RoleS
 		Select("funcCode").
 		Where("companyId = ?", roleStructEntity.CompanyId).
 		Where("roleId = ?", roleStructEntity.RoleId).
-		Find(&roleStructs).
+		Find(&entities.RoleStruct{}).
+		Pluck("funcCode", &roleStructs).
 		Error
 
 	return &roleStructs, &err

@@ -3,7 +3,6 @@ package controller
 import (
 	"backend/application/services"
 	"backend/domain/entities"
-	"backend/infrastructure/persistence"
 	"backend/interfaces/method"
 	"net/http"
 
@@ -11,13 +10,11 @@ import (
 )
 
 type RoleController struct {
-	repo *persistence.Repositories
 	roleApp application.RoleAppInterface
 }
 
-func NewRole(repo *persistence.Repositories, app application.RoleAppInterface) *RoleController {
+func NewRole(app application.RoleAppInterface) *RoleController {
 	return &RoleController{
-		repo: repo,
 		roleApp: app,
 	}
 }

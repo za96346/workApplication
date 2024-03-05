@@ -4,12 +4,11 @@ import (
 	"backend/domain/entities"
 	"backend/domain/repository"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
-
 type FunctionRoleBanchRelationRepo struct {
-	db *gorm.DB
+	db        *gorm.DB
 	tableName string
 }
 

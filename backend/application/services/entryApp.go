@@ -18,6 +18,7 @@ type EntryAppInterface interface {
 
 func (u *EntryApp) Login(userEntity *entities.User) (*entities.User, *error) {
 	user, _ := u.UserRepo.GetUserByAccount(userEntity)
+
 	if !(
 		(*user).Password == userEntity.Password && 
 		(*user).Account == userEntity.Account &&

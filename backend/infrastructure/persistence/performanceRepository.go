@@ -1,19 +1,18 @@
 package persistence
 
 import (
-	domainDtos "backend/domain/dtos"
 	appDtos "backend/application/dtos"
+	domainDtos "backend/domain/dtos"
 	"backend/domain/entities"
 	"backend/domain/repository"
 	"errors"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
-
 type PerformanceRepo struct {
-	db *gorm.DB
+	db        *gorm.DB
 	tableName string
 }
 
@@ -24,16 +23,16 @@ func NewPerformanceRepository(db *gorm.DB) *PerformanceRepo {
 var _ repository.PerformanceRepository = &PerformanceRepo{}
 
 func (r *PerformanceRepo) GetPerformances(
-    performanceEntity *entities.Performance,
+	performanceEntity *entities.Performance,
 	queryParams *appDtos.PerformanceQueryParams,
-    scopeBanch *[]int,
-    scopeRole *[]int,
+	scopeBanch *[]int,
+	scopeRole *[]int,
 ) (*[]domainDtos.PerformanceDetailDto, *error) {
-    // 獲取資料
+	// 獲取資料
 	var data []domainDtos.PerformanceDetailDto
 	searchQuery := r.db.
-        Debug().
-        Table(r.tableName).
+		Debug().
+		Table(r.tableName).
 		Where("performance.companyId = ?", performanceEntity.CompanyId).
 		Where("performance.banchId in (?)", *scopeBanch).
 		Where("user.roleId in (?)", *scopeRole).
@@ -58,7 +57,7 @@ func (r *PerformanceRepo) GetPerformances(
 
 	// 使用者名稱
 	if queryParams.UserName != nil {
-		searchQuery.Where("userName like ?", "%" + *queryParams.UserName + "%")
+		searchQuery.Where("userName like ?", "%"+*queryParams.UserName+"%")
 	}
 
 	// 日期塞選
@@ -98,14 +97,14 @@ func (r *PerformanceRepo) GetPerformances(
 
 	err := searchQuery.Find(&data).Error
 
-    return &data, &err
+	return &data, &err
 }
 
 func (r *PerformanceRepo) GetYearPerformances(
 	performanceEntity *entities.Performance,
 	queryParams *appDtos.PerformanceQueryParams,
-    scopeBanch *[]int,
-    scopeRole *[]int,
+	scopeBanch *[]int,
+	scopeRole *[]int,
 ) (*[]entities.YearPerformance, *error) {
 	var data []entities.YearPerformance
 
@@ -146,7 +145,7 @@ func (r *PerformanceRepo) GetYearPerformances(
 
 	// 使用者名稱
 	if queryParams.UserName != nil {
-		searchQuery.Where("user.userName like ?", "%" + *queryParams.UserName + "%")
+		searchQuery.Where("user.userName like ?", "%"+*queryParams.UserName+"%")
 	}
 
 	// 年度塞選
@@ -244,33 +243,33 @@ func (r *PerformanceRepo) DeletePerformance(performanceEntity *entities.Performa
 
 // 拿取新的 performance id ( max count + 1 )
 func (r *PerformanceRepo) GetNewPerformanceID(companyId int) int {
-    var MaxCount int64
+	var MaxCount int64
 
 	r.db.
 		Debug().
 		Table(r.tableName).
-        Where("companyId = ?", companyId).
-        Select("max(performanceId)").
-        Row().
-        Scan(&MaxCount)
+		Where("companyId = ?", companyId).
+		Select("max(performanceId)").
+		Row().
+		Scan(&MaxCount)
 
-    return int(MaxCount) + 1
+	return int(MaxCount) + 1
 }
 
 // 檢查績效年月是否重複
 func (r *PerformanceRepo) IsYearMonthDuplicated(performanceEntity *entities.Performance) bool {
-    var MaxCount int64
+	var MaxCount int64
 
 	r.db.
 		Debug().
 		Table(r.tableName).
-        Where("companyId = ?", (*performanceEntity).CompanyId).
-        Where("userId = ?", (*performanceEntity).UserId).
-        Where("performanceId != ?", (*performanceEntity).PerformanceId).
-        Where("Year = ?", (*performanceEntity).Year).
-        Where("Month = ?", (*performanceEntity).Month).
-        Where("deleteFlag = ?", "N").
-        Count(&MaxCount)
+		Where("companyId = ?", (*performanceEntity).CompanyId).
+		Where("userId = ?", (*performanceEntity).UserId).
+		Where("performanceId != ?", (*performanceEntity).PerformanceId).
+		Where("Year = ?", (*performanceEntity).Year).
+		Where("Month = ?", (*performanceEntity).Month).
+		Where("deleteFlag = ?", "N").
+		Count(&MaxCount)
 
-    return MaxCount > 0
+	return MaxCount > 0
 }

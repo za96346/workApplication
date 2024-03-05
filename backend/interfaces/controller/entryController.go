@@ -3,7 +3,6 @@ package controller
 import (
 	"backend/application/services"
 	"backend/domain/entities"
-	"backend/infrastructure/persistence"
 	"net/http"
 	"strconv"
 
@@ -12,13 +11,11 @@ import (
 )
 
 type EntryController struct {
-	repo *persistence.Repositories
 	entryApp application.EntryAppInterface
 }
 
-func NewEntry(repo *persistence.Repositories, app application.EntryAppInterface) *EntryController {
+func NewEntry(app application.EntryAppInterface) *EntryController {
 	return &EntryController{
-		repo: repo,
 		entryApp: app,
 	}
 }
@@ -54,6 +51,7 @@ func (e *EntryController) Login(Request *gin.Context) {
 				"message": "登入失敗",
 			},
 		)
+		return
 	}
 
 	// 加入 banch id 為 nil 的轉換
