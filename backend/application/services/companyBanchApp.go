@@ -19,17 +19,17 @@ type CompanyBanchAppInterface interface {
 	GetCompanyBanches(
 		companyBanchEntity *entities.CompanyBanch,
 		sessionStruct *method.SessionStruct,
-	) (*[]entities.CompanyBanch, *error)
-	GetCompanyBanchesSelector(sessionStruct *method.SessionStruct) (*[]entities.CompanyBanch, *error)
-	UpdateCompanyBanch(*entities.CompanyBanch, *method.SessionStruct) (*entities.CompanyBanch, *error)
-	SaveCompanyBanch(*entities.CompanyBanch, *method.SessionStruct) (*entities.CompanyBanch, *error)
-	DeleteCompanyBanch(*entities.CompanyBanch, *method.SessionStruct) (*entities.CompanyBanch, *error)
+	) (*[]entities.CompanyBanch, error)
+	GetCompanyBanchesSelector(sessionStruct *method.SessionStruct) (*[]entities.CompanyBanch, error)
+	UpdateCompanyBanch(*entities.CompanyBanch, *method.SessionStruct) (*entities.CompanyBanch, error)
+	SaveCompanyBanch(*entities.CompanyBanch, *method.SessionStruct) (*entities.CompanyBanch, error)
+	DeleteCompanyBanch(*entities.CompanyBanch, *method.SessionStruct) (*entities.CompanyBanch, error)
 }
 
 func (c *CompanyBanchApp) GetCompanyBanches(
 	companyBanchEntity *entities.CompanyBanch,
 	sessionStruct *method.SessionStruct,
-) (*[]entities.CompanyBanch, *error) {
+) (*[]entities.CompanyBanch, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		c.RoleRepo,
@@ -52,7 +52,7 @@ func (c *CompanyBanchApp) GetCompanyBanches(
 	)
 }
 
-func (c *CompanyBanchApp) GetCompanyBanchesSelector(sessionStruct *method.SessionStruct) (*[]entities.CompanyBanch, *error) {
+func (c *CompanyBanchApp) GetCompanyBanchesSelector(sessionStruct *method.SessionStruct) (*[]entities.CompanyBanch, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		c.RoleRepo,
@@ -69,7 +69,7 @@ func (c *CompanyBanchApp) GetCompanyBanchesSelector(sessionStruct *method.Sessio
 	return c.CompanyBanchRepo.GetCompanyBanchesSelector(authAggregate.User.CompanyId)
 }
 
-func (c *CompanyBanchApp) UpdateCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, *error) {
+func (c *CompanyBanchApp) UpdateCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		c.RoleRepo,
@@ -84,7 +84,7 @@ func (c *CompanyBanchApp) UpdateCompanyBanch(companyBanchEntity *entities.Compan
 	}
 
 	if err := authAggregate.CheckScopeBanchValidation((*companyBanchEntity).BanchId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 
 	companyBanchEntity.CompanyId = authAggregate.User.CompanyId
@@ -92,7 +92,7 @@ func (c *CompanyBanchApp) UpdateCompanyBanch(companyBanchEntity *entities.Compan
 	return c.CompanyBanchRepo.UpdateCompanyBanch(companyBanchEntity)
 }
 
-func (c *CompanyBanchApp) SaveCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, *error) {
+func (c *CompanyBanchApp) SaveCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		c.RoleRepo,
@@ -111,7 +111,7 @@ func (c *CompanyBanchApp) SaveCompanyBanch(companyBanchEntity *entities.CompanyB
 	return c.CompanyBanchRepo.SaveCompanyBanch(companyBanchEntity)
 }
 
-func (c *CompanyBanchApp) DeleteCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, *error) {
+func (c *CompanyBanchApp) DeleteCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		c.RoleRepo,
@@ -126,7 +126,7 @@ func (c *CompanyBanchApp) DeleteCompanyBanch(companyBanchEntity *entities.Compan
 	}
 
 	if err := authAggregate.CheckScopeBanchValidation((*companyBanchEntity).BanchId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 
 	companyBanchEntity.CompanyId = authAggregate.User.CompanyId

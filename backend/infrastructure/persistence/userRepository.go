@@ -20,7 +20,7 @@ func NewUserRepository(db *gorm.DB) *UserRepo {
 
 var _ repository.UserRepository = &UserRepo{}
 
-func (r *UserRepo) GetUser(userEntity *entities.User) (*entities.User, *error) {
+func (r *UserRepo) GetUser(userEntity *entities.User) (*entities.User, error) {
 	var user entities.User
 	err := r.db.
 		Debug().
@@ -30,10 +30,10 @@ func (r *UserRepo) GetUser(userEntity *entities.User) (*entities.User, *error) {
 		First(&user).
 		Error
 
-	return &user, &err
+	return &user, err
 }
 
-func (r *UserRepo) GetUserByAccount(userEntity *entities.User) (*entities.User, *error) {
+func (r *UserRepo) GetUserByAccount(userEntity *entities.User) (*entities.User, error) {
 	var user entities.User
 	err := r.db.
 		Debug().
@@ -42,14 +42,14 @@ func (r *UserRepo) GetUserByAccount(userEntity *entities.User) (*entities.User, 
 		First(&user).
 		Error
 
-	return &user, &err
+	return &user, err
 }
 
 func (r *UserRepo) GetUsers(
 	userEntity *entities.User,
 	roleScope *[]int,
 	banchScope *[]int,
-) (*[]entities.User, *error) {
+) (*[]entities.User, error) {
 	var users []entities.User
 
 	searchQuery := r.db.
@@ -101,12 +101,12 @@ func (r *UserRepo) GetUsers(
 
 	err := searchQuery.Find(&users).Error
 
-	return &users, &err
+	return &users, err
 }
 
 func (r *UserRepo) GetUsersSelector(
 	userEntity *entities.User,
-) (*[]entities.User, *error) {
+) (*[]entities.User, error) {
 
 	var users []entities.User
 
@@ -138,7 +138,7 @@ func (r *UserRepo) GetUsersSelector(
 
 	err := searchQuery.Find(&users).Error
 
-	return &users, &err
+	return &users, err
 }
 
 // 拿取新的 user id ( max count + 1 )
@@ -156,13 +156,13 @@ func (r *UserRepo) GetNewUserID(companyId int) int {
 	return int(MaxCount) + 1
 }
 
-func (r *UserRepo) SaveUser(userEntity *entities.User) (*entities.User, *error) {
+func (r *UserRepo) SaveUser(userEntity *entities.User) (*entities.User, error) {
 	// 加入一些固定欄位
 	now := time.Now()
 
 	if (*r).IsAccountDuplicated(userEntity.Account) {
 		err := errors.New("帳號重複")
-		return nil, &err
+		return nil, err
 	}
 
 	(*userEntity).UserId = (*r).GetNewUserID((*userEntity).CompanyId)
@@ -179,10 +179,10 @@ func (r *UserRepo) SaveUser(userEntity *entities.User) (*entities.User, *error) 
 		Create(userEntity).
 		Error
 
-	return userEntity, &err
+	return userEntity, err
 }
 
-func (r *UserRepo) UpdateUser(userEntity *entities.User) (*entities.User, *error) {
+func (r *UserRepo) UpdateUser(userEntity *entities.User) (*entities.User, error) {
 	// 加入一些固定欄位
 	now := time.Now()
 
@@ -199,10 +199,10 @@ func (r *UserRepo) UpdateUser(userEntity *entities.User) (*entities.User, *error
 		Updates(&userEntity).
 		Error
 
-	return userEntity, &err
+	return userEntity, err
 }
 
-func (r *UserRepo) DeleteUser(userEntity *entities.User) (*entities.User, *error) {
+func (r *UserRepo) DeleteUser(userEntity *entities.User) (*entities.User, error) {
 	// 加入一些固定欄位
 	now := time.Now()
 
@@ -219,7 +219,7 @@ func (r *UserRepo) DeleteUser(userEntity *entities.User) (*entities.User, *error
 		Updates(&userEntity).
 		Error
 
-	return userEntity, &err
+	return userEntity, err
 }
 
 // 帳號是否重複

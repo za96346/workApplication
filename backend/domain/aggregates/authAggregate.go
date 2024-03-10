@@ -74,7 +74,7 @@ func NewAuthAggregate(
 	permissionValidation bool, // 是否開啟 權限驗證
 	permissionFuncCode string,
 	permissionItemCode string,
-) (*AutAggregate, *error){
+) (*AutAggregate, error){
 	instance := new(AutAggregate)
 
 	(*instance).IsCurrentScopeBanchAll = false
@@ -92,8 +92,7 @@ func NewAuthAggregate(
 				permissionFuncCode,
 				permissionItemCode,
 			)
-			err := errors.New(errMSG)
-			return nil, &err
+			return nil, errors.New(errMSG)
 		}
 
 		// 可編輯角色範圍 的資料 搜尋 ( 分為自己，所有，自訂 )

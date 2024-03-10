@@ -24,7 +24,7 @@ var _ repository.CompanyBanchRepository = &CompanyBanchRepo{}
 func (r *CompanyBanchRepo) GetCompanyBanches(
 	companyBanchEntity *entities.CompanyBanch,
 	scopeBanch *[]int,
-) (*[]entities.CompanyBanch, *error) {
+) (*[]entities.CompanyBanch, error) {
 
 	var companyBanches []entities.CompanyBanch
 
@@ -46,13 +46,13 @@ func (r *CompanyBanchRepo) GetCompanyBanches(
 	}
 
 	err := searchQuery.Find(&companyBanches).Error
-	return &companyBanches, &err
+	return &companyBanches, err
 }
 
 // 查詢 選擇器 該公司 部門
 func (r *CompanyBanchRepo) GetCompanyBanchesSelector(
 	companyId int,
-) (*[]entities.CompanyBanch, *error) {
+) (*[]entities.CompanyBanch, error) {
 
 	// 獲取部門
 	var companyBanches []entities.CompanyBanch
@@ -63,7 +63,7 @@ func (r *CompanyBanchRepo) GetCompanyBanchesSelector(
 		Find(&companyBanches).
 		Error
 
-	return &companyBanches, &err
+	return &companyBanches, err
 }
 
 // 拿取新的 banch id ( max count + 1 )
@@ -130,7 +130,7 @@ func (r *CompanyBanchRepo) IsBanchNameDuplicated(companyBanchEntity *entities.Co
 // 更新 該公司部門
 func (r *CompanyBanchRepo) UpdateCompanyBanch(
 	companyBanchEntity *entities.CompanyBanch,
-) (*entities.CompanyBanch, *error) {
+) (*entities.CompanyBanch, error) {
 
 	// 添加固定欄位
 	now := time.Now()
@@ -140,8 +140,7 @@ func (r *CompanyBanchRepo) UpdateCompanyBanch(
 	companyBanchEntity.DeleteFlag = "N"
 
 	if r.IsBanchNameDuplicated(companyBanchEntity) {
-		err := errors.New("部門名稱重複")
-		return companyBanchEntity, &err
+		return companyBanchEntity, errors.New("部門名稱重複")
 	}
 
 	err := r.db.
@@ -152,13 +151,13 @@ func (r *CompanyBanchRepo) UpdateCompanyBanch(
 		Updates(companyBanchEntity).
 		Error
 
-	return companyBanchEntity, &err
+	return companyBanchEntity, err
 }
 
 // 新增 該公司部門
 func (r *CompanyBanchRepo) SaveCompanyBanch(
 	companyBanchEntity *entities.CompanyBanch,
-) (*entities.CompanyBanch, *error) {
+) (*entities.CompanyBanch, error) {
 
 	// 添加固定欄位
 	now := time.Now()
@@ -170,8 +169,7 @@ func (r *CompanyBanchRepo) SaveCompanyBanch(
 	(*companyBanchEntity).DeleteFlag = "N"
 
 	if r.IsBanchNameDuplicated(companyBanchEntity) {
-		err := errors.New("部門名稱重複")
-		return companyBanchEntity, &err
+		return companyBanchEntity, errors.New("部門名稱重複")
 	}
 
 	err := r.db.
@@ -180,13 +178,13 @@ func (r *CompanyBanchRepo) SaveCompanyBanch(
 		Create(companyBanchEntity).
 		Error
 
-	return companyBanchEntity, &err
+	return companyBanchEntity, err
 }
 
 // 刪除 該公司部門
 func (r *CompanyBanchRepo) DeleteCompanyBanch(
 	companyBanchEntity *entities.CompanyBanch,
-) (*entities.CompanyBanch, *error) {
+) (*entities.CompanyBanch, error) {
 
 	// 加入固定欄位
 	now := time.Now()
@@ -202,5 +200,5 @@ func (r *CompanyBanchRepo) DeleteCompanyBanch(
 		Updates(companyBanchEntity).
 		Error
 
-	return companyBanchEntity, &err
+	return companyBanchEntity, err
 }

@@ -13,10 +13,10 @@ type EntryApp struct {
 var _ EntryAppInterface = &EntryApp{}
 
 type EntryAppInterface interface {
-	Login(*entities.User) (*entities.User, *error)
+	Login(*entities.User) (*entities.User, error)
 }
 
-func (u *EntryApp) Login(userEntity *entities.User) (*entities.User, *error) {
+func (u *EntryApp) Login(userEntity *entities.User) (*entities.User, error) {
 	user, _ := u.UserRepo.GetUserByAccount(userEntity)
 
 	if !(
@@ -24,14 +24,13 @@ func (u *EntryApp) Login(userEntity *entities.User) (*entities.User, *error) {
 		(*user).Account == userEntity.Account &&
 		(*user).Account != "" &&
 		(*user).Password != "") {
-		err := errors.New("帳號或密碼錯誤")
-		return nil, &err
+
+		return nil, errors.New("帳號或密碼錯誤")
 	}
 
 	// 驗證是否是離職
 	if (*user).IsQuitWorking() {
-		err := errors.New("已離職")
-		return nil, &err
+		return nil, errors.New("已離職")
 	}
 
 	return user, nil

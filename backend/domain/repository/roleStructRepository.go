@@ -8,8 +8,8 @@ import (
 
 
 type RoleStructRepository interface {
-	GetRoleStructs(roleStructEntity *entities.RoleStruct) (*[]entities.RoleStruct, *error)
-	GetRoleStructsFuncCode(roleStructEntity *entities.RoleStruct) (*[]string, *error)
-	DeleteRoleStructs(roleStructEntity *entities.RoleStruct, Tx *gorm.DB) (*entities.RoleStruct, *error)
-	SaveRoleStruct(roleStructEntity *entities.RoleStruct, Tx *gorm.DB) (*entities.RoleStruct, *error)
+	GetRoleStructs(roleStructEntity *entities.RoleStruct) (*[]entities.RoleStruct, error)
+	GetRoleStructsFuncCode(roleStructEntity *entities.RoleStruct) (*[]string, error)
+	DeleteRoleStructs(roleStructEntity *entities.RoleStruct, Tx *gorm.DB) (*entities.RoleStruct, error)
+	SaveRoleStruct(roleStructEntity *entities.RoleStruct, Tx *gorm.DB) (*entities.RoleStruct, error)
 }

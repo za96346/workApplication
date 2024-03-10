@@ -22,45 +22,45 @@ type UserAppInterface interface {
 	GetMine(
 		userEntity *entities.User,
 		sessionStruct *method.SessionStruct,
-	) (*entities.User, *error)
+	) (*entities.User, error)
 
 	GetUsers(
 		userEntity *entities.User,
 		sessionStruct *method.SessionStruct,
-	) (*[]entities.User, *error)
+	) (*[]entities.User, error)
 
 	GetUsersSelector(
 		userEntity *entities.User,
 		sessionStruct *method.SessionStruct,
-	) (*[]entities.User, *error) 
+	) (*[]entities.User, error) 
 
 	UpdateUser(
 		userEntity *entities.User,
 		sessionStruct *method.SessionStruct,
-	) (*entities.User, *error)
+	) (*entities.User, error)
 
 	UpdatePassword(
 		updatePwdDto *dtos.UserPasswordUpdateQueryParams,
 		sessionStruct *method.SessionStruct,
-	) (*entities.User, *error)
+	) (*entities.User, error)
 
 	UpdateMine(
 		userEntity *entities.User,
 		sessionStruct *method.SessionStruct,
-	) (*entities.User, *error)
+	) (*entities.User, error)
 
 	SaveUser(
 		userEntity *entities.User,
 		sessionStruct *method.SessionStruct,
-	) (*entities.User, *error)
+	) (*entities.User, error)
 
 	DeleteUser(
 		userEntity *entities.User,
 		sessionStruct *method.SessionStruct,
-	) (*entities.User, *error)
+	) (*entities.User, error)
 }
 
-func (u *UserApp) GetMine(userEntity *entities.User, sessionStruct *method.SessionStruct) (*entities.User, *error) {
+func (u *UserApp) GetMine(userEntity *entities.User, sessionStruct *method.SessionStruct) (*entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		u.RoleRepo,
@@ -84,7 +84,7 @@ func (u *UserApp) GetMine(userEntity *entities.User, sessionStruct *method.Sessi
 func (u *UserApp) GetUsers(
 	userEntity *entities.User,
 	sessionStruct *method.SessionStruct,
-) (*[]entities.User, *error) {
+) (*[]entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		u.RoleRepo,
@@ -110,7 +110,7 @@ func (u *UserApp) GetUsers(
 func (u *UserApp) GetUsersSelector(
 	userEntity *entities.User,
 	sessionStruct *method.SessionStruct,
-) (*[]entities.User, *error) {
+) (*[]entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		u.RoleRepo,
@@ -131,7 +131,7 @@ func (u *UserApp) GetUsersSelector(
 func (u *UserApp) UpdateUser(
 	userEntity *entities.User,
 	sessionStruct *method.SessionStruct,
-) (*entities.User, *error) {
+) (*entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		u.RoleRepo,
@@ -146,17 +146,16 @@ func (u *UserApp) UpdateUser(
 	}
 
 	if err := authAggregate.CheckScopeBanchValidation(*(*userEntity).BanchId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 
 	if err := authAggregate.CheckScopeRoleValidation((*userEntity).RoleId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 
 	// 檢驗欄位
 	if userEntity.UserId == 0 {
-		err := errors.New("更新失敗，UserId is nil.")
-		return nil, &err
+		return nil, errors.New("更新失敗，UserId is nil.")
 	}
 
 	userEntity.CompanyId = authAggregate.User.CompanyId
@@ -166,7 +165,7 @@ func (u *UserApp) UpdateUser(
 func (u *UserApp) UpdatePassword(
 	updatePwdDto *dtos.UserPasswordUpdateQueryParams,
 	sessionStruct *method.SessionStruct,
-) (*entities.User, *error) {
+) (*entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		u.RoleRepo,
@@ -186,11 +185,11 @@ func (u *UserApp) UpdatePassword(
 	})
 
 	if err := authAggregate.CheckScopeBanchValidation(*(*userEntity).BanchId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 
 	if err := authAggregate.CheckScopeRoleValidation((*userEntity).RoleId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 
 	// 驗證 密碼
@@ -198,7 +197,7 @@ func (u *UserApp) UpdatePassword(
 		updatePwdDto.NewPassword != updatePwdDto.NewPasswordAgain {
 		
 		err := errors.New("舊密碼不相符, 或 新密碼不相符")
-		return nil, &err
+		return nil, err
 	}
 
 	return u.UserRepo.UpdateUser(userEntity)
@@ -207,7 +206,7 @@ func (u *UserApp) UpdatePassword(
 func (u *UserApp) UpdateMine(
 	userEntity *entities.User,
 	sessionStruct *method.SessionStruct,
-) (*entities.User, *error) {
+) (*entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		u.RoleRepo,
@@ -230,7 +229,7 @@ func (u *UserApp) UpdateMine(
 func (u *UserApp) SaveUser(
 	userEntity *entities.User,
 	sessionStruct *method.SessionStruct,
-) (*entities.User, *error) {
+) (*entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		u.RoleRepo,
@@ -245,10 +244,10 @@ func (u *UserApp) SaveUser(
 	}
 
 	if err := authAggregate.CheckScopeBanchValidation(*(*userEntity).BanchId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 	if err := authAggregate.CheckScopeRoleValidation((*userEntity).RoleId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 
 	userEntity.CompanyId = authAggregate.User.CompanyId
@@ -259,7 +258,7 @@ func (u *UserApp) SaveUser(
 func (u *UserApp) DeleteUser(
 	userEntity *entities.User,
 	sessionStruct *method.SessionStruct,
-) (*entities.User, *error) {
+) (*entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		u.RoleRepo,
@@ -274,10 +273,10 @@ func (u *UserApp) DeleteUser(
 	}
 
 	if err := authAggregate.CheckScopeBanchValidation(*(*userEntity).BanchId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 	if err := authAggregate.CheckScopeRoleValidation((*userEntity).RoleId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 
 	userEntity.CompanyId = authAggregate.User.CompanyId

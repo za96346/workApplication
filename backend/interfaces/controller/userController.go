@@ -6,6 +6,7 @@ import (
 	"backend/domain/entities"
 	"backend/infrastructure/persistence"
 	"backend/interfaces/method"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -33,6 +34,8 @@ func (u *UserController) GetMine(Request *gin.Context) {
 		&entities.User{},
 		session,
 	)
+
+	fmt.Println(appErr)
 
 	if appErr != nil {
 		Request.JSON(

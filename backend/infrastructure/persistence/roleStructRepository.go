@@ -20,7 +20,7 @@ func NewRoleStructRepository(db *gorm.DB) *RoleStrcutRepo {
 
 var _ repository.RoleStructRepository = &RoleStrcutRepo{}
 
-func (r *RoleStrcutRepo) GetRoleStructs(roleStructEntity *entities.RoleStruct) (*[]entities.RoleStruct, *error) {
+func (r *RoleStrcutRepo) GetRoleStructs(roleStructEntity *entities.RoleStruct) (*[]entities.RoleStruct, error) {
 	var roleStructs []entities.RoleStruct
 
 	err := r.db.
@@ -31,10 +31,10 @@ func (r *RoleStrcutRepo) GetRoleStructs(roleStructEntity *entities.RoleStruct) (
 		Find(&roleStructs).
 		Error
 
-	return &roleStructs, &err
+	return &roleStructs, err
 }
 
-func (r *RoleStrcutRepo) GetRoleStructsFuncCode(roleStructEntity *entities.RoleStruct) (*[]string, *error) {
+func (r *RoleStrcutRepo) GetRoleStructsFuncCode(roleStructEntity *entities.RoleStruct) (*[]string, error) {
 	var roleStructs []string
 
 	err := r.db.
@@ -48,10 +48,10 @@ func (r *RoleStrcutRepo) GetRoleStructsFuncCode(roleStructEntity *entities.RoleS
 		Pluck("funcCode", &roleStructs).
 		Error
 
-	return &roleStructs, &err
+	return &roleStructs, err
 }
 
-func (r *RoleStrcutRepo) DeleteRoleStructs(roleStructEntity *entities.RoleStruct, Tx *gorm.DB) (*entities.RoleStruct, *error) {
+func (r *RoleStrcutRepo) DeleteRoleStructs(roleStructEntity *entities.RoleStruct, Tx *gorm.DB) (*entities.RoleStruct, error) {
 	var roleStruct entities.RoleStruct
 
 	err := Tx.
@@ -62,10 +62,10 @@ func (r *RoleStrcutRepo) DeleteRoleStructs(roleStructEntity *entities.RoleStruct
 		Delete(&roleStruct).
 		Error
 
-	return &roleStruct, &err
+	return &roleStruct, err
 }
 
-func (r *RoleStrcutRepo) SaveRoleStruct(roleStructEntity *entities.RoleStruct, Tx *gorm.DB) (*entities.RoleStruct, *error) {
+func (r *RoleStrcutRepo) SaveRoleStruct(roleStructEntity *entities.RoleStruct, Tx *gorm.DB) (*entities.RoleStruct, error) {
 	now := time.Now()
 	(*roleStructEntity).CreateTime = &now
 	(*roleStructEntity).LastModify = &now
@@ -76,5 +76,5 @@ func (r *RoleStrcutRepo) SaveRoleStruct(roleStructEntity *entities.RoleStruct, T
 		Create(&roleStructEntity).
 		Error
 
-	return roleStructEntity, &err
+	return roleStructEntity, err
 }

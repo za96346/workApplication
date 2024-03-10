@@ -24,26 +24,26 @@ type RoleAppInterface interface {
 	) (
 		*entities.Role,
 		*map[string](map[string]map[string]interface{}),
-		*error,
+		error,
 	)
-	GetRoles(*entities.Role, *method.SessionStruct) (*[]entities.Role, *error)
-	GetRolesSelector(*entities.Role, *method.SessionStruct) (*[]entities.Role, *error)
+	GetRoles(*entities.Role, *method.SessionStruct) (*[]entities.Role, error)
+	GetRolesSelector(*entities.Role, *method.SessionStruct) (*[]entities.Role, error)
 
 	UpdateRole(
 		*entities.Role,
 		*map[string]map[string]map[string]interface{},
 		*method.SessionStruct,
-	) (*entities.Role, *error)
+	) (*entities.Role, error)
 
 	SaveRole(
 		*entities.Role,
 		*map[string]map[string]map[string]interface{},
 		*method.SessionStruct,
-	) (*entities.Role, *error)
-	DeleteRole(*entities.Role, *method.SessionStruct) (*entities.Role, *error)
+	) (*entities.Role, error)
+	DeleteRole(*entities.Role, *method.SessionStruct) (*entities.Role, error)
 }
 
-func (r *RoleApp) GetRoles(roleEntity *entities.Role, sessionStruct *method.SessionStruct) (*[]entities.Role, *error) {
+func (r *RoleApp) GetRoles(roleEntity *entities.Role, sessionStruct *method.SessionStruct) (*[]entities.Role, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		r.RoleRepo,
@@ -68,7 +68,7 @@ func (r *RoleApp) GetRole(
 ) (
 	*entities.Role,
 	*map[string](map[string]map[string]interface{}),
-	*error,
+	error,
 ) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
@@ -122,7 +122,7 @@ func (r *RoleApp) GetRole(
 	return role, &rolePermissionMap, nil
 }
 
-func (r *RoleApp) GetRolesSelector(roleEntity *entities.Role, sessionStruct *method.SessionStruct) (*[]entities.Role, *error) {
+func (r *RoleApp) GetRolesSelector(roleEntity *entities.Role, sessionStruct *method.SessionStruct) (*[]entities.Role, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		r.RoleRepo,
@@ -145,7 +145,7 @@ func (r *RoleApp) UpdateRole(
 	roleEntity *entities.Role,
 	data *map[string]map[string]map[string]interface{},
 	sessionStruct *method.SessionStruct,
-) (*entities.Role, *error) {
+) (*entities.Role, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		r.RoleRepo,
@@ -186,7 +186,7 @@ func (r *RoleApp) SaveRole(
 	roleEntity *entities.Role,
 	data *map[string]map[string]map[string]interface{},
 	sessionStruct *method.SessionStruct,
-) (*entities.Role, *error) {
+) (*entities.Role, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		r.RoleRepo,
@@ -223,7 +223,7 @@ func (r *RoleApp) SaveRole(
 	return nil, nil
 }
 
-func (r *RoleApp) DeleteRole(roleEntity *entities.Role, sessionStruct *method.SessionStruct) (*entities.Role, *error) {
+func (r *RoleApp) DeleteRole(roleEntity *entities.Role, sessionStruct *method.SessionStruct) (*entities.Role, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		r.RoleRepo,

@@ -18,7 +18,7 @@ func NewFunctionRoleBanchRelationRepository(db *gorm.DB) *FunctionRoleBanchRelat
 
 var _ repository.FunctionRoleBanchRelationRepository = &FunctionRoleBanchRelationRepo{}
 
-func (f *FunctionRoleBanchRelationRepo) GetFunctionRoleBanchRelations() (*[]entities.FuncRoleBanchRelation, *error) {
+func (f *FunctionRoleBanchRelationRepo) GetFunctionRoleBanchRelations() (*[]entities.FuncRoleBanchRelation, error) {
 	var funcRoleBanchRelation []entities.FuncRoleBanchRelation
 
 	err := f.db.
@@ -27,5 +27,5 @@ func (f *FunctionRoleBanchRelationRepo) GetFunctionRoleBanchRelations() (*[]enti
 		Find(funcRoleBanchRelation).
 		Error
 
-	return &funcRoleBanchRelation, &err
+	return &funcRoleBanchRelation, err
 }

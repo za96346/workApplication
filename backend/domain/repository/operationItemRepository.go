@@ -4,5 +4,5 @@ import "backend/domain/entities"
 
 
 type OperationItemRepository interface {
-	GetOperationItems() (*[]entities.OperationItem, *error)
+	GetOperationItems() (*[]entities.OperationItem, error)
 }

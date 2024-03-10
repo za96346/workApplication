@@ -4,5 +4,5 @@ import "backend/domain/entities"
 
 
 type FunctionRoleBanchRelationRepository interface {
-	GetFunctionRoleBanchRelations() (*[]entities.FuncRoleBanchRelation, *error)
+	GetFunctionRoleBanchRelations() (*[]entities.FuncRoleBanchRelation, error)
 }

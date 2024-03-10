@@ -4,6 +4,6 @@ import "backend/domain/entities"
 
 
 type FunctionItemRepository interface {
-	GetFunctionItemsByFuncCodes(funcCodes *[]string) (*[]entities.FunctionItem, *error)
-	GetFunctionItems() (*[]entities.FunctionItem, *error)
+	GetFunctionItemsByFuncCodes(funcCodes *[]string) (*[]entities.FunctionItem, error)
+	GetFunctionItems() (*[]entities.FunctionItem, error)
 }

@@ -33,7 +33,7 @@ func NewRoleAggregate(
 func (r *RoleAggregate) AddRoleStruct(
 	data *map[string](map[string](map[string]interface{})),
 	TX *gorm.DB,
-) *error {
+) error {
 	now := time.Now()
 	// 先把 此role structure 的資料 刪除
 	r.RoleStructRepo.DeleteRoleStructs(

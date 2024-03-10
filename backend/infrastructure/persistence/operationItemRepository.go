@@ -18,7 +18,7 @@ func NewOperationItemRepository(db *gorm.DB) *OperationItemRepo {
 
 var _ repository.OperationItemRepository = &OperationItemRepo{}
 
-func (o *OperationItemRepo) GetOperationItems() (*[]entities.OperationItem, *error) {
+func (o *OperationItemRepo) GetOperationItems() (*[]entities.OperationItem, error) {
 	var operationItems []entities.OperationItem
 
 	err := o.db.
@@ -28,5 +28,5 @@ func (o *OperationItemRepo) GetOperationItems() (*[]entities.OperationItem, *err
 		Find(&operationItems).
 		Error
 
-	return &operationItems, &err
+	return &operationItems, err
 }

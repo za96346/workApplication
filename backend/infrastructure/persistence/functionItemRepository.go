@@ -18,7 +18,7 @@ func NewFunctionItemRepository(db *gorm.DB) *FunctionItemRepo {
 
 var _ repository.FunctionItemRepository = &FunctionItemRepo{}
 
-func (f *FunctionItemRepo) GetFunctionItemsByFuncCodes(funcCodes *[]string) (*[]entities.FunctionItem, *error) {
+func (f *FunctionItemRepo) GetFunctionItemsByFuncCodes(funcCodes *[]string) (*[]entities.FunctionItem, error) {
 	var functionItem []entities.FunctionItem
 
 	err := f.db.
@@ -32,10 +32,10 @@ func (f *FunctionItemRepo) GetFunctionItemsByFuncCodes(funcCodes *[]string) (*[]
 		Find(&functionItem).
 		Error
 
-	return &functionItem, &err
+	return &functionItem, err
 }
 
-func (f *FunctionItemRepo) GetFunctionItems() (*[]entities.FunctionItem, *error) {
+func (f *FunctionItemRepo) GetFunctionItems() (*[]entities.FunctionItem, error) {
 	var functionItem []entities.FunctionItem
 
 	err := f.db.
@@ -45,5 +45,5 @@ func (f *FunctionItemRepo) GetFunctionItems() (*[]entities.FunctionItem, *error)
 		Find(functionItem).
 		Error
 
-	return &functionItem, &err
+	return &functionItem, err
 }

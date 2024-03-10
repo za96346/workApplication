@@ -24,25 +24,25 @@ type PerformanceAppInterface interface {
 		performanceEntity *entities.Performance,
 		queryParams *appDtos.PerformanceQueryParams,
 		sessionStruct *method.SessionStruct,
-	) (*[]domainDtos.PerformanceDetailDto, *error)
+	) (*[]domainDtos.PerformanceDetailDto, error)
 	GetYearPerformances(
 		performanceEntity *entities.Performance,
 		queryParams *appDtos.PerformanceQueryParams,
 		sessionStruct *method.SessionStruct,
-	) (*[]entities.YearPerformance, *error)
+	) (*[]entities.YearPerformance, error)
 
-	UpdatePerformance(*entities.Performance, *method.SessionStruct) (*entities.Performance, *error)
-	SavePerformance(*entities.Performance, *method.SessionStruct) (*entities.Performance, *error)
-	DeletePerformance(*entities.Performance, *method.SessionStruct) (*entities.Performance, *error)
+	UpdatePerformance(*entities.Performance, *method.SessionStruct) (*entities.Performance, error)
+	SavePerformance(*entities.Performance, *method.SessionStruct) (*entities.Performance, error)
+	DeletePerformance(*entities.Performance, *method.SessionStruct) (*entities.Performance, error)
 
-	ChangeBanch(*entities.Performance, *method.SessionStruct) (*entities.Performance, *error)
+	ChangeBanch(*entities.Performance, *method.SessionStruct) (*entities.Performance, error)
 }
 
 func (p *PerformanceApp) GetPerformances(
 	performanceEntity *entities.Performance,
 	queryParams *appDtos.PerformanceQueryParams,
 	sessionStruct *method.SessionStruct,
-) (*[]domainDtos.PerformanceDetailDto, *error) {
+) (*[]domainDtos.PerformanceDetailDto, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		p.RoleRepo,
@@ -70,7 +70,7 @@ func (p *PerformanceApp) GetYearPerformances(
 	performanceEntity *entities.Performance,
 	queryParams *appDtos.PerformanceQueryParams,
 	sessionStruct *method.SessionStruct,
-) (*[]entities.YearPerformance, *error) {
+) (*[]entities.YearPerformance, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		p.RoleRepo,
@@ -94,7 +94,7 @@ func (p *PerformanceApp) GetYearPerformances(
 	)
 }
 
-func (p *PerformanceApp) SavePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, *error) {
+func (p *PerformanceApp) SavePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		p.RoleRepo,
@@ -120,17 +120,17 @@ func (p *PerformanceApp) SavePerformance(performanceEntity *entities.Performance
 	}
 
 	if err := authAggregate.CheckScopeBanchValidation(*user.BanchId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 
 	if err := authAggregate.CheckScopeRoleValidation(user.RoleId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 
 	return p.PerformanceRepo.SavePerformance(performanceEntity)
 }
 
-func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, *error) {
+func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		p.RoleRepo,
@@ -156,17 +156,17 @@ func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performan
 	}
 
 	if err := authAggregate.CheckScopeBanchValidation(*user.BanchId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 
 	if err := authAggregate.CheckScopeRoleValidation(user.RoleId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 
 	return p.PerformanceRepo.UpdatePerformance(performanceEntity)
 }
 
-func (p *PerformanceApp) DeletePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, *error) {
+func (p *PerformanceApp) DeletePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		p.RoleRepo,
@@ -191,7 +191,7 @@ func (p *PerformanceApp) DeletePerformance(performanceEntity *entities.Performan
 	return performance, nil
 }
 
-func (p *PerformanceApp) ChangeBanch(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, *error) {
+func (p *PerformanceApp) ChangeBanch(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
 		p.RoleRepo,
@@ -214,14 +214,14 @@ func (p *PerformanceApp) ChangeBanch(performanceEntity *entities.Performance, se
 
 	// 檢查 role
 	if err := authAggregate.CheckScopeRoleValidation(user.RoleId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 
 	thisPerformance, _ := p.PerformanceRepo.GetPerformance(performanceEntity)
 
 	// 檢查 banch
 	if err := authAggregate.CheckScopeBanchValidation(thisPerformance.BanchId); err != nil {
-		return nil, &err
+		return nil, err
 	}
 
 	thisPerformance.BanchId = performanceEntity.BanchId

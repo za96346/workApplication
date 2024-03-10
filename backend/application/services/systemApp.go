@@ -25,7 +25,7 @@ type SystemAppInterface interface {
 	GetAuth(sessionStruct *method.SessionStruct) (
 		*[]entities.FunctionItem,
 		*map[string](map[string](map[string]interface{})),
-		*error,
+		error,
 	)
 	GetFunc() (
 		*[]entities.FunctionItem,
@@ -41,7 +41,7 @@ type SystemAppInterface interface {
 		*[]entities.CompanyBanch,
 		*[]entities.Role,
 		*[]entities.User,
-		*error,
+		error,
 	)
 }
 
@@ -51,7 +51,7 @@ func (s *SystemApp) GetAuth(
 ) (
 	*[]entities.FunctionItem,
 	*map[string](map[string](map[string]interface{})),
-	*error,
+	error,
 ) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
@@ -157,7 +157,7 @@ func (s *SystemApp) GetRoleBanchList(
 	*[]entities.CompanyBanch,
 	*[]entities.Role,
 	*[]entities.User,
-	*error,
+	error,
 ) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
