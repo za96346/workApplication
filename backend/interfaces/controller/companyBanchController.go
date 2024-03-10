@@ -22,7 +22,7 @@ func NewCompanyBanch(app application.CompanyBanchAppInterface) *CompanyBanchCont
 // 拿取
 func (s *CompanyBanchController) GetCompanyBanches(Request *gin.Context) {
 	reqParams := new(struct{
-		BanchName   *string       `gorm:"column:banchName" json:"BanchName"`
+		BanchName   string       `gorm:"column:banchName" json:"BanchName"`
 	})
 
 	session, err := method.NewSession(
@@ -36,7 +36,7 @@ func (s *CompanyBanchController) GetCompanyBanches(Request *gin.Context) {
 
 	responseData, appErr := s.companyBanchApp.GetCompanyBanches(
 		&entities.CompanyBanch{
-			BanchName: *(*reqParams).BanchName,
+			BanchName: (*reqParams).BanchName,
 		},
 		session,
 	)

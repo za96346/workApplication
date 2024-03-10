@@ -85,17 +85,17 @@ func (r *UserRepo) GetUsers(
 	}
 
 	// 使用者名稱
-	if &userEntity.UserName != nil {
+	if userEntity.UserName != "" {
 		searchQuery.Where("userName like ?", "%"+userEntity.UserName+"%")
 	}
 
 	// 員工編號
-	if &userEntity.EmployeeNumber != nil {
+	if userEntity.EmployeeNumber != "" {
 		searchQuery.Where("employeeNumber like ?", "%"+userEntity.EmployeeNumber+"%")
 	}
 
 	// 離職狀態
-	if &userEntity.QuitFlag != nil {
+	if userEntity.QuitFlag != "" {
 		searchQuery.Where("quitFlag = ?", userEntity.QuitFlag)
 	}
 
@@ -117,22 +117,22 @@ func (r *UserRepo) GetUsersSelector(
 		Order("sort asc")
 
 	// 使用者名稱
-	if &userEntity.UserName != nil {
+	if userEntity.UserName != "" {
 		searchQuery.Where("userName like ?", "%"+userEntity.UserName+"%")
 	}
 
 	// 員工編號
-	if &userEntity.EmployeeNumber != nil {
+	if userEntity.EmployeeNumber != "" {
 		searchQuery.Where("employeeNumber like ?", "%"+userEntity.EmployeeNumber+"%")
 	}
 
 	// 部門查詢
-	if &userEntity.BanchId != nil {
+	if userEntity.BanchId != nil {
 		searchQuery.Where("banchId = ?", userEntity.BanchId)
 	}
 
 	// 角色查詢
-	if &userEntity.RoleId != nil {
+	if userEntity.RoleId != 0 {
 		searchQuery.Where("roleId = ?", userEntity.RoleId)
 	}
 

@@ -36,7 +36,7 @@ func (r *CompanyBanchRepo) GetCompanyBanches(
 		Order("sort asc")
 
 	// banch name
-	if &companyBanchEntity.BanchName != nil {
+	if companyBanchEntity.BanchName != "" {
 		searchQuery.Where("banchName like ?", "%"+companyBanchEntity.BanchName+"%")
 	}
 
@@ -140,7 +140,7 @@ func (r *CompanyBanchRepo) UpdateCompanyBanch(
 	companyBanchEntity.DeleteFlag = "N"
 
 	if r.IsBanchNameDuplicated(companyBanchEntity) {
-		return companyBanchEntity, errors.New("部門名稱重複")
+		return nil, errors.New("部門名稱重複")
 	}
 
 	err := r.db.
@@ -169,7 +169,7 @@ func (r *CompanyBanchRepo) SaveCompanyBanch(
 	(*companyBanchEntity).DeleteFlag = "N"
 
 	if r.IsBanchNameDuplicated(companyBanchEntity) {
-		return companyBanchEntity, errors.New("部門名稱重複")
+		return nil, errors.New("部門名稱重複")
 	}
 
 	err := r.db.

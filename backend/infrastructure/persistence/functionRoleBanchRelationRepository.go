@@ -24,7 +24,7 @@ func (f *FunctionRoleBanchRelationRepo) GetFunctionRoleBanchRelations() (*[]enti
 	err := f.db.
 		Debug().
 		Table(f.tableName).
-		Find(funcRoleBanchRelation).
+		Find(&funcRoleBanchRelation).
 		Error
 
 	return &funcRoleBanchRelation, err

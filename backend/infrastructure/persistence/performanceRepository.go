@@ -168,11 +168,11 @@ func (r *PerformanceRepo) GetPerformance(performanceEntity *entities.Performance
 		Debug().
 		Table(r.tableName)
 
-	if &performanceEntity.PerformanceId != nil {
+	if performanceEntity.PerformanceId != 0 {
 		searchQuery.Where("performanceId = ?", performanceEntity.PerformanceId)
 	}
 
-	if &performanceEntity.CompanyId != nil {
+	if performanceEntity.CompanyId != 0 {
 		searchQuery.Where("companyId = ?", performanceEntity.CompanyId)
 	}
 

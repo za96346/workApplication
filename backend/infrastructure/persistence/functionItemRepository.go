@@ -42,7 +42,7 @@ func (f *FunctionItemRepo) GetFunctionItems() (*[]entities.FunctionItem, error) 
 		Debug().
 		Table(f.tableName).
 		Order("sort asc").
-		Find(functionItem).
+		Find(&functionItem).
 		Error
 
 	return &functionItem, err

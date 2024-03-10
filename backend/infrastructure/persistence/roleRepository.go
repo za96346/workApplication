@@ -48,7 +48,7 @@ func (r *RoleRepo) GetRole(roleEntity *entities.Role) (*entities.Role, error) {
 		Where("companyId = ?", roleEntity.CompanyId).
 		Where("roleId = ?", roleEntity.RoleId).
 		Where("deleteFlag = ?", "N").
-		First(role).
+		First(&role).
 		Error
 
 	return &role, err
@@ -64,7 +64,7 @@ func (r *RoleRepo) GetRoles(roleEntity *entities.Role) (*[]entities.Role, error)
 		Where("deleteFlag = ?", "N").
 		Order("sort asc")
 
-	if &roleEntity.RoleName != nil {
+	if roleEntity.RoleName != "" {
 		searchQuery.Where("roleName like ?", "%" + roleEntity.RoleName + "%")
 	}
 
@@ -91,7 +91,7 @@ func (r *RoleRepo) GetRolesSelector(roleEntity *entities.Role) (*[]entities.Role
 func (r *RoleRepo) UpdateRole(roleEntity *entities.Role, TX *gorm.DB) (*entities.Role, error) {
 	if r.IsRoleNameDuplicated(roleEntity) {
 		err := errors.New("角色名稱重複")
-		return roleEntity, err
+		return nil, err
 	}
 	err := TX.
 		Debug().
