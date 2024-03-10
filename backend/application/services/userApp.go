@@ -98,8 +98,8 @@ func (u *UserApp) GetUsers(
 
 	return u.UserRepo.GetUsers(
 		userEntity,
-		authAggregate.GetScopeBanchWithCustomize(userEntity.BanchId),
 		authAggregate.GetScopeRolehWithCustomize(&userEntity.RoleId),
+		authAggregate.GetScopeBanchWithCustomize(userEntity.BanchId),
 	)
 }
 
@@ -224,11 +224,20 @@ func (u *UserApp) SaveUser(
 		string(enum.EmployeeManage),
 		string(enum.Add),
 	)
-	
+
 	if err != nil {
 		return nil, err
 	}
 
+	// 找到原本資料
+	userEntity.CompanyId = authAggregate.User.CompanyId
+	user, err := u.UserRepo.GetUser(userEntity)
+	userEntity = user
+
+	if err != nil {
+		return nil, errors.New("找不到此user")
+	}
+	
 	if err := authAggregate.CheckScopeBanchValidation(*(*userEntity).BanchId); err != nil {
 		return nil, err
 	}
@@ -254,6 +263,15 @@ func (u *UserApp) DeleteUser(
 	
 	if err != nil {
 		return nil, err
+	}
+
+	// 找到原本資料
+	userEntity.CompanyId = authAggregate.User.CompanyId
+	user, err := u.UserRepo.GetUser(userEntity)
+	userEntity = user
+
+	if err != nil {
+		return nil, errors.New("找不到此user")
 	}
 
 	if err := authAggregate.CheckScopeBanchValidation(*(*userEntity).BanchId); err != nil {

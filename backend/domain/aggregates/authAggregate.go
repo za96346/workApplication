@@ -178,7 +178,7 @@ func(instance *AutAggregate) CheckScopeRoleValidation(roleId int) error {
 
 // 指定的banch id 與 目前可查詢的 banch
 func(instance *AutAggregate) GetScopeBanchWithCustomize(banchId *int) *[]int {
-	if banchId != nil {
+	if banchId != nil && *banchId != 0 {
 		if exists, _ := inArray(
 			(*instance).CurrentPermissionScopeBanch,
 			banchId,
@@ -192,7 +192,7 @@ func(instance *AutAggregate) GetScopeBanchWithCustomize(banchId *int) *[]int {
 
 // 指定的role id 與 目前可查詢的 role
 func(instance *AutAggregate) GetScopeRolehWithCustomize(roleId *int) *[]int {
-	if roleId != nil {
+	if roleId != nil && *roleId != 0 {
 		if exists, _ := inArray(
 			(*instance).CurrentPermissionScopeRole,
 			roleId,

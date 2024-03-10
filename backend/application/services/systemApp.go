@@ -200,6 +200,12 @@ func (s *SystemApp) GetRoleBanchList(
 		scopeUser[FunctionItem.FuncCode] = make(map[string]interface{})
 
 		for _, operation := range *operationItem {
+			authAggregate, _ := aggregates.NewAuthAggregate(
+				sessionStruct,
+				false,
+				FunctionItem.FuncCode,
+				operation.OperationCode,
+			)
 
 			scopeBanch[FunctionItem.FuncCode][operation.OperationCode] = authAggregate.CurrentPermissionScopeBanch
 			scopeRole[FunctionItem.FuncCode][operation.OperationCode] = authAggregate.CurrentPermissionScopeRole

@@ -34,7 +34,7 @@ func (e *PerformanceController) GetPerformances(Request *gin.Context) {
 
 	data, appErr := e.performanceApp.GetPerformances(
 		&entities.Performance{
-			BanchId: *reqParams.BanchId,
+			BanchId: reqParams.BanchId,
 		},
 		reqParams,
 		session,

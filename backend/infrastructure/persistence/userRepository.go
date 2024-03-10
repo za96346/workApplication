@@ -76,12 +76,12 @@ func (r *UserRepo) GetUsers(
 
 	// 角色範圍查詢
 	if roleScope != nil {
-		searchQuery.Where("roleId in (?)", roleScope)
+		searchQuery.Where("roleId in (?)", *roleScope)
 	}
 
 	// 部門範圍查詢
 	if banchScope != nil {
-		searchQuery.Where("banchId in (?)", banchScope)
+		searchQuery.Where("banchId in (?)", *banchScope)
 	}
 
 	// 使用者名稱

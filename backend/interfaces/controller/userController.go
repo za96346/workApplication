@@ -60,11 +60,11 @@ func (u *UserController) GetMine(Request *gin.Context) {
 func (u *UserController) GetUsers(Request *gin.Context) {
 	// 請求處理
 	reqParams := new(struct {
-		BanchId *int `json:"BanchId"`
-		RoleId *int `json:"RoleId"`
-		UserName *string `json:"UserName"`
-		EmployeeNumber *string `json:"EmployeeNumber"`
-		QuitFlag *string `json:"QuitFlag"`
+		BanchId int `json:"BanchId"`
+		RoleId int `json:"RoleId"`
+		UserName string `json:"UserName"`
+		EmployeeNumber string `json:"EmployeeNumber"`
+		QuitFlag string `json:"QuitFlag"`
 	})
 
 	session, err := method.NewSession(
@@ -78,11 +78,11 @@ func (u *UserController) GetUsers(Request *gin.Context) {
 
 	data, appErr := u.userApp.GetUsers(
 		&entities.User{
-			BanchId: reqParams.BanchId,
-			RoleId: *reqParams.RoleId,
-			UserName: *reqParams.UserName,
-			EmployeeNumber: *reqParams.EmployeeNumber,
-			QuitFlag: *reqParams.QuitFlag,
+			BanchId: &reqParams.BanchId,
+			RoleId: reqParams.RoleId,
+			UserName: reqParams.UserName,
+			EmployeeNumber: reqParams.EmployeeNumber,
+			QuitFlag: reqParams.QuitFlag,
 		},
 		session,
 	)
@@ -110,10 +110,10 @@ func (u *UserController) GetUsers(Request *gin.Context) {
 func (u *UserController) GetUsersSelector(Request *gin.Context) {
 	// 請求處理
 	reqParams := new(struct {
-		BanchId *int `json:"BanchId"`
-		RoleId *int `json:"RoleId"`
-		UserName *string `json:"UserName"`
-		EmployeeNumber *string `json:"EmployeeNumber"`
+		BanchId int `json:"BanchId"`
+		RoleId int `json:"RoleId"`
+		UserName string `json:"UserName"`
+		EmployeeNumber string `json:"EmployeeNumber"`
 	})
 
 	session, err := method.NewSession(
@@ -127,10 +127,10 @@ func (u *UserController) GetUsersSelector(Request *gin.Context) {
 
 	data, appErr := u.userApp.GetUsersSelector(
 		&entities.User{
-			BanchId: reqParams.BanchId,
-			RoleId: *reqParams.RoleId,
-			UserName: *reqParams.UserName,
-			EmployeeNumber:  *reqParams.EmployeeNumber,
+			BanchId: &reqParams.BanchId,
+			RoleId: reqParams.RoleId,
+			UserName: reqParams.UserName,
+			EmployeeNumber:  reqParams.EmployeeNumber,
 		},
 		session,
 	)

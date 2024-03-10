@@ -224,7 +224,9 @@ func (e *RoleController) SaveRole(Request *gin.Context) {
 	if err != nil {return}
 
 	_, appErr := e.roleApp.SaveRole(
-		&entities.Role{},
+		&entities.Role{
+			RoleName: reqBody.RoleName,
+		},
 		&reqBody.Data,
 		session,
 	)

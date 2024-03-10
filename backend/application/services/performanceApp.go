@@ -59,8 +59,8 @@ func (p *PerformanceApp) GetPerformances(
 	return p.PerformanceRepo.GetPerformances(
 		performanceEntity,
 		queryParams,
-		&authAggregate.CurrentPermissionScopeBanch,
-		&authAggregate.CurrentPermissionScopeRole,
+		authAggregate.GetScopeBanchWithCustomize(&queryParams.BanchId),
+		authAggregate.GetScopeRolehWithCustomize(&queryParams.RoleId),
 	)
 }
 
@@ -85,8 +85,8 @@ func (p *PerformanceApp) GetYearPerformances(
 	return p.PerformanceRepo.GetYearPerformances(
 		performanceEntity,
 		queryParams,
-		&authAggregate.CurrentPermissionScopeBanch,
-		&authAggregate.CurrentPermissionScopeRole,
+		authAggregate.GetScopeBanchWithCustomize(&queryParams.BanchId),
+		authAggregate.GetScopeRolehWithCustomize(&queryParams.RoleId),
 	)
 }
 

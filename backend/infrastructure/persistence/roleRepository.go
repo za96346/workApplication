@@ -30,6 +30,10 @@ func (r *RoleRepo) SaveRole(roleEntity *entities.Role, TX *gorm.DB) (*entities.R
 	(*roleEntity).DeleteFlag = "N"
 	(*roleEntity).DeleteTime = nil
 
+	if r.IsRoleNameDuplicated(roleEntity) {
+		return nil, errors.New("角色名稱重複")
+	}
+
 	err := TX.
 		Debug().
 		Table(r.tableName).
@@ -90,8 +94,7 @@ func (r *RoleRepo) GetRolesSelector(roleEntity *entities.Role) (*[]entities.Role
 
 func (r *RoleRepo) UpdateRole(roleEntity *entities.Role, TX *gorm.DB) (*entities.Role, error) {
 	if r.IsRoleNameDuplicated(roleEntity) {
-		err := errors.New("角色名稱重複")
-		return nil, err
+		return nil, errors.New("角色名稱重複")
 	}
 	err := TX.
 		Debug().
@@ -127,6 +130,7 @@ func (r *RoleRepo) GetNewRoleID(companyId int) int {
 
 	r.db.
 		Debug().
+		Table(r.tableName).
         Where("companyId = ?", companyId).
         Select("max(roleId)").
         Row().
@@ -141,6 +145,7 @@ func (r *RoleRepo) IsRoleNameDuplicated(roleEntity *entities.Role) bool {
 
 	r.db.
 		Debug().
+		Table(r.tableName).
         Where("companyId = ?", (*roleEntity).CompanyId).
         Where("roleName = ?", (*roleEntity).RoleName).
         Where("roleId != ?", (*roleEntity).RoleId).
