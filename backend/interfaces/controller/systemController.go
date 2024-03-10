@@ -3,6 +3,7 @@ package controller
 import (
 	"backend/application/services"
 	"backend/interfaces/method"
+	"encoding/json"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -26,6 +27,8 @@ func (e *SystemController) GetAuth(Request *gin.Context) {
 	if err != nil {return}
 
 	functionItem, permission, appErr := e.systemApp.GetAuth(session)
+	permissionToJson, _ := json.Marshal(permission)
+	session.SessionInstance.Set("permission", string(permissionToJson))
 
 	if appErr != nil {
 		Request.JSON(
@@ -37,6 +40,8 @@ func (e *SystemController) GetAuth(Request *gin.Context) {
 		)
 		return
 	}
+
+	session.SessionInstance.Save()
 
 	Request.JSON(
 		http.StatusOK,

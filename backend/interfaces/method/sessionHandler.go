@@ -26,6 +26,7 @@ type SessionStruct struct {
 	IsLogin bool // 是否成功登入 "Y" | "N"
 	User *entities.User
 	Permission interface{}
+	SessionInstance sessions.Session
 }
 
 /*
@@ -37,6 +38,7 @@ func NewSession(
 ) (*SessionStruct, error){
 	instance := new(SessionStruct)
 	session := sessions.Default(Request)
+	instance.SessionInstance = session
 
 	// 公司 id
 	companyId, err := strconv.Atoi(session.Get("companyId").(string))
