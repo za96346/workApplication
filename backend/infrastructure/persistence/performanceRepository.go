@@ -178,7 +178,7 @@ func (r *PerformanceRepo) GetPerformance(performanceEntity *entities.Performance
 
 	err := searchQuery.First(&performance).Error
 
-	return performanceEntity, err
+	return &performance, err
 }
 
 func (r *PerformanceRepo) SavePerformance(performanceEntity *entities.Performance) (*entities.Performance, error) {

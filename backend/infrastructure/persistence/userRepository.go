@@ -113,6 +113,21 @@ func (r *UserRepo) GetUsersSelector(
 	searchQuery := r.db.
 		Debug().
 		Table(r.tableName).
+		Select(`
+			companyId,
+			userId,
+			roleId,
+			banchId,
+			userName,
+			employeeNumber,
+			account,
+			onWorkDay,
+			quitFlag,
+			deleteFlag,
+			deleteTime,
+			createTime,
+			lastModify
+		`).
 		Where("companyId = ?", userEntity.CompanyId).
 		Order("sort asc")
 
@@ -127,7 +142,7 @@ func (r *UserRepo) GetUsersSelector(
 	}
 
 	// 部門查詢
-	if userEntity.BanchId != nil {
+	if userEntity.BanchId != nil && *userEntity.BanchId != 0 {
 		searchQuery.Where("banchId = ?", userEntity.BanchId)
 	}
 

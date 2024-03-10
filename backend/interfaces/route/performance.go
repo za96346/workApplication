@@ -14,7 +14,7 @@ func Performance(props *gin.RouterGroup, performanceController *controller.Perfo
 
 		props.POST("/", performanceController.UpdatePerformance)
 		props.DELETE("/", performanceController.DeletePerformance)
-		props.PUT("/copy", performanceController.SavePerformance)
+		props.PUT("/copy", performanceController.CopyPerformance)
 		props.POST("/banch", performanceController.ChangeBanch)
 		props.GET("/year", performanceController.GetYearPerformances)
 	}

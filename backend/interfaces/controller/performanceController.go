@@ -101,12 +101,6 @@ func (e *PerformanceController) GetYearPerformances(Request *gin.Context) {
 func (e *PerformanceController) SavePerformance(Request *gin.Context) {
 	reqBody := new(entities.Performance)
 
-	// 不想多寫一個 copy
-	// PermissionItemCode := "add"
-	// if strings.Contains(Request.Request.URL.Path, "copy") {
-	// 	PermissionItemCode = "copy"
-	// }
-
 	session, err := method.NewSession(
 		Request,
 		&method.ReqStruct{
@@ -117,6 +111,38 @@ func (e *PerformanceController) SavePerformance(Request *gin.Context) {
 	if err != nil {return}
 
 	_, appErr := e.performanceApp.SavePerformance(reqBody, session)
+
+	if appErr != nil {
+		Request.JSON(
+			http.StatusBadRequest,
+			gin.H {
+				"message": "新增失敗",
+			},
+		)
+		return
+	}
+
+	Request.JSON(
+		http.StatusOK,
+		gin.H {
+			"message": "新增成功",
+		},
+	)
+}
+
+func (e *PerformanceController) CopyPerformance(Request *gin.Context) {
+	reqBody := new(entities.Performance)
+
+	session, err := method.NewSession(
+		Request,
+		&method.ReqStruct{
+			ReqBodyValidation: true,
+			ReqBodyStruct: reqBody,
+		},
+	)
+	if err != nil {return}
+
+	_, appErr := e.performanceApp.CopyPerformance(reqBody, session)
 
 	if appErr != nil {
 		Request.JSON(

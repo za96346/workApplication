@@ -4,10 +4,10 @@ import "time"
 
 type Performance struct {
     CompanyId       int         `gorm:"column:companyId;primaryKey" json:"CompanyId"`      //type:*int         comment:公司id          version:2023-10-08 14:35
-    UserId          int         `gorm:"column:userId;primaryKey" json:"UserId" binding:"required"`            //type:*int         comment:使用者id        version:2023-10-08 14:35
+    UserId          int         `gorm:"column:userId" json:"UserId" binding:"required"`            //type:*int         comment:使用者id        version:2023-10-08 14:35
     PerformanceId   int         `gorm:"column:performanceId;primaryKey" json:"PerformanceId"`   //type:*int         comment:績效id          version:2023-10-08 14:35
-    Year            int         `gorm:"column:year;primaryKey" json:"Year" binding:"required"`                //type:*int         comment:年分            version:2023-10-08 14:35
-    Month           int         `gorm:"column:month;primaryKey" json:"Month" binding:"required"`              //type:*int         comment:月份            version:2023-10-08 14:35
+    Year            int         `gorm:"column:year" json:"Year" binding:"required"`                //type:*int         comment:年分            version:2023-10-08 14:35
+    Month           int         `gorm:"column:month" json:"Month" binding:"required"`              //type:*int         comment:月份            version:2023-10-08 14:35
     BanchId         int         `gorm:"column:banchId" json:"BanchId"`                     //type:*int         comment:部門id          version:2023-10-08 14:35
     Goal            string       `gorm:"column:goal" json:"Goal" binding:"required"`                           //type:string       comment:績效目標        version:2023-10-08 14:35
     Attitude        *int         `gorm:"column:attitude" json:"Attitude" binding:"required"`                   //type:*int         comment:態度分數        version:2023-10-08 14:35
