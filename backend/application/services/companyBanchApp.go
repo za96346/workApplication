@@ -32,8 +32,6 @@ func (c *CompanyBanchApp) GetCompanyBanches(
 ) (*[]entities.CompanyBanch, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		c.RoleRepo,
-		c.CompanyBanchRepo,
 		true,
 		string(enum.BanchManage),
 		string(enum.Inquire),
@@ -55,8 +53,6 @@ func (c *CompanyBanchApp) GetCompanyBanches(
 func (c *CompanyBanchApp) GetCompanyBanchesSelector(sessionStruct *method.SessionStruct) (*[]entities.CompanyBanch, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		c.RoleRepo,
-		c.CompanyBanchRepo,
 		false,
 		"",
 		"",
@@ -72,8 +68,6 @@ func (c *CompanyBanchApp) GetCompanyBanchesSelector(sessionStruct *method.Sessio
 func (c *CompanyBanchApp) UpdateCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		c.RoleRepo,
-		c.CompanyBanchRepo,
 		true,
 		string(enum.BanchManage),
 		string(enum.Edit),
@@ -95,8 +89,6 @@ func (c *CompanyBanchApp) UpdateCompanyBanch(companyBanchEntity *entities.Compan
 func (c *CompanyBanchApp) SaveCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		c.RoleRepo,
-		c.CompanyBanchRepo,
 		true,
 		string(enum.BanchManage),
 		string(enum.Add),
@@ -114,8 +106,6 @@ func (c *CompanyBanchApp) SaveCompanyBanch(companyBanchEntity *entities.CompanyB
 func (c *CompanyBanchApp) DeleteCompanyBanch(companyBanchEntity *entities.CompanyBanch, sessionStruct *method.SessionStruct) (*entities.CompanyBanch, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		c.RoleRepo,
-		c.CompanyBanchRepo,
 		true,
 		string(enum.BanchManage),
 		string(enum.Delete),

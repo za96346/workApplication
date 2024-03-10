@@ -55,8 +55,6 @@ func (s *SystemApp) GetAuth(
 ) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		s.RoleRepo,
-		s.CompanyBanchRepo,
 		false,
 		"",
 		"",
@@ -161,8 +159,6 @@ func (s *SystemApp) GetRoleBanchList(
 ) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		s.RoleRepo,
-		s.CompanyBanchRepo,
 		false,
 		"",
 		"",

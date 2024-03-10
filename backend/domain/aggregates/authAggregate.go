@@ -2,7 +2,6 @@ package aggregates
 
 import (
 	"backend/domain/entities"
-	"backend/domain/repository"
 	"backend/interfaces/method"
 	"encoding/json"
 	"errors"
@@ -69,8 +68,6 @@ type AutAggregate struct {
 */
 func NewAuthAggregate(
 	sessionStruct *method.SessionStruct,
-	roleRepo repository.RoleRepository,
-	banchRepo repository.CompanyBanchRepository,
 	permissionValidation bool, // 是否開啟 權限驗證
 	permissionFuncCode string,
 	permissionItemCode string,

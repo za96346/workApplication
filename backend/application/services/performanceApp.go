@@ -45,8 +45,6 @@ func (p *PerformanceApp) GetPerformances(
 ) (*[]domainDtos.PerformanceDetailDto, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		p.RoleRepo,
-		p.CompanyBanchRepo,
 		true,
 		string(enum.Performance),
 		string(enum.Inquire),
@@ -73,8 +71,6 @@ func (p *PerformanceApp) GetYearPerformances(
 ) (*[]entities.YearPerformance, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		p.RoleRepo,
-		p.CompanyBanchRepo,
 		true,
 		string(enum.Performance),
 		string(enum.Inquire),
@@ -97,8 +93,6 @@ func (p *PerformanceApp) GetYearPerformances(
 func (p *PerformanceApp) SavePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		p.RoleRepo,
-		p.CompanyBanchRepo,
 		true,
 		string(enum.Performance),
 		string(enum.Add),
@@ -133,8 +127,6 @@ func (p *PerformanceApp) SavePerformance(performanceEntity *entities.Performance
 func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		p.RoleRepo,
-		p.CompanyBanchRepo,
 		true,
 		string(enum.Performance),
 		string(enum.Edit),
@@ -169,8 +161,6 @@ func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performan
 func (p *PerformanceApp) DeletePerformance(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		p.RoleRepo,
-		p.CompanyBanchRepo,
 		true,
 		string(enum.Performance),
 		string(enum.Delete),
@@ -194,8 +184,6 @@ func (p *PerformanceApp) DeletePerformance(performanceEntity *entities.Performan
 func (p *PerformanceApp) ChangeBanch(performanceEntity *entities.Performance, sessionStruct *method.SessionStruct) (*entities.Performance, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		p.RoleRepo,
-		p.CompanyBanchRepo,
 		true,
 		string(enum.Performance),
 		string(enum.Edit),

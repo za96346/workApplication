@@ -1,10 +1,12 @@
 package main
 
 import (
+	"backend/domain/aggregates"
 	"backend/infrastructure/persistence"
 	"backend/interfaces"
 	"os"
 	"path/filepath"
+
 	"github.com/joho/godotenv"
 )
 
@@ -34,5 +36,6 @@ func main() {
 	}
 	defer repo.Close()
 
+	aggregates.NewAggregateRepo(repo.Role, repo.CompanyBanch)
 	interfaces.SetUp(repo)
 }

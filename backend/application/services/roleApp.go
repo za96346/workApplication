@@ -46,8 +46,6 @@ type RoleAppInterface interface {
 func (r *RoleApp) GetRoles(roleEntity *entities.Role, sessionStruct *method.SessionStruct) (*[]entities.Role, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		r.RoleRepo,
-		r.CompanyBanchRepo,
 		true,
 		string(enum.RoleManage),
 		string(enum.Inquire),
@@ -72,8 +70,6 @@ func (r *RoleApp) GetRole(
 ) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		r.RoleRepo,
-		r.CompanyBanchRepo,
 		true,
 		string(enum.RoleManage),
 		string(enum.Inquire),
@@ -125,8 +121,6 @@ func (r *RoleApp) GetRole(
 func (r *RoleApp) GetRolesSelector(roleEntity *entities.Role, sessionStruct *method.SessionStruct) (*[]entities.Role, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		r.RoleRepo,
-		r.CompanyBanchRepo,
 		false,
 		string(enum.RoleManage),
 		string(enum.Inquire),
@@ -148,8 +142,6 @@ func (r *RoleApp) UpdateRole(
 ) (*entities.Role, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		r.RoleRepo,
-		r.CompanyBanchRepo,
 		true,
 		string(enum.RoleManage),
 		string(enum.Edit),
@@ -189,8 +181,6 @@ func (r *RoleApp) SaveRole(
 ) (*entities.Role, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		r.RoleRepo,
-		r.CompanyBanchRepo,
 		true,
 		string(enum.RoleManage),
 		string(enum.Add),
@@ -226,8 +216,6 @@ func (r *RoleApp) SaveRole(
 func (r *RoleApp) DeleteRole(roleEntity *entities.Role, sessionStruct *method.SessionStruct) (*entities.Role, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		r.RoleRepo,
-		r.CompanyBanchRepo,
 		true,
 		string(enum.RoleManage),
 		string(enum.Delete),

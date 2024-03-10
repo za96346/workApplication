@@ -36,7 +36,7 @@ func (s *CompanyBanchController) GetCompanyBanches(Request *gin.Context) {
 
 	responseData, appErr := s.companyBanchApp.GetCompanyBanches(
 		&entities.CompanyBanch{
-			BanchName: *reqParams.BanchName,
+			BanchName: *(*reqParams).BanchName,
 		},
 		session,
 	)

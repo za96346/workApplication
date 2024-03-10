@@ -63,8 +63,6 @@ type UserAppInterface interface {
 func (u *UserApp) GetMine(userEntity *entities.User, sessionStruct *method.SessionStruct) (*entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.RoleRepo,
-		u.CompanyBanchRepo,
 		false,
 		"",
 		"",
@@ -87,8 +85,6 @@ func (u *UserApp) GetUsers(
 ) (*[]entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.RoleRepo,
-		u.CompanyBanchRepo,
 		true,
 		string(enum.EmployeeManage),
 		string(enum.Inquire),
@@ -113,8 +109,6 @@ func (u *UserApp) GetUsersSelector(
 ) (*[]entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.RoleRepo,
-		u.CompanyBanchRepo,
 		false,
 		"",
 		"",
@@ -134,8 +128,6 @@ func (u *UserApp) UpdateUser(
 ) (*entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.RoleRepo,
-		u.CompanyBanchRepo,
 		true,
 		string(enum.EmployeeManage),
 		string(enum.Edit),
@@ -168,8 +160,6 @@ func (u *UserApp) UpdatePassword(
 ) (*entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.RoleRepo,
-		u.CompanyBanchRepo,
 		true,
 		string(enum.EmployeeManage),
 		string(enum.Edit),
@@ -209,8 +199,6 @@ func (u *UserApp) UpdateMine(
 ) (*entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.RoleRepo,
-		u.CompanyBanchRepo,
 		true,
 		string(enum.SelfData),
 		string(enum.Edit),
@@ -232,8 +220,6 @@ func (u *UserApp) SaveUser(
 ) (*entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.RoleRepo,
-		u.CompanyBanchRepo,
 		true,
 		string(enum.EmployeeManage),
 		string(enum.Add),
@@ -261,8 +247,6 @@ func (u *UserApp) DeleteUser(
 ) (*entities.User, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		u.RoleRepo,
-		u.CompanyBanchRepo,
 		true,
 		string(enum.EmployeeManage),
 		string(enum.Delete),

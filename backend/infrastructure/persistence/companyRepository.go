@@ -24,7 +24,7 @@ func (r *CompanyRepo) GetCompany(companyEntity *entities.Company) (*entities.Com
 	err := r.db.
 		Debug().
 		Table(r.tableName).
-		Where("id = ?", (*companyEntity).CompanyId).
+		Where("companyId = ?", (*companyEntity).CompanyId).
 		First(&company).
 		Error
 

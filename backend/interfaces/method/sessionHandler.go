@@ -99,35 +99,36 @@ func NewSession(
 	// 使用者 員工編號
 	employeeNumber := session.Get("employeeNumber").(string)
 
+	if req != nil {
+		// 請求資料驗證 body
+		if (*req).ReqBodyValidation {
+			bindError := Request.ShouldBindJSON((*req).ReqBodyStruct)
+		
+			if bindError != nil {
+				Request.JSON(
+					http.StatusOK,
+					gin.H {
+						"message": fmt.Sprintf("Request Data 格式不正確 %s", bindError),
+					},
+				)
+				return nil, bindError
+			}	
+		}
 
-	// 請求資料驗證 body
-	if (*req).ReqBodyValidation {
-		bindError := Request.ShouldBindJSON((*req).ReqBodyStruct)
-	
-		if bindError != nil {
-			Request.JSON(
-				http.StatusOK,
-				gin.H {
-					"message": fmt.Sprintf("Request Data 格式不正確 %s", bindError),
-				},
-			)
-			return nil, bindError
-		}	
-	}
-
-	// 請求資料驗證 params
-	if (*req).ReqParamsValidation {
-		bindError := Request.BindQuery((*req).ReqParamsStruct)
-	
-		if bindError != nil {
-			Request.JSON(
-				http.StatusOK,
-				gin.H {
-					"message": fmt.Sprintf("Request Params 格式不正確 %s", bindError),
-				},
-			)
-			return nil, bindError
-		}	
+		// 請求資料驗證 params
+		if (*req).ReqParamsValidation {
+			bindError := Request.ShouldBindQuery((*req).ReqParamsStruct)
+		
+			if bindError != nil {
+				Request.JSON(
+					http.StatusOK,
+					gin.H {
+						"message": fmt.Sprintf("Request Params 格式不正確 %s", bindError),
+					},
+				)
+				return nil, bindError
+			}	
+		}
 	}
 
 	// 綁定物件

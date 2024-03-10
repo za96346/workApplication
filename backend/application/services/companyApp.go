@@ -27,8 +27,6 @@ func (c *CompanyApp) UpdateCompany(
 ) (*entities.Company, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		c.RoleRepo,
-		c.CompanyBanchRepo,
 		true,
 		string(enum.CompanyData),
 		string(enum.Edit),
@@ -49,8 +47,6 @@ func (c *CompanyApp) GetCompany(
 ) (*entities.Company, error) {
 	authAggregate, err := aggregates.NewAuthAggregate(
 		sessionStruct,
-		c.RoleRepo,
-		c.CompanyBanchRepo,
 		true,
 		string(enum.CompanyData),
 		string(enum.Inquire),
