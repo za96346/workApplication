@@ -1,5 +1,5 @@
 import { Table } from 'antd'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import columns from './methods/column'
 import Searchbar from './components/Searchbar'
 import { useAppSelector } from 'hook/redux'
@@ -13,8 +13,14 @@ import { usePermission } from 'hook/usePermission'
 import { FuncCodeEnum } from 'types/system'
 import { dropdownList } from './methods/dropdownList'
 import ModalChangeBanch from './components/modalChangeBanch/Index'
+import PerformanceSession from './methods/performanceSession'
 
-const Index = (): JSX.Element => {
+interface propsType {
+    userId?: number
+    year?: number
+}
+
+const Index = ({ userId, year }: propsType): JSX.Element => {
     const performance = useAppSelector((v) => v?.performance?.all)
     const permission = usePermission({ funcCode: FuncCodeEnum.performance })
 
@@ -36,8 +42,14 @@ const Index = (): JSX.Element => {
         }))
     }, [performance, permission])
 
+    useEffect(() => {
+        return () => {
+            PerformanceSession.Instance.reset({})
+        }
+    }, [])
+
     return (
-        <>
+        <PerformanceSession.Provider>
             <ModalEdit />
             <ModalChangeBanch />
             {
@@ -78,7 +90,7 @@ const Index = (): JSX.Element => {
                     </>
                 )
             }
-            <Searchbar/>
+            <Searchbar userId={userId} year={year} />
             <Table
                 dataSource={dataSource}
                 columns={columns}
@@ -93,7 +105,7 @@ const Index = (): JSX.Element => {
                     x: 1500
                 }}
             />
-        </>
+        </PerformanceSession.Provider>
     )
 }
 

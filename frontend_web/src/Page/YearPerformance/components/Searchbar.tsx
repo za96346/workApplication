@@ -5,6 +5,7 @@ import React, { useEffect } from 'react'
 import Btn from 'shared/Button'
 import { FuncCodeEnum, OperationCodeEnum } from 'types/system'
 import DateSelect from 'shared/AntdOverwrite/DateSelectRangePicker'
+import YearPerformanceSession from '../methods/yearPerformanceSession'
 
 const Searchbar = (): JSX.Element => {
     const [form] = Form.useForm()
@@ -15,10 +16,16 @@ const Searchbar = (): JSX.Element => {
     })
 
     const onSearch = async (v: any): Promise<void> => {
-        void api.performance.getYear({
+        const currentParams = {
             ...v,
             ...DateSelect.getZhtwYear(v?.range)
-        })
+        }
+        void api.performance.getYear(currentParams)
+
+        YearPerformanceSession.Instance.set((prev) => ({
+            ...prev,
+            currentParams
+        }))
     }
 
     useEffect(() => {

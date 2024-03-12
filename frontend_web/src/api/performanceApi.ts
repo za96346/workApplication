@@ -8,6 +8,7 @@ declare namespace params {
     }
     interface get {
         UserName: string
+        UserId: number
         RoleId: number
         BanchId: number
         StartDate: string

@@ -17,6 +17,11 @@ const columns: ColumnsType<any> = [
         key: 'Score',
         title: '分數',
         dataIndex: 'Score'
+    },
+    {
+        key: 'action',
+        title: '',
+        dataIndex: 'action'
     }
 ]
 export default columns

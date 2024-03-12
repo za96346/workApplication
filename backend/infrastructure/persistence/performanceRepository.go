@@ -60,6 +60,11 @@ func (r *PerformanceRepo) GetPerformances(
 		searchQuery.Where("userName like ?", "%" + queryParams.UserName + "%")
 	}
 
+	// 使用者 id
+	if queryParams.UserId != 0 {
+		searchQuery.Where("performance.userId = ?", queryParams.UserId)
+	}
+
 	// 日期塞選
 	if queryParams.StartDate != "" {
 		searchQuery.Where(
@@ -132,6 +137,7 @@ func (r *PerformanceRepo) GetYearPerformances(
 		Select(
 			"performance.year as year",
 			"user.userName as userName",
+			"user.userId",
 			`
 				round(
 					(
@@ -142,6 +148,11 @@ func (r *PerformanceRepo) GetYearPerformances(
 				) as score
 			`,
 		)
+
+	// 使用者 id
+	if queryParams.UserId != 0 {
+		searchQuery.Where("performance.userId = ?", queryParams.UserId)
+	}
 
 	// 使用者名稱
 	if queryParams.UserName != "" {

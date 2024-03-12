@@ -6,7 +6,8 @@ export enum modalType {
     add = 'add',
     copy = 'copy',
     print = 'print',
-    changeBanch = 'changeBanch'
+    changeBanch = 'changeBanch',
+    inquire = 'inquire'
 }
 
 export enum modalTitle {

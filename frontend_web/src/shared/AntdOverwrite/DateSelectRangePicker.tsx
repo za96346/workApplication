@@ -1,14 +1,15 @@
 import { DatePicker } from 'antd'
 import React, { useEffect, useState } from 'react'
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 
 interface props {
     onChange: (v: dayjs.Dayjs[]) => void
     type: 'year' | 'month'
+    defaultValue?: [Dayjs, Dayjs]
 }
-const DateSelect = ({ onChange, type = 'month' }: props): JSX.Element => {
+const DateSelect = ({ onChange, type = 'month', defaultValue = [dayjs(), dayjs()] }: props): JSX.Element => {
     const [dates, setDates] = useState<any>(null)
-    const [value, setValue] = useState<any>([dayjs(), dayjs()])
+    const [value, setValue] = useState<any>(defaultValue)
 
     const disabledDate = (current: any): boolean => {
         if (!dates) {
@@ -36,7 +37,7 @@ const DateSelect = ({ onChange, type = 'month' }: props): JSX.Element => {
                 allowEmpty={[false, true]}
                 value={dates || value}
                 disabledDate={disabledDate}
-                defaultValue={[dayjs(), dayjs()]}
+                defaultValue={defaultValue}
                 onCalendarChange={(val) => setDates(val)}
                 placeholder={['開始', '結束']}
                 onChange={(val) => setValue(val)}

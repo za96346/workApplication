@@ -25,6 +25,7 @@ declare namespace performanceTypes {
 
     interface year {
         UserName: userTypes.TABLE['UserName']
+        UserId: userTypes.TABLE['UserId']
         Year: TABLE['Year']
         Score: number
     }

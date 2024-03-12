@@ -5,8 +5,18 @@ import React, { useEffect } from 'react'
 import Btn from 'shared/Button'
 import { FuncCodeEnum, OperationCodeEnum } from 'types/system'
 import DateSelect from 'shared/AntdOverwrite/DateSelectRangePicker'
+import dayjs from 'dayjs'
+import PerformanceSession from '../methods/performanceSession'
 
-const Searchbar = (): JSX.Element => {
+interface propsType {
+    userId: number
+    year: number
+}
+
+const Searchbar = ({
+    userId,
+    year
+}: propsType): JSX.Element => {
     const [form] = Form.useForm()
 
     const rolBanchList = useRoleBanchList({
@@ -15,10 +25,20 @@ const Searchbar = (): JSX.Element => {
     })
 
     const onSearch = (v: any): void => {
-        void api.performance.get({
+        const currentParams = {
             ...v,
-            ...DateSelect.getZhtwDate(v?.range)
-        })
+            ...DateSelect.getZhtwDate(v?.range),
+            ...(year ? { StartDate: `${year}-01` } : {}),
+            ...(year ? { EndDate: `${year}-12` } : {}),
+            ...(userId ? { UserId: userId } : {})
+        }
+
+        void api.performance.get(currentParams)
+
+        PerformanceSession.Instance.set((prev) => ({
+            ...prev,
+            currentParams
+        }))
     }
 
     useEffect(() => {
@@ -36,8 +56,24 @@ const Searchbar = (): JSX.Element => {
                 autoComplete="off"
                 className='row'
             >
-                <Form.Item label='範圍搜尋' name='range' className='col-md-4'>
-                    <DateSelect type='month' onChange={(v) => { }} />
+                <Form.Item
+                    label='範圍搜尋'
+                    name='range'
+                    className='col-md-4'
+                >
+                    <DateSelect
+                        {...(year
+                            ? {
+                                defaultValue: [
+                                    dayjs(`${year + 1911}-01`),
+                                    dayjs(`${year + 1911}-12`)
+                                ]
+                            }
+                            : {}
+                        )}
+                        type='month'
+                        onChange={(v) => { }}
+                    />
                 </Form.Item>
                 <Form.Item
                     name="BanchId"

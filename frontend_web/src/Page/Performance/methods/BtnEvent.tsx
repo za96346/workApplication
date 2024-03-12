@@ -3,12 +3,13 @@ import ModalEdit from '../components/modalEdit/Index'
 import { modalType } from 'static'
 import performanceTypes from 'types/performance'
 import ModalChangeBanch from '../components/modalChangeBanch/Index'
+import PerformanceSession from './performanceSession'
 
 const BtnEvent = ({ type, value }: BtnEventParams<performanceTypes.TABLE>): void => {
     const onClose = (): void => {
         ModalEdit.close({})
         ModalChangeBanch.close({})
-        void api.performance.get()
+        void api.performance.get(PerformanceSession.Instance.get().currentParams)
     }
     if (type === modalType.delete) {
         void api.performance.delete({ performanceId: value?.PerformanceId })
