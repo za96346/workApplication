@@ -114,6 +114,15 @@ func (r *RoleApp) GetRole(
 		} else {
 			rolePermissionMap[v.FuncCode][v.ItemCode]["scopeRole"] = v.ScopeRole
 		}
+
+		// 可編輯使用者範圍 json decode
+		if v.ScopeUser != "all" && v.ScopeUser != "self" {
+			var scopeUser []int
+			json.Unmarshal([]byte(v.ScopeUser), &scopeUser)
+			rolePermissionMap[v.FuncCode][v.ItemCode]["scopeUser"] = scopeUser
+		} else {
+			rolePermissionMap[v.FuncCode][v.ItemCode]["scopeUser"] = v.ScopeUser
+		}
 	}
 	return role, &rolePermissionMap, nil
 }

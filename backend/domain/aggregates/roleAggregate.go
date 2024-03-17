@@ -66,6 +66,15 @@ func (r *RoleAggregate) AddRoleStruct(
 				scopeRole = string(scopeRoleByte)
 			}
 
+			// 可編輯角色範圍
+			scopeUser := ""
+			if scopeObject["scopeUser"] == "all" || scopeObject["scopeUser"] == "self" {
+				scopeUser = scopeObject["scopeUser"].(string)
+			} else {
+				scopeUserByte, _ :=json.Marshal(scopeObject["scopeUser"])
+				scopeUser = string(scopeUserByte)
+			}
+
 			// 新增
 			r.RoleStructRepo.SaveRoleStruct(
 				&entities.RoleStruct{
@@ -75,6 +84,7 @@ func (r *RoleAggregate) AddRoleStruct(
 					ItemCode: itemCode,
 					ScopeBanch: scopeBanch,
 					ScopeRole: scopeRole,
+					ScopeUser: scopeUser,
 					CreateTime: &now,
 					LastModify: &now,
 				},

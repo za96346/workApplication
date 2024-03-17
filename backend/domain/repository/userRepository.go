@@ -10,6 +10,8 @@ type UserRepository interface {
 		roleScope *[]int,
 		banchScope *[]int,
 	) (*[]entities.User, error)
+	GetUsersID(userEntity *entities.User) *[]int
+	GetUsersIdByScopeUser(userEntity *entities.User, scopeUser *[]int) *[]int
 	GetUsersSelector(
 		userEntity *entities.User,
 	) (*[]entities.User, error)

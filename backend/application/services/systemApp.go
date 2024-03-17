@@ -109,6 +109,15 @@ func (s *SystemApp) GetAuth(
 		} else {
 			(*permission)[value.FuncCode][value.ItemCode]["scopeBanch"] = value.ScopeBanch
 		}
+
+		// 可編輯使用者範圍 json decode
+		if value.ScopeUser != "all" && value.ScopeUser != "self" {
+			var scopeUser []int
+			json.Unmarshal([]byte(value.ScopeUser), &scopeUser)
+			(*permission)[value.FuncCode][value.ItemCode]["scopeUser"] = scopeUser
+		} else {
+			(*permission)[value.FuncCode][value.ItemCode]["scopeUser"] = value.ScopeUser
+		}
 	}
 
 	return functionItem, permission, nil
@@ -141,6 +150,7 @@ func (s *SystemApp) GetFunc() (
 		}
 		functionRoleBanchRelationMap[value.FuncCode][value.ItemCode]["scopeRole"] = strings.Split(value.HasScopeRole, ",")
 		functionRoleBanchRelationMap[value.FuncCode][value.ItemCode]["scopeBanch"] = strings.Split(value.HasScopeBanch, ",")
+		functionRoleBanchRelationMap[value.FuncCode][value.ItemCode]["scopeUser"] = strings.Split(value.HasScopeUser, ",")
 	}
 
 	return functionItem, operationItem, &functionRoleBanchRelationMap

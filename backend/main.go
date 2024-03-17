@@ -36,6 +36,6 @@ func main() {
 	}
 	defer repo.Close()
 
-	aggregates.NewAggregateRepo(repo.Role, repo.CompanyBanch)
+	aggregates.NewAggregateRepo(repo.Role, repo.CompanyBanch, repo.User)
 	interfaces.SetUp(repo)
 }

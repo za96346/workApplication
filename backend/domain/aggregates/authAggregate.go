@@ -57,10 +57,12 @@ type AutAggregate struct {
 	CurrentPermission map[string]interface{} // 當前的權限
 	CurrentPermissionScopeBanch []int // 當前的 scope banch
 	CurrentPermissionScopeRole []int // 當前的 scope role
+	CurrentPermissionScopeUser []int // 當前的 scope user
 	
 
 	IsCurrentScopeBanchAll bool // scope banch 是否是 all (給add 看的)
 	IsCurrentScopeRoleAll bool // scope role 是否是 all (給add 看的)
+	IsCurrentScopeUserAll bool // scope user 是否是 all (給add 看的)
 }
 
 /*
@@ -142,10 +144,36 @@ func NewAuthAggregate(
 			)
 		}
 
+		// 可編輯角色範圍 的資料 搜尋 ( 分為自己，所有，自訂 )
+		var scopeUser  []int
+		if permission["scopeUser"] == "all" {
+			scopeUser = *userRepo.GetUsersID(&entities.User{
+				CompanyId: sessionStruct.User.CompanyId,
+			})
+			
+			// 設定 is current scope user all
+			(*instance).IsCurrentScopeUserAll = true
+		} else if permission["scopeUser"] == "self" {
+			scopeUser = append(scopeUser, sessionStruct.User.UserId)
+		} else if permission["scopeUser"] != nil {
+			scopeUserSlice := convertSliceToInt(
+				permission["scopeUser"].([]any),
+			)
+
+			// 要把 自訂義裡面 可能被刪除的 userId過濾掉
+			scopeUser = *userRepo.GetUsersIdByScopeUser(
+				&entities.User{
+					CompanyId: sessionStruct.User.CompanyId,
+				},
+				&scopeUserSlice,
+			)
+		}
+
 		// 綁定物件
 		(*instance).CurrentPermission = permission
 		(*instance).CurrentPermissionScopeBanch = scopeBanch
 		(*instance).CurrentPermissionScopeRole = scopeRole
+		(*instance).CurrentPermissionScopeUser = scopeUser
 	}
 
 	return instance, nil
@@ -171,6 +199,19 @@ func(instance *AutAggregate) CheckScopeRoleValidation(roleId int) error {
 		roleId);
 		!exists {
 		return errors.New("無法插入此角色，尚無權限")
+	}
+
+	return nil
+}
+
+// 檢查可編輯的 使用者範圍
+func(instance *AutAggregate) CheckScopeUserValidation(userId int) error {
+	// 檢查是否可以加入此使用者
+	if exists, _ := inArray(
+		(*instance).CurrentPermissionScopeUser,
+		userId);
+		!exists {
+		return errors.New("無法插入此使用者，尚無權限")
 	}
 
 	return nil
@@ -202,4 +243,18 @@ func(instance *AutAggregate) GetScopeRolehWithCustomize(roleId *int) *[]int {
 		return &[]int{}
 	}
 	return &(*instance).CurrentPermissionScopeRole
+}
+
+// 指定的user id 與 目前可查詢的 user
+func(instance *AutAggregate) GetScopeUserWithCustomize(userId *int) *[]int {
+	if userId != nil && *userId != 0 {
+		if exists, _ := inArray(
+			(*instance).CurrentPermissionScopeUser,
+			userId,
+		); !exists {
+			return &[]int{*userId}
+		}
+		return &[]int{}
+	}
+	return &(*instance).CurrentPermissionScopeUser
 }

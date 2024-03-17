@@ -171,6 +171,37 @@ func (r *UserRepo) GetNewUserID(companyId int) int {
 	return int(MaxCount) + 1
 }
 
+func (r *UserRepo) GetUsersID(userEntity *entities.User) *[]int {
+	var usersIdArr []int
+
+	r.db.
+		Debug().
+		Table(r.tableName).
+		Select("userId").
+		Where("companyId = ?", userEntity.CompanyId).
+		Where("deleteFlag = ?", "N").
+		Find(&entities.User{}).
+		Pluck("userId", &usersIdArr)
+
+	return &usersIdArr
+}
+
+func (r *UserRepo) GetUsersIdByScopeUser(userEntity *entities.User, scopeUser *[]int) *[]int {
+	var userIdArr []int
+
+	r.db.
+		Debug().
+		Table(r.tableName).
+		Select("userId").
+		Where("companyId = ?", userEntity.CompanyId).
+		Where("deleteFlag = ?", "N").
+		Where("userId in (?)", *scopeUser).
+		Find(&entities.User{}).
+		Pluck("userId", &userIdArr)
+
+	return &userIdArr
+}
+
 func (r *UserRepo) SaveUser(userEntity *entities.User) (*entities.User, error) {
 	// 加入一些固定欄位
 	now := time.Now()

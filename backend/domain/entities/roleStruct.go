@@ -11,6 +11,7 @@ type RoleStruct struct {
     ItemCode    string       `gorm:"column:itemCode;primaryKey" json:"ItemCode"`   //type:string       comment:操作代碼(edit, delete...)             version:2023-10-02 15:48
     ScopeBanch  string       `gorm:"column:scopeBanch" json:"ScopeBanch"`   //type:string       comment:可操作部門範圍 ( 部門ID[] )           version:2023-10-03 23:02
     ScopeRole   string       `gorm:"column:scopeRole" json:"ScopeRole"`     //type:string       comment:可操作角色範圍 ( 角色ID[] )           version:2023-10-02 15:48
+    ScopeUser   string       `gorm:"column:scopeUser" json:"ScopeUser"`     //type:string       comment:可操作使用者範圍 ( 使用者ID[] )           version:2023-10-02 15:48
     CreateTime  *time.Time   `gorm:"column:createTime" json:"CreateTime"`   //type:*time.Time   comment:創建時間                              version:2023-10-02 15:48
     LastModify  *time.Time   `gorm:"column:lastModify" json:"LastModify"`   //type:*time.Time   comment:最近修改                              version:2023-10-02 15:48
 }
