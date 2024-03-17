@@ -56,11 +56,13 @@ declare namespace systemTypes {
     interface permission {
         scopeBanch: 'self' | 'all' | number[]
         scopeRole: 'self' | 'all' | number[]
+        scopeUser: 'self' | 'all' | number[]
     }
 
     interface scope {
         scopeBanch: ScopeEnum[]
         scopeRole: ScopeEnum[]
+        scopeUser: ScopeEnum[]
     }
 
     // api

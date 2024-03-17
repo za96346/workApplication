@@ -5,6 +5,7 @@ import BanchSelector from 'shared/BanchSelector/Index'
 import RoleSelector from 'shared/RoleSelector/Index'
 import { ScopeNameEnum } from 'static'
 import systemTypes, { ScopeEnum } from 'types/system'
+import UserSelector from 'shared/UserSelector/Index'
 
 const RadioGroup = (
     { operationItem, functionItem, scopeLimit }: {
@@ -15,7 +16,8 @@ const RadioGroup = (
     // scope 預處理 ( 把 empty string in array 的 移除 )
     scopeLimit = useMemo(() => ({
         scopeBanch: scopeLimit?.scopeBanch?.filter((i) => i),
-        scopeRole: scopeLimit?.scopeRole?.filter((i) => i)
+        scopeRole: scopeLimit?.scopeRole?.filter((i) => i),
+        scopeUser: scopeLimit?.scopeUser?.filter((i) => i)
     }), [scopeLimit])
 
     const { session, setSession } = useSession<systemTypes.auth['permission']>({})
@@ -57,6 +59,15 @@ const RadioGroup = (
     const onRoleScopeChange = (e: RadioChangeEvent): void => {
         setCurrentSession({
             scopeRole: e.target.value === 'customize'
+                ? []
+                : e.target.value
+        })
+    }
+
+    // 使用者勾選
+    const onUserScopeChange = (e: RadioChangeEvent): void => {
+        setCurrentSession({
+            scopeUser: e.target.value === 'customize'
                 ? []
                 : e.target.value
         })
@@ -137,6 +148,46 @@ const RadioGroup = (
                         onChange={(v) => {
                             setCurrentSession({
                                 scopeRole: v?.map((item) => item?.RoleId)
+                            })
+                        }}
+                    />
+                )
+            }
+
+            {/* 使用者 */}
+            {
+                scopeLimit?.scopeUser?.length > 0 && (
+                    <>
+                        <span className='text-secondary'>使用者</span>
+                        <Radio.Group
+                            onChange={onUserScopeChange}
+                            value={
+                                Array.isArray(currentValue?.scopeUser)
+                                    ? 'customize'
+                                    : currentValue?.scopeUser
+                            }
+                        >
+                            {
+                                scopeLimit?.scopeUser?.map((item) => (
+                                    <Radio key={item} value={item}>{ScopeNameEnum[item]}</Radio>
+                                ))
+                            }
+                        </Radio.Group>
+                    </>
+                )
+            }
+
+            {
+                (
+                    Array.isArray(currentValue?.scopeUser) &&
+                    scopeLimit?.scopeRole?.includes(ScopeEnum.customize)
+                ) && (
+                    <UserSelector
+                        defaultValue={currentValue?.scopeUser || []}
+                        subComponents='tag'
+                        onChange={(v) => {
+                            setCurrentSession({
+                                scopeUser: v?.map((item) => item?.UserId)
                             })
                         }}
                     />
