@@ -4,7 +4,7 @@
   "avatar": "",
   "version": "4.6.3",
   "createdTime": "2023-7-29 21:06:30",
-  "updatedTime": "2024-3-8 13:21:00",
+  "updatedTime": "2024-3-17 19:31:03",
   "dbConns": [],
   "profile": {
     "default": {
@@ -1662,6 +1662,23 @@
           "extProps": {},
           "domain": "",
           "id": "CFFD27E0-8E0C-420A-98AD-FDEB1DE9876A"
+        },
+        {
+          "defKey": "scopeUser",
+          "defName": "可操作使用者範圍 ( 使用者ID[] )",
+          "comment": "",
+          "type": "TEXT",
+          "len": "",
+          "scale": "",
+          "primaryKey": false,
+          "notNull": false,
+          "autoIncrement": false,
+          "defaultValue": "",
+          "hideInGraph": false,
+          "refDict": "",
+          "extProps": {},
+          "domain": "",
+          "id": "2681F152-CBD5-4C81-89AD-7F18E7D44FA2"
         },
         {
           "defKey": "createTime",
@@ -11708,6 +11725,23 @@
           "domain": "9092C4E0-1A54-4859-ABBB-5B62DBC27573",
           "id": "D575D8E7-BAA1-4229-8855-169EAC2FCB02",
           "uiHint": null
+        },
+        {
+          "defKey": "hasScopeUser",
+          "defName": "操作使用者範圍 ( [all, self, customize] )",
+          "comment": "",
+          "type": "",
+          "len": "",
+          "scale": "",
+          "primaryKey": false,
+          "notNull": false,
+          "autoIncrement": false,
+          "defaultValue": "",
+          "hideInGraph": false,
+          "refDict": "",
+          "extProps": {},
+          "domain": "9092C4E0-1A54-4859-ABBB-5B62DBC27573",
+          "id": "B8293E11-784A-41A3-83B8-14A029C9AE99"
         },
         {
           "defKey": "createTime",
