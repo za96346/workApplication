@@ -37,12 +37,12 @@ func (r *CompanyBanchRepo) GetCompanyBanches(
 
 	// banch name
 	if companyBanchEntity.BanchName != "" {
-		searchQuery.Where("banchName like ?", "%"+companyBanchEntity.BanchName+"%")
+		searchQuery = searchQuery.Where("banchName like ?", "%"+companyBanchEntity.BanchName+"%")
 	}
 
 	// 部門範圍
 	if scopeBanch != nil {
-		searchQuery.Where("banchId in (?)", *scopeBanch)
+		searchQuery = searchQuery.Where("banchId in (?)", *scopeBanch)
 	}
 
 	err := searchQuery.Find(&companyBanches).Error

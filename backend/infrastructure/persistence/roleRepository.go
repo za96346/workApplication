@@ -69,7 +69,7 @@ func (r *RoleRepo) GetRoles(roleEntity *entities.Role) (*[]entities.Role, error)
 		Order("sort asc")
 
 	if roleEntity.RoleName != "" {
-		searchQuery.Where("roleName like ?", "%" + roleEntity.RoleName + "%")
+		searchQuery = searchQuery.Where("roleName like ?", "%" + roleEntity.RoleName + "%")
 	}
 
 	err := searchQuery.Find(&roles).Error

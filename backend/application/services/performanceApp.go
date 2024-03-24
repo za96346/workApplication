@@ -61,6 +61,7 @@ func (p *PerformanceApp) GetPerformances(
 		queryParams,
 		authAggregate.GetScopeBanchWithCustomize(&queryParams.BanchId),
 		authAggregate.GetScopeRolehWithCustomize(&queryParams.RoleId),
+		&authAggregate.CurrentPermissionScopeUser,
 	)
 }
 
@@ -87,6 +88,7 @@ func (p *PerformanceApp) GetYearPerformances(
 		queryParams,
 		authAggregate.GetScopeBanchWithCustomize(&queryParams.BanchId),
 		authAggregate.GetScopeRolehWithCustomize(&queryParams.RoleId),
+		&authAggregate.CurrentPermissionScopeUser,
 	)
 }
 
@@ -118,6 +120,10 @@ func (p *PerformanceApp) SavePerformance(performanceEntity *entities.Performance
 	}
 
 	if err := authAggregate.CheckScopeRoleValidation(user.RoleId); err != nil {
+		return nil, err
+	}
+
+	if err := authAggregate.CheckScopeUserValidation(user.UserId); err != nil {
 		return nil, err
 	}
 
@@ -158,6 +164,10 @@ func (p *PerformanceApp) CopyPerformance(performanceEntity *entities.Performance
 		return nil, err
 	}
 
+	if err := authAggregate.CheckScopeUserValidation(user.UserId); err != nil {
+		return nil, err
+	}
+
 	// 加入使用者的欄位
 	performanceEntity.BanchId = *user.BanchId
 
@@ -195,6 +205,10 @@ func (p *PerformanceApp) UpdatePerformance(performanceEntity *entities.Performan
 		return nil, err
 	}
 
+	if err := authAggregate.CheckScopeUserValidation(user.UserId); err != nil {
+		return nil, err
+	}
+
 	// 加入使用者的欄位
 	performanceEntity.BanchId = *user.BanchId
 
@@ -214,6 +228,27 @@ func (p *PerformanceApp) DeletePerformance(performanceEntity *entities.Performan
 	}
 
 	performanceEntity.CompanyId = authAggregate.User.CompanyId
+
+	user, err := p.UserRepo.GetUser(&entities.User{
+		CompanyId: authAggregate.User.CompanyId,
+		UserId: performanceEntity.UserId,
+	})
+
+	if user == nil {
+		return nil, err
+	}
+
+	if err := authAggregate.CheckScopeBanchValidation(*user.BanchId); err != nil {
+		return nil, err
+	}
+
+	if err := authAggregate.CheckScopeRoleValidation(user.RoleId); err != nil {
+		return nil, err
+	}
+
+	if err := authAggregate.CheckScopeUserValidation(user.UserId); err != nil {
+		return nil, err
+	}
 
 	performance, err := p.PerformanceRepo.DeletePerformance(performanceEntity)
 

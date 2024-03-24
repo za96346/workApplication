@@ -76,27 +76,27 @@ func (r *UserRepo) GetUsers(
 
 	// 角色範圍查詢
 	if roleScope != nil {
-		searchQuery.Where("roleId in (?)", *roleScope)
+		searchQuery = searchQuery.Where("roleId in (?)", *roleScope)
 	}
 
 	// 部門範圍查詢
 	if banchScope != nil {
-		searchQuery.Where("banchId in (?)", *banchScope)
+		searchQuery = searchQuery.Where("banchId in (?)", *banchScope)
 	}
 
 	// 使用者名稱
 	if userEntity.UserName != "" {
-		searchQuery.Where("userName like ?", "%"+userEntity.UserName+"%")
+		searchQuery = searchQuery.Where("userName like ?", "%"+userEntity.UserName+"%")
 	}
 
 	// 員工編號
 	if userEntity.EmployeeNumber != "" {
-		searchQuery.Where("employeeNumber like ?", "%"+userEntity.EmployeeNumber+"%")
+		searchQuery = searchQuery.Where("employeeNumber like ?", "%"+userEntity.EmployeeNumber+"%")
 	}
 
 	// 離職狀態
 	if userEntity.QuitFlag != "" {
-		searchQuery.Where("quitFlag = ?", userEntity.QuitFlag)
+		searchQuery = searchQuery.Where("quitFlag = ?", userEntity.QuitFlag)
 	}
 
 	err := searchQuery.Find(&users).Error
@@ -133,22 +133,22 @@ func (r *UserRepo) GetUsersSelector(
 
 	// 使用者名稱
 	if userEntity.UserName != "" {
-		searchQuery.Where("userName like ?", "%"+userEntity.UserName+"%")
+		searchQuery = searchQuery.Where("userName like ?", "%"+userEntity.UserName+"%")
 	}
 
 	// 員工編號
 	if userEntity.EmployeeNumber != "" {
-		searchQuery.Where("employeeNumber like ?", "%"+userEntity.EmployeeNumber+"%")
+		searchQuery = searchQuery.Where("employeeNumber like ?", "%"+userEntity.EmployeeNumber+"%")
 	}
 
 	// 部門查詢
 	if userEntity.BanchId != nil && *userEntity.BanchId != 0 {
-		searchQuery.Where("banchId = ?", userEntity.BanchId)
+		searchQuery = searchQuery.Where("banchId = ?", userEntity.BanchId)
 	}
 
 	// 角色查詢
 	if userEntity.RoleId != 0 {
-		searchQuery.Where("roleId = ?", userEntity.RoleId)
+		searchQuery = searchQuery.Where("roleId = ?", userEntity.RoleId)
 	}
 
 	err := searchQuery.Find(&users).Error

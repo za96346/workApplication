@@ -144,7 +144,7 @@ func NewAuthAggregate(
 			)
 		}
 
-		// 可編輯角色範圍 的資料 搜尋 ( 分為自己，所有，自訂 )
+		// 可編輯使用者範圍 的資料 搜尋 ( 分為自己，所有，自訂 )
 		var scopeUser  []int
 		if permission["scopeUser"] == "all" {
 			scopeUser = *userRepo.GetUsersID(&entities.User{

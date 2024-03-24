@@ -4,7 +4,6 @@ import (
 	"backend/application/dtos"
 	"backend/application/services"
 	"backend/domain/entities"
-	"backend/infrastructure/persistence"
 	"backend/interfaces/method"
 	"fmt"
 	"net/http"
@@ -13,7 +12,6 @@ import (
 )
 
 type UserController struct {
-	repo *persistence.Repositories
 	userApp application.UserAppInterface
 }
 
@@ -91,7 +89,7 @@ func (u *UserController) GetUsers(Request *gin.Context) {
 		Request.JSON(
 			http.StatusBadRequest,
 			gin.H {
-				"message": "失敗",
+				"message": appErr.Error(),
 				"data":    nil,
 			},
 		)

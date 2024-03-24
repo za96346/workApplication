@@ -13,6 +13,7 @@ type PerformanceRepository interface {
 		queryParams *appDtos.PerformanceQueryParams,
 		scopeBanch *[]int,
 		scopeRole *[]int,
+		scopeUser *[]int,
 	) (*[]domainDto.PerformanceDetailDto, error)
 
 	GetYearPerformances(
@@ -20,6 +21,7 @@ type PerformanceRepository interface {
 		queryParams *appDtos.PerformanceQueryParams,
 		scopeBanch *[]int,
 		scopeRole *[]int,
+		scopeUser *[]int,
 	) (*[]entities.YearPerformance, error)
 	GetPerformance(performanceEntity *entities.Performance) (*entities.Performance, error)
 

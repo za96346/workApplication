@@ -27,6 +27,7 @@ func (r *PerformanceRepo) GetPerformances(
 	queryParams *appDtos.PerformanceQueryParams,
 	scopeBanch *[]int,
 	scopeRole *[]int,
+	scopeUser *[]int,
 ) (*[]domainDtos.PerformanceDetailDto, error) {
 	// 獲取資料
 	var data []domainDtos.PerformanceDetailDto
@@ -36,6 +37,7 @@ func (r *PerformanceRepo) GetPerformances(
 		Where("performance.companyId = ?", performanceEntity.CompanyId).
 		Where("performance.banchId in (?)", *scopeBanch).
 		Where("user.roleId in (?)", *scopeRole).
+		Where("user.userId in (?)", *scopeUser).
 		Where("performance.deleteFlag = ?", "N").
 		Joins(`
 			left join user
@@ -57,17 +59,17 @@ func (r *PerformanceRepo) GetPerformances(
 
 	// 使用者名稱
 	if queryParams.UserName != "" {
-		searchQuery.Where("userName like ?", "%" + queryParams.UserName + "%")
+		searchQuery = searchQuery.Where("userName like ?", "%" + queryParams.UserName + "%")
 	}
 
 	// 使用者 id
 	if queryParams.UserId != 0 {
-		searchQuery.Where("performance.userId = ?", queryParams.UserId)
+		searchQuery = searchQuery.Where("performance.userId = ?", queryParams.UserId)
 	}
 
 	// 日期塞選
 	if queryParams.StartDate != "" {
-		searchQuery.Where(
+		searchQuery = searchQuery.Where(
 			`
 				concat(
 					performance.year,
@@ -84,7 +86,7 @@ func (r *PerformanceRepo) GetPerformances(
 	}
 
 	if queryParams.EndDate != "" {
-		searchQuery.Where(
+		searchQuery = searchQuery.Where(
 			`
 				concat(
 					performance.year,
@@ -110,6 +112,7 @@ func (r *PerformanceRepo) GetYearPerformances(
 	queryParams *appDtos.PerformanceQueryParams,
 	scopeBanch *[]int,
 	scopeRole *[]int,
+	scopeUser *[]int,
 ) (*[]entities.YearPerformance, error) {
 	var data []entities.YearPerformance
 
@@ -119,6 +122,7 @@ func (r *PerformanceRepo) GetYearPerformances(
 		Where("performance.companyId = ?", performanceEntity.CompanyId).
 		Where("performance.banchId in (?)", *scopeBanch).
 		Where("user.roleId in (?)", *scopeRole).
+		Where("user.userId in (?)", *scopeUser).
 		Where("performance.deleteFlag = ?", "N").
 		Joins(`
 			left join user
@@ -151,21 +155,21 @@ func (r *PerformanceRepo) GetYearPerformances(
 
 	// 使用者 id
 	if queryParams.UserId != 0 {
-		searchQuery.Where("performance.userId = ?", queryParams.UserId)
+		searchQuery = searchQuery.Where("performance.userId = ?", queryParams.UserId)
 	}
 
 	// 使用者名稱
 	if queryParams.UserName != "" {
-		searchQuery.Where("user.userName like ?", "%" + queryParams.UserName + "%")
+		searchQuery = searchQuery.Where("user.userName like ?", "%" + queryParams.UserName + "%")
 	}
 
 	// 年度塞選
 	if queryParams.StartYear != "" {
-		searchQuery.Where("performance.year >= ?", queryParams.StartYear)
+		searchQuery = searchQuery.Where("performance.year >= ?", queryParams.StartYear)
 	}
 
 	if queryParams.EndYear != "" {
-		searchQuery.Where("performance.year <= ?", queryParams.EndYear)
+		searchQuery = searchQuery.Where("performance.year <= ?", queryParams.EndYear)
 	}
 
 	err := searchQuery.Find(&data).Error
@@ -180,11 +184,11 @@ func (r *PerformanceRepo) GetPerformance(performanceEntity *entities.Performance
 		Table(r.tableName)
 
 	if performanceEntity.PerformanceId != 0 {
-		searchQuery.Where("performanceId = ?", performanceEntity.PerformanceId)
+		searchQuery = searchQuery.Where("performanceId = ?", performanceEntity.PerformanceId)
 	}
 
 	if performanceEntity.CompanyId != 0 {
-		searchQuery.Where("companyId = ?", performanceEntity.CompanyId)
+		searchQuery = searchQuery.Where("companyId = ?", performanceEntity.CompanyId)
 	}
 
 	err := searchQuery.First(&performance).Error

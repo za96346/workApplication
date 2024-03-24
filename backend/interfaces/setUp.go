@@ -15,7 +15,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-contrib/sessions/memstore"
 )
 
 // 設定 http server
@@ -24,7 +24,7 @@ func SetUp(repo *persistence.Repositories) *gin.Engine {
 	apiServer := gin.Default()
 
 	// 创建基于cookie的存储引擎，secret11111 参数是用于加密的密钥
-	store := cookie.NewStore(
+	store := memstore.NewStore(
 		[]byte("secret11111"),
 	)
 
