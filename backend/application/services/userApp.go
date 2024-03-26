@@ -231,12 +231,6 @@ func (u *UserApp) SaveUser(
 
 	// 找到原本資料
 	userEntity.CompanyId = authAggregate.User.CompanyId
-	user, err := u.UserRepo.GetUser(userEntity)
-	userEntity = user
-
-	if err != nil {
-		return nil, errors.New("找不到此user")
-	}
 	
 	if err := authAggregate.CheckScopeBanchValidation(*(*userEntity).BanchId); err != nil {
 		return nil, err
