@@ -161,7 +161,7 @@ func (r *CompanyBanchRepo) SaveCompanyBanch(
 
 	// 添加固定欄位
 	now := time.Now()
-	(*r).GetNewBanchID((*companyBanchEntity).CompanyId)
+	(*companyBanchEntity).BanchId = (*r).GetNewBanchID((*companyBanchEntity).CompanyId)
 
 	(*companyBanchEntity).LastModify = &now
 	(*companyBanchEntity).CreateTime = &now
